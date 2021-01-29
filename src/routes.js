@@ -7,6 +7,12 @@ const routes = [
 		name: 'Example Pages',
 		path: '/example',
 	},
+	{
+		component: React.lazy(() => import('./pages/authentication/authentication')),
+		exact: true,
+		name: 'Authentication Pages',
+		path: '/authentication',
+	},
 ];
 
 export default routes;
