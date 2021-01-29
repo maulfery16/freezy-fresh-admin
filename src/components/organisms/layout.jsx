@@ -1,51 +1,101 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Layout, Menu } from 'antd';
-import { useHistory } from 'react-router-dom';
-
 import {
-	DesktopOutlined,
-	PieChartOutlined,
-	TeamOutlined,
+	Avatar,
+	Badge,
+	Divider,
+	Layout,
+	Menu,
+	Row,
+	Space,
+	Typography,
+} from 'antd';
+import { useHistory, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
+import { BsFillPersonCheckFill, BsPersonFill } from 'react-icons/bs';
+import {
+	FaBoxOpen,
+	FaMoneyBill,
+	FaMotorcycle,
+	FaStoreAlt,
+} from 'react-icons/fa';
+import {
+	BellOutlined,
+	HomeFilled,
+	SettingOutlined,
+	ShoppingCartOutlined,
+	UserOutlined,
 } from '@ant-design/icons';
 
 import FFLogo from '../../assets/logos/ff-logo.png';
+import AuthService from '../../services/auth';
+
+const authService = new AuthService();
+const menus = [
+	{
+		name: 'Dashboard',
+		icon: <HomeFilled />,
+		link: '/dashboard',
+	},
+	{
+		name: 'Admin',
+		icon: <BsPersonFill />,
+		link: '/admin',
+	},
+
+	{
+		name: 'Pesanan',
+		icon: <ShoppingCartOutlined />,
+		subMenuKey: 'order',
+		subMenus: [
+			{
+				name: 'Pesanan Baru',
+				link: '/order/new',
+			},
+			{
+				name: 'Pesanan Diproses',
+				link: '/order/proceed',
+			},
+			{
+				name: 'Pesanan Batal',
+				link: '/order/cancel',
+			},
+		],
+	},
+	{
+		name: 'Produk-Poduk',
+		icon: <FaBoxOpen />,
+		link: '/product',
+	},
+	{
+		name: 'Membership',
+		icon: <BsFillPersonCheckFill />,
+		link: '/membership',
+	},
+	{
+		name: 'Cabang Page',
+		icon: <FaStoreAlt />,
+		link: '/branch',
+	},
+	{
+		name: 'Pendapatan',
+		icon: <FaMoneyBill />,
+		link: '/income',
+	},
+	{
+		name: 'Kurir',
+		icon: <FaMotorcycle />,
+		link: '/courier',
+	},
+];
 
 const OrganismLayout = (props) => {
 	const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+	const [notifCount] = useState(0);
+	const { user } = useSelector((state) => state.auth);
 	const history = useHistory();
-
-	const menus = [
-		{
-			key: '1',
-			name: 'Option 1',
-			icon: <PieChartOutlined />,
-			link: '/to-some-link-1',
-		},
-		{
-			key: '2',
-			name: 'Option 2',
-			icon: <DesktopOutlined />,
-			link: '/to-some-link-2',
-		},
-		{
-			key: 'Sub 1',
-			name: 'Sub 1',
-			icon: <TeamOutlined />,
-			subMenus: [
-				{
-					key: '3',
-					name: 'Sub Option 1',
-					link: '/to-some-link-3',
-				},
-				{
-					key: '4',
-					name: 'Sub Option 2',
-					link: '/to-some-link-4',
-				},
-			],
-		},
-	];
+	const location = useLocation();
 
 	return (
 		<>
@@ -66,15 +116,60 @@ const OrganismLayout = (props) => {
 						<img src={FFLogo} alt="Logo" />
 					</div>
 
+					<Row
+						className="mh3"
+						justify={
+							isSidebarCollapsed ? 'center' : 'space-between'
+						}
+					>
+						<Space size={15}>
+							<Avatar
+								icon={<UserOutlined />}
+								size={50}
+								src={user.image}
+							/>
+
+							{!isSidebarCollapsed && (
+								<Space direction="vertical" size={-3}>
+									<Typography.Text>
+										<span className="white">
+											{user.name.split(' ')[0]}
+										</span>
+									</Typography.Text>
+									<Typography.Text>
+										<span
+											className="turbo pointer"
+											onClick={() => authService.logout()}
+										>
+											Logout
+										</span>
+									</Typography.Text>
+								</Space>
+							)}
+						</Space>
+
+						{!isSidebarCollapsed && (
+							<Space size={15}>
+								<Badge count={notifCount}>
+									<BellOutlined className="white f4 pointer" />
+								</Badge>
+								<SettingOutlined className="white f4 pointer" />
+							</Space>
+						)}
+
+						<Divider className="b--white" />
+					</Row>
+
 					<Menu
-						theme="dark"
-						defaultSelectedKeys={['1']}
+						defaultOpenKeys={[location.pathname.split('/')[1]]}
+						defaultSelectedKeys={[location.pathname]}
 						mode="inline"
+						theme="dark"
 					>
 						{menus.map((menu) => {
 							return !menu.subMenus ? (
 								<Menu.Item
-									key={menu.key}
+									key={menu.link}
 									icon={menu.icon}
 									onClick={() => history.push(menu.link)}
 								>
@@ -82,13 +177,20 @@ const OrganismLayout = (props) => {
 								</Menu.Item>
 							) : (
 								<Menu.SubMenu
-									key={menu.key}
+									className={
+										location.pathname.includes(
+											menu.subMenyKey
+										)
+											? 'ant-menu-submenu-open'
+											: ''
+									}
+									key={menu.subMenuKey}
 									icon={menu.icon}
 									title={menu.name}
 								>
 									{menu.subMenus.map((sub) => (
 										<Menu.Item
-											key={sub.key}
+											key={sub.link}
 											onClick={() =>
 												history.push(sub.link)
 											}
