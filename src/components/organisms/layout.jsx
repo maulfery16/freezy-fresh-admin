@@ -9,6 +9,8 @@ import {
 	TeamOutlined,
 } from '@ant-design/icons';
 
+import FFLogo from '../../assets/logos/ff-logo.png';
+
 const OrganismLayout = (props) => {
 	const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 	const history = useHistory();
@@ -60,11 +62,8 @@ const OrganismLayout = (props) => {
 					}
 					width={250}
 				>
-					<div className="pa2 mv3">
-						<img
-							src="https://placeholder.com/wp-content/uploads/2018/10/placeholder.com-logo4.jpg"
-							alt="Logo"
-						/>
+					<div className="pa2 mv3 mh4">
+						<img src={FFLogo} alt="Logo" />
 					</div>
 
 					<Menu
