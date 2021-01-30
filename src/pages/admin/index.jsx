@@ -1,6 +1,6 @@
 import React from 'react';
-import OrganismDatatable from '../components/organisms/datatable';
-import OrganismLayout from '../components/organisms/layout';
+import OrganismDatatable from '../../components/organisms/datatable';
+import OrganismLayout from '../../components/organisms/layout';
 
 const ExamplePages = () => {
 	const column = [
@@ -15,7 +15,7 @@ const ExamplePages = () => {
 	];
 
 	return (
-		<OrganismLayout title="Example">
+		<OrganismLayout title="Admin Page">
 			<OrganismDatatable
 				additionalAction={
 					<div className="flex items-center justify-center bg-moonraker br-100 pointer">

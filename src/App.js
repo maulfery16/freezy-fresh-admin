@@ -1,3 +1,5 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable react/display-name */
 import React, { Suspense } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
@@ -9,36 +11,51 @@ import OrganismErrorBoundary from './components/organisms/error-boundary';
 import routes from './routes';
 import { useSelector } from 'react-redux';
 
+const generateRoutes = (route, pathPrefix, customRender) => {
+	return (
+		<Route
+			key={route.name}
+			path={pathPrefix ? `${pathPrefix}${route.path}` : route.path}
+			exact={route.exact}
+			name={route.name}
+			render={
+				customRender
+					? customRender
+					: (props) => <route.component {...props} />
+			}
+		/>
+	);
+};
+
+const renderLoggedInComponent = (isLoggedIn, route) => {
+	return (props) =>
+		isLoggedIn ? (
+			<route.component {...props} />
+		) : (
+			<Redirect key="login-redirect" to="/login" />
+		);
+};
+
 const renderRoutes = (isLoggedIn) => {
-	return routes.map((route, idx) => {
-		if (route.guard) {
-			return (
-				<Route
-					key={idx}
-					path={route.path}
-					exact={route.exact}
-					name={route.name}
-					render={(props) =>
-						isLoggedIn ? (
-							<route.component {...props} />
-						) : (
-							<Redirect key={idx} to="/login" />
+	return routes.map((route) =>
+		route.guard
+			? route.children
+				? route.children.map((child) =>
+						generateRoutes(
+							child,
+							route.path,
+							renderLoggedInComponent(isLoggedIn, child)
 						)
-					}
-				/>
-			);
-		} else {
-			return (
-				<Route
-					key={idx}
-					path={route.path}
-					exact={route.exact}
-					name={route.name}
-					render={(props) => <route.component {...props} />}
-				/>
-			);
-		}
-	});
+				  )
+				: generateRoutes(
+						route,
+						null,
+						renderLoggedInComponent(isLoggedIn, route)
+				  )
+			: route.children
+			? route.children.map((child) => generateRoutes(child, route.path))
+			: generateRoutes(route)
+	);
 };
 
 const App = () => {
