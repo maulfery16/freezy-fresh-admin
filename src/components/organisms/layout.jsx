@@ -4,6 +4,7 @@ import {
 	Avatar,
 	Badge,
 	Divider,
+	Input,
 	Layout,
 	Menu,
 	Row,
@@ -25,6 +26,7 @@ import {
 	HomeFilled,
 	SettingOutlined,
 	ShoppingCartOutlined,
+	SearchOutlined,
 	UserOutlined,
 } from '@ant-design/icons';
 
@@ -155,6 +157,17 @@ const OrganismLayout = (props) => {
 								</Badge>
 								<SettingOutlined className="white f4 pointer" />
 							</Space>
+						)}
+
+						{!isSidebarCollapsed && (
+							<Input
+								className="mt4 br4"
+								onPressEnter={(event) =>
+									console.log(event.target.value)
+								}
+								placeholder="Cari"
+								prefix={<SearchOutlined />}
+							/>
 						)}
 
 						<Divider className="b--white" />

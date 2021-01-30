@@ -52,6 +52,10 @@ a {
 	background: #127ec5 !important;
 }
 
+.ant-layout-sider-trigger {
+	border-top: 5px solid rgba(0, 0, 0, 0.1);
+}
+
 .ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected,
 .ant-menu.ant-menu-dark .ant-menu-item-selected,
 .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
