@@ -1,6 +1,5 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-unused-vars*/
 import React, {
 	forwardRef,
 	useEffect,
@@ -18,36 +17,40 @@ import {
 	Typography,
 } from 'antd';
 
+import AtomDatatableHeader from '../atoms/datatable/header';
+
 import DatatableService from '../../services/datatable';
 const datatableService = new DatatableService();
 
 const OrganismDatatable = forwardRef((props, ref) => {
-	const [current, setCurrent] = useState(1);
 	const [isGettingData, setIsGettingData] = useState(false);
 	const [data, setData] = useState(null);
 	const [totalData, setTotalData] = useState(0);
 
 	let filterParameter = {
+		filter: '',
 		keyword: '',
 		limit: 5,
-		page: 0,
+		page: 1,
+		sort: '',
 	};
 
 	const getData = async () => {
 		setIsGettingData(true);
 
 		try {
-			// const { data } = await datatableService.getData(
-			// 	props.dataSourceURL,
-			// 	filterParameter
-			// );
+			if (props.mock) {
+				setData(props.mock.data);
+				setTotalData(props.mock.meta.total_data);
+			} else {
+				const { data, meta } = await datatableService.getData(
+					props.dataSourceURL,
+					filterParameter
+				);
 
-			// setData(data.data);
-			// setTotalData(data.totalData);
-			setData([
-				{ id: 1, name: 'John Doe 1', age: 22 },
-				{ id: 2, name: 'John Doe 22', age: 24 },
-			]);
+				setData(data);
+				setTotalData(meta.total_data);
+			}
 		} catch (error) {
 			message.error(error.message);
 		} finally {
@@ -66,9 +69,18 @@ const OrganismDatatable = forwardRef((props, ref) => {
 		getData();
 	};
 
+	const setLimit = (limit) => {
+		filterParameter = { ...filterParameter, limit };
+		getData();
+	};
+
 	const setPagination = (page) => {
-		filterParameter = { ...filterParameter, page: page - 1 };
-		setCurrent(page);
+		filterParameter = { ...filterParameter, page };
+		getData();
+	};
+
+	const setSort = (order, attr) => {
+		filterParameter = { ...filterParameter, sort: `${order}${attr}` };
 		getData();
 	};
 
@@ -84,7 +96,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 				<Row align="middle" justify="space-between">
 					<Space align="middle" size={50}>
 						<Typography.Title level={props.titleSize || 4}>
-							{props.title || ''}
+							{props.title.toUpperCase() || ''}
 						</Typography.Title>
 
 						{props.withSearchFilter && (
@@ -108,18 +120,41 @@ const OrganismDatatable = forwardRef((props, ref) => {
 						bordered={true}
 						columns={props.columns.map((column) => ({
 							...column,
-							title: column.title,
+							title: (
+								<AtomDatatableHeader
+									attr={column.dataIndex}
+									setSort={column.sort ? setSort : false}
+									title={column.title}
+								/>
+							),
 						}))}
 						className={props.className}
 						dataSource={data}
 						pagination={{
-							current,
-							pageSize: filterParameter.limit,
-							total: totalData,
+							current: filterParameter.page,
+							itemRender: (_, type, originalEl) => {
+								if (type === 'prev')
+									return (
+										<a className="bg-white pa2 br2 ba b--black-50">
+											Sebelumnya
+										</a>
+									);
+								if (type === 'next')
+									return (
+										<a className="bg-white pa2 br2 ba b--black-50">
+											Seleanjutnya
+										</a>
+									);
+								return originalEl;
+							},
 							onChange: (page) => setPagination(page),
+							onShowSizeChange: (limit) => setLimit(limit),
+							pageSize: filterParameter.limit,
+							responsive: true,
+							total: totalData,
 						}}
 						rowKey={props.rowKey || 'id'}
-						scroll={{ x: props.scroll || 720 }}
+						scroll={{ x: props.scroll || 1920 }}
 						style={{ width: '100%' }}
 					/>
 				)}

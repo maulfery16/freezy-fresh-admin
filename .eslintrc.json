@@ -20,5 +20,13 @@
 	"plugins": ["react", "react-hooks"],
 	"rules": {
 		"react/prop-types": 0
-	}
+	},
+	"overrides": [
+		{
+			"files": ["**/*.js"],
+			"rules": {
+				"react-hooks/exhaustive-deps": "off"
+			}
+		}
+	]
 }

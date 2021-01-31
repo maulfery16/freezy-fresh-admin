@@ -218,7 +218,15 @@ const OrganismLayout = (props) => {
 				</Layout.Sider>
 
 				<Layout className="site-layout">
-					<div className="ph5 pv4">{props.children}</div>
+					<div className="ph5 pv4">
+						<Divider />
+						<Layout.Content style={{ minHeight: '80vh' }}>
+							{props.children}
+						</Layout.Content>
+						<Layout.Footer style={{ textAlign: 'center' }}>
+							Copyright © 2021 Freezy Fresh. All rights reserved
+						</Layout.Footer>
+					</div>
 				</Layout>
 			</Layout>
 		</>
