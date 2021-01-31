@@ -31,9 +31,6 @@ import {
 } from '@ant-design/icons';
 
 import FFLogo from '../../assets/logos/ff-logo.png';
-import AuthService from '../../services/auth';
-
-const authService = new AuthService();
 const menus = [
 	{
 		name: 'Dashboard',
@@ -132,32 +129,29 @@ const OrganismLayout = (props) => {
 							/>
 
 							{!isSidebarCollapsed && (
-								<Space direction="vertical" size={-3}>
-									<Typography.Text>
-										<span className="white">
-											{user.name.split(' ')[0]}
-										</span>
-									</Typography.Text>
-									<Typography.Text>
-										<span
-											className="turbo pointer"
-											onClick={() => authService.logout()}
-										>
-											Logout
-										</span>
-									</Typography.Text>
+								<Space direction="vertical" size={10}>
+									<Space direction="vertical" size={-3}>
+										<Typography.Text strong>
+											<span className="white">
+												{user.name}
+											</span>
+										</Typography.Text>
+										<Typography.Text className="f7">
+											<span className="white">
+												{user.role} - {user.domicile}
+											</span>
+										</Typography.Text>
+									</Space>
+
+									<Space size={15}>
+										<Badge count={notifCount}>
+											<BellOutlined className="white f4 pointer" />
+										</Badge>
+										<SettingOutlined className="white f4 pointer" />
+									</Space>
 								</Space>
 							)}
 						</Space>
-
-						{!isSidebarCollapsed && (
-							<Space size={15}>
-								<Badge count={notifCount}>
-									<BellOutlined className="white f4 pointer" />
-								</Badge>
-								<SettingOutlined className="white f4 pointer" />
-							</Space>
-						)}
 
 						{!isSidebarCollapsed && (
 							<Input
