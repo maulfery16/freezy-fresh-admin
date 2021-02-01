@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import ReactMoment from 'react-moment';
 import { Helmet } from 'react-helmet-async';
 import {
 	Avatar,
 	Badge,
+	Col,
 	Divider,
-	Input,
 	Layout,
 	Menu,
 	Row,
@@ -26,14 +27,11 @@ import {
 	HomeFilled,
 	SettingOutlined,
 	ShoppingCartOutlined,
-	SearchOutlined,
 	UserOutlined,
 } from '@ant-design/icons';
 
 import FFLogo from '../../assets/logos/ff-logo.png';
-import AuthService from '../../services/auth';
 
-const authService = new AuthService();
 const menus = [
 	{
 		name: 'Dashboard',
@@ -124,51 +122,77 @@ const OrganismLayout = (props) => {
 							isSidebarCollapsed ? 'center' : 'space-between'
 						}
 					>
-						<Space size={15}>
+						<Col span={8}>
 							<Avatar
 								icon={<UserOutlined />}
 								size={50}
 								src={user.image}
 							/>
+						</Col>
+						<Col span={16}>
+							<Row>
+								<Col span={17}>
+									<Space size={15}>
+										{!isSidebarCollapsed && (
+											<Space
+												direction="vertical"
+												size={-3}
+											>
+												<Typography.Text>
+													<span className="yellow f5 fw7">
+														{user.name}
+													</span>
+												</Typography.Text>
+												<Typography.Text>
+													<span className="white f6">
+														{user.role}
+													</span>
+												</Typography.Text>
+											</Space>
+										)}
+									</Space>
+								</Col>
 
-							{!isSidebarCollapsed && (
-								<Space direction="vertical" size={-3}>
-									<Typography.Text>
-										<span className="white">
-											{user.name.split(' ')[0]}
-										</span>
-									</Typography.Text>
-									<Typography.Text>
-										<span
-											className="turbo pointer"
-											onClick={() => authService.logout()}
-										>
-											Logout
-										</span>
-									</Typography.Text>
-								</Space>
-							)}
-						</Space>
-
-						{!isSidebarCollapsed && (
-							<Space size={15}>
-								<Badge count={notifCount}>
-									<BellOutlined className="white f4 pointer" />
-								</Badge>
-								<SettingOutlined className="white f4 pointer" />
-							</Space>
-						)}
-
-						{!isSidebarCollapsed && (
-							<Input
-								className="mt4 br4"
-								onPressEnter={(event) =>
-									console.log(event.target.value)
-								}
-								placeholder="Cari"
-								prefix={<SearchOutlined />}
-							/>
-						)}
+								{!isSidebarCollapsed && (
+									<>
+										<Col span={7}>
+											<Space size={10}>
+												<Badge count={notifCount}>
+													<BellOutlined className="white f4 pointer" />
+												</Badge>
+												<SettingOutlined className="white f4 pointer" />
+											</Space>
+										</Col>
+										<Col span={22}>
+											<Space direction="vertical">
+												<Typography.Text>
+													<span
+														className="white i"
+														style={{ fontSize: 10 }}
+													>
+														bergabung pada{' '}
+														<ReactMoment format="D MMM YYYY">
+															{
+																new Date(
+																	user.joined_at
+																)
+															}
+														</ReactMoment>
+													</span>
+												</Typography.Text>
+												<Typography.Text>
+													<span className="white f7 fw6">
+														{user.domiciles.join(
+															', '
+														)}
+													</span>
+												</Typography.Text>
+											</Space>
+										</Col>
+									</>
+								)}
+							</Row>
+						</Col>
 
 						<Divider className="b--white" />
 					</Row>

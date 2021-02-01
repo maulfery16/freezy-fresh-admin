@@ -2,6 +2,12 @@ import React from 'react';
 
 const routes = [
 	{
+		component: React.lazy(() => import('./pages/dasboard.jsx')),
+		exact: true,
+		name: 'Hallo from dashbord',
+		path: '/',
+	},
+	{
 		component: React.lazy(() => import('./pages/admin')),
 		exact: true,
 		name: 'Admin Page',

@@ -6,6 +6,9 @@ const INITIAL_STATE = {
 	user: {
 		id: null,
 		name: 'John Doe',
+		role: 'Administrator',
+		joined_at: new Date(),
+		domiciles: ['Jakarta Pusat', 'Jakarta Barat', 'Bandung'],
 	},
 };
 
