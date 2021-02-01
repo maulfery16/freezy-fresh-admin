@@ -31,7 +31,6 @@ import {
 } from '@ant-design/icons';
 
 import FFLogo from '../../assets/logos/ff-logo.png';
-
 const menus = [
 	{
 		name: 'Dashboard',

@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable react/display-name */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {
@@ -7,9 +8,11 @@ import React, {
 	useState,
 } from 'react';
 import {
+	Button,
 	Col,
 	Input,
 	message,
+	Modal,
 	Row,
 	Skeleton,
 	Space,
@@ -23,12 +26,14 @@ import DatatableService from '../../services/datatable';
 const datatableService = new DatatableService();
 
 const OrganismDatatable = forwardRef((props, ref) => {
-	const [isGettingData, setIsGettingData] = useState(false);
 	const [data, setData] = useState(null);
+	const [isFilterVisible, setIsFilterVisible] = useState(false);
+	const [isGettingData, setIsGettingData] = useState(false);
 	const [totalData, setTotalData] = useState(0);
 
 	let filterParameter = {
 		filter: '',
+		filters: [],
 		keyword: '',
 		limit: 5,
 		page: 1,
@@ -64,6 +69,55 @@ const OrganismDatatable = forwardRef((props, ref) => {
 		},
 	}));
 
+	const addFilter = (name, operator, value) => {
+		const newFilter = { name, operator, value };
+		const existingFilterIndex = filterParameter.filters.findIndex(
+			(filter) => name === filter.name
+		);
+
+		existingFilterIndex > -1
+			? (filterParameter.filters[existingFilterIndex] = newFilter)
+			: filterParameter.filter.push;
+	};
+
+	const addMultipleFilter = (appliedFilters) => {
+		appliedFilters.forEach((applFilter) => {
+			const existingFilterIndex = filterParameter.filters.findIndex(
+				(filter) =>
+					newFilter.name === filter.name &&
+					applFilter.name === filter.operator
+			);
+			const newFilter = { ...applFilter };
+
+			existingFilterIndex > -1
+				? (filterParameter.filters[existingFilterIndex] = newFilter)
+				: filterParameter.filter.push;
+		});
+	};
+
+	const removeFilter = (name) => {
+		const filterIndex = filterParameter.filters.findIndex(
+			(filter) => name === filter.name
+		);
+
+		filterParameter.filters.splice(filterIndex, 1);
+	};
+
+	const setFilter = () => {
+		filterParameter = {
+			...filterParameter,
+			filter: filterParameter.filters.map(
+				(query, index) =>
+					`${index > 0 ? 'and' : ''} ${query.name} ${
+						query.operator
+					} ${query.value} `
+			),
+			page: 1,
+		};
+		setIsFilterVisible(false);
+		getData();
+	};
+
 	const setKeyword = (value) => {
 		filterParameter = { ...filterParameter, keyword: value };
 		getData();
@@ -98,17 +152,110 @@ const OrganismDatatable = forwardRef((props, ref) => {
 						<Typography.Title level={props.titleSize || 4}>
 							{props.title.toUpperCase() || ''}
 						</Typography.Title>
-
-						{props.withSearchFilter && (
-							<Input.Search
-								placeholder={props.inputPlaceHolder || 'Cari'}
-								onSearch={(value) => setKeyword(value)}
-								style={{ width: 300 }}
-							/>
-						)}
 					</Space>
 
 					{props.additionalAction}
+				</Row>
+			</Col>
+
+			<Col className="mt4" span={24}>
+				<Row align="bottom">
+					<Col span={17}>
+						<Row gutter={[12, 12]}>
+							{props.additionalInformation &&
+							props.additionalInformation instanceof Array
+								? props.additionalInformation.map(
+										(info, index) => (
+											<Col
+												key={`additional-info-${index}`}
+												span={6}
+											>
+												{info}
+											</Col>
+										)
+								  )
+								: props.additionalInformation
+								? props.additionalInformation
+								: null}
+						</Row>
+					</Col>
+
+					<Col span={7}>
+						<Row gutter={12} justify="end">
+							{props.filters && (
+								<Col span={6}>
+									<Button
+										className="bg-denim white br2 w-100"
+										onClick={() => setIsFilterVisible(true)}
+									>
+										Filter
+									</Button>
+
+									<Modal
+										footer={null}
+										title="Filter"
+										visible={isFilterVisible}
+										width={350}
+										onCancel={() =>
+											setIsFilterVisible(false)
+										}
+									>
+										<Space
+											className="w-100"
+											direction="vertical"
+											size={15}
+										>
+											<Row>
+												{props.filters.map(
+													(filter, index) => {
+														const filterEl = React.cloneElement(
+															filter,
+															{
+																addFilter,
+																addMultipleFilter,
+																removeFilter,
+															}
+														);
+
+														return (
+															<Col
+																key={`dattable-filter-${index}`}
+																span={24}
+															>
+																{filterEl}
+															</Col>
+														);
+													}
+												)}
+											</Row>
+										</Space>
+
+										<Row className="mt5" justify="center">
+											<Button
+												className="bg-denim white br3 w-30"
+												onClick={setFilter}
+												size="large"
+											>
+												Filter
+											</Button>
+										</Row>
+									</Modal>
+								</Col>
+							)}
+
+							{props.searchInput && (
+								<Col span={18}>
+									<Input.Search
+										placeholder={
+											props.searchInput.placeholder ||
+											'Cari'
+										}
+										onSearch={(value) => setKeyword(value)}
+									/>
+								</Col>
+							)}
+						</Row>
+					</Col>
 				</Row>
 			</Col>
 

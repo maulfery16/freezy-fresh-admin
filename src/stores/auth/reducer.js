@@ -4,6 +4,7 @@ const INITIAL_STATE = {
 	isLoggedIn: false,
 	token: '',
 	user: {
+		domicile: 'Bandung',
 		id: null,
 		name: 'John Doe',
 		role: 'Administrator',
