@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable react/display-name */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {
@@ -113,6 +114,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 			),
 			page: 1,
 		};
+		setIsFilterVisible(false);
 		getData();
 	};
 
@@ -157,76 +159,100 @@ const OrganismDatatable = forwardRef((props, ref) => {
 			</Col>
 
 			<Col className="mt4" span={24}>
-				<Row>
-					<Col span={18}>
+				<Row align="bottom">
+					<Col span={17}>
 						<Row gutter={[12, 12]}>
 							{props.additionalInformation &&
-								props.additionalInformation.map(
-									(info, index) => (
-										<Col
-											key={`additional-info-${index}`}
-											span={6}
-										>
-											{info}
-										</Col>
-									)
-								)}
+							props.additionalInformation instanceof Array
+								? props.additionalInformation.map(
+										(info, index) => (
+											<Col
+												key={`additional-info-${index}`}
+												span={6}
+											>
+												{info}
+											</Col>
+										)
+								  )
+								: props.additionalInformation
+								? props.additionalInformation
+								: null}
 						</Row>
 					</Col>
-					<Col span={6}>
-						<Row gutter={8} justify="end">
-							<>
-								<Button onClick={setIsFilterVisible(true)}>
-									Filter
-								</Button>
 
-								<Modal
-									visible={isFilterVisible}
-									title="Filter"
-									footer={null}
-								>
-									<Space direction="vertical" size={15}>
-										<Row>
-											{props.filters.map(
-												(filter, index) => {
-													const filterEl = React.cloneElement(
-														filter,
-														{
-															addFilter,
-															addMultipleFilter,
-															removeFilter,
-														}
-													);
+					<Col span={7}>
+						<Row gutter={12} justify="end">
+							{props.filters && (
+								<Col span={6}>
+									<Button
+										className="bg-denim white br2 w-100"
+										onClick={() => setIsFilterVisible(true)}
+									>
+										Filter
+									</Button>
 
-													return (
-														<Col
-															key={`dattable-filter-${index}`}
-															span={24}
-														>
-															{filterEl}
-														</Col>
-													);
-												}
-											)}
+									<Modal
+										footer={null}
+										title="Filter"
+										visible={isFilterVisible}
+										width={350}
+										onCancel={() =>
+											setIsFilterVisible(false)
+										}
+									>
+										<Space
+											className="w-100"
+											direction="vertical"
+											size={15}
+										>
+											<Row>
+												{props.filters.map(
+													(filter, index) => {
+														const filterEl = React.cloneElement(
+															filter,
+															{
+																addFilter,
+																addMultipleFilter,
+																removeFilter,
+															}
+														);
+
+														return (
+															<Col
+																key={`dattable-filter-${index}`}
+																span={24}
+															>
+																{filterEl}
+															</Col>
+														);
+													}
+												)}
+											</Row>
+										</Space>
+
+										<Row className="mt5" justify="center">
+											<Button
+												className="bg-denim white br3 w-30"
+												onClick={setFilter}
+												size="large"
+											>
+												Filter
+											</Button>
 										</Row>
-
-										<Button onClick={setFilter}>
-											Filter
-										</Button>
-									</Space>
-								</Modal>
-							</>
+									</Modal>
+								</Col>
+							)}
 
 							{props.searchInput && (
-								<Input.Search
-									placeholder={
-										props.searchInput.placeholder || 'Cari'
-									}
-									onSearch={(value) => setKeyword(value)}
-									style={{
-										width: props.searchInput.widtj || 300,
-									}}
-								/>
+								<Col span={18}>
+									<Input.Search
+										placeholder={
+											props.searchInput.placeholder ||
+											'Cari'
+										}
+										onSearch={(value) => setKeyword(value)}
+									/>
+								</Col>
 							)}
 						</Row>
 					</Col>

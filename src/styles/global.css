@@ -96,3 +96,9 @@ a {
 	word-wrap: break-word !important;
 	word-break: break-all !important;
 }
+
+.ant-modal-title {
+	color: #127ec5;
+	font-size: 20px;
+	font-weight: 700;
+}

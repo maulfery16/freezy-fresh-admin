@@ -1,8 +1,8 @@
 /* eslint-disable react/display-name */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactMoment from 'react-moment';
 import { useHistory } from 'react-router-dom';
-import { Button, Image, Popconfirm, Space } from 'antd';
+import { Button, Image, message, Popconfirm, Skeleton, Space } from 'antd';
 import {
 	DeleteFilled,
 	EyeFilled,
@@ -11,8 +11,15 @@ import {
 
 import AtomNumberFormat from '../../components/atoms/number-format';
 import MoleculeDatatableAdditionalInformation from '../../components/molecules/datatable/additional-information-card';
+import MoleculeDatatableFilter from '../../components/molecules/datatable/filter-plugin';
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
+
+// import AdminService from '../../services/admin';
+// import MasterService from '../../services/master';
+
+// const adminService = new AdminService();
+// const masterService = new MasterService();
 
 const mock = {
 	meta: {
@@ -147,7 +154,34 @@ const AdminPage = () => {
 		},
 	];
 
+	const [totalAdmin, setTotalAdmin] = useState(null);
+	const [branchesOption, setbranchesOption] = useState([]);
 	const history = useHistory();
+
+	const getBranchesFilterOption = async () => {
+		try {
+			// const branches = await masterService.getBranches();
+			// return branches.map(branch => ({label: branch.name, value: branch.id}))
+
+			setbranchesOption([{ value: 'Bandung', label: 'Bandung' }]);
+		} catch (error) {
+			message.error(error.message);
+		}
+	};
+
+	const getTotalAdmin = async () => {
+		try {
+			// const total = adminService.getTotalAdmin();
+			// setTotalAdmin(total);
+
+			setTimeout(
+				setTotalAdmin({ registered: 99999, active: 99999 }),
+				2000
+			);
+		} catch (error) {
+			message.error(error.message);
+		}
+	};
 
 	const renderAdditionalAction = () => {
 		return (
@@ -159,31 +193,63 @@ const AdminPage = () => {
 	};
 
 	const renderAdditionalInformation = () => {
+		return totalAdmin ? (
+			[
+				<MoleculeDatatableAdditionalInformation
+					key="admin-terdaftar"
+					title={
+						<>
+							Admin
+							<br />
+							Terdaftar
+						</>
+					}
+					value={<AtomNumberFormat value={totalAdmin.registered} />}
+				/>,
+				<MoleculeDatatableAdditionalInformation
+					key="admin-aktif"
+					title={
+						<>
+							Admin
+							<br />
+							Aktif
+						</>
+					}
+					value={<AtomNumberFormat value={totalAdmin.active} />}
+				/>,
+			]
+		) : (
+			<Skeleton active />
+		);
+	};
+
+	const renderDatatableFilters = () => {
 		return [
-			<MoleculeDatatableAdditionalInformation
-				key="admin-terdaftar"
-				title={
-					<>
-						Admin
-						<br />
-						Terdaftar
-					</>
-				}
-				value={<AtomNumberFormat value={99999} />}
+			<MoleculeDatatableFilter
+				name="filter"
+				operator="eq"
+				identifier="branch-filter"
+				label="Cabang"
+				key="branch-filter"
+				options={branchesOption}
+				placeholder="Semua cabang"
 			/>,
-			<MoleculeDatatableAdditionalInformation
-				key="admin-aktif"
-				title={
-					<>
-						Admin
-						<br />
-						Aktif
-					</>
-				}
-				value={<AtomNumberFormat value={99999} />}
-			/>,
+			// <MoleculeDateRangeFilter
+			// 	filterName="created_at"
+			// 	filterOperator="eq"
+			// 	placeholder="Filter tanggal melamar"
+			// 	size={4}
+			// 	identifier="daterangefilter"
+			// />
 		];
 	};
+
+	useEffect(() => {
+		(async () => {
+			getBranchesFilterOption();
+			getTotalAdmin();
+		})();
+	}, []);
 
 	return (
 		<OrganismLayout title="Admin Page">
@@ -191,8 +257,10 @@ const AdminPage = () => {
 				additionalAction={renderAdditionalAction()}
 				additionalInformation={renderAdditionalInformation()}
 				columns={column}
-				dataSourceURL={`/url/to/api`}
+				dataSourceURL={`/v1/admins`}
+				filters={renderDatatableFilters()}
 				mock={mock}
+				searchInput={true}
 				title={`Admin Menu`}
 			/>
 		</OrganismLayout>

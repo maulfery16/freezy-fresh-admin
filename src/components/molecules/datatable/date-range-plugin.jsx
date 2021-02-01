@@ -1,7 +1,7 @@
 import React from 'react';
 import { DatePicker, Space, Typography } from 'antd';
 
-const MoleculeFilterPlugin = (props) => {
+const MoleculeDatatableDateRange = (props) => {
 	const setDateRangeFilter = (selectedValue) => {
 		if (selectedValue.length > 0) {
 			props.addMultipleFilter([
@@ -39,4 +39,4 @@ const MoleculeFilterPlugin = (props) => {
 	);
 };
 
-export default MoleculeFilterPlugin;
+export default MoleculeDatatableDateRange;

@@ -5,21 +5,25 @@ const MoleculeFilterPlugin = (props) => {
 	const setFilterQuery = (selectedValue) => {
 		if (selectedValue.length > 0) {
 			props.addFilter(
-				props.filterName,
-				props.filterOperator,
+				props.name,
+				props.operator,
 				generateClauseValue(selectedValue)
 			);
 		} else {
-			props.removeFilter(props.filterName);
+			props.removeFilter(props.name);
 		}
 	};
 
 	const generateClauseValue = (values) =>
 		values instanceof Array ? `["${values.join(`","`)}"]` : values;
 
-	let isValidToRender = props.fiilterName && props.operator ? true : false;
+	let isValidToRender =
+		props.name && props.operator && props.options ? true : false;
+
+	console.log(props.options);
+
 	return isValidToRender ? (
-		<Space direction="vertical">
+		<Space className="w-100" direction="vertical">
 			<Typography.Text>
 				<span>{props.label}</span>
 			</Typography.Text>
@@ -29,7 +33,6 @@ const MoleculeFilterPlugin = (props) => {
 				mode={isValidToRender ? 'multiple' : 'tags'}
 				onChange={setFilterQuery}
 				placeholder={props.placeholder}
-				size="large"
 				style={{ width: '100%' }}
 			>
 				{props.options.map((option, index) => (
