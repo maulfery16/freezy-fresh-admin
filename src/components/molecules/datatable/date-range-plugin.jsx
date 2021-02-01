@@ -21,17 +21,17 @@ const MoleculeDatatableDateRange = (props) => {
 		}
 	};
 
-	let isValidToRender = props.fiilterName && props.operator ? true : false;
+	let isValidToRender = props.name && props.operator ? true : false;
 	return isValidToRender ? (
-		<Space direction="vertical">
+		<Space className="w-100" direction="vertical">
 			<Typography.Text>
-				<span>{props.label}</span>
+				<span className="moon-gray fw6">{props.label}</span>
 			</Typography.Text>
 
-			<DatePicker
+			<DatePicker.RangePicker
+				className="w-100"
 				onChange={setDateRangeFilter}
 				placeholder={['Dari tanggal', 'Hingga tanggal']}
-				size="large"
 			/>
 		</Space>
 	) : (

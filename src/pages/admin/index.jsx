@@ -11,15 +11,13 @@ import {
 
 import AtomNumberFormat from '../../components/atoms/number-format';
 import MoleculeDatatableAdditionalInformation from '../../components/molecules/datatable/additional-information-card';
+import MoleculeDatatableDateRange from '../../components/molecules/datatable/date-range-plugin';
 import MoleculeDatatableFilter from '../../components/molecules/datatable/filter-plugin';
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
 
 // import AdminService from '../../services/admin';
-// import MasterService from '../../services/master';
-
 // const adminService = new AdminService();
-// const masterService = new MasterService();
 
 const mock = {
 	meta: {
@@ -70,24 +68,16 @@ const AdminPage = () => {
 			width: 240,
 		},
 		{
-			title: 'Tgl. Gabung',
-			dataIndex: 'created_at',
-			width: 240,
-			render: (date) => (
-				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
-			),
+			title: 'Nama Admin',
+			dataIndex: 'name',
+			sort: true,
+			width: 360,
 		},
 		{
 			title: 'Foto',
 			dataIndex: 'image',
 			width: 100,
 			render: (image) => <Image preview src={image} width={100} />,
-		},
-		{
-			title: 'Nama Admin',
-			dataIndex: 'name',
-			sort: true,
-			width: 360,
 		},
 		{
 			title: 'Email',
@@ -100,6 +90,14 @@ const AdminPage = () => {
 			dataIndex: 'phone_number',
 			sort: true,
 			width: 240,
+		},
+		{
+			title: 'Tgl. Gabung',
+			dataIndex: 'created_at',
+			width: 240,
+			render: (date) => (
+				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
+			),
 		},
 		{
 			title: 'Peranan',
@@ -155,19 +153,7 @@ const AdminPage = () => {
 	];
 
 	const [totalAdmin, setTotalAdmin] = useState(null);
-	const [branchesOption, setbranchesOption] = useState([]);
 	const history = useHistory();
-
-	const getBranchesFilterOption = async () => {
-		try {
-			// const branches = await masterService.getBranches();
-			// return branches.map(branch => ({label: branch.name, value: branch.id}))
-
-			setbranchesOption([{ value: 'Bandung', label: 'Bandung' }]);
-		} catch (error) {
-			message.error(error.message);
-		}
-	};
 
 	const getTotalAdmin = async () => {
 		try {
@@ -226,27 +212,60 @@ const AdminPage = () => {
 	const renderDatatableFilters = () => {
 		return [
 			<MoleculeDatatableFilter
-				name="filter"
+				name="domiciles"
 				operator="eq"
-				identifier="branch-filter"
+				identifier="domiciles-filter"
 				label="Cabang"
-				key="branch-filter"
-				options={branchesOption}
+				key="domiciles-filter"
 				placeholder="Semua cabang"
+				data={{
+					url: '/domiciles',
+					mock: [
+						{
+							label: 'Bandung',
+							value: 'Bandung',
+						},
+						{
+							label: 'Garut',
+							value: 'Garut',
+						},
+					],
+				}}
 			/>,
-			// <MoleculeDateRangeFilter
-			// 	filterName="created_at"
-			// 	filterOperator="eq"
-			// 	placeholder="Filter tanggal melamar"
-			// 	size={4}
-			// 	identifier="daterangefilter"
-			// />
+			<MoleculeDatatableFilter
+				name="roles"
+				operator="eq"
+				identifier="roles-filter"
+				label="Peran"
+				key="roles-filter"
+				placeholder="Semua roles"
+				data={{
+					url: '/roles',
+					mock: [
+						{
+							label: 'Administrator',
+							value: 1,
+						},
+						{
+							label: 'Kasir',
+							value: 2,
+						},
+					],
+				}}
+			/>,
+			<MoleculeDatatableDateRange
+				name="joined_at"
+				operator="eq"
+				identifier="daterangefilter"
+				key="daterange"
+				label="Tanggal Register"
+				placeholder="Filter tanggal register"
+			/>,
 		];
 	};
 
 	useEffect(() => {
 		(async () => {
-			getBranchesFilterOption();
 			getTotalAdmin();
 		})();
 	}, []);

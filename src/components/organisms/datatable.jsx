@@ -134,7 +134,23 @@ const OrganismDatatable = forwardRef((props, ref) => {
 	};
 
 	const setSort = (order, attr) => {
-		filterParameter = { ...filterParameter, sort: `${order}${attr}` };
+		const newSort = { attr, order };
+		const existingFilterIndex = filterParameter.sorter.findIndex(
+			(sort) => attr === sort.attr
+		);
+
+		existingFilterIndex > -1
+			? (filterParameter.sorter[existingFilterIndex] = newSort)
+			: filterParameter.sorter.push;
+
+		filterParameter = {
+			...filterParameter,
+			sort: filterParameter.sorter.map(
+				(query, index) =>
+					`${index > 0 ? 'and' : ''} ${query.order}${query.attr} `
+			),
+			page: 1,
+		};
 		getData();
 	};
 
@@ -203,9 +219,8 @@ const OrganismDatatable = forwardRef((props, ref) => {
 										<Space
 											className="w-100"
 											direction="vertical"
-											size={15}
 										>
-											<Row>
+											<Row gutter={[0, 16]}>
 												{props.filters.map(
 													(filter, index) => {
 														const filterEl = React.cloneElement(
