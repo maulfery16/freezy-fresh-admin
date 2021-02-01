@@ -1,5 +1,17 @@
+.bg-denim {
+	background: #127ec5;
+}
+
 .bg-mineshaft {
 	background: #313131;
+}
+
+.b--denim {
+	border: 1px solid #127ec5;
+}
+
+.denim {
+	color: #127ec5;
 }
 
 .mineshaft {
