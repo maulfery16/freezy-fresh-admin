@@ -12,7 +12,7 @@ import routes from './routes';
 import { useSelector } from 'react-redux';
 
 const generateRoutes = (route, pathPrefix, customRender) => {
-	return (
+	return route.skipRenderParent ? null : (
 		<Route
 			key={route.name}
 			path={pathPrefix ? `${pathPrefix}${route.path}` : route.path}
@@ -21,40 +21,58 @@ const generateRoutes = (route, pathPrefix, customRender) => {
 			render={
 				customRender
 					? customRender
-					: (props) => <route.component {...props} />
+					: (props) => <route.component key={route.name} {...props} />
 			}
 		/>
 	);
 };
 
 const renderLoggedInComponent = (isLoggedIn, route) => {
-	return (props) =>
-		isLoggedIn ? (
-			<route.component {...props} />
-		) : (
-			<Redirect key="login-redirect" to="/login" />
-		);
+	return route.skipRenderParent
+		? null
+		: (props) =>
+				isLoggedIn ? (
+					<route.component key={route.name} {...props} />
+				) : (
+					<Redirect key="login-redirect" to="/login" />
+				);
 };
 
 const renderRoutes = (isLoggedIn) => {
 	return routes.map((route) =>
-		route.guard
-			? route.children
-				? route.children.map((child) =>
+		route.guard ? (
+			route.children ? (
+				<>
+					{generateRoutes(
+						route,
+						null,
+						renderLoggedInComponent(isLoggedIn, route)
+					)}
+					{route.children.map((child) =>
 						generateRoutes(
 							child,
 							route.path,
 							renderLoggedInComponent(isLoggedIn, child)
 						)
-				  )
-				: generateRoutes(
-						route,
-						null,
-						renderLoggedInComponent(isLoggedIn, route)
-				  )
-			: route.children
-			? route.children.map((child) => generateRoutes(child, route.path))
-			: generateRoutes(route)
+					)}
+				</>
+			) : (
+				generateRoutes(
+					route,
+					null,
+					renderLoggedInComponent(isLoggedIn, route)
+				)
+			)
+		) : route.children ? (
+			<>
+				{generateRoutes(route)}
+				{route.children.map((child) =>
+					generateRoutes(child, route.path)
+				)}
+			</>
+		) : (
+			generateRoutes(route)
+		)
 	);
 };
 

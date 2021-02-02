@@ -12,8 +12,23 @@ const routes = [
 		exact: true,
 		name: 'Admin Page',
 		path: '/admin',
+		children: [
+			{
+				component: React.lazy(() => import('./pages/admin/modify')),
+				exact: true,
+				name: 'Add Admin',
+				path: '/add',
+			},
+			{
+				component: React.lazy(() => import('./pages/admin/modify')),
+				exact: true,
+				name: 'Edit Admin',
+				path: '/edit',
+			},
+		],
 	},
 	{
+		skipRenderParent: true,
 		name: 'Pesanan Page',
 		path: '/order',
 		children: [
