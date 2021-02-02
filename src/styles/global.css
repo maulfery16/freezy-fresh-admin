@@ -108,3 +108,19 @@ a {
 	font-size: 20px;
 	font-weight: 700;
 }
+
+.ant-breadcrumb a {
+	color: #417ba2 !important;
+}
+
+.ant-breadcrumb > span:last-child a {
+	color: #127ec5 !important;
+	font-weight: 700 !important;
+}
+
+.ant-select-selector {
+	border-color: rgba(0, 0, 0, 0.1) !important;
+	border-radius: 0.5rem !important;
+	border-width: 0.125rem !important;
+	padding: 0 1rem !important;
+}

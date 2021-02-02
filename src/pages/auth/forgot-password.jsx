@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Col, Form, Row, Space, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 
-import AtomInput from '../../components/atoms/inputs/input';
+import MoleculeTextInputGroup from '../../components/molecules/input-group/text-input';
 import AuthenticationLayout from '../../components/layouts/authentication';
 
 const ForgotPasswordPages = () => {
@@ -17,25 +17,21 @@ const ForgotPasswordPages = () => {
 					LUPA PASSWORD ANDA?
 				</Typography.Title>
 
-				<Typography type="secondary" className="f7 tc silver">
+				<Typography type="secondary" className="f6 tc b--black-10">
 					Silakan masukkan alamat email Anda dan kami akan <br />
 					mengirimkan Anda tautan untuk mereset kata <br />
 					sandi Anda.
 				</Typography>
 
-				<Form
-					name="basic"
-					// onFinish={onFinish}
-					onFinishFailed={onFinishFailed}
-				>
+				<Form name="reset-password" onFinishFailed={onFinishFailed}>
 					<Space className="w-100" direction="vertical" size={30}>
-						<AtomInput
-							className="silver"
-							isRequired
+						<MoleculeTextInputGroup
+							label="Masukkkan Email Anda"
 							name="email"
-							prefix="Email"
+							required={true}
+							validationMessage="Email harus dalam bentuk email"
+							requiredMessage="Email tidak boleh kosong"
 							type="email"
-							requiredMessage="Alamat email tidak boleh kosong"
 						/>
 						<Row
 							justify="space-between"
@@ -51,7 +47,6 @@ const ForgotPasswordPages = () => {
 									block
 									className="bg-denim f6 fw5 shadow-3 white"
 									htmlType="submit"
-									// loading={isLoggingIn}
 									size="large"
 									style={{ borderRadius: '8px' }}
 								>

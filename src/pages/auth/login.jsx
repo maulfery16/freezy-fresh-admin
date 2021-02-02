@@ -1,12 +1,26 @@
 import React from 'react';
-import { Button, Checkbox, Col, Form, Row, Space, Typography } from 'antd';
+import {
+	Button,
+	Checkbox,
+	Col,
+	Form,
+	Input,
+	Row,
+	Space,
+	Typography,
+} from 'antd';
 import { Link } from 'react-router-dom';
 
-import AtomInput from '../../components/atoms/inputs/input';
-import AtomInputPassword from '../../components/atoms/inputs/password';
 import AuthenticationLayout from '../../components/layouts/authentication';
 
 const LoginPages = () => {
+	const validateMessages = {
+		required: '${name} tidak boleh kosong',
+		types: {
+			email: '${name} harus dalam bentuk email',
+		},
+	};
+
 	const onFinishFailed = (errorInfo) => {
 		console.log('Failed:', errorInfo);
 	};
@@ -21,23 +35,43 @@ const LoginPages = () => {
 					name="basic"
 					// onFinish={onFinish}
 					onFinishFailed={onFinishFailed}
+					validateMessages={validateMessages}
 				>
-					<Space className="w-100" direction="vertical" size={15}>
-						<AtomInput
-							className="silver"
-							isRequired
-							name="email"
-							prefix="Email"
-							type="email"
-							requiredMessage="Alamat email tidak boleh kosong"
-						/>
-						<AtomInputPassword
-							className="silver"
-							isRequired
-							name="password"
-							prefix="Password"
-							requiredMessage="Password tidak boleh kosong"
-						/>
+					<Space className="w-100" direction="vertical" size={20}>
+						<Form.Item
+							className="mb0"
+							name="Email"
+							rules={[
+								{
+									type: 'email',
+								},
+								{
+									required: true,
+								},
+							]}
+						>
+							<Input
+								className={`br3 ba bw1 b--black-10 pv2 ph3`}
+								prefix="Email"
+								size="middle"
+							/>
+						</Form.Item>
+
+						<Form.Item
+							className="mb0"
+							name="Password"
+							rules={[
+								{
+									required: true,
+								},
+							]}
+						>
+							<Input.Password
+								className={`br3 ba bw1 b--black-10 pv2 ph3`}
+								prefix="Password"
+								size="middle"
+							/>
+						</Form.Item>
 
 						<Row
 							justify="space-between"

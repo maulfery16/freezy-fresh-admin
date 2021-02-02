@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import {
 	Avatar,
 	Badge,
+	Breadcrumb,
 	Col,
 	Divider,
 	Layout,
@@ -12,7 +13,7 @@ import {
 	Space,
 	Typography,
 } from 'antd';
-import { useHistory, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import { BsFillPersonCheckFill, BsPersonFill } from 'react-icons/bs';
@@ -33,9 +34,9 @@ import {
 import FFLogo from '../../assets/logos/ff-logo.png';
 const menus = [
 	{
-		name: 'Dashboard',
+		name: 'Beranda',
 		icon: <HomeFilled />,
-		link: '/dashboard',
+		link: '/',
 	},
 	{
 		name: 'Admin',
@@ -155,7 +156,7 @@ const OrganismLayout = (props) => {
 								{!isSidebarCollapsed && (
 									<>
 										<Col span={7}>
-											<Space size={10}>
+											<Space size={5}>
 												<Badge count={notifCount}>
 													<BellOutlined className="white f4 pointer" />
 												</Badge>
@@ -163,7 +164,10 @@ const OrganismLayout = (props) => {
 											</Space>
 										</Col>
 										<Col span={22}>
-											<Space direction="vertical">
+											<Space
+												direction="vertical"
+												size={0}
+											>
 												<Typography.Text>
 													<span
 														className="white i"
@@ -180,7 +184,10 @@ const OrganismLayout = (props) => {
 													</span>
 												</Typography.Text>
 												<Typography.Text>
-													<span className="white f7 fw6">
+													<span
+														className="white fw7"
+														style={{ fontSize: 10 }}
+													>
 														{user.domiciles.join(
 															', '
 														)}
@@ -198,7 +205,10 @@ const OrganismLayout = (props) => {
 
 					<Menu
 						defaultOpenKeys={[location.pathname.split('/')[1]]}
-						defaultSelectedKeys={[location.pathname]}
+						defaultSelectedKeys={[
+							location.pathname,
+							`/${location.pathname.split('/')[1]}`,
+						]}
 						mode="inline"
 						theme="dark"
 					>
@@ -242,6 +252,20 @@ const OrganismLayout = (props) => {
 
 				<Layout className="site-layout">
 					<div className="ph5 pv4">
+						{props.breadcumbs && (
+							<Breadcrumb>
+								{props.breadcumbs.map((breadcumb, index) => (
+									<Breadcrumb.Item
+										className="denim"
+										key={`breadcumb-${index}`}
+									>
+										<Link to={breadcumb.link}>
+											{breadcumb.name}
+										</Link>
+									</Breadcrumb.Item>
+								))}
+							</Breadcrumb>
+						)}
 						<Divider />
 						<Layout.Content style={{ minHeight: '80vh' }}>
 							{props.children}
