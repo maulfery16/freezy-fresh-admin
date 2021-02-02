@@ -1,5 +1,17 @@
+.bg-light-grey {
+	background: #fafafa;
+}
+
+.bg-blue {
+	background: #127ec5;
+}
+
 .bg-mineshaft {
 	background: #313131;
+}
+
+.btn-blue {
+	background: #127ec5;
 }
 
 .mineshaft {

@@ -70,3 +70,9 @@ a {
 	color: #127ec5 !important;
 	font-weight: 500;
 }
+
+.ant-checkbox-inner,
+.ant-checkbox-inner:after,
+.ant-checkbox-checked:after {
+	border-radius: 100% !important;
+}
