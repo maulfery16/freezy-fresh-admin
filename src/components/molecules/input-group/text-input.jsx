@@ -21,16 +21,17 @@ const MoleculeTextInputGroup = (props) => {
 
 	const rules = [
 		{
-			message: `${props.label} harus dalam bentuk ${
-				TYPE_ENUM[props.type]
-			}`,
+			message:
+				props.validationMessage ||
+				`${props.label} harus dalam bentuk ${TYPE_ENUM[props.type]}`,
 			pattern: renderRegExp(),
 		},
 	];
 
 	if (props.required)
 		rules.push({
-			message: `${props.label} tidak boleh kosong`,
+			message:
+				props.requiredMessage || `${props.label} tidak boleh kosong`,
 			required: true,
 		});
 
