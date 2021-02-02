@@ -4,8 +4,12 @@ const INITIAL_STATE = {
 	isLoggedIn: false,
 	token: '',
 	user: {
+		domicile: 'Bandung',
 		id: null,
 		name: 'John Doe',
+		role: 'Administrator',
+		joined_at: new Date(),
+		domiciles: ['Jakarta Pusat', 'Jakarta Barat', 'Bandung'],
 	},
 };
 

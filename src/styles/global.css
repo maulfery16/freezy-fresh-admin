@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap');
 
 body {
 	min-height: 100vh;
 	height: 100%;
-	font-family: 'Roboto';
+	font-family: 'Quicksand';
 }
 
 a {
@@ -11,8 +11,8 @@ a {
 	color: black;
 }
 
-.roboto {
-	font-family: 'Roboto', sans-serif;
+.quicksand {
+	font-family: 'Quicksand', sans-serif;
 }
 
 .xy-center {
@@ -75,4 +75,36 @@ a {
 .ant-checkbox-inner:after,
 .ant-checkbox-checked:after {
 	border-radius: 100% !important;
+}
+
+.ant-pagination-item {
+	background: white !important;
+	border: 1px solid black !important;
+	color: black !important;
+	border-radius: 5px !important;
+}
+
+.ant-pagination-item-active {
+	background: red !important;
+	border: none !important;
+	color: white !important;
+}
+
+.ant-pagination-item-active a {
+	color: white;
+}
+
+.ant-table-fixed {
+	table-layout: fixed !important;
+}
+
+.ant-table-tbody > tr > td {
+	word-wrap: break-word !important;
+	word-break: break-all !important;
+}
+
+.ant-modal-title {
+	color: #127ec5;
+	font-size: 20px;
+	font-weight: 700;
 }

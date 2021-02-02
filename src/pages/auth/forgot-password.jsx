@@ -42,14 +42,14 @@ const ForgotPasswordPages = () => {
 							className="flex items-center"
 						>
 							<Col className="tl" span={12}>
-								<Link to="/login" className="f6 blue">
+								<Link to="/login" className="f6 denim">
 									Kembali
 								</Link>
 							</Col>
 							<Col span={10}>
 								<Button
 									block
-									className="btn-blue f6 fw5 shadow-3 white"
+									className="bg-denim f6 fw5 shadow-3 white"
 									htmlType="submit"
 									// loading={isLoggingIn}
 									size="large"

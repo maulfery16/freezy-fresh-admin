@@ -35,7 +35,7 @@ const AuthenticationLayout = (props) => {
 					<AtomFooter />
 				</div>
 			</Col>
-			<div className="w2 bg-blue" span={1}></div>
+			<div className="w2 bg-denim" span={1}></div>
 		</Row>
 	);
 };

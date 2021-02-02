@@ -64,7 +64,7 @@ const LoginPages = () => {
 							<Col span={12}>
 								<Button
 									block
-									className="btn-blue f6 fw5 shadow-3 white"
+									className="bg-denim f6 fw5 shadow-3 white"
 									htmlType="submit"
 									// loading={isLoggingIn}
 									size="large"
