@@ -74,7 +74,7 @@ const menus = [
 		link: '/membership',
 	},
 	{
-		name: 'Cabang Page',
+		name: 'Cabang',
 		icon: <FaStoreAlt />,
 		link: '/branch',
 	},
