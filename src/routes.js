@@ -58,6 +58,20 @@ const routes = [
 		name: 'Check Email Pages',
 		path: '/email-check',
 	},
+	{
+		component: React.lazy(() => import('./pages/auth/password-reset')),
+		exact: true,
+		name: 'Reset Password Pages',
+		path: '/reset-password',
+	},
+	{
+		component: React.lazy(() =>
+			import('./pages/auth/password-reset-success')
+		),
+		exact: true,
+		name: 'Reset Password Pages',
+		path: '/reset-password-success',
+	},
 ];
 
 export default routes;
