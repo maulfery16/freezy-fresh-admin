@@ -44,6 +44,20 @@ export default class AdminService extends RequestAdapterService {
 		}
 	}
 
+	async getAdmin(id) {
+		try {
+			const data = await super.sendGetRequest(
+				`${this.baseUrl}/admin/${id}`
+			);
+
+			return data;
+		} catch (error) {
+			throw new Error(
+				`Fail getting admin detail: ${error.response.data.message}`
+			);
+		}
+	}
+
 	async getTotalAdmin(params) {
 		try {
 			const data = await super.sendGetRequest(
