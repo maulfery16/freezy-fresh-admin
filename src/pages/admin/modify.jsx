@@ -116,6 +116,7 @@ const AdminModifyPage = () => {
 								<Col span={12}>
 									<MoleculeFileInputGroup
 										label="Foto Profile"
+										id="profile-photo-upload"
 										name="profile_photo"
 										placeholder="jpg, png"
 									/>
@@ -125,6 +126,7 @@ const AdminModifyPage = () => {
 									<MoleculeFileInputGroup
 										label="Foto KTP"
 										name="id_card_photo"
+										id="card-photo-upload"
 										placeholder="jpg, png"
 									/>
 								</Col>
@@ -140,7 +142,7 @@ const AdminModifyPage = () => {
 										name="email"
 										label="Email"
 										placeholder="Email"
-										requiredß
+										required
 										type="email"
 									/>
 								</Col>
