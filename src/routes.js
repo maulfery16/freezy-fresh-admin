@@ -20,10 +20,16 @@ const routes = [
 		],
 	},
 	{
-		component: React.lazy(() => import('./pages/authentication/authentication')),
+		component: React.lazy(() => import('./pages/auth/login')),
 		exact: true,
-		name: 'Authentication Pages',
-		path: '/authentication',
+		name: 'Login Pages',
+		path: '/login',
+	},
+	{
+		component: React.lazy(() => import('./pages/auth/forgot-password')),
+		exact: true,
+		name: 'Forgot Password Pages',
+		path: '/forgot-password',
 	},
 ];
 
