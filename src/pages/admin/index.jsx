@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 import React, { useEffect, useState } from 'react';
 import ReactMoment from 'react-moment';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Button, Image, message, Popconfirm, Skeleton, Space } from 'antd';
 import {
 	DeleteFilled,
@@ -173,7 +173,9 @@ const AdminPage = () => {
 		return (
 			<Space>
 				<Button className="br2 denim b--denim">Export Excel</Button>
-				<Button className="br2 bg-denim white">Tambah Admin</Button>
+				<Link to="/admin/add">
+					<Button className="br2 bg-denim white">Tambah Admin</Button>
+				</Link>
 			</Space>
 		);
 	};
@@ -271,7 +273,10 @@ const AdminPage = () => {
 	}, []);
 
 	return (
-		<OrganismLayout title="Admin Page">
+		<OrganismLayout
+			breadcumbs={[{ name: 'Admin', link: '/admin' }]}
+			title="Admin Page"
+		>
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				additionalInformation={renderAdditionalInformation()}
