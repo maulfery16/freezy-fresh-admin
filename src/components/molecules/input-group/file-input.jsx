@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Col, Form, Input, Row, Typography } from 'antd';
 
 const MoleculeFileInputGroup = (props) => {
+	const [image, setImage] = useState(props.defaultValue || null);
+
 	return (
 		<Form.Item>
 			<Typography.Text>
@@ -9,7 +11,12 @@ const MoleculeFileInputGroup = (props) => {
 			</Typography.Text>
 
 			<Form.Item name={props.name} noStyle>
-				<Input {...props} style={{ display: 'none' }} type="file" />
+				<Input
+					{...props}
+					onChange={(e) => setImage(e.target.files[0])}
+					style={{ display: 'none' }}
+					type="file"
+				/>
 			</Form.Item>
 
 			<Row
@@ -18,12 +25,19 @@ const MoleculeFileInputGroup = (props) => {
 			>
 				<Col>
 					<Typography.Text strong>
-						<span className="moon-gray">{props.placeholder}</span>
+						<span className="moon-gray">
+							{image ? image.name : props.placeholder}
+						</span>
 					</Typography.Text>
 				</Col>
 				<Col>
-					<Typography.Text>
-						<span className="denim">Browse</span>
+					<Typography.Text
+						className="pointer"
+						onClick={() => {
+							document.getElementById(props.id).click();
+						}}
+					>
+						<span className="denim fw6">Browse</span>
 					</Typography.Text>
 				</Col>
 			</Row>

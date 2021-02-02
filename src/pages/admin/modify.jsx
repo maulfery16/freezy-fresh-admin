@@ -1,21 +1,67 @@
-import React from 'react';
-import { Button, Col, Form, Row, Space, Typography } from 'antd';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import {
+	Button,
+	Col,
+	Form,
+	message,
+	Row,
+	Skeleton,
+	Space,
+	Typography,
+} from 'antd';
+import { Link, useLocation, useParams } from 'react-router-dom';
 
 import AtomCard from '../../components/atoms/card';
+import MoleculeFileInputGroup from '../../components/molecules/input-group/file-input';
 import MoleculePasswordInputGroup from '../../components/molecules/input-group/password-input';
 import MoleculeSelectInputGroup from '../../components/molecules/input-group/select-input';
 import MoleculeTextInputGroup from '../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../components/organisms/layout';
-import MoleculeFileInputGroup from '../../components/molecules/input-group/file-input';
+
+import AdminService from '../../services/admin';
+const adminService = new AdminService();
 
 const AdminModifyPage = () => {
+	const { id } = useParams();
 	const location = useLocation();
+
+	const isCreating = location.pathname.includes('add') ? true : false;
 	const label = location.pathname.includes('add')
 		? 'Tambah Admin'
 		: 'Ubah Admin';
 
-	return (
+	const [admin, setAdmin] = useState(null);
+
+	const submit = async (values) => {
+		try {
+			const data = new FormData();
+
+			Object.keys(values).forEach((key) => {
+				data.append(key, values[key]);
+			});
+
+			if (isCreating) {
+				await adminService.createAdmin(data);
+			} else {
+				await adminService.editAdmin(data, id);
+			}
+		} catch (error) {
+			message.error(error.message);
+		}
+	};
+
+	useEffect(() => {
+		(async () => {
+			if (!isCreating) {
+				const admin = await adminService.getAdmin(id);
+				setAdmin(admin);
+			}
+		})();
+	}, []);
+
+	return !isCreating && !admin ? (
+		<Skeleton active />
+	) : (
 		<OrganismLayout
 			breadcumbs={[
 				{ name: 'Admin', link: '/admin' },
@@ -30,7 +76,16 @@ const AdminModifyPage = () => {
 				<span className="fw7">{label.toUpperCase()}</span>
 			</Typography.Title>
 
-			<Form className="w-100 mt4">
+			<Form
+				className="w-100 mt4"
+				name="modify_admin"
+				initialValues={{ ...admin }}
+				onFinish={submit}
+				onFinishFailed={(error) => {
+					message.error(`Failed: ${error}`);
+					console.error(error);
+				}}
+			>
 				<Row>
 					<Col span={15}>
 						<AtomCard title="Info Admin">
@@ -116,6 +171,7 @@ const AdminModifyPage = () => {
 								<Col span={12}>
 									<MoleculeFileInputGroup
 										label="Foto Profile"
+										id="profile-photo-upload"
 										name="profile_photo"
 										placeholder="jpg, png"
 									/>
@@ -125,6 +181,7 @@ const AdminModifyPage = () => {
 									<MoleculeFileInputGroup
 										label="Foto KTP"
 										name="id_card_photo"
+										id="card-photo-upload"
 										placeholder="jpg, png"
 									/>
 								</Col>
@@ -140,7 +197,7 @@ const AdminModifyPage = () => {
 										name="email"
 										label="Email"
 										placeholder="Email"
-										requiredß
+										required
 										type="email"
 									/>
 								</Col>
