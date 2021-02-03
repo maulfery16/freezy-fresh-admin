@@ -176,7 +176,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 
 			<Col className="mt4" span={24}>
 				<Row align="bottom">
-					<Col span={17}>
+					<Col span={16}>
 						<Row gutter={[12, 12]}>
 							{props.additionalInformation &&
 							props.additionalInformation instanceof Array
@@ -184,7 +184,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 										(info, index) => (
 											<Col
 												key={`additional-info-${index}`}
-												span={6}
+												span={8}
 											>
 												{info}
 											</Col>
@@ -196,10 +196,10 @@ const OrganismDatatable = forwardRef((props, ref) => {
 						</Row>
 					</Col>
 
-					<Col span={7}>
+					<Col span={8}>
 						<Row gutter={12} justify="end">
 							{props.filters && (
-								<Col span={6}>
+								<Col span={8}>
 									<Button
 										className="bg-denim white br2 w-100"
 										onClick={() => setIsFilterVisible(true)}
@@ -259,7 +259,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 							)}
 
 							{props.searchInput && (
-								<Col span={18}>
+								<Col span={16}>
 									<Input.Search
 										placeholder={
 											props.searchInput.placeholder ||
