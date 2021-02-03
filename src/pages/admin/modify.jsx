@@ -26,9 +26,6 @@ const AdminModifyPage = () => {
 	const location = useLocation();
 
 	const isCreating = location.pathname.includes('add') ? true : false;
-	const label = location.pathname.includes('add')
-		? 'Tambah Admin'
-		: 'Ubah Admin';
 
 	const [admin, setAdmin] = useState(null);
 
@@ -70,10 +67,12 @@ const AdminModifyPage = () => {
 					link: location.pathname,
 				},
 			]}
-			title={label}
+			title={`${isCreating ? 'Tambah' : 'Ubah'} Admin`}
 		>
 			<Typography.Title level={4}>
-				<span className="fw7">{label.toUpperCase()}</span>
+				<span className="fw7">
+					{`${isCreating ? 'Tambah' : 'Ubah'} Admin`.toUpperCase()}
+				</span>
 			</Typography.Title>
 
 			<Form
@@ -202,15 +201,17 @@ const AdminModifyPage = () => {
 									/>
 								</Col>
 
-								<Col span={12}>
-									<MoleculePasswordInputGroup
-										name="password"
-										label="Password"
-										placeholder="Password"
-									/>
-								</Col>
+								{isCreating && (
+									<Col span={12}>
+										<MoleculePasswordInputGroup
+											name="password"
+											label="Password"
+											placeholder="Password"
+										/>
+									</Col>
+								)}
 
-								<Col span={10}>
+								<Col span={isCreating ? 10 : 12}>
 									<MoleculeSelectInputGroup
 										label="Peranan"
 										name="role"
@@ -232,7 +233,7 @@ const AdminModifyPage = () => {
 									/>
 								</Col>
 
-								<Col span={14}>
+								<Col span={isCreating ? 14 : 24}>
 									<MoleculeSelectInputGroup
 										label="Cabang"
 										name="branches"
@@ -273,7 +274,7 @@ const AdminModifyPage = () => {
 								size="large"
 								type="submit"
 							>
-								{label}
+								{`${isCreating ? 'Tambah' : 'Ubah'} Admin`}
 							</Button>
 						</Space>
 					</Col>

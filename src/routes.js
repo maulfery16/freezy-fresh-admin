@@ -43,25 +43,25 @@ const routes = [
 	{
 		component: React.lazy(() => import('./pages/auth/login')),
 		exact: true,
-		name: 'Login Pages',
+		name: 'Login Page',
 		path: '/login',
 	},
 	{
 		component: React.lazy(() => import('./pages/auth/forgot-password')),
 		exact: true,
-		name: 'Forgot Password Pages',
+		name: 'Forgot Password Page',
 		path: '/forgot-password',
 	},
 	{
 		component: React.lazy(() => import('./pages/auth/email-check')),
 		exact: true,
-		name: 'Check Email Pages',
+		name: 'Check Email Page',
 		path: '/email-check',
 	},
 	{
 		component: React.lazy(() => import('./pages/auth/password-reset')),
 		exact: true,
-		name: 'Reset Password Pages',
+		name: 'Reset Password Page',
 		path: '/reset-password',
 	},
 	{
@@ -69,7 +69,7 @@ const routes = [
 			import('./pages/auth/password-reset-success')
 		),
 		exact: true,
-		name: 'Reset Password Pages',
+		name: 'Reset Password Success Page',
 		path: '/reset-password-success',
 	},
 ];

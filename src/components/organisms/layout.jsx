@@ -31,7 +31,9 @@ import {
 	UserOutlined,
 } from '@ant-design/icons';
 
+import AtomFooter from '../atoms/footer';
 import FFLogo from '../../assets/logos/ff-logo.png';
+
 const menus = [
 	{
 		name: 'Beranda',
@@ -111,6 +113,7 @@ const OrganismLayout = (props) => {
 						setIsSidebarCollapsed((collapsed) => !collapsed)
 					}
 					width={250}
+					style={{ height: '100vh' }}
 				>
 					<div className="pa2 mv3 mh4">
 						<img src={FFLogo} alt="Logo" />
@@ -250,7 +253,10 @@ const OrganismLayout = (props) => {
 					</Menu>
 				</Layout.Sider>
 
-				<Layout className="site-layout">
+				<Layout
+					className="site-layout"
+					style={{ height: '100vh', overflow: 'scroll' }}
+				>
 					<div className="ph5 pv4">
 						{props.breadcumbs && (
 							<Breadcrumb>
@@ -271,7 +277,7 @@ const OrganismLayout = (props) => {
 							{props.children}
 						</Layout.Content>
 						<Layout.Footer style={{ textAlign: 'center' }}>
-							Copyright © 2021 Freezy Fresh. All rights reserved
+							<AtomFooter />
 						</Layout.Footer>
 					</div>
 				</Layout>
