@@ -31,7 +31,9 @@ import {
 	UserOutlined,
 } from '@ant-design/icons';
 
+import AtomFooter from '../atoms/footer';
 import FFLogo from '../../assets/logos/ff-logo.png';
+
 const menus = [
 	{
 		name: 'Beranda',
@@ -275,7 +277,7 @@ const OrganismLayout = (props) => {
 							{props.children}
 						</Layout.Content>
 						<Layout.Footer style={{ textAlign: 'center' }}>
-							Copyright © 2021 Freezy Fresh. All rights reserved
+							<AtomFooter />
 						</Layout.Footer>
 					</div>
 				</Layout>
