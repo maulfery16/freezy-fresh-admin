@@ -4,7 +4,7 @@ import { Col, Row, Typography } from 'antd';
 const MoleculeDatatableAdditionalInformation = (props) => {
 	return (
 		<Row
-			align="middles"
+			align="middle"
 			className="bg-white pv3 ph3 ba b--black-20"
 			justify="space-between"
 		>

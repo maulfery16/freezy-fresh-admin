@@ -1,8 +1,8 @@
-const BaseTypes = {
+const AuthTypes = {
 	SET_AUTH_TOKEN: 'SET_AUTH_TOKEN',
 	SET_CURRENT_USER: 'SET_CURRENT_USER',
 	SET_LOGIN_STATUS: 'SET_LOGIN_STATUS',
 	SET_SIDER_VISIBILITY: 'SET_SIDER_VISIBILITY',
 };
 
-export default BaseTypes;
+export default AuthTypes;
