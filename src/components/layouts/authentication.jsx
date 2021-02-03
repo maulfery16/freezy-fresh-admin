@@ -3,7 +3,7 @@ import { Col, Row } from 'antd';
 
 import AtomFooter from '../atoms/footer';
 import FFLogo from '../../assets/logos/ff-logo.png';
-import FFMainLogo from '../../assets/images/background-auth.svg';
+import AuthBanner from '../../assets/images/background-auth.svg';
 
 const AuthenticationLayout = (props) => {
 	return (
@@ -12,7 +12,7 @@ const AuthenticationLayout = (props) => {
 			justify="space-between"
 			style={{
 				height: '100vh',
-				backgroundImage: `url(${FFMainLogo})`,
+				backgroundImage: `url(${AuthBanner})`,
 				backgroundSize: 'contain',
 				backgroundRepeat: 'no-repeat',
 				backgroundPosition: 'fixed',

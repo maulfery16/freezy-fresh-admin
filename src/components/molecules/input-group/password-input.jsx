@@ -13,7 +13,7 @@ const MoleculePasswordInputGroup = (props) => {
 				noStyle
 				rules={[
 					{
-						message: `${props.label} tidak boleh kosong`,
+						message: props.requiredMessage || `${props.label} tidak boleh kosong`,
 						required: true,
 						type: props.type || 'string',
 					},

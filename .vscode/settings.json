@@ -1,14 +1,61 @@
 {
-	"arrowParens": "always",
-	"bracketSpacing": true,
-	"disableLanguages": ["vue", "yaml"],
-	"jsxBracketSameLine": false,
-	"jsxSingleQuote": false,
-	"packageManager": "yarn",
-	"printWidth": 80,
-	"semi": true,
-	"singleQuote": true,
-	"useTabs": true,
-	"tabWidth": 4,
-	"trailingComma": "es5"
+	"diffEditor.ignoreTrimWhitespace": false,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnPaste": true,
+	"editor.formatOnSave": true,
+	"editor.minimap.enabled": false,
+	"editor.suggestSelection": "first",
+	"editor.tabSize": 4,
+	"emmet.includeLanguages": {
+		"javascript": "javascriptreact"
+	},
+	"explorer.confirmDelete": false,
+	"files.associations": {
+		"*.txt": "plaintext",
+		"*.html": "html"
+	},
+	"files.eol": "\n",
+	"files.insertFinalNewline": true,
+	"javascript.updateImportsOnFileMove.enabled": "always",
+	"prettier.arrowParens": "always",
+	"prettier.bracketSpacing": true,
+	"prettier.disableLanguages": ["vue", "yaml"],
+	"prettier.jsxBracketSameLine": true,
+	"prettier.jsxSingleQuote": false,
+	"prettier.packageManager": "yarn",
+	"prettier.printWidth": 100,
+	"prettier.semi": true,
+	"prettier.singleQuote": true,
+	"prettier.useTabs": true,
+	"prettier.tabWidth": 4,
+	"prettier.trailingComma": "es5",
+	"terminal.integrated.shell.windows": "C:\\Program Files\\Git\\bin\\bash.exe",
+	"window.zoomLevel": -1,
+	"workbench.iconTheme": "helium-icon-theme",
+	"[javascript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true
+	},
+	"[python]": {
+		"editor.defaultFormatter": "ms-python.python",
+		"editor.formatOnSave": true
+	},
+	"yaml.schemas": {
+		"file:///c%3A/Users/Raka%20Pratama/.vscode/extensions/atlassian.atlascode-2.6.1/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml"
+	},
+	"workbench.sideBar.location": "left",
+	"git.ignoreWindowsGit27Warning": true,
+	"[dart]": {
+		"editor.formatOnSave": true,
+		"editor.formatOnType": true,
+		"editor.rulers": [80],
+		"editor.selectionHighlight": false,
+		"editor.suggest.snippetsPreventQuickSuggestions": false,
+		"editor.suggestSelection": "first",
+		"editor.tabCompletion": "onlySnippets",
+		"editor.wordBasedSuggestions": false
+	},
+	"workbench.colorTheme": "Default Dark+",
+	"workbench.statusBar.visible": true,
+	"explorer.confirmDragAndDrop": false
 }

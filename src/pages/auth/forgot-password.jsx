@@ -2,8 +2,8 @@ import React from 'react';
 import { Button, Col, Form, Row, Space, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 
-import MoleculeTextInputGroup from '../../components/molecules/input-group/text-input';
 import AuthenticationLayout from '../../components/layouts/authentication';
+import MoleculeTextInputGroup from '../../components/molecules/input-group/text-input';
 
 const ForgotPasswordPages = () => {
 	const onFinishFailed = (errorInfo) => {
@@ -23,7 +23,7 @@ const ForgotPasswordPages = () => {
 					sandi Anda.
 				</Typography>
 
-				<Form name="reset-password" onFinishFailed={onFinishFailed}>
+				<Form name="forgot-password" onFinishFailed={onFinishFailed}>
 					<Space className="w-100" direction="vertical" size={30}>
 						<MoleculeTextInputGroup
 							label="Masukkkan Email Anda"
