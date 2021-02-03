@@ -191,7 +191,7 @@ const OrganismLayout = (props) => {
 														className="white fw7"
 														style={{ fontSize: 10 }}
 													>
-														{user.domiciles.join(
+														{user.branches.join(
 															', '
 														)}
 													</span>

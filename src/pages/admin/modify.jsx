@@ -24,10 +24,18 @@ const adminService = new AdminService();
 const AdminModifyPage = () => {
 	const { id } = useParams();
 	const location = useLocation();
-
 	const isCreating = location.pathname.includes('add') ? true : false;
 
 	const [admin, setAdmin] = useState(null);
+
+	const getAdminDetail = (adminId) => {
+		try {
+			const admin = adminService.getAdminDetail(adminId);
+			setAdmin(admin);
+		} catch (error) {
+			message.error(error.message);
+		}
+	};
 
 	const submit = async (values) => {
 		try {
@@ -50,15 +58,12 @@ const AdminModifyPage = () => {
 	useEffect(() => {
 		(async () => {
 			if (!isCreating) {
-				const admin = await adminService.getAdmin(id);
-				setAdmin(admin);
+				await getAdminDetail(id);
 			}
 		})();
 	}, []);
 
-	return !isCreating && !admin ? (
-		<Skeleton active />
-	) : (
+	return (
 		<OrganismLayout
 			breadcumbs={[
 				{ name: 'Admin', link: '/admin' },
@@ -75,211 +80,215 @@ const AdminModifyPage = () => {
 				</span>
 			</Typography.Title>
 
-			<Form
-				className="w-100 mt4"
-				name="modify_admin"
-				initialValues={{ ...admin }}
-				onFinish={submit}
-				onFinishFailed={(error) => {
-					message.error(`Failed: ${error}`);
-					console.error(error);
-				}}
-			>
-				<Row>
-					<Col span={15}>
-						<AtomCard title="Info Admin">
-							<Row gutter={12}>
-								<Col span={12}>
-									<MoleculeTextInputGroup
-										name="first_name"
-										label="Nama Depan"
-										placeholder="Nama Depan"
-										type="text"
-									/>
-								</Col>
-
-								<Col span={12}>
-									<MoleculeTextInputGroup
-										name="last_name"
-										label="Nama Belakang"
-										placeholder="Nama Belakang"
-										type="text"
-									/>
-								</Col>
-
-								<Col span={24}>
-									<MoleculeSelectInputGroup
-										label="Jenis Kelamin"
-										name="gender"
-										placeholder="Jenis Kelamin"
-										required
-										data={{
-											mock: [
-												{
-													label: 'Pria',
-													value: 'MAN',
-												},
-												{
-													label: 'WANITA',
-													value: 'WOMAN',
-												},
-											],
-										}}
-									/>
-								</Col>
-
-								<Col span={24}>
-									<MoleculeTextInputGroup
-										name="phone_number"
-										label="Nomor Handpone"
-										placeholder="Nomor Handpone"
-										type="phone"
-									/>
-								</Col>
-
-								<Col span={8}>
-									<MoleculeSelectInputGroup
-										label="Bank (Opsional)"
-										name="bank"
-										placeholder="Bank (Opsional)"
-										data={{
-											url: '/banks',
-											mock: [
-												{
-													label: 'Mandiri',
-													value: 'Mandiri',
-												},
-												{
-													label: 'BCA',
-													value: 'BCA',
-												},
-											],
-										}}
-									/>
-								</Col>
-
-								<Col span={16}>
-									<MoleculeTextInputGroup
-										name="rek_number"
-										label="Nomor Rekening"
-										placeholder="Nomor Rekening"
-										type="number"
-									/>
-								</Col>
-
-								<Col span={12}>
-									<MoleculeFileInputGroup
-										label="Foto Profile"
-										id="profile-photo-upload"
-										name="profile_photo"
-										placeholder="jpg, png"
-									/>
-								</Col>
-
-								<Col span={12}>
-									<MoleculeFileInputGroup
-										label="Foto KTP"
-										name="id_card_photo"
-										id="card-photo-upload"
-										placeholder="jpg, png"
-									/>
-								</Col>
-							</Row>
-						</AtomCard>
-					</Col>
-
-					<Col className="mt4" span={15}>
-						<AtomCard title="Info Admin">
-							<Row gutter={12}>
-								<Col span={12}>
-									<MoleculeTextInputGroup
-										name="email"
-										label="Email"
-										placeholder="Email"
-										required
-										type="email"
-									/>
-								</Col>
-
-								{isCreating && (
+			{!isCreating && !admin ? (
+				<Skeleton active />
+			) : (
+				<Form
+					className="w-100 mt4"
+					name="modify_admin"
+					initialValues={{ ...admin }}
+					onFinish={submit}
+					onFinishFailed={(error) => {
+						message.error(`Failed: ${error}`);
+						console.error(error);
+					}}
+				>
+					<Row>
+						<Col span={15}>
+							<AtomCard title="Info Admin">
+								<Row gutter={12}>
 									<Col span={12}>
-										<MoleculePasswordInputGroup
-											name="password"
-											label="Password"
-											placeholder="Password"
+										<MoleculeTextInputGroup
+											name="first_name"
+											label="Nama Depan"
+											placeholder="Nama Depan"
+											type="text"
 										/>
 									</Col>
-								)}
 
-								<Col span={isCreating ? 10 : 12}>
-									<MoleculeSelectInputGroup
-										label="Peranan"
-										name="role"
-										placeholder="Peranan"
-										required
-										data={{
-											url: '/roles',
-											mock: [
-												{
-													label: 'Staff',
-													value: 'staff',
-												},
-												{
-													label: 'Administrator',
-													value: 'Administrator',
-												},
-											],
-										}}
-									/>
-								</Col>
+									<Col span={12}>
+										<MoleculeTextInputGroup
+											name="last_name"
+											label="Nama Belakang"
+											placeholder="Nama Belakang"
+											type="text"
+										/>
+									</Col>
 
-								<Col span={isCreating ? 14 : 24}>
-									<MoleculeSelectInputGroup
-										label="Cabang"
-										name="branches"
-										placeholder="Cabang"
-										mode="multiple"
-										required
-										data={{
-											url: '/domiciles',
-											mock: [
-												{
-													label: 'Bandung',
-													value: 'Bandung',
-												},
-												{
-													label: 'Garut',
-													value: 'Garut',
-												},
-											],
-										}}
-									/>
-								</Col>
-							</Row>
-						</AtomCard>
-					</Col>
+									<Col span={24}>
+										<MoleculeSelectInputGroup
+											label="Jenis Kelamin"
+											name="gender"
+											placeholder="Jenis Kelamin"
+											required
+											data={{
+												mock: [
+													{
+														label: 'Pria',
+														value: 'MAN',
+													},
+													{
+														label: 'WANITA',
+														value: 'WOMAN',
+													},
+												],
+											}}
+										/>
+									</Col>
 
-					<Col className="mt5" span={24}>
-						<Space>
-							<Link to="/admin">
+									<Col span={24}>
+										<MoleculeTextInputGroup
+											name="phone_number"
+											label="Nomor Handpone"
+											placeholder="Nomor Handpone"
+											type="phone"
+										/>
+									</Col>
+
+									<Col span={8}>
+										<MoleculeSelectInputGroup
+											label="Bank (Opsional)"
+											name="bank"
+											placeholder="Bank (Opsional)"
+											data={{
+												url: '/banks',
+												mock: [
+													{
+														label: 'Mandiri',
+														value: 'Mandiri',
+													},
+													{
+														label: 'BCA',
+														value: 'BCA',
+													},
+												],
+											}}
+										/>
+									</Col>
+
+									<Col span={16}>
+										<MoleculeTextInputGroup
+											name="rek_number"
+											label="Nomor Rekening"
+											placeholder="Nomor Rekening"
+											type="number"
+										/>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeFileInputGroup
+											label="Foto Profile"
+											id="profile-photo-upload"
+											name="profile_photo"
+											placeholder="jpg, png"
+										/>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeFileInputGroup
+											label="Foto KTP"
+											name="id_card_photo"
+											id="card-photo-upload"
+											placeholder="jpg, png"
+										/>
+									</Col>
+								</Row>
+							</AtomCard>
+						</Col>
+
+						<Col className="mt4" span={15}>
+							<AtomCard title="Info Admin">
+								<Row gutter={12}>
+									<Col span={12}>
+										<MoleculeTextInputGroup
+											name="email"
+											label="Email"
+											placeholder="Email"
+											required
+											type="email"
+										/>
+									</Col>
+
+									{isCreating && (
+										<Col span={12}>
+											<MoleculePasswordInputGroup
+												name="password"
+												label="Password"
+												placeholder="Password"
+											/>
+										</Col>
+									)}
+
+									<Col span={isCreating ? 10 : 12}>
+										<MoleculeSelectInputGroup
+											label="Peranan"
+											name="role"
+											placeholder="Peranan"
+											required
+											data={{
+												url: '/roles',
+												mock: [
+													{
+														label: 'Staff',
+														value: 'staff',
+													},
+													{
+														label: 'Administrator',
+														value: 'Administrator',
+													},
+												],
+											}}
+										/>
+									</Col>
+
+									<Col span={isCreating ? 14 : 24}>
+										<MoleculeSelectInputGroup
+											label="Cabang"
+											name="branches"
+											placeholder="Cabang"
+											mode="multiple"
+											required
+											data={{
+												url: '/branches',
+												mock: [
+													{
+														label: 'Bandung',
+														value: 'Bandung',
+													},
+													{
+														label: 'Garut',
+														value: 'Garut',
+													},
+												],
+											}}
+										/>
+									</Col>
+								</Row>
+							</AtomCard>
+						</Col>
+
+						<Col className="mt5" span={24}>
+							<Space>
+								<Link to="/admin">
+									<Button
+										className="br3 denim b--denim"
+										size="large"
+									>
+										Kembali
+									</Button>
+								</Link>
 								<Button
-									className="br3 denim b--denim"
+									className="br3 bg-denim white"
 									size="large"
+									type="submit"
 								>
-									Kembali
+									{`${isCreating ? 'Tambah' : 'Ubah'} Admin`}
 								</Button>
-							</Link>
-							<Button
-								className="br3 bg-denim white"
-								size="large"
-								type="submit"
-							>
-								{`${isCreating ? 'Tambah' : 'Ubah'} Admin`}
-							</Button>
-						</Space>
-					</Col>
-				</Row>
-			</Form>
+							</Space>
+						</Col>
+					</Row>
+				</Form>
+			)}
 		</OrganismLayout>
 	);
 };

@@ -9,7 +9,7 @@ const INITIAL_STATE = {
 		name: 'John Doe',
 		role: 'Administrator',
 		joined_at: new Date(),
-		domiciles: ['Jakarta Pusat', 'Jakarta Barat', 'Bandung'],
+		branches: ['Jakarta Pusat', 'Jakarta Barat', 'Bandung'],
 	},
 };
 

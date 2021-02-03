@@ -2,12 +2,6 @@ import React from 'react';
 
 const routes = [
 	{
-		component: React.lazy(() => import('./pages/dasboard.jsx')),
-		exact: true,
-		name: 'Hallo from dashbord',
-		path: '/',
-	},
-	{
 		component: React.lazy(() => import('./pages/admin')),
 		exact: true,
 		name: 'Admin Page',
@@ -16,16 +10,41 @@ const routes = [
 			{
 				component: React.lazy(() => import('./pages/admin/modify')),
 				exact: true,
-				name: 'Add Admin',
+				name: 'Add Admin Page',
 				path: '/add',
+			},
+			{
+				component: React.lazy(() => import('./pages/admin/detail')),
+				exact: true,
+				name: 'Addmin Detail Page',
+				path: '/:id',
 			},
 			{
 				component: React.lazy(() => import('./pages/admin/modify')),
 				exact: true,
-				name: 'Edit Admin',
-				path: '/edit',
+				name: 'Edit Admin Page',
+				path: '/edit/:id',
 			},
 		],
+	},
+	{
+		component: React.lazy(() => import('./pages/auth/email-check')),
+		exact: true,
+		name: 'Check Email Page',
+		path: '/email-check',
+	},
+	{
+		component: React.lazy(() => import('./pages/auth/forgot-password')),
+		exact: true,
+		name: 'Forgot Password Page',
+		path: '/forgot-password',
+	},
+
+	{
+		component: React.lazy(() => import('./pages/dasboard.jsx')),
+		exact: true,
+		name: 'Hallo from dashbord',
+		path: '/',
 	},
 	{
 		skipRenderParent: true,
@@ -46,18 +65,7 @@ const routes = [
 		name: 'Login Page',
 		path: '/login',
 	},
-	{
-		component: React.lazy(() => import('./pages/auth/forgot-password')),
-		exact: true,
-		name: 'Forgot Password Page',
-		path: '/forgot-password',
-	},
-	{
-		component: React.lazy(() => import('./pages/auth/email-check')),
-		exact: true,
-		name: 'Check Email Page',
-		path: '/email-check',
-	},
+
 	{
 		component: React.lazy(() => import('./pages/auth/password-reset')),
 		exact: true,
