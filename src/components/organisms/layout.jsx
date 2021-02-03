@@ -111,6 +111,7 @@ const OrganismLayout = (props) => {
 						setIsSidebarCollapsed((collapsed) => !collapsed)
 					}
 					width={250}
+					style={{ height: '100vh' }}
 				>
 					<div className="pa2 mv3 mh4">
 						<img src={FFLogo} alt="Logo" />
@@ -250,7 +251,10 @@ const OrganismLayout = (props) => {
 					</Menu>
 				</Layout.Sider>
 
-				<Layout className="site-layout">
+				<Layout
+					className="site-layout"
+					style={{ height: '100vh', overflow: 'scroll' }}
+				>
 					<div className="ph5 pv4">
 						{props.breadcumbs && (
 							<Breadcrumb>

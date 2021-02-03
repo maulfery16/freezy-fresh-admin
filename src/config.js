@@ -1,12 +1,12 @@
 /* eslint-disable no-undef */
 let config = {
-	API_URL: 'http://localhost:3000',
+	API_URL: 'https://api.freezyfresh.abcwork.id',
 };
 
-if (process.env.NODE_ENV === 'development') {
-	config['API_URL'] = 'http://localhost:5000/api';
-} else {
-	config['API_URL'] = 'https://lms-api.indihomestudy.com/api';
+if (['development', 'staging'].includes(process.env.NODE_ENV)) {
+	config['API_URL'] = 'https://api.freezyfresh.abcwork.id';
+} else if (['production'].includes(process.env.NODE_ENV)) {
+	config['API_URL'] = 'https://api.freezyfresh.abcwork.id';
 }
 
 export default config;
