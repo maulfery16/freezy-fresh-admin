@@ -7,19 +7,22 @@ const masterService = new MasterService();
 const AtomCustomSelect = (props) => {
 	const [options, setOptions] = useState(null);
 
+	const generateOption = (item) => {
+		if (props.generateCustomOption) return props.generateCustomOption(item);
+
+		return {
+			label: item.label,
+			value: item.id,
+		};
+	};
+
 	const getOptions = async () => {
 		if (props.data.mock) {
 			setOptions(props.data.mock);
 		} else {
 			const { data } = await masterService(props.url);
-			const options = data.map((item) => ({
-				label: props.data.labelIndex
-					? item[props.data.labelIndex]
-					: item.name,
-				value: props.data.valueIndex
-					? item[props.data.valueIndex]
-					: item.id,
-			}));
+			const options = data.map((item) => generateOption(item));
+
 			if (props.addblankoption)
 				options.unshift({ label: 'Semua', value: '' });
 
