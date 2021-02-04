@@ -282,6 +282,7 @@ const AdminPage = () => {
 				dataSourceURL={`/v1/admins`}
 				filters={renderDatatableFilters()}
 				mock={mock}
+				scroll={1920}
 				searchInput={true}
 				title={`Admin Menu`}
 			/>

@@ -227,7 +227,7 @@ const AdminModifyPage = () => {
 									Kembali
 								</Button>
 							</Link>
-							<Link to={`/admin/edit/${id}`}>
+							<Link to={`/admin/${id}/edit`}>
 								<Button
 									className="br3 bg-denim white"
 									size="large"
