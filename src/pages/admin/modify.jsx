@@ -28,9 +28,9 @@ const AdminModifyPage = () => {
 
 	const [admin, setAdmin] = useState(null);
 
-	const getAdminDetail = (adminId) => {
+	const getAdminDetail = (id) => {
 		try {
-			const admin = adminService.getAdminDetail(adminId);
+			const admin = adminService.getAdminById(id);
 			setAdmin(admin);
 		} catch (error) {
 			message.error(error.message);
@@ -47,11 +47,21 @@ const AdminModifyPage = () => {
 
 			if (isCreating) {
 				await adminService.createAdmin(data);
+
+				message.success('Berhasil menambah admin');
 			} else {
-				await adminService.editAdmin(data, id);
+				await adminService.editAdmin(id, data);
+				message.success('Berhasil mengubah admin');
 			}
 		} catch (error) {
 			message.error(error.message);
+		} finally {
+			message.info(
+				'Akan dikembalikan ke halaman daftar admin dalam 2 detik'
+			);
+			setTimeout(() => {
+				history.push('/admin');
+			}, 2000);
 		}
 	};
 

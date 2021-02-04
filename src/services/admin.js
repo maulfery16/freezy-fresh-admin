@@ -29,7 +29,7 @@ export default class AdminService extends RequestAdapterService {
 		}
 	}
 
-	async editAdmin(admin, id) {
+	async editAdmin(id, admin) {
 		try {
 			const { data } = await super.sendPutRequest(
 				`${this.baseUrl}/admin/${id}`,
@@ -44,7 +44,7 @@ export default class AdminService extends RequestAdapterService {
 		}
 	}
 
-	async getAdmin(id) {
+	async getAdminById(id) {
 		try {
 			const data = await super.sendGetRequest(
 				`${this.baseUrl}/admin/${id}`
