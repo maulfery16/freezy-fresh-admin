@@ -152,7 +152,7 @@ const CategoryPage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`/v1/admins`}
+				dataSourceURL={`/v1/products/category`}
 				mock={mock}
 				searchInput={true}
 				title={`Kategori Dasar`}
