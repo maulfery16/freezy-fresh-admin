@@ -67,6 +67,14 @@ const routes = [
 				path: '/additional-category/new',
 			},
 			{
+				component: React.lazy(() =>
+					import('./pages/products/brand/modify')
+				),
+				exact: true,
+				name: 'Add Brand Page',
+				path: '/brand/add',
+			},
+			{
 				component: React.lazy(() => import('./pages/products/brand')),
 				exact: true,
 				name: 'Brand Page',
@@ -74,11 +82,11 @@ const routes = [
 			},
 			{
 				component: React.lazy(() =>
-					import('./pages/products/brand/add')
+					import('./pages/products/brand/modify')
 				),
 				exact: true,
-				name: 'Add Brand Page',
-				path: '/brand/add',
+				name: 'Edit Brand Page',
+				path: '/brand/:id/edit',
 			},
 			{
 				component: React.lazy(() =>
@@ -104,7 +112,6 @@ const routes = [
 				name: 'Edit Category Page',
 				path: '/category/:id/edit',
 			},
-
 			{
 				component: React.lazy(() => import('./pages/products/colour')),
 				exact: true,

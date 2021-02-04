@@ -65,36 +65,30 @@ const AdminPage = () => {
 		{
 			title: 'ID',
 			dataIndex: 'id',
-			width: 240,
 		},
 		{
 			title: 'Nama Admin',
 			dataIndex: 'name',
 			sort: true,
-			width: 360,
 		},
 		{
 			title: 'Foto',
 			dataIndex: 'image',
-			width: 100,
 			render: (image) => <Image preview src={image} width={100} />,
 		},
 		{
 			title: 'Email',
 			dataIndex: 'email',
 			sort: true,
-			width: 300,
 		},
 		{
 			title: 'No. Hp',
 			dataIndex: 'phone_number',
 			sort: true,
-			width: 240,
 		},
 		{
 			title: 'Tgl. Gabung',
 			dataIndex: 'created_at',
-			width: 240,
 			render: (date) => (
 				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
 			),
@@ -103,34 +97,28 @@ const AdminPage = () => {
 			title: 'Peranan',
 			dataIndex: 'role',
 			sort: true,
-			width: 240,
 		},
 		{
 			title: 'Cabang',
 			dataIndex: 'branches',
 			sort: true,
-			width: 240,
 			render: (branches) => branches.join(', '),
 		},
 		{
 			title: 'Jenis Kelamin',
 			dataIndex: 'gender',
-			width: 240,
 		},
 		{
 			title: 'Nomor Rek',
 			dataIndex: 'account_number',
-			width: 240,
 		},
 		{
 			title: 'Bank',
 			dataIndex: 'bank',
-			width: 240,
 		},
 		{
 			title: 'Aksi',
 			dataIndex: 'id',
-			width: 200,
 			render: (id) => (
 				<Space size="middle">
 					<Link to={`/admin/${id}`}>

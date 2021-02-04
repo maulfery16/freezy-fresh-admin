@@ -132,7 +132,9 @@ const CategoryPage = () => {
 			<Space>
 				<Button className="br2 denim b--denim">Export Excel</Button>
 				<Link to="/products/category/add">
-					<Button className="br2 bg-denim white">Tambah Admin</Button>
+					<Button className="br2 bg-denim white">
+						Tambah Kategori
+					</Button>
 				</Link>
 			</Space>
 		);
@@ -147,7 +149,7 @@ const CategoryPage = () => {
 					link: location.pathname,
 				},
 			]}
-			title="Admin Page"
+			title="Product Page Category"
 		>
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
