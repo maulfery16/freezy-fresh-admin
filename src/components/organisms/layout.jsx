@@ -67,8 +67,26 @@ const menus = [
 	},
 	{
 		name: 'Produk-Poduk',
-		icon: <FaBoxOpen />,
-		link: '/product',
+		icon: <FaBoxOpen style={{ marginRight: '10px' }} />,
+		subMenuKey: 'produts',
+		subMenus: [
+			{
+				name: 'Kategori Dasar',
+				link: '/products/category',
+			},
+			{
+				name: 'Kategori Tambahan',
+				link: '/products/additional-category',
+			},
+			{
+				name: 'Warna',
+				link: '/products/colour',
+			},
+			{
+				name: 'Brand',
+				link: '/products/brand',
+			},
+		],
 	},
 	{
 		name: 'Membership',

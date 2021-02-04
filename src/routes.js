@@ -39,7 +39,6 @@ const routes = [
 		name: 'Forgot Password Page',
 		path: '/forgot-password',
 	},
-
 	{
 		component: React.lazy(() => import('./pages/dasboard.jsx')),
 		exact: true,
@@ -48,14 +47,69 @@ const routes = [
 	},
 	{
 		skipRenderParent: true,
-		name: 'Pesanan Page',
-		path: '/order',
+		name: 'Product Page',
+		path: '/products',
 		children: [
 			{
-				component: React.lazy(() => import('./pages/admin')),
+				component: React.lazy(() =>
+					import('./pages/products/additional-category')
+				),
 				exact: true,
-				name: 'Pesanan Baru Page',
-				path: '/new',
+				name: 'Additional Category Page',
+				path: '/additional-category',
+			},
+			{
+				component: React.lazy(() =>
+					import('./pages/products/additional-category/add')
+				),
+				exact: true,
+				name: 'Add Additional Category Page',
+				path: '/additional-category/new',
+			},
+			{
+				component: React.lazy(() => import('./pages/products/brand')),
+				exact: true,
+				name: 'Brand Page',
+				path: '/brand',
+			},
+			{
+				component: React.lazy(() =>
+					import('./pages/products/brand/add')
+				),
+				exact: true,
+				name: 'Add Brand Page',
+				path: '/brand/add',
+			},
+			{
+				component: React.lazy(() =>
+					import('./pages/products/category')
+				),
+				exact: true,
+				name: 'Category Page',
+				path: '/category',
+			},
+			{
+				component: React.lazy(() =>
+					import('./pages/products/category/add')
+				),
+				exact: true,
+				name: 'Add Category Page',
+				path: '/category/add',
+			},
+
+			{
+				component: React.lazy(() => import('./pages/products/colour')),
+				exact: true,
+				name: 'Colour Page',
+				path: '/colour',
+			},
+			{
+				component: React.lazy(() =>
+					import('./pages/products/colour/add')
+				),
+				exact: true,
+				name: 'Add Colour Page',
+				path: '/colour/add',
 			},
 		],
 	},
