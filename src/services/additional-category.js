@@ -44,7 +44,7 @@ export default class AdditionalCategoryService extends RequestAdapterService {
 		}
 	}
 
-	async getCategoryById(id) {
+	async getAdditionalCategoryById(id) {
 		try {
 			const data = await super.sendGetRequest(
 				`${this.baseUrl}/products/additional-category/${id}`
