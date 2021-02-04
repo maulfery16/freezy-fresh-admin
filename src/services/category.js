@@ -1,6 +1,6 @@
 import RequestAdapterService from './request-adapter';
 
-export default class Category extends RequestAdapterService {
+export default class CategoryService extends RequestAdapterService {
 	async createCategory(category) {
 		try {
 			const { data } = await super.sendPostRequest(
