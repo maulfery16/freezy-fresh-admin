@@ -1,25 +1,25 @@
 import RequestAdapterService from './request-adapter';
 
-export default class CategoryService extends RequestAdapterService {
-	async createCategory(category) {
+export default class BrandService extends RequestAdapterService {
+	async createBrand(brand) {
 		try {
 			const { data } = await super.sendPostRequest(
-				`${this.baseUrl}/products/category`,
-				category
+				`${this.baseUrl}/products/brand`,
+				brand
 			);
 
 			return data;
 		} catch (error) {
 			throw new Error(
-				`Fail creating category: ${error.response.data.message}`
+				`Fail creating brand: ${error.response.data.message}`
 			);
 		}
 	}
 
-	async deleteCategory(id) {
+	async deleteBrand(id) {
 		try {
 			return await super.sendDeleteRequest(
-				`${this.baseUrl}/products/category/${id}`,
+				`${this.baseUrl}/products/brand/${id}`,
 				{ id }
 			);
 		} catch (error) {
@@ -29,25 +29,25 @@ export default class CategoryService extends RequestAdapterService {
 		}
 	}
 
-	async editCategory(id, category) {
+	async editBrand(id, brand) {
 		try {
 			const { data } = await super.sendPutRequest(
-				`${this.baseUrl}/products/category/${id}`,
-				category
+				`${this.baseUrl}/products/brand/${id}`,
+				brand
 			);
 
 			return data;
 		} catch (error) {
 			throw new Error(
-				`Fail updating category: ${error.response.data.message}`
+				`Fail updating brand: ${error.response.data.message}`
 			);
 		}
 	}
 
-	async getCategoryById(id) {
+	async getBrandById(id) {
 		try {
 			const data = await super.sendGetRequest(
-				`${this.baseUrl}/products/category/${id}`
+				`${this.baseUrl}/products/brand/${id}`
 			);
 
 			return data;
@@ -58,17 +58,17 @@ export default class CategoryService extends RequestAdapterService {
 		}
 	}
 
-	async updateCategoryActiveStatus(id, status) {
+	async updateBrandActiveStatus(id, status) {
 		try {
 			const { data } = await super.sendPutRequest(
-				`${this.baseUrl}/products/category/${id}/status`,
+				`${this.baseUrl}/products/brand/${id}/status`,
 				status
 			);
 
 			return data;
 		} catch (error) {
 			throw new Error(
-				`Fail updating category status: ${error.response.data.message}`
+				`Fail updating brand status: ${error.response.data.message}`
 			);
 		}
 	}
