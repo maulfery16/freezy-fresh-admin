@@ -16,14 +16,14 @@ const routes = [
 			{
 				component: React.lazy(() => import('./pages/admin/detail')),
 				exact: true,
-				name: 'Addmin Detail Page',
+				name: 'Admin Detail Page',
 				path: '/:id',
 			},
 			{
 				component: React.lazy(() => import('./pages/admin/modify')),
 				exact: true,
 				name: 'Edit Admin Page',
-				path: '/edit/:id',
+				path: '/:id/edit',
 			},
 		],
 	},
@@ -82,6 +82,14 @@ const routes = [
 			},
 			{
 				component: React.lazy(() =>
+					import('./pages/products/category/modify')
+				),
+				exact: true,
+				name: 'Add Category Page',
+				path: '/category/add',
+			},
+			{
+				component: React.lazy(() =>
 					import('./pages/products/category')
 				),
 				exact: true,
@@ -90,11 +98,11 @@ const routes = [
 			},
 			{
 				component: React.lazy(() =>
-					import('./pages/products/category/add')
+					import('./pages/products/category/modify')
 				),
 				exact: true,
-				name: 'Add Category Page',
-				path: '/category/add',
+				name: 'Edit Category Page',
+				path: '/category/:id/edit',
 			},
 
 			{

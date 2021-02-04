@@ -207,6 +207,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 									props.searchInput.placeholder || 'Cari'
 								}
 								onSearch={(value) => setKeyword(value)}
+								size="large"
 							/>
 						</Col>
 					)}
@@ -308,7 +309,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 							total: totalData,
 						}}
 						rowKey={props.rowKey || 'id'}
-						scroll={{ x: props.scroll || 1920 }}
+						scroll={{ x: props.scroll || 1080 }}
 						style={{ width: '100%' }}
 					/>
 				)}
