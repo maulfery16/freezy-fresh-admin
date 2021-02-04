@@ -176,7 +176,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 
 			<Col className="mt4" span={24}>
 				<Row align="bottom">
-					<Col span={16}>
+					<Col span={24}>
 						<Row gutter={[12, 12]}>
 							{props.additionalInformation &&
 							props.additionalInformation instanceof Array
@@ -184,7 +184,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 										(info, index) => (
 											<Col
 												key={`additional-info-${index}`}
-												span={8}
+												span={6}
 											>
 												{info}
 											</Col>
@@ -195,82 +195,74 @@ const OrganismDatatable = forwardRef((props, ref) => {
 								: null}
 						</Row>
 					</Col>
+				</Row>
+			</Col>
 
-					<Col span={8}>
-						<Row gutter={12} justify="end">
-							{props.filters && (
-								<Col span={8}>
+			<Col className="mt4" span={24}>
+				<Row gutter={12}>
+					{props.searchInput && (
+						<Col span={8}>
+							<Input.Search
+								placeholder={
+									props.searchInput.placeholder || 'Cari'
+								}
+								onSearch={(value) => setKeyword(value)}
+							/>
+						</Col>
+					)}
+
+					{props.filters && (
+						<Col span={4}>
+							<Button
+								className="bg-denim white br2 w-100"
+								onClick={() => setIsFilterVisible(true)}
+							>
+								Filter
+							</Button>
+
+							<Modal
+								footer={null}
+								title="Filter"
+								visible={isFilterVisible}
+								width={350}
+								onCancel={() => setIsFilterVisible(false)}
+							>
+								<Space className="w-100" direction="vertical">
+									<Row gutter={[0, 16]}>
+										{props.filters.map((filter, index) => {
+											const filterEl = React.cloneElement(
+												filter,
+												{
+													addFilter,
+													addMultipleFilter,
+													removeFilter,
+												}
+											);
+
+											return (
+												<Col
+													key={`dattable-filter-${index}`}
+													span={24}
+												>
+													{filterEl}
+												</Col>
+											);
+										})}
+									</Row>
+								</Space>
+
+								<Row className="mt5" justify="center">
 									<Button
-										className="bg-denim white br2 w-100"
-										onClick={() => setIsFilterVisible(true)}
+										className="bg-denim white br3 w-30"
+										onClick={setFilter}
+										size="large"
 									>
 										Filter
 									</Button>
-
-									<Modal
-										footer={null}
-										title="Filter"
-										visible={isFilterVisible}
-										width={350}
-										onCancel={() =>
-											setIsFilterVisible(false)
-										}
-									>
-										<Space
-											className="w-100"
-											direction="vertical"
-										>
-											<Row gutter={[0, 16]}>
-												{props.filters.map(
-													(filter, index) => {
-														const filterEl = React.cloneElement(
-															filter,
-															{
-																addFilter,
-																addMultipleFilter,
-																removeFilter,
-															}
-														);
-
-														return (
-															<Col
-																key={`dattable-filter-${index}`}
-																span={24}
-															>
-																{filterEl}
-															</Col>
-														);
-													}
-												)}
-											</Row>
-										</Space>
-
-										<Row className="mt5" justify="center">
-											<Button
-												className="bg-denim white br3 w-30"
-												onClick={setFilter}
-												size="large"
-											>
-												Filter
-											</Button>
-										</Row>
-									</Modal>
-								</Col>
-							)}
-
-							{props.searchInput && (
-								<Col span={16}>
-									<Input.Search
-										placeholder={
-											props.searchInput.placeholder ||
-											'Cari'
-										}
-										onSearch={(value) => setKeyword(value)}
-									/>
-								</Col>
-							)}
-						</Row>
-					</Col>
+								</Row>
+							</Modal>
+						</Col>
+					)}
 				</Row>
 			</Col>
 
