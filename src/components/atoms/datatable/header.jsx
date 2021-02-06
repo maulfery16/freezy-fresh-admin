@@ -4,12 +4,16 @@ import { Space, Typography } from 'antd';
 import { CaretDownFilled, CaretUpFilled } from '@ant-design/icons';
 
 const AtomDatatableHeader = (props) => {
-	const [order, setOrder] = useState(null);
+	const [order, setOrder] = useState(
+		props.attr === props.activeSort.sortedBy
+			? props.activeSort.orderBy
+			: null
+	);
 
 	const switchSort = () => {
-		if (order === null) setOrder('');
-		if (order === '') setOrder('-');
-		if (order === '-') setOrder(null);
+		if (order === null) setOrder('asc');
+		if (order === 'asc') setOrder('desc');
+		if (order === 'desc') setOrder(null);
 
 		props.setSort(order, props.attr);
 	};
@@ -27,9 +31,11 @@ const AtomDatatableHeader = (props) => {
 					onClick={switchSort}
 					size={-14}
 				>
-					<CaretUpFilled className={`${order === '' && 'denim'}`} />
+					<CaretUpFilled
+						className={`${order === 'asc' && 'denim'}`}
+					/>
 					<CaretDownFilled
-						className={`${order === '-' && 'denim'}`}
+						className={`${order === 'desc' && 'denim'}`}
 					/>
 				</Space>
 			)}
