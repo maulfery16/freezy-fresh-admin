@@ -114,7 +114,6 @@ const AdditionalCategoryPage = () => {
 	return (
 		<OrganismLayout
 			breadcumbs={[
-				{ name: 'Dashboard', link: '/' },
 				{ name: 'Produk', link: location.pathname },
 				{
 					name: 'Kategori Tambahan',
