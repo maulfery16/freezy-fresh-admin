@@ -36,8 +36,9 @@ const OrganismDatatable = forwardRef((props, ref) => {
 		filters: [],
 		keyword: '',
 		limit: 5,
+		orderBy: '',
 		page: 1,
-		sort: '',
+		sortedBy: '',
 	};
 
 	const getData = async () => {
@@ -133,23 +134,12 @@ const OrganismDatatable = forwardRef((props, ref) => {
 		getData();
 	};
 
-	const setSort = (order, attr) => {
-		const newSort = { attr, order };
-		const existingFilterIndex = filterParameter.sorter.findIndex(
-			(sort) => attr === sort.attr
-		);
-
-		existingFilterIndex > -1
-			? (filterParameter.sorter[existingFilterIndex] = newSort)
-			: filterParameter.sorter.push;
-
+	const setSort = (orderBy, sortedBy) => {
 		filterParameter = {
 			...filterParameter,
-			sort: filterParameter.sorter.map(
-				(query, index) =>
-					`${index > 0 ? 'and' : ''} ${query.order}${query.attr} `
-			),
+			orderBy,
 			page: 1,
+			sortedBy,
 		};
 		getData();
 	};
@@ -278,6 +268,10 @@ const OrganismDatatable = forwardRef((props, ref) => {
 							title: (
 								<AtomDatatableHeader
 									attr={column.dataIndex}
+									activeSort={{
+										orderBy: filterParameter.orderBy,
+										sortedBy: filterParameter.sortedBy,
+									}}
 									setSort={column.sort ? setSort : false}
 									title={column.title}
 								/>
