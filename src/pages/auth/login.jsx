@@ -5,6 +5,7 @@ import {
 	Col,
 	Form,
 	Input,
+	message,
 	Row,
 	Space,
 	Typography,
@@ -12,6 +13,9 @@ import {
 import { Link } from 'react-router-dom';
 
 import AuthenticationLayout from '../../components/layouts/authentication';
+import AuthService from '../../services/auth';
+
+const authService = new AuthService();
 
 const LoginPages = () => {
 	const validateMessages = {
@@ -21,8 +25,16 @@ const LoginPages = () => {
 		},
 	};
 
-	const onFinishFailed = (errorInfo) => {
+	const showLoginErrorMessage = (errorInfo) => {
 		console.log('Failed:', errorInfo);
+	};
+
+	const login = async (values) => {
+		try {
+			await authService.login({ ...values, grantType: 'password' });
+		} catch (error) {
+			message.error(error.message);
+		}
 	};
 
 	return (
@@ -33,8 +45,8 @@ const LoginPages = () => {
 				</Typography.Title>
 				<Form
 					name="basic"
-					// onFinish={onFinish}
-					onFinishFailed={onFinishFailed}
+					onFinish={login}
+					onFinishFailed={showLoginErrorMessage}
 					validateMessages={validateMessages}
 				>
 					<Space className="w-100" direction="vertical" size={20}>

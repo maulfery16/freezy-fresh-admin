@@ -10,14 +10,13 @@ import {
 export default class AuthService extends RequestAdapterService {
 	async login(credential) {
 		try {
-			const user = await super.sendPostRequest(
+			const { access_token } = await super.sendPostRequest(
 				`${this.baseUrl}/user/login`,
 				credential
 			);
 
-			store.dispatch(setAuthToken(user.token));
-			store.dispatch(setCurrentUser(user.data));
-			store.dispatch(setLoginStatus(false));
+			store.dispatch(setAuthToken(access_token));
+			store.dispatch(setLoginStatus(true));
 		} catch (error) {
 			throw new Error(`Login failed: ${error.response.data.message}`);
 		}
@@ -26,6 +25,7 @@ export default class AuthService extends RequestAdapterService {
 	logout() {
 		store.dispatch(setAuthToken(null));
 		store.dispatch(setCurrentUser(null));
+
 		store.dispatch(setLoginStatus(false));
 		super.overrideAuthToken(null);
 	}
