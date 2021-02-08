@@ -19,7 +19,7 @@ export default class BrandService extends RequestAdapterService {
 	async deleteBrand(id) {
 		try {
 			return await super.sendDeleteRequest(
-				`${this.baseUrl}/products/brand/${id}`,
+				`${this.baseUrl}/brands/${id}`,
 				{ id }
 			);
 		} catch (error) {

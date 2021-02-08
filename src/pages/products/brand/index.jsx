@@ -1,8 +1,8 @@
 /* eslint-disable react/display-name */
-import React from 'react';
+import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
 import { Link } from 'react-router-dom';
-import { Button, Image, Popconfirm, Space } from 'antd';
+import { Button, Image, message, Popconfirm, Space } from 'antd';
 import {
 	DeleteFilled,
 	EditFilled,
@@ -12,6 +12,9 @@ import {
 import AtomNumberFormat from '../../../components/atoms/number-format';
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
+
+import BrandService from '../../../services/brand';
+const brandService = new BrandService();
 
 const mock = {
 	data: [
@@ -210,13 +213,26 @@ const BrandPage = () => {
 					>
 						<DeleteFilled
 							className="f4 red"
-							onClick={() => console.log(id)}
+							onClick={() => deleteBrand(id)}
 						/>
 					</Popconfirm>
 				</Space>
 			),
 		},
 	];
+	const brandTableRef = useRef();
+
+	const deleteBrand = async (id) => {
+		try {
+			await brandService.deleteBrand(id);
+
+			message.success('Berhasil menghapus brand');
+			brandTableRef.current.refetchData();
+		} catch (error) {
+			message.error(error.message);
+			message.error(error.errors.code);
+		}
+	};
 
 	const renderAdditionalAction = () => {
 		return (
@@ -245,9 +261,10 @@ const BrandPage = () => {
 				columns={column}
 				dataSourceURL={`/v1//brands`}
 				mock={mock}
+				ref={brandTableRef}
+				scroll={1920}
 				searchInput={true}
 				title={`Brand`}
-				scroll={1920}
 			/>
 		</OrganismLayout>
 	);
