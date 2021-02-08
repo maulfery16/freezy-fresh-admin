@@ -136,8 +136,8 @@ const AddAdditionalCategoryPage = () => {
 									<Col span={24}>
 										<MoleculeTextInputGroup
 											name="code"
-											label="Kode Kategori Tambahan (EN)"
-											placeholder="Kode Kategori Tambahan (EN)"
+											label="Kode Kategori Tambahan"
+											placeholder="Kode Kategori Tambahan"
 											type="text"
 										/>
 									</Col>
