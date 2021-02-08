@@ -34,7 +34,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 	let filterParameter = {
 		filter: '',
 		filters: [],
-		keyword: '',
+		search: '',
 		limit: 5,
 		orderBy: '',
 		page: 1,
@@ -47,7 +47,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 		try {
 			if (props.mock) {
 				setData(props.mock.data);
-				setTotalData(props.mock.meta.total_data);
+				setTotalData(props.mock.meta.pagination.total);
 			} else {
 				const { data, meta } = await datatableService.getData(
 					props.dataSourceURL,
@@ -119,8 +119,8 @@ const OrganismDatatable = forwardRef((props, ref) => {
 		getData();
 	};
 
-	const setKeyword = (value) => {
-		filterParameter = { ...filterParameter, keyword: value };
+	const setKeyword = (search) => {
+		filterParameter = { ...filterParameter, search };
 		getData();
 	};
 
