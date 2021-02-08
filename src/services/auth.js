@@ -11,7 +11,7 @@ export default class AuthService extends RequestAdapterService {
 	async login(credential) {
 		try {
 			const { access_token } = await super.sendPostRequest(
-				`${this.baseUrl}/user/login`,
+				`${this.baseUrl}/v1/clients/web/admin/login`,
 				credential
 			);
 

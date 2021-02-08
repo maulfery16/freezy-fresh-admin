@@ -31,7 +31,7 @@ const LoginPages = () => {
 
 	const login = async (values) => {
 		try {
-			await authService.login({ ...values, grantType: 'password' });
+			await authService.login({ ...values, grant_type: 'password' });
 		} catch (error) {
 			message.error(error.message);
 		}
@@ -52,7 +52,7 @@ const LoginPages = () => {
 					<Space className="w-100" direction="vertical" size={20}>
 						<Form.Item
 							className="mb0"
-							name="Email"
+							name="email"
 							rules={[
 								{
 									type: 'email',
@@ -71,7 +71,7 @@ const LoginPages = () => {
 
 						<Form.Item
 							className="mb0"
-							name="Password"
+							name="password"
 							rules={[
 								{
 									required: true,
