@@ -59,14 +59,12 @@ const column = [
 	{
 		title: 'Tanggal Dibuat',
 		dataIndex: 'created_at',
-		render: (date) => (
-		<ReactMoment format="DD/MM/YY">{date}</ReactMoment>),
+		render: (date) => <ReactMoment format="DD/MM/YY">{date}</ReactMoment>,
 	},
 	{
 		title: 'Tanggal Diupdate',
 		dataIndex: 'updated_at',
-			render: (date) => (
-			<ReactMoment format="DD/MM/YY">{date}</ReactMoment>),
+		render: (date) => <ReactMoment format="DD/MM/YY">{date}</ReactMoment>,
 	},
 	{
 		title: 'Dibuat Oleh',
@@ -88,7 +86,7 @@ const column = [
 				<Popconfirm
 					title="Are you sure?"
 					icon={<QuestionCircleFilled className="red" />}
-					>
+				>
 					<DeleteFilled
 						className="f4 red"
 						onClick={() => console.log(id)}
@@ -120,7 +118,7 @@ const AdditionalCategoryPage = () => {
 					link: location.pathname,
 				},
 			]}
-			title="Admin Page"
+			title="Product Page Additional Category"
 		>
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
