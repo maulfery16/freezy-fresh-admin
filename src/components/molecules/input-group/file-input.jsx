@@ -4,6 +4,12 @@ import { Col, Form, Input, Row, Typography } from 'antd';
 const MoleculeFileInputGroup = (props) => {
 	const [image, setImage] = useState(props.defaultValue || null);
 
+	const inputProps = {
+		id: props.id,
+		label: props.label,
+		palceholder: props.placeholder,
+	};
+
 	return (
 		<Form.Item>
 			<Typography.Text>
@@ -12,8 +18,11 @@ const MoleculeFileInputGroup = (props) => {
 
 			<Form.Item name={props.name} noStyle>
 				<Input
-					{...props}
-					onChange={(e) => setImage(e.target.files[0])}
+					{...inputProps}
+					onChange={(e) => {
+						setImage(e.target.files[0]);
+						props.setImage(e.target.files[0]);
+					}}
 					style={{ display: 'none' }}
 					type="file"
 				/>

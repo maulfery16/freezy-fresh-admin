@@ -3,8 +3,8 @@ import RequestAdapterService from './request-adapter';
 export default class BrandService extends RequestAdapterService {
 	async createBrand(brand) {
 		try {
-			const { data } = await super.sendPostRequest(
-				`${this.baseUrl}/products/brand`,
+			const { data } = await super.sendPostMultipartRequest(
+				`${this.baseUrl}/brands`,
 				brand
 			);
 
@@ -31,8 +31,8 @@ export default class BrandService extends RequestAdapterService {
 
 	async editBrand(id, brand) {
 		try {
-			const { data } = await super.sendPutRequest(
-				`${this.baseUrl}/products/brand/${id}`,
+			const { data } = await super.sendPutMultipartRequest(
+				`${this.baseUrl}/brands/${id}?_method=PATCH`,
 				brand
 			);
 
@@ -46,8 +46,8 @@ export default class BrandService extends RequestAdapterService {
 
 	async getBrandById(id) {
 		try {
-			const data = await super.sendGetRequest(
-				`${this.baseUrl}/products/brand/${id}`
+			const { data } = await super.sendGetRequest(
+				`${this.baseUrl}/brands/${id}`
 			);
 
 			return data;

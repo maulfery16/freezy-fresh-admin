@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import React, { useEffect, useState } from 'react';
 import {
 	Button,
@@ -17,6 +18,7 @@ import MoleculeNumberInputGroup from '../../../components/molecules/input-group/
 import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../../components/organisms/layout';
 
+import RequestAdapterService from '../../../services/request-adapter';
 import BrandService from '../../../services/brand';
 const brandService = new BrandService();
 
@@ -26,22 +28,44 @@ const BrandModifyPage = () => {
 	const isCreating = location.pathname.includes('add') ? true : false;
 
 	const [brand, setBrand] = useState(null);
+	const [brandImage, setBrandImage] = useState(null);
 
-	const getBrandDetail = (id) => {
+	const getBrandDetail = async (id) => {
 		try {
-			const brand = brandService.getBrandById(id);
+			const brand = await brandService.getBrandById(id);
+
+			const brandImageFile = await RequestAdapterService.convertImageURLtoFile(
+				brand.image.original
+			);
+			setBrandImage(brandImageFile);
 			setBrand(brand);
 		} catch (error) {
 			message.error(error.message);
+			message.error(error.errors.code);
 		}
+	};
+
+	const setBrandInitialValues = () => {
+		return isCreating
+			? {}
+			: {
+					code: brand.code,
+					en_name: brand.name.en,
+					followers: brand.followers || 1,
+					id_name: brand.name.id,
+					image: brandImage,
+			  };
 	};
 
 	const submit = async (values) => {
 		try {
 			const data = new FormData();
-			Object.keys(values).forEach((key) => {
-				data.append(key, values[key]);
-			});
+			data.append('code', values.code);
+			data.append('followers', values.followers);
+			data.append('image', brandImage);
+			data.append('name[en]', values.en_name);
+			data.append('name[id]', values.id_name);
+			if (!isCreating) data.append('is_active', false);
 
 			if (isCreating) {
 				await brandService.createBrand(data);
@@ -50,15 +74,16 @@ const BrandModifyPage = () => {
 				await brandService.editBrand(id, data);
 				message.success('Berhasil mengubah brand');
 			}
-		} catch (error) {
-			message.error(error.message);
-		} finally {
+
 			message.info(
 				'Akan dikembalikan ke halaman daftar brand dalam 2 detik'
 			);
 			setTimeout(() => {
 				history.push('/products/brand');
 			}, 2000);
+		} catch (error) {
+			message.error(error.message);
+			message.error(error.errors.code);
 		}
 	};
 
@@ -94,10 +119,7 @@ const BrandModifyPage = () => {
 				<Form
 					className="w-100 mt4"
 					name="modify_brand"
-					initialValues={{
-						...brand,
-						followers: brand ? brand.followers : 1,
-					}}
+					initialValues={setBrandInitialValues()}
 					onFinish={submit}
 					onFinishFailed={(error) => {
 						message.error(`Failed: ${error}`);
@@ -110,8 +132,26 @@ const BrandModifyPage = () => {
 								<Row gutter={12}>
 									<Col span={24}>
 										<MoleculeTextInputGroup
-											name="name"
-											label="Nama Brand"
+											name="code"
+											label="Kode"
+											placeholder="Kode Brand"
+											type="text"
+										/>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeTextInputGroup
+											name="id_name"
+											label="Nama Brand (ID)"
+											placeholder="Nama Brand"
+											type="text"
+										/>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeTextInputGroup
+											name="en_name"
+											label="Nama Brand (EN)"
 											placeholder="Nama Brand"
 											type="text"
 										/>
@@ -123,6 +163,7 @@ const BrandModifyPage = () => {
 											id="brand-logo-upload"
 											name="image"
 											placeholder="png"
+											setImage={setBrandImage}
 										/>
 									</Col>
 
@@ -162,7 +203,7 @@ const BrandModifyPage = () => {
 								<Button
 									className="br3 bg-denim white"
 									size="large"
-									type="submit"
+									htmlType="submit"
 								>
 									{`${isCreating ? 'Tambah' : 'Ubah'} Brand`}
 								</Button>

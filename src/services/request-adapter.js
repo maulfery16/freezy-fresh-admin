@@ -53,17 +53,28 @@ export default class RequestAdapterService {
 		});
 	}
 
-	sendPostRequest(URL, requestBody, withoutDestructuring = false) {
-		if (withoutDestructuring) {
-			return this.reqClient.post(URL, requestBody);
-		} else {
-			return this.reqClient.post(URL, { ...requestBody });
-		}
+	sendPostRequest(URL, requestBody) {
+		return this.reqClient.post(URL, requestBody);
 	}
 
 	sendPutRequest(URL, requestBody) {
 		return this.reqClient.put(URL, requestBody);
 	}
+
+	sendPutMultipartRequest(URL, formData) {
+		return this.reqClient.put(URL, formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+		});
+	}
+
+	static convertImageURLtoFile = async (url) => {
+		const response = await fetch(url);
+		const contentType = response.headers.get('content-type');
+		const blob = await response.blob();
+		return new File([blob], 'Image', { contentType });
+	};
 
 	static getURLParams = (url) => {
 		const searchParams = new URLSearchParams(url);
