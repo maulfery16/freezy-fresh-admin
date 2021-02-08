@@ -67,12 +67,12 @@ const routes = [
 			},
 			{
 				component: React.lazy(() =>
-					import('./pages/products/additional-category/add')
+					import('./pages/products/additional-category/modify')
 				),
 				exact: true,
 				guard: true,
 				name: 'Add Additional Category Page',
-				path: '/additional-category/new',
+				path: '/additional-category/add',
 			},
 			{
 				component: React.lazy(() =>
