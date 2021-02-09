@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import React, { useEffect, useState } from 'react';
 import {
 	Button,
@@ -25,34 +26,40 @@ const ColourModifyPage = () => {
 	const location = useLocation();
 	const isCreating = location.pathname.includes('add') ? true : false;
 
-	const [colour, setColour] = useState({ colour: { hexa: null } });
-	const [hexaCode, setHexaCode] = useState(colour.hexa_code || '#ffffff');
-	const handleChangeColorComplete = (color) => {
-		setHexaCode(color.hex);
-	};
-
-	const colorPicker = (
-		<SketchPicker
-			color={hexaCode}
-			onChangeComplete={handleChangeColorComplete}
-		/>
-	);
+	const [colour, setColour] = useState(null);
+	const [hexaCode, setHexaCode] = useState('#ffffff');
 
 	const getColourDetail = (id) => {
 		try {
 			const colour = colourService.getColourById(id);
+
 			setColour(colour);
+			setHexaCode(colour.hexa_code);
 		} catch (error) {
 			message.error(error.message);
+			message.error(error.errors.code);
 		}
+	};
+
+	const setColourInitialValues = () => {
+		return isCreating
+			? {}
+			: {
+					id_name: colour.name.id,
+					hexa_code: colour.hexa_code || '#ffffff',
+					en_name: colour.name.en,
+					code: colour.code,
+			  };
 	};
 
 	const submit = async (values) => {
 		try {
 			const data = new FormData();
-			Object.keys(values).forEach((key) => {
-				data.append(key, values[key]);
-			});
+			data.append('code', values.code);
+			data.append('hexa_code', values.hexa_code);
+			data.append('name[en]', values.en_name);
+			data.append('name[id]', values.id_name);
+			if (!isCreating) data.append('is_active', false);
 
 			if (isCreating) {
 				await colourService.createColour(data);
@@ -81,6 +88,17 @@ const ColourModifyPage = () => {
 		})();
 	}, []);
 
+	const handleChangeColorComplete = (color) => {
+		setHexaCode(color.hex);
+	};
+
+	const colorPicker = (
+		<SketchPicker
+			color={hexaCode}
+			onChangeComplete={handleChangeColorComplete}
+		/>
+	);
+
 	return (
 		<OrganismLayout
 			breadcumbs={[
@@ -107,8 +125,8 @@ const ColourModifyPage = () => {
 			) : (
 				<Form
 					className="w-100 mt4"
-					name="modify_additional_category"
-					initialValues={{ ...colour }}
+					name="modify_colour"
+					initialValues={setColourInitialValues()}
 					onFinish={submit}
 					onFinishFailed={(error) => {
 						message.error(`Failed: ${error}`);
@@ -139,7 +157,7 @@ const ColourModifyPage = () => {
 
 									<Col span={20}>
 										<MoleculeTextInputGroup
-											name="code"
+											name="hexa_code"
 											label="Kode Hexa"
 											placeholder="Kode Hexa"
 											type="text"

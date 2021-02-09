@@ -1,8 +1,8 @@
 /* eslint-disable react/display-name */
-import React from 'react';
+import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
 import { Link } from 'react-router-dom';
-import { Button, Col, Popconfirm, Row, Space } from 'antd';
+import { Button, Col, message, Popconfirm, Row, Space } from 'antd';
 import {
 	DeleteFilled,
 	EditFilled,
@@ -12,13 +12,10 @@ import {
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
-// import ColourService from '../../../services/colour';
-// const colourService = new ColourService();
+import ColourService from '../../../services/colour';
+const colourService = new ColourService();
 
 const mock = {
-	meta: {
-		total_data: 2,
-	},
 	data: [
 		{
 			code: 'RED',
@@ -47,6 +44,18 @@ const mock = {
 			updated_by: 'Ji Min',
 		},
 	],
+	meta: {
+		include: [],
+		custom: [],
+		pagination: {
+			total: 5,
+			count: 5,
+			per_page: 10,
+			current_page: 1,
+			total_pages: 1,
+			links: {},
+		},
+	},
 };
 
 const ColourPage = () => {
@@ -125,13 +134,27 @@ const ColourPage = () => {
 					>
 						<DeleteFilled
 							className="f4 red"
-							onClick={() => console.log(id)}
+							onClick={() => deleteColour(id)}
 						/>
 					</Popconfirm>
 				</Space>
 			),
 		},
 	];
+
+	const colourTableRef = useRef();
+
+	const deleteColour = async (id) => {
+		try {
+			await colourService.deleteColour(id);
+
+			message.success('Berhasil menghapus warna');
+			colourTableRef.current.refetchData();
+		} catch (error) {
+			message.error(error.message);
+			message.error(error.errors.code);
+		}
+	};
 
 	const renderAdditionalAction = () => {
 		return (
@@ -157,8 +180,10 @@ const ColourPage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`/colors`}
+				dataSourceURL={`/v1/colors`}
 				mock={mock}
+				ref={colourTableRef}
+				scroll={1920}
 				searchInput={true}
 				title={`Warna`}
 			/>
