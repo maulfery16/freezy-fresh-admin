@@ -11,7 +11,9 @@ export default class AuthService extends RequestAdapterService {
 			return data;
 		} catch (error) {
 			console.log(error);
-			throw new Error(`Login failed: ${error.response.data.message}`);
+			throw new Error(
+				`Login failed: ${error.response.data.message} - ${error.response.data.errors.code} `
+			);
 		}
 	}
 }

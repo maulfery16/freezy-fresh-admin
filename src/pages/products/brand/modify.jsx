@@ -10,7 +10,7 @@ import {
 	Space,
 	Typography,
 } from 'antd';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
 import MoleculeFileInputGroup from '../../../components/molecules/input-group/file-input';
@@ -24,24 +24,26 @@ const brandService = new BrandService();
 
 const BrandModifyPage = () => {
 	const { id } = useParams();
+	const history = useHistory();
 	const location = useLocation();
 	const isCreating = location.pathname.includes('add') ? true : false;
 
 	const [brand, setBrand] = useState(null);
 	const [brandImage, setBrandImage] = useState(null);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const getBrandDetail = async (id) => {
 		try {
-			const brand = await brandService.getBrandById(id);
+			const { data: brand } = await brandService.getBrandById(id);
 
+			setBrand(brand);
 			const brandImageFile = await RequestAdapterService.convertImageURLtoFile(
 				brand.image.original
 			);
+			console.log(brandImageFile);
 			setBrandImage(brandImageFile);
-			setBrand(brand);
 		} catch (error) {
 			message.error(error.message);
-			message.error(error.errors.code);
 		}
 	};
 
@@ -59,8 +61,9 @@ const BrandModifyPage = () => {
 
 	const submit = async (values) => {
 		try {
+			setIsSubmitting(true);
+
 			const data = new FormData();
-			data.append('code', values.code);
 			data.append('followers', values.followers);
 			data.append('image', brandImage);
 			data.append('name[en]', values.en_name);
@@ -83,7 +86,8 @@ const BrandModifyPage = () => {
 			}, 2000);
 		} catch (error) {
 			message.error(error.message);
-			message.error(error.errors.code);
+		} finally {
+			setIsSubmitting(false);
 		}
 	};
 
@@ -130,15 +134,6 @@ const BrandModifyPage = () => {
 						<Col span={15}>
 							<AtomCard title="Info Brand">
 								<Row gutter={12}>
-									<Col span={24}>
-										<MoleculeTextInputGroup
-											name="code"
-											label="Kode"
-											placeholder="Kode Brand"
-											type="text"
-										/>
-									</Col>
-
 									<Col span={12}>
 										<MoleculeTextInputGroup
 											name="id_name"
@@ -157,8 +152,9 @@ const BrandModifyPage = () => {
 										/>
 									</Col>
 
-									<Col span={12}>
+									<Col span={24}>
 										<MoleculeFileInputGroup
+											defaultValue={brandImage}
 											label="Logo Brand"
 											id="brand-logo-upload"
 											name="image"
@@ -167,7 +163,7 @@ const BrandModifyPage = () => {
 										/>
 									</Col>
 
-									<Col span={12}>
+									<Col span={24}>
 										<MoleculeNumberInputGroup
 											id="followers"
 											label="Jumlah Followers Sosmed"
@@ -202,8 +198,9 @@ const BrandModifyPage = () => {
 								</Link>
 								<Button
 									className="br3 bg-denim white"
-									size="large"
 									htmlType="submit"
+									loading={isSubmitting}
+									size="large"
 								>
 									{`${isCreating ? 'Tambah' : 'Ubah'} Brand`}
 								</Button>

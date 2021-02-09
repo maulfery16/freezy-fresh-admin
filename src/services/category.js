@@ -11,7 +11,7 @@ export default class CategoryService extends RequestAdapterService {
 			return data;
 		} catch (error) {
 			throw new Error(
-				`Fail creating category: ${error.response.data.message}`
+				`Fail creating category: ${error.response.data.message} - ${error.response.data.errors.code} `
 			);
 		}
 	}
@@ -24,7 +24,7 @@ export default class CategoryService extends RequestAdapterService {
 			);
 		} catch (error) {
 			throw new Error(
-				`Fail deleting admin: ${error.response.data.message}`
+				`Fail deleting admin: ${error.response.data.message} - ${error.response.data.errors.code} `
 			);
 		}
 	}
@@ -39,7 +39,7 @@ export default class CategoryService extends RequestAdapterService {
 			return data;
 		} catch (error) {
 			throw new Error(
-				`Fail updating category: ${error.response.data.message}`
+				`Fail updating category: ${error.response.data.message} - ${error.response.data.errors.code} `
 			);
 		}
 	}
@@ -53,7 +53,7 @@ export default class CategoryService extends RequestAdapterService {
 			return data;
 		} catch (error) {
 			throw new Error(
-				`Fail getting categiory detail: ${error.response.data.message}`
+				`Fail getting categiory detail: ${error.response.data.message} - ${error.response.data.errors.code} `
 			);
 		}
 	}
@@ -68,7 +68,7 @@ export default class CategoryService extends RequestAdapterService {
 			return data;
 		} catch (error) {
 			throw new Error(
-				`Fail updating category status: ${error.response.data.message}`
+				`Fail updating category status: ${error.response.data.message} - ${error.response.data.errors.code} `
 			);
 		}
 	}
