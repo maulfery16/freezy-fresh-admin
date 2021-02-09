@@ -39,9 +39,9 @@ const BrandModifyPage = () => {
 			);
 			setBrandImage(brandImageFile);
 			setBrand(brand);
-		} catch (error) {
-			message.error(error.message);
-			message.error(error.errors.code);
+		} catch ({ message, errors }) {
+			message.error(message);
+			message.error(errors.code);
 		}
 	};
 
@@ -81,9 +81,9 @@ const BrandModifyPage = () => {
 			setTimeout(() => {
 				history.push('/products/brand');
 			}, 2000);
-		} catch (error) {
-			message.error(error.message);
-			message.error(error.errors.code);
+		} catch ({ message, errors }) {
+			message.error(message);
+			message.error(errors.code);
 		}
 	};
 

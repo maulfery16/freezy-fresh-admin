@@ -228,9 +228,9 @@ const BrandPage = () => {
 
 			message.success('Berhasil menghapus brand');
 			brandTableRef.current.refetchData();
-		} catch (error) {
-			message.error(error.message);
-			message.error(error.errors.code);
+		} catch ({ message, errors }) {
+			message.error(message);
+			message.error(errors.code);
 		}
 	};
 

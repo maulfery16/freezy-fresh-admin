@@ -19,7 +19,7 @@ export default class CategoryService extends RequestAdapterService {
 	async deleteCategory(id) {
 		try {
 			return await super.sendDeleteRequest(
-				`${this.baseUrl}/products/category/${id}`,
+				`${this.baseUrl}/base_categories/${id}`,
 				{ id }
 			);
 		} catch (error) {
@@ -61,7 +61,7 @@ export default class CategoryService extends RequestAdapterService {
 	async updateCategoryActiveStatus(id, status) {
 		try {
 			const { data } = await super.sendPutRequest(
-				`${this.baseUrl}/products/category/${id}/status`,
+				`${this.baseUrl}/base_categories/${id}/status`,
 				status
 			);
 
