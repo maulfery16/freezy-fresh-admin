@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Image, message, Popconfirm, Space, Switch } from 'antd';
 import {
@@ -15,31 +15,33 @@ import CategoryService from '../../../services/category';
 const categoryService = new CategoryService();
 
 const mock = {
-	meta: {
-		total_data: 2,
-	},
 	data: [
 		{
-			active: true,
-			colour: '#FF3412',
-			created_at: new Date(),
-			id: 'FF-836732982',
-			id_name: 'Daging Ikan',
-			en_name: 'Fish Meat',
-			icon:
-				'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDoXuk_pQv_beIYwtbApyRWeOvS_dWofCdjA&usqp=CAU',
-		},
-		{
-			active: false,
-			colour: '#2334FF',
-			created_at: new Date(),
-			id: 'FF-836732282',
-			id_name: 'Sayuran',
-			en_name: 'Veggies',
-			icon:
-				'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDoXuk_pQv_beIYwtbApyRWeOvS_dWofCdjA&usqp=CAU',
+			object: 'BaseCategory',
+			id: 'azkvml597yxe8b9j',
+			name: 'Makasnan',
+			color: {
+				id: 'azkvml597yxe8b9j',
+				name: '{"en":"White","id":"Putih"}',
+			},
+			is_active: 1,
+			created_at: '2021-02-09T00:28:04.000000Z',
+			updated_at: '2021-02-09T00:28:04.000000Z',
+			inactive_at: null,
 		},
 	],
+	meta: {
+		include: [],
+		custom: [],
+		pagination: {
+			total: 1,
+			count: 1,
+			per_page: 10,
+			current_page: 1,
+			total_pages: 1,
+			links: {},
+		},
+	},
 };
 
 const CategoryPage = () => {
@@ -55,11 +57,13 @@ const CategoryPage = () => {
 		},
 		{
 			title: 'Nama Kategori (ID)',
-			dataIndex: 'id_name',
+			dataIndex: 'name',
+			render: (_, record) => record.name,
 		},
 		{
 			title: 'Nama Kategori (EN)',
-			dataIndex: 'en_name',
+			dataIndex: 'name',
+			render: (_, record) => record.name,
 		},
 		{
 			title: 'Foto Icon',
@@ -82,7 +86,7 @@ const CategoryPage = () => {
 		},
 		{
 			title: 'Aktif',
-			dataIndex: 'active',
+			dataIndex: 'is_active',
 			render: (active, record) => (
 				<Switch
 					defaultChecked={active}
@@ -107,13 +111,14 @@ const CategoryPage = () => {
 					>
 						<DeleteFilled
 							className="f4 red"
-							onClick={() => console.log(id)}
+							onClick={() => deleteBaseCategory(id)}
 						/>
 					</Popconfirm>
 				</Space>
 			),
 		},
 	];
+	const categoryTableRef = useRef();
 
 	const changeCategoryActiveStatus = async (status, id) => {
 		try {
@@ -124,6 +129,18 @@ const CategoryPage = () => {
 			message.success('Berhasil memperbaharui status aktif kategori');
 		} catch (error) {
 			message.error(error.message);
+		}
+	};
+
+	const deleteBaseCategory = async (id) => {
+		try {
+			await categoryService.deleteCategory(id);
+			message.success('Berhasil menghapus kategori dasar');
+
+			categoryTableRef.current.refetchData();
+		} catch ({ message, errors }) {
+			message.error(message);
+			message.error(errors.code);
 		}
 	};
 
@@ -154,8 +171,9 @@ const CategoryPage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`/v1/products/category`}
+				dataSourceURL={`/v1/base_categories`}
 				mock={mock}
+				ref={categoryTableRef}
 				searchInput={true}
 				title={`Kategori Dasar`}
 			/>

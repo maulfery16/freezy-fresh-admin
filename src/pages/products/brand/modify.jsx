@@ -40,7 +40,6 @@ const BrandModifyPage = () => {
 			const brandImageFile = await RequestAdapterService.convertImageURLtoFile(
 				brand.image.original
 			);
-			console.log(brandImageFile);
 			setBrandImage(brandImageFile);
 		} catch (error) {
 			message.error(error.message);
