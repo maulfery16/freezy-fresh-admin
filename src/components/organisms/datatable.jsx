@@ -55,7 +55,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 				);
 
 				setData(data);
-				setTotalData(meta.total_data);
+				setTotalData(meta.pagination.total);
 			}
 		} catch (error) {
 			message.error(error.message);
