@@ -8,7 +8,8 @@ const AtomCustomSelect = (props) => {
 	const [options, setOptions] = useState(null);
 
 	const generateOption = (item) => {
-		if (props.generateCustomOption) return props.generateCustomOption(item);
+		if (props.data.generateCustomOption)
+			return props.data.generateCustomOption(item);
 
 		return {
 			label: item.label,
@@ -20,7 +21,8 @@ const AtomCustomSelect = (props) => {
 		if (props.data.mock) {
 			setOptions(props.data.mock);
 		} else {
-			const { data } = await masterService(props.url);
+			const { data } = await masterService.getOptions(props.data.url);
+
 			const options = data.map((item) => generateOption(item));
 
 			if (props.addblankoption)

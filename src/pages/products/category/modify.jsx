@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import React, { useEffect, useState } from 'react';
 import {
 	Button,
@@ -9,7 +10,7 @@ import {
 	Space,
 	Typography,
 } from 'antd';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
 import MoleculeFileInputGroup from '../../../components/molecules/input-group/file-input';
@@ -18,30 +19,54 @@ import MoleculeTextInputGroup from '../../../components/molecules/input-group/te
 import OrganismLayout from '../../../components/organisms/layout';
 
 import CategoryService from '../../../services/category';
+import RequestAdapterService from '../../../services/request-adapter';
+
 const categoryService = new CategoryService();
 
 const CategoryModifyPage = () => {
 	const { id } = useParams();
+	const history = useHistory();
 	const location = useLocation();
 	const isCreating = location.pathname.includes('add') ? true : false;
 
 	const [category, setCategory] = useState(null);
+	const [categoryImage, setCategoryImage] = useState(null);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
-	const getCategoryDetail = (id) => {
+	const getCategoryDetail = async (id) => {
 		try {
-			const category = categoryService.getCategoryById(id);
+			const category = await categoryService.getCategoryById(id);
 			setCategory(category);
+
+			const brandImageFile = await RequestAdapterService.convertImageURLtoFile(
+				category.image.original
+			);
+			setCategoryImage(brandImageFile);
 		} catch (error) {
 			message.error(error.message);
 		}
 	};
 
+	const setCategoryInitialValues = () => {
+		return isCreating
+			? {}
+			: {
+					colour: category.color.id,
+					en_name: category.name.en,
+					id_name: category.name.id,
+					image: category.iamge,
+			  };
+	};
+
 	const submit = async (values) => {
 		try {
+			setIsSubmitting(true);
+
 			const data = new FormData();
-			Object.keys(values).forEach((key) => {
-				data.append(key, values[key]);
-			});
+			data.append('color_id', values.colour);
+			data.append('image', categoryImage);
+			data.append('name[en]', values.en_name);
+			data.append('name[id]', values.id_name);
 
 			if (isCreating) {
 				await categoryService.createCategory(data);
@@ -50,15 +75,17 @@ const CategoryModifyPage = () => {
 				await categoryService.editCategory(id, data);
 				message.success('Berhasil mengubah kategori');
 			}
-		} catch (error) {
-			message.error(error.message);
-		} finally {
+
 			message.info(
 				'Akan dikembalikan ke halaman daftar kategori dalam 2 detik'
 			);
 			setTimeout(() => {
 				history.push('/products/category');
 			}, 2000);
+		} catch (error) {
+			message.error(error.message);
+		} finally {
+			setIsSubmitting(false);
 		}
 	};
 
@@ -94,7 +121,7 @@ const CategoryModifyPage = () => {
 				<Form
 					className="w-100 mt4"
 					name="modify_category"
-					initialValues={{ ...category }}
+					initialValues={setCategoryInitialValues()}
 					onFinish={submit}
 					onFinishFailed={(error) => {
 						message.error(`Failed: ${error}`);
@@ -123,58 +150,24 @@ const CategoryModifyPage = () => {
 										/>
 									</Col>
 
-									<Col span={12}>
+									<Col span={24}>
 										<MoleculeFileInputGroup
+											defaultValue={categoryImage}
 											label="Foto Icon"
 											id="icon-photo-upload"
-											name="icon"
+											name="image"
 											placeholder="png"
+											setImage={setCategoryImage}
 										/>
 									</Col>
 
-									<Col span={12}>
+									<Col span={24}>
 										<MoleculeSelectInputGroup
 											label="Pilih Warna"
 											name="colour"
 											placeholder="Pilih Warna"
 											data={{
-												url: '/products/colour',
-												mock: [
-													{
-														label: (
-															<Space>
-																<div
-																	className="br2"
-																	style={{
-																		background:
-																			'#FF0000',
-																		height: 20,
-																		width: 20,
-																	}}
-																/>
-																Merah
-															</Space>
-														),
-														value: 'CC-2',
-													},
-													{
-														label: (
-															<Space>
-																<div
-																	className="br2"
-																	style={{
-																		background:
-																			'#0000FF',
-																		height: 20,
-																		width: 20,
-																	}}
-																/>
-																Biru
-															</Space>
-														),
-														value: 'CC-2',
-													},
-												],
+												url: '/v1/colors',
 												generateCustomOption: (
 													item
 												) => ({
@@ -185,13 +178,13 @@ const CategoryModifyPage = () => {
 																className="br2"
 																style={{
 																	background:
-																		item.colour,
+																		item.hexa_code,
 																	height: 20,
 																	width: 20,
 																}}
 															/>
-
-															{item.name}
+															{item.name.en} /
+															{item.name.id}
 														</Space>
 													),
 												}),
@@ -214,8 +207,9 @@ const CategoryModifyPage = () => {
 								</Link>
 								<Button
 									className="br3 bg-denim white"
+									htmlType="submit"
+									loading={isSubmitting}
 									size="large"
-									type="submit"
 								>
 									{`${
 										isCreating ? 'Tambah' : 'Ubah'
