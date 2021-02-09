@@ -11,13 +11,17 @@ import {
 	Typography,
 } from 'antd';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import AuthenticationLayout from '../../components/layouts/authentication';
-import AuthService from '../../services/auth';
+import { setAuthToken, setLoginStatus } from '../../stores/auth/actions';
 
+import AuthService from '../../services/auth';
 const authService = new AuthService();
 
 const LoginPages = () => {
+	const dispatch = useDispatch();
+
 	const validateMessages = {
 		required: '${name} tidak boleh kosong',
 		types: {
@@ -31,7 +35,14 @@ const LoginPages = () => {
 
 	const login = async (values) => {
 		try {
-			await authService.login({ ...values, grant_type: 'password' });
+			const { access_token } = await authService.login({
+				...values,
+				grant_type: 'password',
+			});
+
+			dispatch(setAuthToken(access_token));
+			dispatch(setLoginStatus(true));
+			window.location = '/';
 		} catch (error) {
 			message.error(error.message);
 		}

@@ -16,133 +16,6 @@ import OrganismLayout from '../../../components/organisms/layout';
 import BrandService from '../../../services/brand';
 const brandService = new BrandService();
 
-const mock = {
-	data: [
-		{
-			id: '6dpbgq5ka0axoe8r',
-			code: 'CCCCCC',
-			name: {
-				en: 'Coca Cola Edit',
-				id: 'Coca Cola',
-			},
-			image: {
-				original:
-					'https://api.ms-freezy-fresh.local/storage/uploads/images/lHOpp0T7BscrKYz72KMR.jpg',
-				compressed:
-					'https://api.ms-freezy-fresh.local/storage/uploads/images\\compressed\\lHOpp0T7BscrKYz72KMR.jpg',
-				thumb:
-					'https://api.ms-freezy-fresh.local/storage/uploads/images\\thumb\\lHOpp0T7BscrKYz72KMR.jpg',
-			},
-			is_active: false,
-			created_by: 'Superadmin Administartor',
-			updated_by: 'Superadmin Administartor',
-			inactive_by: 'Superadmin Administartor',
-			created_at: '2021-02-04T12:31:18.000000Z',
-			updated_at: '2021-02-05T08:30:10.000000Z',
-		},
-		{
-			id: 'mdjw8454a5xb39pq',
-			code: 'CCC',
-			name: {
-				en: 'Coca Cola',
-				id: 'Coca Cola',
-			},
-			image: {
-				original:
-					'https://api.ms-freezy-fresh.local/storage/uploads/images/lHOpp0T7BscrKYz72KMR.jpg',
-				compressed:
-					'https://api.ms-freezy-fresh.local/storage/uploads/images\\compressed\\lHOpp0T7BscrKYz72KMR.jpg',
-				thumb:
-					'https://api.ms-freezy-fresh.local/storage/uploads/images\\thumb\\lHOpp0T7BscrKYz72KMR.jpg',
-			},
-			is_active: true,
-			created_by: 'Superadmin Administartor',
-			updated_by: 'Superadmin Administartor',
-			inactive_by: '',
-			created_at: '2021-02-04T12:31:23.000000Z',
-			updated_at: '2021-02-04T12:31:23.000000Z',
-		},
-		{
-			id: 'pvnxml0njyj6r3eg',
-			code: 'CCCC',
-			name: {
-				en: 'Coca Cola',
-				id: 'Coca Cola',
-			},
-			image: {
-				original:
-					'https://api.ms-freezy-fresh.local/storage/uploads/images/lHOpp0T7BscrKYz72KMR.jpg',
-				compressed:
-					'https://api.ms-freezy-fresh.local/storage/uploads/images\\compressed\\lHOpp0T7BscrKYz72KMR.jpg',
-				thumb:
-					'https://api.ms-freezy-fresh.local/storage/uploads/images\\thumb\\lHOpp0T7BscrKYz72KMR.jpg',
-			},
-			is_active: true,
-			created_by: 'Superadmin Administartor',
-			updated_by: 'Superadmin Administartor',
-			inactive_by: '',
-			created_at: '2021-02-04T12:31:44.000000Z',
-			updated_at: '2021-02-04T12:31:44.000000Z',
-		},
-		{
-			id: '4zr8mb07lykowjaq',
-			code: 'CCCCC',
-			name: {
-				en: 'Coca Cola',
-				id: 'Coca Cola',
-			},
-			image: {
-				original:
-					'https://api.ms-freezy-fresh.local/storage/uploads/images/lHOpp0T7BscrKYz72KMR.jpg',
-				compressed:
-					'https://api.ms-freezy-fresh.local/storage/uploads/images\\compressed\\lHOpp0T7BscrKYz72KMR.jpg',
-				thumb:
-					'https://api.ms-freezy-fresh.local/storage/uploads/images\\thumb\\lHOpp0T7BscrKYz72KMR.jpg',
-			},
-			is_active: true,
-			created_by: 'Superadmin Administartor',
-			updated_by: 'Superadmin Administartor',
-			inactive_by: '',
-			created_at: '2021-02-04T12:47:03.000000Z',
-			updated_at: '2021-02-04T12:47:03.000000Z',
-		},
-		{
-			id: 'p8e9xqye60o6jbmw',
-			code: 'C001',
-			name: {
-				en: 'Coca Cola',
-				id: 'Coca Cola',
-			},
-			image: {
-				original:
-					'https://api.ms-freezy-fresh.local/storage/uploads/images/lHOpp0T7BscrKYz72KMR.jpg',
-				compressed:
-					'https://api.ms-freezy-fresh.local/storage/uploads/images\\compressed\\lHOpp0T7BscrKYz72KMR.jpg',
-				thumb:
-					'https://api.ms-freezy-fresh.local/storage/uploads/images\\thumb\\lHOpp0T7BscrKYz72KMR.jpg',
-			},
-			is_active: true,
-			created_by: 'Superadmin Administartor',
-			updated_by: 'Superadmin Administartor',
-			inactive_by: '',
-			created_at: '2021-02-05T08:27:48.000000Z',
-			updated_at: '2021-02-05T08:27:48.000000Z',
-		},
-	],
-	meta: {
-		include: [],
-		custom: [],
-		pagination: {
-			total: 5,
-			count: 5,
-			per_page: 10,
-			current_page: 1,
-			total_pages: 1,
-			links: {},
-		},
-	},
-};
-
 const BrandPage = () => {
 	const column = [
 		{
@@ -210,11 +83,9 @@ const BrandPage = () => {
 					<Popconfirm
 						title="Are you sure"
 						icon={<QuestionCircleFilled className="red" />}
+						onConfirm={() => deleteBrand(id)}
 					>
-						<DeleteFilled
-							className="f4 red"
-							onClick={() => deleteBrand(id)}
-						/>
+						<DeleteFilled className="f4 red" />
 					</Popconfirm>
 				</Space>
 			),
@@ -228,9 +99,8 @@ const BrandPage = () => {
 
 			message.success('Berhasil menghapus brand');
 			brandTableRef.current.refetchData();
-		} catch ({ message, errors }) {
-			message.error(message);
-			message.error(errors.code);
+		} catch (error) {
+			message.error(error.message);
 		}
 	};
 
@@ -259,8 +129,7 @@ const BrandPage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`/v1//brands`}
-				mock={mock}
+				dataSourceURL={`/v1/brands`}
 				ref={brandTableRef}
 				scroll={1920}
 				searchInput={true}
