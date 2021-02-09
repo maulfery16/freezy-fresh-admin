@@ -14,36 +14,6 @@ import OrganismLayout from '../../../components/organisms/layout';
 import CategoryService from '../../../services/category';
 const categoryService = new CategoryService();
 
-const mock = {
-	data: [
-		{
-			object: 'BaseCategory',
-			id: 'azkvml597yxe8b9j',
-			name: 'Makasnan',
-			color: {
-				id: 'azkvml597yxe8b9j',
-				name: '{"en":"White","id":"Putih"}',
-			},
-			is_active: 1,
-			created_at: '2021-02-09T00:28:04.000000Z',
-			updated_at: '2021-02-09T00:28:04.000000Z',
-			inactive_at: null,
-		},
-	],
-	meta: {
-		include: [],
-		custom: [],
-		pagination: {
-			total: 1,
-			count: 1,
-			per_page: 10,
-			current_page: 1,
-			total_pages: 1,
-			links: {},
-		},
-	},
-};
-
 const CategoryPage = () => {
 	const column = [
 		{
@@ -58,26 +28,28 @@ const CategoryPage = () => {
 		{
 			title: 'Nama Kategori (ID)',
 			dataIndex: 'name',
-			render: (_, record) => record.name,
+			render: (_, record) => record.name.id,
 		},
 		{
 			title: 'Nama Kategori (EN)',
 			dataIndex: 'name',
-			render: (_, record) => record.name,
+			render: (_, record) => record.name.en,
 		},
 		{
 			title: 'Foto Icon',
-			dataIndex: 'icon',
-			render: (icon) => <Image preview src={icon} width={50} />,
+			dataIndex: 'image',
+			render: (image) => (
+				<Image preview src={image ? image.original : null} width={50} />
+			),
 		},
 		{
 			title: 'Warna',
-			dataIndex: 'colour',
-			render: (colour) => (
+			dataIndex: 'color',
+			render: (color) => (
 				<div
-					className="br2"
+					className="br2 ba b--black-20"
 					style={{
-						background: colour,
+						background: color.hexa_code,
 						height: '50px',
 						width: '50px',
 					}}
@@ -106,13 +78,11 @@ const CategoryPage = () => {
 					</Link>
 
 					<Popconfirm
-						title="Are you sure"
 						icon={<QuestionCircleFilled className="red" />}
+						onConfirm={() => deleteBaseCategory(id)}
+						title="Are you sure"
 					>
-						<DeleteFilled
-							className="f4 red"
-							onClick={() => deleteBaseCategory(id)}
-						/>
+						<DeleteFilled className="f4 red" />
 					</Popconfirm>
 				</Space>
 			),
@@ -120,7 +90,7 @@ const CategoryPage = () => {
 	];
 	const categoryTableRef = useRef();
 
-	const changeCategoryActiveStatus = async (status, id) => {
+	const changeCategoryActiveStatus = async (id, status) => {
 		try {
 			await categoryService.updateCategoryActiveStatus(id, {
 				status: !status,
@@ -138,9 +108,8 @@ const CategoryPage = () => {
 			message.success('Berhasil menghapus kategori dasar');
 
 			categoryTableRef.current.refetchData();
-		} catch ({ message, errors }) {
-			message.error(message);
-			message.error(errors.code);
+		} catch (error) {
+			message.error(error.message);
 		}
 	};
 
@@ -172,7 +141,6 @@ const CategoryPage = () => {
 				additionalAction={renderAdditionalAction()}
 				columns={column}
 				dataSourceURL={`/v1/base_categories`}
-				mock={mock}
 				ref={categoryTableRef}
 				searchInput={true}
 				title={`Kategori Dasar`}

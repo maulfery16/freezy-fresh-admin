@@ -4,7 +4,7 @@ export default class CategoryService extends RequestAdapterService {
 	async createCategory(category) {
 		try {
 			const { data } = await super.sendPostRequest(
-				`${this.baseUrl}/products/category`,
+				`${this.baseUrl}/v1/base_categories`,
 				category
 			);
 
@@ -19,7 +19,7 @@ export default class CategoryService extends RequestAdapterService {
 	async deleteCategory(id) {
 		try {
 			return await super.sendDeleteRequest(
-				`${this.baseUrl}/base_categories/${id}`,
+				`${this.baseUrl}/v1/base_categories/${id}`,
 				{ id }
 			);
 		} catch (error) {
@@ -32,7 +32,7 @@ export default class CategoryService extends RequestAdapterService {
 	async editCategory(id, category) {
 		try {
 			const { data } = await super.sendPutRequest(
-				`${this.baseUrl}/products/category/${id}`,
+				`${this.baseUrl}/v1/base_categories/${id}`,
 				category
 			);
 
@@ -47,7 +47,7 @@ export default class CategoryService extends RequestAdapterService {
 	async getCategoryById(id) {
 		try {
 			const data = await super.sendGetRequest(
-				`${this.baseUrl}/products/category/${id}`
+				`${this.baseUrl}/v1/base_categories/${id}`
 			);
 
 			return data;
@@ -61,7 +61,7 @@ export default class CategoryService extends RequestAdapterService {
 	async updateCategoryActiveStatus(id, status) {
 		try {
 			const { data } = await super.sendPutRequest(
-				`${this.baseUrl}/base_categories/${id}/status`,
+				`${this.baseUrl}/v1/base_categories/${id}/status`,
 				status
 			);
 

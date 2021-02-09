@@ -52,7 +52,7 @@ const BrandModifyPage = () => {
 			: {
 					code: brand.code,
 					en_name: brand.name.en,
-					followers: brand.followers || 1,
+					followers: brand.social_media_followers || 1,
 					id_name: brand.name.id,
 					image: brandImage,
 			  };
@@ -63,7 +63,7 @@ const BrandModifyPage = () => {
 			setIsSubmitting(true);
 
 			const data = new FormData();
-			data.append('followers', values.followers);
+			data.append('social_media_followers', values.followers);
 			data.append('image', brandImage);
 			data.append('name[en]', values.en_name);
 			data.append('name[id]', values.id_name);
