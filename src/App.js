@@ -11,80 +11,61 @@ import OrganismErrorBoundary from './components/organisms/error-boundary';
 import routes from './routes';
 import { useSelector } from 'react-redux';
 
-const generateRoutes = (route, pathPrefix, customRender) => {
-	return route.skipRenderParent ? null : (
+const App = () => {
+	const { isLoggedIn } = useSelector((state) => state.auth);
+	const renderedRoutes = [];
+
+	const generateChildrenRoute = (children, parentPath) => {
+		children.forEach((child) => {
+			if (child.children) {
+				generateChildrenRoute(
+					child.children,
+					`${parentPath}${child.path}`
+				);
+			} else {
+				renderedRoutes.push(generateRoute(child, parentPath));
+			}
+		});
+	};
+
+	const generateRoute = (route, pathPrefix) => (
 		<Route
 			key={route.name}
 			path={pathPrefix ? `${pathPrefix}${route.path}` : route.path}
 			exact={route.exact}
 			name={route.name}
-			render={
-				customRender
-					? customRender
-					: (props) => <route.component key={route.name} {...props} />
-			}
+			render={(props) => {
+				if (route.guard) {
+					return isLoggedIn ? (
+						<route.component key={route.name} {...props} />
+					) : (
+						<Redirect key={`login-redirect`} to="/login" />
+					);
+				} else {
+					return <route.component key={route.name} {...props} />;
+				}
+			}}
 		/>
 	);
-};
 
-const renderLoggedInComponent = (isLoggedIn, route) => {
-	return route.skipRenderParent
-		? null
-		: (props) =>
-				isLoggedIn ? (
-					<route.component key={route.name} {...props} />
-				) : (
-					<Redirect key="login-redirect" to="/login" />
-				);
-};
+	const renderRoutes = () => {
+		routes.forEach((route) => {
+			if (route.children) {
+				generateChildrenRoute(route.children, route.path);
+			} else {
+				renderedRoutes.push(generateRoute(route));
+			}
+		});
 
-const renderRoutes = (isLoggedIn) => {
-	return routes.map((route) =>
-		route.guard ? (
-			route.children ? (
-				<>
-					{generateRoutes(
-						route,
-						null,
-						renderLoggedInComponent(isLoggedIn, route)
-					)}
-					{route.children.map((child) =>
-						generateRoutes(
-							child,
-							route.path,
-							renderLoggedInComponent(isLoggedIn, child)
-						)
-					)}
-				</>
-			) : (
-				generateRoutes(
-					route,
-					null,
-					renderLoggedInComponent(isLoggedIn, route)
-				)
-			)
-		) : route.children ? (
-			<>
-				{generateRoutes(route)}
-				{route.children.map((child) =>
-					generateRoutes(child, route.path)
-				)}
-			</>
-		) : (
-			generateRoutes(route)
-		)
-	);
-};
-
-const App = () => {
-	const { isLoggedIn } = useSelector((state) => state.auth);
+		return renderedRoutes.map((route) => route);
+	};
 
 	return (
 		<div className="App">
 			<OrganismErrorBoundary>
 				<Switch>
 					<Suspense fallback={<AtomSpinner />}>
-						{renderRoutes(isLoggedIn)}
+						{renderRoutes()}
 					</Suspense>
 					<Redirect to="/" />
 				</Switch>
