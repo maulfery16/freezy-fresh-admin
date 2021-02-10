@@ -11,7 +11,11 @@ export default class AdminService extends RequestAdapterService {
 			return data;
 		} catch (error) {
 			throw new Error(
-				`Fail creating admin: ${error.response.data.message} - ${error.response.data.errors.code} `
+				`Fail creating admin: ${error.response.data.message} - ${
+					error.response.data.errors
+						? error.response.data.errors.code
+						: 'Error'
+				} `
 			);
 		}
 	}
@@ -24,7 +28,11 @@ export default class AdminService extends RequestAdapterService {
 			);
 		} catch (error) {
 			throw new Error(
-				`Fail deleting admin: ${error.response.data.message} - ${error.response.data.errors.code} `
+				`Fail deleting admin: ${error.response.data.message} - ${
+					error.response.data.errors
+						? error.response.data.errors.code
+						: 'Error'
+				} `
 			);
 		}
 	}
@@ -39,7 +47,11 @@ export default class AdminService extends RequestAdapterService {
 			return data;
 		} catch (error) {
 			throw new Error(
-				`Fail updating admin: ${error.response.data.message} - ${error.response.data.errors.code} `
+				`Fail updating admin: ${error.response.data.message} - ${
+					error.response.data.errors
+						? error.response.data.errors.code
+						: 'Error'
+				} `
 			);
 		}
 	}
@@ -53,7 +65,11 @@ export default class AdminService extends RequestAdapterService {
 			return data;
 		} catch (error) {
 			throw new Error(
-				`Fail getting admin detail: ${error.response.data.message} - ${error.response.data.errors.code} `
+				`Fail getting admin detail: ${error.response.data.message} - ${
+					error.response.data.errors
+						? error.response.data.errors.code
+						: 'Error'
+				} `
 			);
 		}
 	}
@@ -68,7 +84,11 @@ export default class AdminService extends RequestAdapterService {
 			return data;
 		} catch (error) {
 			throw new Error(
-				`Fail getting total admin: ${error.response.data.message} - ${error.response.data.errors.code} `
+				`Fail getting total admin: ${error.response.data.message} - ${
+					error.response.data.errors
+						? error.response.data.errors.code
+						: 'Error'
+				} `
 			);
 		}
 	}

@@ -11,7 +11,11 @@ export default class AdminService extends RequestAdapterService {
 			return data;
 		} catch (error) {
 			throw new Error(
-				`Getting options: ${error.response.data.message} - ${error.response.data.errors.code} `
+				`Getting options: ${error.response.data.message} - ${
+					error.response.data.errors
+						? error.response.data.errors.code
+						: 'Error'
+				} `
 			);
 		}
 	}
