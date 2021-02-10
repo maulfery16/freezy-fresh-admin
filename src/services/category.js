@@ -105,7 +105,7 @@ export default class CategoryService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail getting categiory detail: ${
+				`Fail getting category detail: ${
 					error.response.data.message
 				} - ${
 					error.response.data.errors
