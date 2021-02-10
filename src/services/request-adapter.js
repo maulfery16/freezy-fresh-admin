@@ -111,6 +111,10 @@ export default class RequestAdapterService {
 		return this.reqClient.put(URL, requestBody);
 	}
 
+	sendPatchRequest(URL, formData) {
+		return this.reqClient.patch(URL, formData);
+	}
+
 	sendPutMultipartRequest(URL, formData) {
 		return this.reqClient.put(URL, formData, {
 			headers: {
