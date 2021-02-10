@@ -152,6 +152,7 @@ const AdminPage = () => {
 			);
 		} catch (error) {
 			message.error(error.message);
+			console.error(error);
 		}
 	};
 

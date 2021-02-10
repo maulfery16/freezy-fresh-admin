@@ -59,6 +59,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 			}
 		} catch (error) {
 			message.error(error.message);
+			console.error(error);
 		} finally {
 			setIsGettingData(false);
 		}

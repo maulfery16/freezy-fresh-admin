@@ -43,6 +43,7 @@ const BrandModifyPage = () => {
 			setBrandImage(brandImageFile);
 		} catch (error) {
 			message.error(error.message);
+			console.error(error);
 		}
 	};
 
@@ -85,6 +86,7 @@ const BrandModifyPage = () => {
 			}, 2000);
 		} catch (error) {
 			message.error(error.message);
+			console.error(error);
 		} finally {
 			setIsSubmitting(false);
 		}

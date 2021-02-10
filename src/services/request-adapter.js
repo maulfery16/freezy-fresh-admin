@@ -1,8 +1,11 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import axios from 'axios';
+import moment from 'moment';
+import { saveAs } from 'file-saver';
 
-import config from '../config';
+import { setAuthToken, setLoginStatus } from '../stores/auth/actions';
 import { store } from '../stores/store';
-import { setAuthToken } from '../stores/auth/actions';
+import config from '../config';
 
 export default class RequestAdapterService {
 	constructor() {
@@ -22,11 +25,58 @@ export default class RequestAdapterService {
 			(response) => response,
 			(error) => {
 				if (error.response)
-					if (error.response.status === 401)
+					if (error.response.status === 401) {
 						store.dispatch(setAuthToken(null));
+						store.dispatch(setLoginStatus(false));
+
+						window.location = '/login';
+					}
 
 				throw error;
 			}
+		);
+	}
+
+	dowloadDataAsCSV(data, properties, filename) {
+		let csv = '';
+
+		const headers = properties.map((property) =>
+			property.skipExport ? '' : property.title
+		);
+		csv = `"${headers.join(`","`)}"`;
+		csv += `\r\n`;
+
+		data.forEach((item) => {
+			const row = [];
+
+			properties.forEach((property, index) => {
+				if (property.skipExport) {
+					row.push('');
+				} else if (property.render) {
+					const value = property.csvRender
+						? property.csvRender(item)
+						: property.render(
+								item[property.dataIndex],
+								item,
+								index
+						  );
+
+					row.push(value);
+				} else {
+					row.push(item[property.dataIndex]);
+				}
+			});
+
+			csv += `"${row.join(`","`)}"`;
+			csv += `\r\n`;
+		});
+
+		const blob = new Blob([csv], {
+			type: 'text/csv;charset=utf-8',
+		});
+		saveAs(
+			blob,
+			`${filename} - ${moment(new Date()).format('DD-MM-YYYY')}.csv`
 		);
 	}
 

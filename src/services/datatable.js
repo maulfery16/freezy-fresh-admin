@@ -10,8 +10,13 @@ export default class DatatableService extends RequestAdapterService {
 
 			return data;
 		} catch (error) {
+			console.error(error);
 			throw new Error(
-				`Getting list: ${error.response.data.message} - ${error.response.data.errors.code} `
+				`Getting list: ${error.response.data.message} - ${
+					error.response.data.errors
+						? error.response.data.errors.code
+						: 'Error'
+				} `
 			);
 		}
 	}

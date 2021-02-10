@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Image, message, Popconfirm, Space, Switch } from 'antd';
 import {
@@ -41,6 +41,9 @@ const CategoryPage = () => {
 			render: (image) => (
 				<Image preview src={image ? image.original : null} width={50} />
 			),
+
+			csvRender: (item) =>
+				item.image ? item.image.original : item.image,
 		},
 		{
 			title: 'Warna',
@@ -55,6 +58,7 @@ const CategoryPage = () => {
 					}}
 				/>
 			),
+			csvRender: (item) => item.color.name.id,
 		},
 		{
 			title: 'Aktif',
@@ -67,6 +71,7 @@ const CategoryPage = () => {
 					}
 				/>
 			),
+			csvRender: (item) => (item.active ? 'Aktif' : 'Tidak Aktif'),
 		},
 		{
 			title: 'Aksi',
@@ -86,9 +91,11 @@ const CategoryPage = () => {
 					</Popconfirm>
 				</Space>
 			),
+			skipExport: true,
 		},
 	];
 	const categoryTableRef = useRef();
+	const [isExporting, setIsExporting] = useState(false);
 
 	const changeCategoryActiveStatus = async (id, status) => {
 		try {
@@ -99,6 +106,7 @@ const CategoryPage = () => {
 			message.success('Berhasil memperbaharui status aktif kategori');
 		} catch (error) {
 			message.error(error.message);
+			console.error(error);
 		}
 	};
 
@@ -110,13 +118,38 @@ const CategoryPage = () => {
 			categoryTableRef.current.refetchData();
 		} catch (error) {
 			message.error(error.message);
+			console.error(error);
+		}
+	};
+
+	const exportAsCSV = async () => {
+		setIsExporting(true);
+
+		try {
+			const params = {
+				page: 1,
+				limit: categoryTableRef.current.totalData,
+			};
+
+			await categoryService.exportAsCSV(params, column);
+		} catch (error) {
+			message.error(error.message);
+			console.error(error);
+		} finally {
+			setIsExporting(false);
 		}
 	};
 
 	const renderAdditionalAction = () => {
 		return (
 			<Space>
-				<Button className="br2 denim b--denim">Export Excel</Button>
+				<Button
+					className="br2 denim b--denim"
+					loading={isExporting}
+					onClick={exportAsCSV}
+				>
+					Export Excel
+				</Button>
 				<Link to="/products/category/add">
 					<Button className="br2 bg-denim white">
 						Tambah Kategori

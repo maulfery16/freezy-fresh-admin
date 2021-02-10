@@ -10,8 +10,15 @@ export default class AdditionalCategoryService extends RequestAdapterService {
 
 			return data;
 		} catch (error) {
+			console.error(error);
 			throw new Error(
-				`Fail creating additional category: ${error.response.data.message} - ${error.response.data.errors.code} `
+				`Fail creating additional category: ${
+					error.response.data.message
+				} - ${
+					error.response.data.errors
+						? error.response.data.errors.code
+						: 'Error'
+				} `
 			);
 		}
 	}
@@ -23,8 +30,15 @@ export default class AdditionalCategoryService extends RequestAdapterService {
 				{ id }
 			);
 		} catch (error) {
+			console.error(error);
 			throw new Error(
-				`Fail deleting additional category: ${error.response.data.message} - ${error.response.data.errors.code} `
+				`Fail deleting additional category: ${
+					error.response.data.message
+				} - ${
+					error.response.data.errors
+						? error.response.data.errors.code
+						: 'Error'
+				} `
 			);
 		}
 	}
@@ -38,8 +52,15 @@ export default class AdditionalCategoryService extends RequestAdapterService {
 
 			return data;
 		} catch (error) {
+			console.error(error);
 			throw new Error(
-				`Fail updating additional category: ${error.response.data.message} - ${error.response.data.errors.code} `
+				`Fail updating additional category: ${
+					error.response.data.message
+				} - ${
+					error.response.data.errors
+						? error.response.data.errors.code
+						: 'Error'
+				} `
 			);
 		}
 	}
@@ -52,8 +73,15 @@ export default class AdditionalCategoryService extends RequestAdapterService {
 
 			return data;
 		} catch (error) {
+			console.error(error);
 			throw new Error(
-				`Fail getting additional category detail: ${error.response.data.message} - ${error.response.data.errors.code} `
+				`Fail getting additional category detail: ${
+					error.response.data.message
+				} - ${
+					error.response.data.errors
+						? error.response.data.errors.code
+						: 'Error'
+				} `
 			);
 		}
 	}
