@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import React, { useEffect, useState } from 'react';
 import {
 	Button,
@@ -9,7 +10,7 @@ import {
 	Space,
 	Typography,
 } from 'antd';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
 import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
@@ -18,18 +19,20 @@ import OrganismLayout from '../../../components/organisms/layout';
 import AdditionalCategoryService from '../../../services/additional-category';
 const additionalCategoryService = new AdditionalCategoryService();
 
-const AddAdditionalCategoryPage = () => {
+const AdditionalCategoryModifyPage = () => {
 	const { id } = useParams();
+	const history = useHistory();
 	const location = useLocation();
-	const isCreating = location.pathname.includes('add') ? true : false;
+	const isCreating = location.pathname.includes('edit') ? false : true;
 
 	const [additionalCategory, setAdditionalCategory] = useState(null);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
-	const getAdditionalCategoryDetail = (id) => {
+	const getAdditionalCategoryDetail = async (id) => {
 		try {
-			const additionalCategory = additionalCategoryService.getAdditionalCategoryById(
-				id
-			);
+			const {
+				data: additionalCategory,
+			} = await additionalCategoryService.getAdditionalCategoryById(id);
 			setAdditionalCategory(additionalCategory);
 		} catch (error) {
 			message.error(error.message);
@@ -37,12 +40,28 @@ const AddAdditionalCategoryPage = () => {
 		}
 	};
 
+	const setAdditionalCategoryInitialValues = () => {
+		return isCreating
+			? {}
+			: {
+					code: additionalCategory.data.code,
+					en_name: additionalCategory.data.name,
+					id_name: additionalCategory.data.name,
+					// en_name: additionalCategory.name.en,
+					// id_name: additionalCategory.name.id,
+			  };
+	};
+
 	const submit = async (values) => {
 		try {
+			setIsSubmitting(true);
+
 			const data = new FormData();
-			Object.keys(values).forEach((key) => {
-				data.append(key, values[key]);
-			});
+			// data.append('code', values.code);
+			// data.append('name[en]', values.en_name);
+			// data.append('name[id]', values.id_name);
+			data.append('name', values.name);
+			if (!isCreating) data.append('is_active', false);
 
 			if (isCreating) {
 				await additionalCategoryService.createAdditionalCategory(data);
@@ -54,16 +73,17 @@ const AddAdditionalCategoryPage = () => {
 				);
 				message.success('Berhasil mengubah kategori tambahan');
 			}
-		} catch (error) {
-			message.error(error.message);
-			console.error(error);
-		} finally {
 			message.info(
 				'Akan dikembalikan ke halaman daftar kategori tambahan dalam 2 detik'
 			);
 			setTimeout(() => {
 				history.push('/products/additional-category');
 			}, 2000);
+		} catch (error) {
+			message.error(error.message);
+			console.error(error);
+		} finally {
+			setIsSubmitting(false);
 		}
 	};
 
@@ -84,7 +104,7 @@ const AddAdditionalCategoryPage = () => {
 					link: '/products/additional-category',
 				},
 				{
-					name: location.pathname.includes('add') ? 'Tambah' : 'Ubah',
+					name: isCreating ? 'Tambah' : 'Ubah',
 					link: location.pathname,
 				},
 			]}
@@ -104,7 +124,7 @@ const AddAdditionalCategoryPage = () => {
 				<Form
 					className="w-100 mt4"
 					name="modify_additional_category"
-					initialValues={{ ...additionalCategory }}
+					initialValues={setAdditionalCategoryInitialValues()}
 					onFinish={submit}
 					onFinishFailed={(error) => {
 						message.error(`Failed: ${error}`);
@@ -158,7 +178,8 @@ const AddAdditionalCategoryPage = () => {
 								<Button
 									className="br3 bg-denim white"
 									size="large"
-									type="submit"
+									htmlType="submit"
+									loading={isSubmitting}
 								>
 									{`${
 										isCreating ? 'Tambah' : 'Ubah'
@@ -172,4 +193,4 @@ const AddAdditionalCategoryPage = () => {
 		</OrganismLayout>
 	);
 };
-export default AddAdditionalCategoryPage;
+export default AdditionalCategoryModifyPage;
