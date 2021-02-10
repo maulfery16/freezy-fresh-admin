@@ -1,5 +1,6 @@
 /* eslint-disable react/display-name */
-import React, { useRef } from 'react';
+import moment from 'moment';
+import React, { useRef, useState } from 'react';
 import ReactMoment from 'react-moment';
 import { Link } from 'react-router-dom';
 import { Button, Col, message, Popconfirm, Row, Space } from 'antd';
@@ -15,6 +16,7 @@ import OrganismLayout from '../../../components/organisms/layout';
 import ColourService from '../../../services/colour';
 const colourService = new ColourService();
 
+// eslint-disable-next-line no-unused-vars
 const mock = {
 	data: [
 		{
@@ -86,7 +88,7 @@ const ColourPage = () => {
 					}}
 				>
 					<Col
-						className="br2"
+						className="br2 ba bw1 b--black-10"
 						style={{
 							background: colour,
 							height: '20px',
@@ -96,6 +98,7 @@ const ColourPage = () => {
 					<Col span={16}>{colour}</Col>
 				</Row>
 			),
+			csvRender: (item) => item.hexa_code,
 		},
 		{
 			title: 'Tanggal Dibuat',
@@ -103,6 +106,7 @@ const ColourPage = () => {
 			render: (date) => (
 				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
 			),
+			csvRender: (item) => moment(item.created_at).format('DD/MM/YYYY'),
 		},
 		{
 			title: 'Tanggal Diupdate',
@@ -110,14 +114,18 @@ const ColourPage = () => {
 			render: (date) => (
 				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
 			),
+			csvRender: (item) => moment(item.created_at).format('DD/MM/YYYY'),
 		},
 		{
 			title: 'Dibuat Oleh',
-			dataIndex: 'created_by',
+			dataIndex: `created_by['email']`,
+			render: (_, record) => record.created_by.email,
 		},
 		{
 			title: 'Diupdate Oleh',
-			dataIndex: 'updated_by',
+			dataIndex: `updated_by['email']`,
+			render: (_, record) =>
+				`${record.updated_by ? record.updated_by.email : '-'}`,
 		},
 		{
 			title: 'Aksi',
@@ -129,20 +137,20 @@ const ColourPage = () => {
 					</Link>
 
 					<Popconfirm
-						title="Are you sure"
+						title="Are you sure?"
 						icon={<QuestionCircleFilled className="red" />}
+						onConfirm={() => deleteColour(id)}
 					>
-						<DeleteFilled
-							className="f4 red"
-							onClick={() => deleteColour(id)}
-						/>
+						<DeleteFilled className="f4 red" />
 					</Popconfirm>
 				</Space>
 			),
+			skipExport: true,
 		},
 	];
 
 	const colourTableRef = useRef();
+	const [isExporting, setIsExporting] = useState(false);
 
 	const deleteColour = async (id) => {
 		try {
@@ -152,13 +160,38 @@ const ColourPage = () => {
 			colourTableRef.current.refetchData();
 		} catch (error) {
 			message.error(error.message);
-			message.error(error.errors.code);
+			console.error(error);
+		}
+	};
+
+	const exportAsCSV = async () => {
+		setIsExporting(true);
+
+		try {
+			const params = {
+				page: 1,
+				limit: colourTableRef.current.totalData,
+			};
+
+			await colourService.exportAsCSV(params, column);
+		} catch (error) {
+			message.error(error.message);
+			console.error(error);
+		} finally {
+			setIsExporting(false);
 		}
 	};
 
 	const renderAdditionalAction = () => {
 		return (
 			<Space>
+				<Button
+					className="br2 denim b--denim"
+					loading={isExporting}
+					onClick={() => exportAsCSV()}
+				>
+					Export Excel
+				</Button>
 				<Link to="/products/colour/add">
 					<Button className="br2 bg-denim white">Tambah Warna</Button>
 				</Link>
@@ -181,9 +214,9 @@ const ColourPage = () => {
 				additionalAction={renderAdditionalAction()}
 				columns={column}
 				dataSourceURL={`/v1/colors`}
-				mock={mock}
+				// mock={mock}
 				ref={colourTableRef}
-				scroll={1920}
+				// scroll={1920}
 				searchInput={true}
 				title={`Warna`}
 			/>
