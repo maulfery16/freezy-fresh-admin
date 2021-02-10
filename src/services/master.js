@@ -10,6 +10,7 @@ export default class AdminService extends RequestAdapterService {
 
 			return data;
 		} catch (error) {
+			console.error(error);
 			throw new Error(
 				`Getting options: ${error.response.data.message} - ${
 					error.response.data.errors

@@ -27,10 +27,13 @@ const AddAdditionalCategoryPage = () => {
 
 	const getAdditionalCategoryDetail = (id) => {
 		try {
-			const additionalCategory = additionalCategoryService.getAdditionalCategoryById(id);
+			const additionalCategory = additionalCategoryService.getAdditionalCategoryById(
+				id
+			);
 			setAdditionalCategory(additionalCategory);
 		} catch (error) {
 			message.error(error.message);
+			console.error(error);
 		}
 	};
 
@@ -45,11 +48,15 @@ const AddAdditionalCategoryPage = () => {
 				await additionalCategoryService.createAdditionalCategory(data);
 				message.success('Berhasil menambah kategori tambahan');
 			} else {
-				await additionalCategoryService.editAdditionalCategory(id, data);
+				await additionalCategoryService.editAdditionalCategory(
+					id,
+					data
+				);
 				message.success('Berhasil mengubah kategori tambahan');
 			}
 		} catch (error) {
 			message.error(error.message);
+			console.error(error);
 		} finally {
 			message.info(
 				'Akan dikembalikan ke halaman daftar kategori tambahan dalam 2 detik'
@@ -72,7 +79,10 @@ const AddAdditionalCategoryPage = () => {
 		<OrganismLayout
 			breadcumbs={[
 				{ name: 'Produk', link: '/products/additional-category' },
-				{ name: 'Kategori Tambahan', link: '/products/additional-category' },
+				{
+					name: 'Kategori Tambahan',
+					link: '/products/additional-category',
+				},
 				{
 					name: location.pathname.includes('add') ? 'Tambah' : 'Ubah',
 					link: location.pathname,
@@ -82,7 +92,9 @@ const AddAdditionalCategoryPage = () => {
 		>
 			<Typography.Title level={4}>
 				<span className="fw7">
-					{`${isCreating ? 'Tambah' : 'Ubah'} Kategori Tambahan`.toUpperCase()}
+					{`${
+						isCreating ? 'Tambah' : 'Ubah'
+					} Kategori Tambahan`.toUpperCase()}
 				</span>
 			</Typography.Title>
 

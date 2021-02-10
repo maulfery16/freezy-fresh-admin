@@ -10,6 +10,7 @@ export default class AdminService extends RequestAdapterService {
 
 			return data;
 		} catch (error) {
+			console.error(error);
 			throw new Error(
 				`Fail creating admin: ${error.response.data.message} - ${
 					error.response.data.errors
@@ -27,6 +28,7 @@ export default class AdminService extends RequestAdapterService {
 				{ id }
 			);
 		} catch (error) {
+			console.error(error);
 			throw new Error(
 				`Fail deleting admin: ${error.response.data.message} - ${
 					error.response.data.errors
@@ -46,6 +48,7 @@ export default class AdminService extends RequestAdapterService {
 
 			return data;
 		} catch (error) {
+			console.error(error);
 			throw new Error(
 				`Fail updating admin: ${error.response.data.message} - ${
 					error.response.data.errors
@@ -64,6 +67,7 @@ export default class AdminService extends RequestAdapterService {
 
 			return data;
 		} catch (error) {
+			console.error(error);
 			throw new Error(
 				`Fail getting admin detail: ${error.response.data.message} - ${
 					error.response.data.errors
@@ -83,6 +87,7 @@ export default class AdminService extends RequestAdapterService {
 
 			return data;
 		} catch (error) {
+			console.error(error);
 			throw new Error(
 				`Fail getting total admin: ${error.response.data.message} - ${
 					error.response.data.errors

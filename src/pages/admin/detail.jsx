@@ -59,6 +59,7 @@ const AdminModifyPage = () => {
 			}, 1000);
 		} catch (error) {
 			message.error(error.message);
+			console.error(error);
 		}
 	};
 

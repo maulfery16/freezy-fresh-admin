@@ -109,6 +109,7 @@ const BrandPage = () => {
 			brandTableRef.current.refetchData();
 		} catch (error) {
 			message.error(error.message);
+			console.error(error);
 		}
 	};
 
@@ -124,6 +125,7 @@ const BrandPage = () => {
 			await brandService.exportAsCSV(params, column);
 		} catch (error) {
 			message.error(error.message);
+			console.error(error);
 		} finally {
 			setIsExporting(false);
 		}

@@ -10,6 +10,7 @@ export default class BrandService extends RequestAdapterService {
 
 			return data;
 		} catch (error) {
+			console.error(error);
 			throw new Error(
 				`Fail creating brand: ${error.response.data.message} - ${
 					error.response.data.errors
@@ -27,6 +28,7 @@ export default class BrandService extends RequestAdapterService {
 				{ id }
 			);
 		} catch (error) {
+			console.error(error);
 			throw new Error(
 				`Fail deleting admin: ${error.response.data.message} - ${
 					error.response.data.errors
@@ -46,6 +48,7 @@ export default class BrandService extends RequestAdapterService {
 
 			return data;
 		} catch (error) {
+			console.error(error);
 			throw new Error(
 				`Fail updating brand: ${error.response.data.message} - ${
 					error.response.data.errors
@@ -61,6 +64,7 @@ export default class BrandService extends RequestAdapterService {
 			const { data } = await this.getBrands(params);
 			super.dowloadDataAsCSV(data, properties, 'Brand List');
 		} catch (error) {
+			console.error(error);
 			throw new Error(
 				`Exporting Brand as CSV: ${error.response.data.message} - ${
 					error.response.data.errors
@@ -80,6 +84,7 @@ export default class BrandService extends RequestAdapterService {
 
 			return data;
 		} catch (error) {
+			console.error(error);
 			throw new Error(
 				`Getting brand data: ${error.response.data.message} - ${
 					error.response.data.errors
@@ -98,6 +103,7 @@ export default class BrandService extends RequestAdapterService {
 
 			return data;
 		} catch (error) {
+			console.error(error);
 			throw new Error(
 				`Fail getting categiory detail: ${
 					error.response.data.message
@@ -119,6 +125,7 @@ export default class BrandService extends RequestAdapterService {
 
 			return data;
 		} catch (error) {
+			console.error(error);
 			throw new Error(
 				`Fail updating brand status: ${error.response.data.message} - ${
 					error.response.data.errors

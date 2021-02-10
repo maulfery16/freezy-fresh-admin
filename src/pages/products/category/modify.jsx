@@ -44,6 +44,7 @@ const CategoryModifyPage = () => {
 			setCategoryImage(brandImageFile);
 		} catch (error) {
 			message.error(error.message);
+			console.error(error);
 		}
 	};
 
@@ -84,6 +85,7 @@ const CategoryModifyPage = () => {
 			}, 2000);
 		} catch (error) {
 			message.error(error.message);
+			console.error(error);
 		} finally {
 			setIsSubmitting(false);
 		}

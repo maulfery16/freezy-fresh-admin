@@ -45,6 +45,7 @@ const LoginPages = () => {
 			window.location = '/';
 		} catch (error) {
 			message.error(error.message);
+			console.error(error);
 		}
 	};
 
