@@ -1,8 +1,8 @@
 /* eslint-disable react/display-name */
-import React from 'react';
+import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
 import { Link } from 'react-router-dom';
-import { Button, Popconfirm, Space } from 'antd';
+import { Button, message, Popconfirm, Space } from 'antd';
 import {
 	DeleteFilled,
 	EditFilled,
@@ -12,103 +12,160 @@ import {
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
+import AdditionalCategoryService from '../../../services/additional-category';
+const additionalCategoryService = new AdditionalCategoryService();
+
+// eslint-disable-next-line no-unused-vars
 const mock = {
-	meta: {
-		total_data: 2,
-	},
 	data: [
 		{
 			code: 'KT1-836732981',
 			created_at: new Date(),
-			created_by: 'Reiner',
-			en_name: 'Food',
-			id_name: 'Makanan',
+			created_by: {
+				email: 'superadmin',
+			},
+			id: 'azkvml597yxe8b9j',
+			name: {
+				id: 'Food',
+				en: 'Makanan',
+			},
 			updated_at: new Date(),
-			updated_by: 'Sasha',
+			updated_by: {
+				email: 'superadmin',
+			},
 		},
 		{
 			code: 'KT1-836732982',
 			created_at: new Date(),
-			created_by: 'Reiner',
-			en_name: 'Drug',
-			id_name: 'Obat',
+			created_by: {
+				email: 'superadmin',
+			},
+			id: '6dpbgq5ka0axoe8r',
+			name: {
+				id: 'Drug',
+				en: 'Obat',
+			},
 			updated_at: new Date(),
-			updated_by: 'Sasha',
+			updated_by: {
+				email: 'superadmin',
+			},
 		},
 	],
-};
-
-const column = [
-	{
-		title: 'No',
-		dataIndex: 'id',
-		render: (id, _, index) => index + 1,
+	meta: {
+		include: [],
+		custom: [],
+		pagination: {
+			total: 2,
+			count: 2,
+			per_page: 10,
+			current_page: 1,
+			total_pages: 1,
+			links: {},
+		},
 	},
-	{
-		title: 'Kode Kategori',
-		dataIndex: 'code',
-	},
-	{
-		title: 'Nama Kategori (ID)',
-		dataIndex: 'id_name',
-	},
-	{
-		title: 'Nama Kategori (EN)',
-		dataIndex: 'en_name',
-	},
-	{
-		title: 'Tanggal Dibuat',
-		dataIndex: 'created_at',
-		render: (date) => <ReactMoment format="DD/MM/YY">{date}</ReactMoment>,
-	},
-	{
-		title: 'Tanggal Diupdate',
-		dataIndex: 'updated_at',
-		render: (date) => <ReactMoment format="DD/MM/YY">{date}</ReactMoment>,
-	},
-	{
-		title: 'Dibuat Oleh',
-		dataIndex: 'created_by',
-	},
-	{
-		title: 'Diupdate Oleh',
-		dataIndex: 'updated_by',
-	},
-	{
-		title: 'Aksi',
-		dataIndex: 'code',
-		render: (id) => (
-			<Space size="middle">
-				<Link to={`/products/additional-category/${id}/edit`}>
-					<EditFilled className="f4 orange" />
-				</Link>
-
-				<Popconfirm
-					title="Are you sure?"
-					icon={<QuestionCircleFilled className="red" />}
-				>
-					<DeleteFilled
-						className="f4 red"
-						onClick={() => console.log(id)}
-					/>
-				</Popconfirm>
-			</Space>
-		),
-	},
-];
-
-const renderAdditionalAction = () => {
-	return (
-		<Space>
-			<Button className="br2 denim b--denim">Export Excel</Button>
-			<Link to="/products/additional-category/add">
-				<Button className="br2 bg-denim white">Tambah Kategori</Button>
-			</Link>
-		</Space>
-	);
 };
 
 const AdditionalCategoryPage = () => {
+	const column = [
+		{
+			title: 'No',
+			dataIndex: 'id',
+			render: (id, _, index) => index + 1,
+		},
+		{
+			title: 'Kode Kategori',
+			dataIndex: 'code',
+		},
+		{
+			title: 'Nama Kategori (ID)',
+			dataIndex: `name`,
+		},
+		{
+			title: 'Nama Kategori (EN)',
+			dataIndex: `name`,
+		},
+		// {
+		// 	title: 'Nama Kategori (ID)',
+		// 	dataIndex: `name['id']`,
+		// 	render: (_, record) => record.name.id,
+		// },
+		// {
+		// 	title: 'Nama Kategori (EN)',
+		// 	dataIndex: `name['en']`,
+		// 	render: (_, record) => record.name.en,
+		// },
+		{
+			title: 'Tanggal Dibuat',
+			dataIndex: 'created_at',
+			render: (date) => (
+				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
+			),
+		},
+		{
+			title: 'Tanggal Diupdate',
+			dataIndex: 'updated_at',
+			render: (date) => (
+				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
+			),
+		},
+		{
+			title: 'Dibuat Oleh',
+			dataIndex: `created_by['email']`,
+			render: (_, record) => record.created_by.email,
+		},
+		{
+			title: 'Diupdate Oleh',
+			dataIndex: `updated_by['email']`,
+			render: (_, record) =>
+				`${record.updated_by ? record.updated_by.email : '-'}`,
+		},
+		{
+			title: 'Aksi',
+			dataIndex: 'id',
+			render: (id) => (
+				<Space size="middle">
+					<Link to={`/products/additional-category/${id}/edit`}>
+						<EditFilled className="f4 orange" />
+					</Link>
+
+					<Popconfirm
+						title="Are you sure?"
+						icon={<QuestionCircleFilled className="red" />}
+						onConfirm={() => deleteAdditionalCategory(id)}
+					>
+						<DeleteFilled className="f4 red" />
+					</Popconfirm>
+				</Space>
+			),
+		},
+	];
+
+	const additionalCategoryTableRef = useRef();
+
+	const deleteAdditionalCategory = async (id) => {
+		try {
+			await additionalCategoryService.deleteAdditionalCategory(id);
+
+			message.success('Berhasil menghapus kategori tambahan');
+			additionalCategoryTableRef.current.refetchData();
+		} catch (error) {
+			message.error(error.message);
+		}
+	};
+
+	const renderAdditionalAction = () => {
+		return (
+			<Space>
+				<Button className="br2 denim b--denim">Export Excel</Button>
+				<Link to="/products/additional-category/add">
+					<Button className="br2 bg-denim white">
+						Tambah Kategori
+					</Button>
+				</Link>
+			</Space>
+		);
+	};
+
 	return (
 		<OrganismLayout
 			breadcumbs={[
@@ -123,8 +180,9 @@ const AdditionalCategoryPage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`/v1/products/additional-category`}
-				mock={mock}
+				dataSourceURL={`/v1/additional_categories`}
+				// mock={mock}
+				ref={additionalCategoryTableRef}
 				searchInput={true}
 				title={`Kategori Tambahan`}
 			/>
