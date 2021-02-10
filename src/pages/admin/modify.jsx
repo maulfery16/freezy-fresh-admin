@@ -34,6 +34,7 @@ const AdminModifyPage = () => {
 			setAdmin(admin);
 		} catch (error) {
 			message.error(error.message);
+			console.error(error);
 		}
 	};
 
@@ -55,6 +56,7 @@ const AdminModifyPage = () => {
 			}
 		} catch (error) {
 			message.error(error.message);
+			console.error(error);
 		} finally {
 			message.info(
 				'Akan dikembalikan ke halaman daftar admin dalam 2 detik'

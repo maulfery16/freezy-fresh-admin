@@ -1,5 +1,6 @@
 /* eslint-disable react/display-name */
-import React, { useRef } from 'react';
+import moment from 'moment';
+import React, { useRef, useState } from 'react';
 import ReactMoment from 'react-moment';
 import { Link } from 'react-router-dom';
 import { Button, Image, message, Popconfirm, Space } from 'antd';
@@ -43,11 +44,13 @@ const BrandPage = () => {
 			render: (_, record) => (
 				<Image preview src={record.image.original} width={100} />
 			),
+			csvRender: (item) => item.image.original,
 		},
 		{
 			title: 'Jumlah Sosmed Follower',
 			dataIndex: 'social_media_followers',
 			render: (followers) => <AtomNumberFormat value={followers || 0} />,
+			csvRender: (item) => item.followers,
 		},
 		{
 			title: 'Tanggal Dibuat',
@@ -55,6 +58,7 @@ const BrandPage = () => {
 			render: (date) => (
 				<ReactMoment format="DD/MM/YYYY">{date}</ReactMoment>
 			),
+			csvRender: (item) => moment(item.created_at).format('DD/MM/YYYY'),
 		},
 		{
 			title: 'Dibuat Oleh',
@@ -66,6 +70,8 @@ const BrandPage = () => {
 			render: (date) => (
 				<ReactMoment format="DD/MM/YYYY">{date}</ReactMoment>
 			),
+
+			csvRender: (item) => moment(item.updated_at).format('DD/MM/YYYY'),
 		},
 		{
 			title: 'Diperbaharui Oleh',
@@ -89,9 +95,11 @@ const BrandPage = () => {
 					</Popconfirm>
 				</Space>
 			),
+			skipExport: true,
 		},
 	];
 	const brandTableRef = useRef();
+	const [isExporting, setIsExporting] = useState(false);
 
 	const deleteBrand = async (id) => {
 		try {
@@ -101,13 +109,38 @@ const BrandPage = () => {
 			brandTableRef.current.refetchData();
 		} catch (error) {
 			message.error(error.message);
+			console.error(error);
+		}
+	};
+
+	const exportAsCSV = async () => {
+		setIsExporting(true);
+
+		try {
+			const params = {
+				page: 1,
+				limit: brandTableRef.current.totalData,
+			};
+
+			await brandService.exportAsCSV(params, column);
+		} catch (error) {
+			message.error(error.message);
+			console.error(error);
+		} finally {
+			setIsExporting(false);
 		}
 	};
 
 	const renderAdditionalAction = () => {
 		return (
 			<Space>
-				<Button className="br2 denim b--denim">Export Excel</Button>
+				<Button
+					className="br2 denim b--denim"
+					loading={isExporting}
+					onClick={() => exportAsCSV()}
+				>
+					Export Excel
+				</Button>
 				<Link to="/products/brand/add">
 					<Button className="br2 bg-denim white">Tambah Brand</Button>
 				</Link>
