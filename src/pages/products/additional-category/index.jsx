@@ -1,5 +1,6 @@
 /* eslint-disable react/display-name */
-import React, { useRef } from 'react';
+import moment from 'moment';
+import React, { useRef, useState } from 'react';
 import ReactMoment from 'react-moment';
 import { Link } from 'react-router-dom';
 import { Button, message, Popconfirm, Space } from 'antd';
@@ -100,6 +101,7 @@ const AdditionalCategoryPage = () => {
 			render: (date) => (
 				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
 			),
+			csvRender: (item) => moment(item.created_at).format('DD/MM/YYYY'),
 		},
 		{
 			title: 'Tanggal Diupdate',
@@ -107,6 +109,7 @@ const AdditionalCategoryPage = () => {
 			render: (date) => (
 				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
 			),
+			csvRender: (item) => moment(item.created_at).format('DD/MM/YYYY'),
 		},
 		{
 			title: 'Dibuat Oleh',
@@ -137,10 +140,12 @@ const AdditionalCategoryPage = () => {
 					</Popconfirm>
 				</Space>
 			),
+			skipExport: true,
 		},
 	];
 
 	const additionalCategoryTableRef = useRef();
+	const [isExporting, setIsExporting] = useState(false);
 
 	const deleteAdditionalCategory = async (id) => {
 		try {
@@ -150,13 +155,38 @@ const AdditionalCategoryPage = () => {
 			additionalCategoryTableRef.current.refetchData();
 		} catch (error) {
 			message.error(error.message);
+			console.error(error);
+		}
+	};
+
+	const exportAsCSV = async () => {
+		setIsExporting(true);
+
+		try {
+			const params = {
+				page: 1,
+				limit: additionalCategoryTableRef.current.totalData,
+			};
+
+			await additionalCategoryService.exportAsCSV(params, column);
+		} catch (error) {
+			message.error(error.message);
+			console.error(error);
+		} finally {
+			setIsExporting(false);
 		}
 	};
 
 	const renderAdditionalAction = () => {
 		return (
 			<Space>
-				<Button className="br2 denim b--denim">Export Excel</Button>
+				<Button
+					className="br2 denim b--denim"
+					loading={isExporting}
+					onClick={() => exportAsCSV()}
+				>
+					Export Excel
+				</Button>
 				<Link to="/products/additional-category/add">
 					<Button className="br2 bg-denim white">
 						Tambah Kategori
