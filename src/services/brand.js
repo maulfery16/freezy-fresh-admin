@@ -105,29 +105,7 @@ export default class BrandService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail getting categiory detail: ${
-					error.response.data.message
-				} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
-			);
-		}
-	}
-
-	async updateBrandActiveStatus(id, status) {
-		try {
-			const { data } = await super.sendPutRequest(
-				`${this.baseUrl}/v1/brands/${id}/status`,
-				status
-			);
-
-			return data;
-		} catch (error) {
-			console.error(error);
-			throw new Error(
-				`Fail updating brand status: ${error.response.data.message} - ${
+				`Fail getting brand detail: ${error.response.data.message} - ${
 					error.response.data.errors
 						? error.response.data.errors.code
 						: 'Error'
