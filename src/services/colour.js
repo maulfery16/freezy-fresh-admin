@@ -33,7 +33,7 @@ export default class ColourService extends RequestAdapterService {
 
 	async editColour(id, colour) {
 		try {
-			const { data } = await super.sendPutRequest(
+			const { data } = await super.sendPatchRequest(
 				`${this.baseUrl}/v1/colors/${id}`,
 				colour
 			);
