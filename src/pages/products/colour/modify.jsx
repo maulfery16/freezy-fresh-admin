@@ -12,7 +12,7 @@ import {
 	Popover,
 } from 'antd';
 import { SketchPicker } from 'react-color';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
 import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
@@ -23,21 +23,23 @@ const colourService = new ColorService();
 
 const ColourModifyPage = () => {
 	const { id } = useParams();
+	const history = useHistory();
 	const location = useLocation();
 	const isCreating = location.pathname.includes('add') ? true : false;
 
 	const [colour, setColour] = useState(null);
-	const [hexaCode, setHexaCode] = useState('#ffffff');
+	const [hexaCode, setHexaCode] = useState('');
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
-	const getColourDetail = (id) => {
+	const getColourDetail = async (id) => {
 		try {
-			const colour = colourService.getColourById(id);
+			const { data: colour } = await colourService.getColourById(id);
 
 			setColour(colour);
-			setHexaCode(colour.hexa_code);
+			setHexaCode(colour.data.hexa_code);
 		} catch (error) {
 			message.error(error.message);
-			message.error(error.errors.code);
+			console.error(error);
 		}
 	};
 
@@ -45,17 +47,16 @@ const ColourModifyPage = () => {
 		return isCreating
 			? {}
 			: {
-					id_name: colour.name.id,
-					hexa_code: colour.hexa_code || '#ffffff',
-					en_name: colour.name.en,
-					code: colour.code,
+					en_name: colour.data.name.en,
+					hexa_code: colour.data.hexa_code,
+					id_name: colour.data.name.id,
 			  };
 	};
 
 	const submit = async (values) => {
 		try {
 			const data = new FormData();
-			data.append('code', values.code);
+			data.append('code', new Date()); // deleted soon, after fixing from BE
 			data.append('hexa_code', values.hexa_code);
 			data.append('name[en]', values.en_name);
 			data.append('name[id]', values.id_name);
@@ -68,15 +69,18 @@ const ColourModifyPage = () => {
 				await colourService.editColour(id, data);
 				message.success('Berhasil mengubah warna');
 			}
-		} catch (error) {
-			message.error(error.message);
-		} finally {
+
 			message.info(
 				'Akan dikembalikan ke halaman daftar warna dalam 2 detik'
 			);
 			setTimeout(() => {
 				history.push('/products/colour');
 			}, 2000);
+		} catch (error) {
+			message.error(error.message);
+			console.error(error);
+		} finally {
+			setIsSubmitting(false);
 		}
 	};
 
@@ -90,6 +94,10 @@ const ColourModifyPage = () => {
 
 	const handleChangeColorComplete = (color) => {
 		setHexaCode(color.hex);
+	};
+
+	const handleChangeHexaCode = (e) => {
+		setHexaCode(e.target.value);
 	};
 
 	const colorPicker = (
@@ -139,8 +147,8 @@ const ColourModifyPage = () => {
 								<Row gutter={12} justify="space-between">
 									<Col span={24}>
 										<MoleculeTextInputGroup
-											name="id_name"
 											label="Nama Warna (ID)"
+											name="id_name"
 											placeholder="Nama Warna (ID)"
 											type="text"
 										/>
@@ -148,8 +156,8 @@ const ColourModifyPage = () => {
 
 									<Col span={24}>
 										<MoleculeTextInputGroup
-											name="en_name"
 											label="Nama Warna (EN)"
+											name="en_name"
 											placeholder="Nama Warna (EN)"
 											type="text"
 										/>
@@ -157,10 +165,12 @@ const ColourModifyPage = () => {
 
 									<Col span={20}>
 										<MoleculeTextInputGroup
-											name="hexa_code"
 											label="Kode Hexa"
+											name="hexa_code"
+											onChange={handleChangeHexaCode}
 											placeholder="Kode Hexa"
 											type="text"
+											value={hexaCode || ''}
 										/>
 									</Col>
 
@@ -170,8 +180,8 @@ const ColourModifyPage = () => {
 												className="br3 ba bw1 b--black-10"
 												style={{
 													background: hexaCode,
-													marginTop: '21px',
 													height: '49%',
+													marginTop: '21px',
 													width: '100%',
 												}}
 											></div>
@@ -193,8 +203,9 @@ const ColourModifyPage = () => {
 								</Link>
 								<Button
 									className="br3 bg-denim white"
+									htmlType="submit"
+									loading={isSubmitting}
 									size="large"
-									type="submit"
 								>
 									{`${isCreating ? 'Tambah' : 'Ubah'} Warna`}
 								</Button>
