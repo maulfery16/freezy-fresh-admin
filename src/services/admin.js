@@ -3,8 +3,8 @@ import RequestAdapterService from './request-adapter';
 export default class AdminService extends RequestAdapterService {
 	async createAdmin(admin) {
 		try {
-			const { data } = await super.sendPostRequest(
-				`${this.baseUrl}/admin`,
+			const { data } = await super.sendPostMultipartRequest(
+				`${this.baseUrl}/v1/admins`,
 				admin
 			);
 
@@ -24,7 +24,7 @@ export default class AdminService extends RequestAdapterService {
 	async deleteAdmin(id) {
 		try {
 			return await super.sendDeleteRequest(
-				`${this.baseUrl}/admin/${id}`,
+				`${this.baseUrl}/v1/admins/${id}`,
 				{ id }
 			);
 		} catch (error) {
@@ -41,8 +41,8 @@ export default class AdminService extends RequestAdapterService {
 
 	async editAdmin(id, admin) {
 		try {
-			const { data } = await super.sendPutRequest(
-				`${this.baseUrl}/admin/${id}`,
+			const { data } = await super.sendPutMultipartRequest(
+				`${this.baseUrl}/v1/admins/${id}`,
 				admin
 			);
 
@@ -62,7 +62,7 @@ export default class AdminService extends RequestAdapterService {
 	async getAdminById(id) {
 		try {
 			const data = await super.sendGetRequest(
-				`${this.baseUrl}/admin/${id}`
+				`${this.baseUrl}/v1/admins/${id}`
 			);
 
 			return data;
@@ -81,7 +81,7 @@ export default class AdminService extends RequestAdapterService {
 	async getTotalAdmin(params) {
 		try {
 			const data = await super.sendGetRequest(
-				`${this.baseUrl}/admin/count`,
+				`${this.baseUrl}/v1/admins/count`,
 				params
 			);
 

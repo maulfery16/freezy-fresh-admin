@@ -27,6 +27,9 @@ const AdminModifyPage = () => {
 	const isCreating = location.pathname.includes('add') ? true : false;
 
 	const [admin, setAdmin] = useState(null);
+	const [idCardImage, setIdCardImage] = useState(null);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [profileImage, setProfileImage] = useState(null);
 
 	const getAdminDetail = (id) => {
 		try {
@@ -40,10 +43,22 @@ const AdminModifyPage = () => {
 
 	const submit = async (values) => {
 		try {
+			setIsSubmitting(true);
 			const data = new FormData();
 
-			Object.keys(values).forEach((key) => {
-				data.append(key, values[key]);
+			data.append('bank_account_name', values.bank.name);
+			data.append('bank_account_number', values.bank.account_number);
+			data.append('email', values.email);
+			data.append('first_name', values.first_name);
+			data.append('gender', values.gender);
+			data.append('idcard_image', idCardImage);
+			data.append('last_name', values.last_name);
+			data.append('phone_number', values.phone_number);
+			data.append('profile_image', profileImage);
+			data.append('role_name', values.role);
+			if (!isCreating) data.append('password', values.password);
+			values.branches.forEach((branch) => {
+				data.append('brand_id[]', branch);
 			});
 
 			if (isCreating) {
@@ -54,16 +69,18 @@ const AdminModifyPage = () => {
 				await adminService.editAdmin(id, data);
 				message.success('Berhasil mengubah admin');
 			}
-		} catch (error) {
-			message.error(error.message);
-			console.error(error);
-		} finally {
+
 			message.info(
 				'Akan dikembalikan ke halaman daftar admin dalam 2 detik'
 			);
 			setTimeout(() => {
 				history.push('/admin');
 			}, 2000);
+		} catch (error) {
+			message.error(error.message);
+			console.error(error);
+		} finally {
+			setIsSubmitting(false);
 		}
 	};
 
@@ -187,21 +204,25 @@ const AdminModifyPage = () => {
 										/>
 									</Col>
 
-									<Col span={12}>
+									<Col span={24}>
 										<MoleculeFileInputGroup
+											defaultValue={profileImage}
 											label="Foto Profile"
 											id="profile-photo-upload"
 											name="profile_photo"
 											placeholder="jpg, png"
+											setImage={setProfileImage}
 										/>
 									</Col>
 
-									<Col span={12}>
+									<Col span={24}>
 										<MoleculeFileInputGroup
+											defaultValue={idCardImage}
 											label="Foto KTP"
 											name="id_card_photo"
 											id="card-photo-upload"
 											placeholder="jpg, png"
+											setImage={setIdCardImage}
 										/>
 									</Col>
 								</Row>
@@ -291,8 +312,9 @@ const AdminModifyPage = () => {
 								</Link>
 								<Button
 									className="br3 bg-denim white"
+									htmlType="submit"
+									loading={isSubmitting}
 									size="large"
-									type="submit"
 								>
 									{`${isCreating ? 'Tambah' : 'Ubah'} Admin`}
 								</Button>

@@ -69,7 +69,7 @@ const routes = [
 				exact: true,
 				guard: true,
 				name: 'Admin Detail Page',
-				path: '/:id',
+				path: '/:id/detail',
 			},
 			{
 				component: React.lazy(() => import('./pages/admin/modify')),
