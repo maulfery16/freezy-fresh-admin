@@ -46,10 +46,10 @@ export default class RequestAdapterService {
 		csv = `"${headers.join(`","`)}"`;
 		csv += `\r\n`;
 
-		data.forEach((item) => {
+		data.forEach((item, dataIdx) => {
 			const row = [];
 
-			properties.forEach((property, index) => {
+			properties.forEach((property) => {
 				if (property.skipExport) {
 					row.push('');
 				} else if (property.render) {
@@ -58,7 +58,7 @@ export default class RequestAdapterService {
 						: property.render(
 								item[property.dataIndex],
 								item,
-								index
+								dataIdx
 						  );
 
 					row.push(value);

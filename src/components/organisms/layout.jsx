@@ -273,7 +273,7 @@ const OrganismLayout = (props) => {
 
 				<Layout
 					className="site-layout"
-					style={{ height: '100vh', overflow: 'scroll' }}
+					style={{ maxHeight: '100vh', overflow: 'scroll' }}
 				>
 					<div className="ph5 pv4">
 						{props.breadcumbs && (
@@ -282,14 +282,12 @@ const OrganismLayout = (props) => {
 									className="denim"
 									key={`breadcumb-0`}
 								>
-									<Link to={`/`}>
-										Dashboard
-									</Link>
+									<Link to={`/`}>Dashboard</Link>
 								</Breadcrumb.Item>
 								{props.breadcumbs.map((breadcumb, index) => (
 									<Breadcrumb.Item
 										className="denim"
-										key={`breadcumb-${index+1}`}
+										key={`breadcumb-${index + 1}`}
 									>
 										<Link to={breadcumb.link}>
 											{breadcumb.name}

@@ -104,7 +104,7 @@ const BrandModifyPage = () => {
 		<OrganismLayout
 			breadcumbs={[
 				{ name: 'Produk', link: '/products/brand' },
-				{ name: 'Brand Dasar', link: '/products/brand' },
+				{ name: 'Brand', link: '/products/brand' },
 				{
 					name: location.pathname.includes('add') ? 'Tambah' : 'Ubah',
 					link: location.pathname,
