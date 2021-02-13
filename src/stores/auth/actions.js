@@ -12,5 +12,19 @@ const setLoginStatus = (payload) => ({
 	type: AuthTypes.SET_LOGIN_STATUS,
 	payload,
 });
+const setRefreshToken = (payload) => ({
+	type: AuthTypes.SET_REFRESH_TOKEN,
+	payload,
+});
+const setRememberMeStatus = (payload) => ({
+	type: AuthTypes.SET_REMEMBER_ME_STATUS,
+	payload,
+});
 
-export { setAuthToken, setCurrentUser, setLoginStatus };
+export {
+	setAuthToken,
+	setCurrentUser,
+	setLoginStatus,
+	setRefreshToken,
+	setRememberMeStatus,
+};

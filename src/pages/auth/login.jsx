@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
 	Button,
 	Checkbox,
@@ -14,13 +14,23 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import AuthenticationLayout from '../../components/layouts/authentication';
-import { setAuthToken, setLoginStatus } from '../../stores/auth/actions';
+import {
+	setAuthToken,
+	setLoginStatus,
+	setRefreshToken,
+	setRememberMeStatus,
+} from '../../stores/auth/actions';
 
 import AuthService from '../../services/auth';
 const authService = new AuthService();
 
 const LoginPages = () => {
 	const dispatch = useDispatch();
+	const [isChecked, setIsChecked] = useState(false);
+
+	const handleCheckChanged = () => {
+		setIsChecked(!isChecked);
+	};
 
 	const validateMessages = {
 		required: '${name} tidak boleh kosong',
@@ -35,13 +45,15 @@ const LoginPages = () => {
 
 	const login = async (values) => {
 		try {
-			const { access_token } = await authService.login({
+			const { access_token, refresh_token } = await authService.login({
 				...values,
 				grant_type: 'password',
 			});
 
 			dispatch(setAuthToken(access_token));
 			dispatch(setLoginStatus(true));
+			dispatch(setRefreshToken(refresh_token));
+			dispatch(setRememberMeStatus(isChecked));
 			window.location = '/';
 		} catch (error) {
 			message.error(error.message);
@@ -103,7 +115,11 @@ const LoginPages = () => {
 						>
 							<Col span={12}>
 								<Form.Item className="mb0" name="remember">
-									<Checkbox className="f6 silver">
+									<Checkbox
+										className="f6 silver"
+										checked={isChecked}
+										onChange={handleCheckChanged}
+									>
 										Ingat saya
 									</Checkbox>
 								</Form.Item>
