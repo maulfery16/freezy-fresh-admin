@@ -69,7 +69,7 @@ const routes = [
 				exact: true,
 				guard: true,
 				name: 'Admin Detail Page',
-				path: '/:id',
+				path: '/:id/detail',
 			},
 			{
 				component: React.lazy(() => import('./pages/admin/modify')),
@@ -195,20 +195,20 @@ const routes = [
 						exact: true,
 						guard: true,
 						name: 'Colour Page',
-						path: '/colour',
+						path: '/',
 					},
 					{
 						component: React.lazy(() =>
-							import('./pages/products/colour/add')
+							import('./pages/products/colour/modify')
 						),
 						exact: true,
 						guard: true,
 						name: 'Add Colour Page',
-						path: '/colour/add',
+						path: '/add',
 					},
 					{
 						component: React.lazy(() =>
-							import('./pages/products/colour/add')
+							import('./pages/products/colour/modify')
 						),
 						exact: true,
 						guard: true,

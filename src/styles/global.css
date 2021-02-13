@@ -71,6 +71,11 @@ a {
 	font-weight: 500;
 }
 
+.ant-menu-root {
+	height: 60vh;
+	overflow: scroll;
+}
+
 .ant-checkbox-inner,
 .ant-checkbox-inner:after,
 .ant-checkbox-checked:after {

@@ -3,7 +3,7 @@ import RequestAdapterService from './request-adapter';
 export default class CategoryService extends RequestAdapterService {
 	async createCategory(category) {
 		try {
-			const { data } = await super.sendPostRequest(
+			const { data } = await super.sendPostMultipartRequest(
 				`${this.baseUrl}/v1/base_categories`,
 				category
 			);
@@ -41,7 +41,7 @@ export default class CategoryService extends RequestAdapterService {
 
 	async editCategory(id, category) {
 		try {
-			const { data } = await super.sendPutRequest(
+			const { data } = await super.sendPutMultipartRequest(
 				`${this.baseUrl}/v1/base_categories/${id}`,
 				category
 			);
@@ -105,7 +105,7 @@ export default class CategoryService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail getting categiory detail: ${
+				`Fail getting category detail: ${
 					error.response.data.message
 				} - ${
 					error.response.data.errors

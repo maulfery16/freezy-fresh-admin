@@ -109,11 +109,11 @@ const CategoryModifyPage = () => {
 					link: location.pathname,
 				},
 			]}
-			title={`${isCreating ? 'Tambah' : 'Ubah'} Category`}
+			title={`${isCreating ? 'Tambah' : 'Ubah'} Kategori`}
 		>
 			<Typography.Title level={4}>
 				<span className="fw7">
-					{`${isCreating ? 'Tambah' : 'Ubah'} Category`.toUpperCase()}
+					{`${isCreating ? 'Tambah' : 'Ubah'} Kategori`.toUpperCase()}
 				</span>
 			</Typography.Title>
 
@@ -132,7 +132,7 @@ const CategoryModifyPage = () => {
 				>
 					<Row>
 						<Col span={15}>
-							<AtomCard title="Info Category">
+							<AtomCard title="Info Kategori">
 								<Row gutter={12}>
 									<Col span={12}>
 										<MoleculeTextInputGroup
