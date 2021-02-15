@@ -14,7 +14,7 @@ import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
 import ColourService from '../../../services/colour';
-import OrganismDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
+import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 const colourService = new ColourService();
 
 // eslint-disable-next-line no-unused-vars
@@ -166,7 +166,7 @@ const ColourPage = () => {
 
 	const renderAdditionalAction = () => {
 		return (
-			<OrganismDatatableAdditionalAction
+			<MoleculeDatatableAdditionalAction
 				column={column}
 				label="Warna"
 				limit={colourService.current.totalData}

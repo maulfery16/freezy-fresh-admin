@@ -12,7 +12,7 @@ import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
 import CategoryService from '../../../services/category';
-import OrganismDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
+import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 const categoryService = new CategoryService();
 
 const CategoryPage = () => {
@@ -124,7 +124,7 @@ const CategoryPage = () => {
 
 	const renderAdditionalAction = () => {
 		return (
-			<OrganismDatatableAdditionalAction
+			<MoleculeDatatableAdditionalAction
 				column={column}
 				label="Kategori Dasar"
 				limit={categoryTableRef.current.totalData}

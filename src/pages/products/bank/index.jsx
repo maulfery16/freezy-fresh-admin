@@ -9,7 +9,7 @@ import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
 import BankService from '../../../services/bank';
-import OrganismDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
+import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 const bankService = new BankService();
 
 const BankPage = () => {
@@ -84,7 +84,7 @@ const BankPage = () => {
 
 	const renderAdditionalAction = () => {
 		return (
-			<OrganismDatatableAdditionalAction
+			<MoleculeDatatableAdditionalAction
 				column={column}
 				label="Bank"
 				limit={bankTableRef.current.totalData}

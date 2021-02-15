@@ -14,7 +14,7 @@ import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
 import AdditionalCategoryService from '../../../services/additional-category';
-import OrganismDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
+import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 const additionalCategoryService = new AdditionalCategoryService();
 
 // eslint-disable-next-line no-unused-vars
@@ -161,7 +161,7 @@ const AdditionalCategoryPage = () => {
 
 	const renderAdditionalAction = () => {
 		return (
-			<OrganismDatatableAdditionalAction
+			<MoleculeDatatableAdditionalAction
 				column={column}
 				label="Kategori Tambahan"
 				limit={additionalCategoryTableRef.current.totalData}

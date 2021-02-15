@@ -15,7 +15,7 @@ import MoleculeDatatableDateRange from '../../components/molecules/datatable/dat
 import MoleculeDatatableFilter from '../../components/molecules/datatable/filter-plugin';
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
-import OrganismDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
+import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
 
 import AdminService from '../../services/admin';
 const adminService = new AdminService();
@@ -160,7 +160,7 @@ const AdminPage = () => {
 
 	const renderAdditionalAction = () => {
 		return (
-			<OrganismDatatableAdditionalAction
+			<MoleculeDatatableAdditionalAction
 				column={column}
 				label="Bank"
 				// limit={adminTableRef.current.totalData}
