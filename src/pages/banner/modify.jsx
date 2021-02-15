@@ -3,51 +3,49 @@ import React, { useEffect, useState } from 'react';
 import { Col, Form, message, Row, Skeleton, Space, Typography } from 'antd';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
-import AtomCard from '../../../components/atoms/card';
-import MoleculeFileInputGroup from '../../../components/molecules/input-group/file-input';
-import MoleculeSelectInputGroup from '../../../components/molecules/input-group/select-input';
-import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
-import OrganismLayout from '../../../components/organisms/layout';
+import AtomCard from '../../components/atoms/card';
+import MoleculeFileInputGroup from '../../components/molecules/input-group/file-input';
+import MoleculeTextInputGroup from '../../components/molecules/input-group/text-input';
+import OrganismLayout from '../../components/organisms/layout';
 
-import CategoryService from '../../../services/category';
-import RequestAdapterService from '../../../services/request-adapter';
-import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
+import RequestAdapterService from '../../services/request-adapter';
+import BannerService from '../../services/banner';
+import MoleculeModifyActionButtons from '../../components/molecules/modify-action-buttons';
+import MoleculeSelectInputGroup from '../../components/molecules/input-group/select-input';
+const bannerService = new BannerService();
 
-const categoryService = new CategoryService();
-
-const CategoryModifyPage = () => {
+const BannerModifyPage = () => {
 	const { id } = useParams();
 	const history = useHistory();
 	const location = useLocation();
 	const isCreating = location.pathname.includes('add') ? true : false;
 
-	const [category, setCategory] = useState(null);
-	const [categoryImage, setCategoryImage] = useState(null);
+	const [banner, setBanner] = useState(null);
+	const [bannerImage, setBannerImage] = useState(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
-	const getCategoryDetail = async (id) => {
+	const getBannerDetail = async (id) => {
 		try {
-			const category = await categoryService.getCategoryById(id);
-			setCategory(category);
+			const { data: banner } = await bannerService.getBannerById(id);
 
-			const brandImageFile = await RequestAdapterService.convertImageURLtoFile(
-				category.image.original
+			setBanner(banner);
+			const bannerImageFile = await RequestAdapterService.convertImageURLtoFile(
+				banner.image.original
 			);
-			setCategoryImage(brandImageFile);
+			setBannerImage(bannerImageFile);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
 		}
 	};
 
-	const setCategoryInitialValues = () => {
+	const setBannerInitialValues = () => {
 		return isCreating
 			? {}
 			: {
-					colour: category.color.id,
-					en_name: category.name.en,
-					id_name: category.name.id,
-					image: category.iamge,
+					title: banner.title,
+					promo: banner.promo,
+					image: bannerImage,
 			  };
 	};
 
@@ -56,24 +54,23 @@ const CategoryModifyPage = () => {
 			setIsSubmitting(true);
 
 			const data = new FormData();
-			data.append('color_id', values.colour);
-			data.append('image', categoryImage);
+			data.append('image', bannerImage);
 			data.append('name[en]', values.en_name);
 			data.append('name[id]', values.id_name);
 
 			if (isCreating) {
-				await categoryService.createCategory(data);
-				message.success('Berhasil menambah kategori');
+				await bannerService.createBanner(data);
+				message.success('Berhasil menambah banner');
 			} else {
-				await categoryService.editCategory(id, data);
-				message.success('Berhasil mengubah kategori');
+				await bannerService.editBanner(id, data);
+				message.success('Berhasil mengubah banner');
 			}
 
 			message.info(
-				'Akan dikembalikan ke halaman daftar kategori dalam 2 detik'
+				'Akan dikembalikan ke halaman daftar banner dalam 2 detik'
 			);
 			setTimeout(() => {
-				history.push('/products/category');
+				history.push('/products/banner');
 			}, 2000);
 		} catch (error) {
 			message.error(error.message);
@@ -86,7 +83,7 @@ const CategoryModifyPage = () => {
 	useEffect(() => {
 		(async () => {
 			if (!isCreating) {
-				await getCategoryDetail(id);
+				await getBannerDetail(id);
 			}
 		})();
 	}, []);
@@ -94,28 +91,27 @@ const CategoryModifyPage = () => {
 	return (
 		<OrganismLayout
 			breadcumbs={[
-				{ name: 'Produk', link: '/products/category' },
-				{ name: 'Kategori Dasar', link: '/products/category' },
+				{ name: 'Banner', link: '/products/banner' },
 				{
 					name: location.pathname.includes('add') ? 'Tambah' : 'Ubah',
 					link: location.pathname,
 				},
 			]}
-			title={`${isCreating ? 'Tambah' : 'Ubah'} Kategori`}
+			title={`${isCreating ? 'Tambah' : 'Ubah'} Banner`}
 		>
 			<Typography.Title level={4}>
 				<span className="fw7">
-					{`${isCreating ? 'Tambah' : 'Ubah'} Kategori`.toUpperCase()}
+					{`${isCreating ? 'Tambah' : 'Ubah'} Banner`.toUpperCase()}
 				</span>
 			</Typography.Title>
 
-			{!isCreating && !category ? (
+			{!isCreating && !banner ? (
 				<Skeleton active />
 			) : (
 				<Form
 					className="w-100 mt4"
-					name="modify_category"
-					initialValues={setCategoryInitialValues()}
+					name="modify_banner"
+					initialValues={setBannerInitialValues()}
 					onFinish={submit}
 					onFinishFailed={(error) => {
 						message.error(`Failed: ${error}`);
@@ -124,42 +120,33 @@ const CategoryModifyPage = () => {
 				>
 					<Row>
 						<Col span={15}>
-							<AtomCard title="Info Kategori">
+							<AtomCard title="Info Banner">
 								<Row gutter={12}>
-									<Col span={12}>
+									<Col span={24}>
 										<MoleculeTextInputGroup
-											name="id_name"
-											label="Nama Kategori (ID)"
-											placeholder="Nama Kategori (ID)"
-											type="text"
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeTextInputGroup
-											name="en_name"
-											label="Nama Kategori (EN)"
-											placeholder="Nama Kategori (EN)"
+											name="title"
+											label="Title Banner"
+											placeholder="Title Banner"
 											type="text"
 										/>
 									</Col>
 
 									<Col span={24}>
 										<MoleculeFileInputGroup
-											defaultValue={categoryImage}
-											label="Foto Icon"
-											id="icon-photo-upload"
+											defaultValue={bannerImage}
+											label="Logo Banner"
+											id="banner-logo-upload"
 											name="image"
 											placeholder="png"
-											setImage={setCategoryImage}
+											setImage={setBannerImage}
 										/>
 									</Col>
 
 									<Col span={24}>
 										<MoleculeSelectInputGroup
-											label="Pilih Warna"
-											name="colour"
-											placeholder="Pilih Warna"
+											label="Pilih Promo"
+											name="promo"
+											placeholder="Pilih Promo"
 											data={{
 												url: '/v1/colors',
 												generateCustomOption: (
@@ -191,10 +178,10 @@ const CategoryModifyPage = () => {
 
 						<Col className="mt4" span={24}>
 							<MoleculeModifyActionButtons
-								backUrl="/products/category"
+								backUrl="/banner"
 								isCreating={isCreating}
 								isSubmitting={isSubmitting}
-								label="Kategori"
+								label="Banner"
 							/>
 						</Col>
 					</Row>
@@ -204,4 +191,4 @@ const CategoryModifyPage = () => {
 	);
 };
 
-export default CategoryModifyPage;
+export default BannerModifyPage;

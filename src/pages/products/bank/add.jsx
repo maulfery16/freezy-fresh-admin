@@ -91,7 +91,7 @@ const BankModifyPage = () => {
 						</AtomCard>
 					</Col>
 
-					<Col className="mt5" span={24}>
+					<Col className="mt4" span={24}>
 						<MoleculeModifyActionButtons
 							backUrl="/products/bank"
 							isCreating={true}

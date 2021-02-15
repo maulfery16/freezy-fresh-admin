@@ -2,7 +2,7 @@ import { Button, message, Space } from 'antd';
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 
-const OrganismDatatableAdditionalAction = (props) => {
+const MoleculeDatatableAdditionalAction = (props) => {
 	const [isExporting, setIsExporting] = useState(false);
 
 	const exportAsCSV = async () => {
@@ -41,4 +41,4 @@ const OrganismDatatableAdditionalAction = (props) => {
 	);
 };
 
-export default OrganismDatatableAdditionalAction;
+export default MoleculeDatatableAdditionalAction;

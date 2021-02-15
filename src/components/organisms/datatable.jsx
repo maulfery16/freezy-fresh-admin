@@ -249,7 +249,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 									</Row>
 								</Space>
 
-								<Row className="mt5" justify="center">
+								<Row className="mt4" justify="center">
 									<Button
 										className="bg-denim white br3 w-30"
 										onClick={setFilter}

@@ -292,7 +292,7 @@ const AdminModifyPage = () => {
 							</AtomCard>
 						</Col>
 
-						<Col className="mt5" span={24}>
+						<Col className="mt4" span={24}>
 							<MoleculeModifyActionButtons
 								backUrl="/admin"
 								isCreating={isCreating}
