@@ -4,11 +4,7 @@ import React, { useRef, useState } from 'react';
 import ReactMoment from 'react-moment';
 import { Link } from 'react-router-dom';
 import { Button, message, Popconfirm, Space } from 'antd';
-import {
-	DeleteFilled,
-	EditFilled,
-	QuestionCircleFilled,
-} from '@ant-design/icons';
+import { DeleteFilled, QuestionCircleFilled } from '@ant-design/icons';
 
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
@@ -60,10 +56,6 @@ const BankPage = () => {
 			dataIndex: 'id',
 			render: (id) => (
 				<Space size="middle">
-					<Link to={`/products/bank/${id}/edit`}>
-						<EditFilled className="f4 orange" />
-					</Link>
-
 					<Popconfirm
 						title="Are you sure"
 						icon={<QuestionCircleFilled className="red" />}
