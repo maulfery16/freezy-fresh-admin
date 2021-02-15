@@ -16,15 +16,15 @@ import {
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import { BsFillPersonCheckFill, BsPersonFill } from 'react-icons/bs';
 import {
-	FaBoxOpen,
-	FaMoneyBill,
-	FaMotorcycle,
-	FaStoreAlt,
-} from 'react-icons/fa';
+	BsFillImageFill,
+	BsFillPersonCheckFill,
+	BsPersonFill,
+} from 'react-icons/bs';
+import { FaMoneyBill, FaMotorcycle, FaStoreAlt } from 'react-icons/fa';
 import {
 	BellOutlined,
+	DropboxOutlined,
 	HomeFilled,
 	SettingOutlined,
 	ShoppingCartOutlined,
@@ -67,7 +67,7 @@ const menus = [
 	},
 	{
 		name: 'Produk-Poduk',
-		icon: <FaBoxOpen style={{ marginRight: '10px' }} />,
+		icon: <DropboxOutlined />,
 		subMenuKey: 'produts',
 		subMenus: [
 			{
@@ -112,6 +112,11 @@ const menus = [
 		icon: <FaMotorcycle />,
 		link: '/courier',
 	},
+	{
+		name: 'Banner',
+		icon: <BsFillImageFill />,
+		link: '/banner',
+	},
 ];
 
 const OrganismLayout = (props) => {
@@ -134,7 +139,7 @@ const OrganismLayout = (props) => {
 					onCollapse={() =>
 						setIsSidebarCollapsed((collapsed) => !collapsed)
 					}
-					width={250}
+					width={300}
 					style={{ height: '100vh' }}
 				>
 					<div className="pa2 mv3 mh4">
@@ -147,14 +152,14 @@ const OrganismLayout = (props) => {
 							isSidebarCollapsed ? 'center' : 'space-between'
 						}
 					>
-						<Col span={8}>
+						<Col span={6}>
 							<Avatar
 								icon={<UserOutlined />}
 								size={50}
 								src={user.image}
 							/>
 						</Col>
-						<Col span={16}>
+						<Col span={18}>
 							<Row>
 								<Col span={17}>
 									<Space size={15}>
