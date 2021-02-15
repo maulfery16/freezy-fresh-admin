@@ -86,6 +86,10 @@ const menus = [
 				name: 'Brand',
 				link: '/products/brand',
 			},
+			{
+				name: 'Bank',
+				link: '/products/bank',
+			},
 		],
 	},
 	{

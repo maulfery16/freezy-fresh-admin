@@ -16,6 +16,7 @@ export default class RequestAdapterService {
 		this.baseUrl = config.API_URL;
 		let headers = {
 			'Content-Type': 'application/json',
+			'Content-Language': 'EN',
 		};
 
 		if (token !== null) headers['Authorization'] = `Bearer ${token}`;

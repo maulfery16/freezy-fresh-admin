@@ -73,7 +73,7 @@ a {
 
 .ant-menu-root {
 	height: 60vh;
-	overflow: scroll;
+	overflow: auto;
 }
 
 .ant-checkbox-inner,
