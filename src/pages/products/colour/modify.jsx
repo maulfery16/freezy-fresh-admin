@@ -19,6 +19,7 @@ import MoleculeTextInputGroup from '../../../components/molecules/input-group/te
 import OrganismLayout from '../../../components/organisms/layout';
 
 import ColorService from '../../../services/colour';
+import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
 const colourService = new ColorService();
 
 const ColourModifyPage = () => {
@@ -192,24 +193,12 @@ const ColourModifyPage = () => {
 						</Col>
 
 						<Col className="mt5" span={24}>
-							<Space>
-								<Link to="/products/colour">
-									<Button
-										className="br3 denim b--denim"
-										size="large"
-									>
-										Kembali
-									</Button>
-								</Link>
-								<Button
-									className="br3 bg-denim white"
-									htmlType="submit"
-									loading={isSubmitting}
-									size="large"
-								>
-									{`${isCreating ? 'Tambah' : 'Ubah'} Warna`}
-								</Button>
-							</Space>
+							<MoleculeModifyActionButtons
+								backUrl="/products/colour"
+								isCreating={isCreating}
+								isSubmitting={isSubmitting}
+								label="Warna"
+							/>
 						</Col>
 					</Row>
 				</Form>

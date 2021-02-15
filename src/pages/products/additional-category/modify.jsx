@@ -1,22 +1,14 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import React, { useEffect, useState } from 'react';
-import {
-	Button,
-	Col,
-	Form,
-	message,
-	Row,
-	Skeleton,
-	Space,
-	Typography,
-} from 'antd';
-import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
+import { Col, Form, message, Row, Skeleton, Typography } from 'antd';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
 import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../../components/organisms/layout';
 
 import AdditionalCategoryService from '../../../services/additional-category';
+import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
 const additionalCategoryService = new AdditionalCategoryService();
 
 const AdditionalCategoryModifyPage = () => {
@@ -166,26 +158,12 @@ const AdditionalCategoryModifyPage = () => {
 						</Col>
 
 						<Col className="mt5" span={24}>
-							<Space>
-								<Link to="/products/additional-category">
-									<Button
-										className="br3 denim b--denim"
-										size="large"
-									>
-										Kembali
-									</Button>
-								</Link>
-								<Button
-									className="br3 bg-denim white"
-									size="large"
-									htmlType="submit"
-									loading={isSubmitting}
-								>
-									{`${
-										isCreating ? 'Tambah' : 'Ubah'
-									} Kategori Tambahan`}
-								</Button>
-							</Space>
+							<MoleculeModifyActionButtons
+								backUrl="/products/additional-category"
+								isCreating={isCreating}
+								isSubmitting={isSubmitting}
+								label="Kategori Tambahan"
+							/>
 						</Col>
 					</Row>
 				</Form>
