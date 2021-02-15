@@ -2,7 +2,9 @@ import AuthTypes from './types';
 
 const INITIAL_STATE = {
 	isLoggedIn: false,
+	isRememberMe: false,
 	token: '',
+	refreshToken: '',
 	user: {
 		domicile: 'Bandung',
 		id: null,
@@ -18,7 +20,8 @@ const authReducer = (state = INITIAL_STATE, action) => {
 		case AuthTypes.SET_AUTH_TOKEN:
 			return {
 				...state,
-				token: action.payload,
+				token: action.payload.access_token,
+				refreshToken: action.payload.refresh_token,
 			};
 		case AuthTypes.SET_CURRENT_USER:
 			return {
@@ -29,6 +32,16 @@ const authReducer = (state = INITIAL_STATE, action) => {
 			return {
 				...state,
 				isLoggedIn: action.payload,
+			};
+		case AuthTypes.SET_REFRESH_TOKEN:
+			return {
+				...state,
+				refreshToken: action.payload,
+			};
+		case AuthTypes.SET_REMEMBER_ME_STATUS:
+			return {
+				...state,
+				isRememberMe: action.payload,
 			};
 		case AuthTypes.SET_SIDER_VISIBILITY:
 			return {
