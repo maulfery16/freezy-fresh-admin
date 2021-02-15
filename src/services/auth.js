@@ -20,4 +20,19 @@ export default class AuthService extends RequestAdapterService {
 			);
 		}
 	}
+
+	async reqRefreshToken() {
+		try {
+			const { data } = await super.sendPostRefreshTokenRequest(
+				`${this.baseUrl}/v1/clients/web/admin/refresh`
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Refresh Token failed: ${error.response.data.message} - ${error.response.status}`
+			);
+		}
+	}
 }

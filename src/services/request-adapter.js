@@ -11,7 +11,9 @@ export default class RequestAdapterService {
 	constructor() {
 		const {
 			auth: { token },
+			auth: { refreshToken },
 		} = store.getState();
+		this.refreshToken = refreshToken;
 
 		this.baseUrl = config.API_URL;
 		let headers = {
@@ -94,6 +96,14 @@ export default class RequestAdapterService {
 
 	sendGetRequest(URL, params) {
 		return this.reqClient.get(URL, { params });
+	}
+
+	sendPostRefreshTokenRequest(URL) {
+		return this.reqClient.post(URL, {
+			headers: {
+				Cookie: `refreshToken=${this.refreshToken}`,
+			},
+		});
 	}
 
 	sendPostMultipartRequest(URL, formData) {

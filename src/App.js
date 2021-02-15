@@ -2,6 +2,7 @@
 /* eslint-disable react/display-name */
 import React, { Suspense } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
 import './styles/colors.css';
 import './styles/global.css';
@@ -9,10 +10,16 @@ import './styles/global.css';
 import AtomSpinner from './components/atoms/spinner';
 import OrganismErrorBoundary from './components/organisms/error-boundary';
 import routes from './routes';
-import { useSelector } from 'react-redux';
+import { setAuthToken, setLoginStatus } from './stores/auth/actions';
+
+import AuthService from './services/auth';
+const authService = new AuthService();
 
 const App = () => {
-	const { isLoggedIn } = useSelector((state) => state.auth);
+	const { isLoggedIn, isRememberMe, refreshToken } = useSelector(
+		(state) => state.auth
+	);
+	const dispatch = useDispatch();
 	const renderedRoutes = [];
 
 	const generateChildrenRoute = (children, parentPath) => {
@@ -38,6 +45,22 @@ const App = () => {
 				if (route.guard) {
 					return isLoggedIn ? (
 						<route.component key={route.name} {...props} />
+					) : isRememberMe ? (
+						async () => {
+							try {
+								const {
+									access_token,
+								} = await authService.reqRefreshToken({
+									refreshToken,
+								});
+
+								dispatch(setAuthToken(access_token));
+								dispatch(setLoginStatus(true));
+								window.location = '/';
+							} catch (error) {
+								console.error(error);
+							}
+						}
 					) : (
 						<Redirect key={`login-redirect`} to="/login" />
 					);
