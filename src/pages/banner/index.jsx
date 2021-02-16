@@ -16,28 +16,6 @@ import BannerService from '../../services/banner';
 import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
 const bannerService = new BannerService();
 
-const mock = {
-	meta: {
-		total_data: 2,
-	},
-	data: [
-		{
-			id: 'FF-836732982',
-			image:
-				'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
-			promo: 'Promo Menarique',
-			title: 'Banner 1',
-		},
-		{
-			id: 'FF-836732934',
-			image:
-				'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
-			promo: 'Promo Misqueen',
-			title: 'Banner 2',
-		},
-	],
-};
-
 const BannerPage = () => {
 	const column = [
 		{
@@ -103,10 +81,9 @@ const BannerPage = () => {
 			<MoleculeDatatableAdditionalAction
 				column={column}
 				label="Banner"
-				// limit={bannerTableRef.current.totalData}
-				limit={0}
+				getLimit={() => bannerTableRef.current.totalData}
 				service={bannerService}
-				url="products/banner"
+				url="banner"
 			/>
 		);
 	};
@@ -125,10 +102,9 @@ const BannerPage = () => {
 				columns={column}
 				dataSourceURL={`/v1/banners`}
 				filters={renderDatatableFilters()}
-				mock={mock}
 				ref={bannerTableRef}
 				searchInput={true}
-				title={`Banner Menu`}
+				title={`Banner`}
 			/>
 		</OrganismLayout>
 	);

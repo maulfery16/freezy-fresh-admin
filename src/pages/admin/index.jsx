@@ -163,8 +163,7 @@ const AdminPage = () => {
 			<MoleculeDatatableAdditionalAction
 				column={column}
 				label="Bank"
-				// limit={adminTableRef.current.totalData}
-				limit={0}
+				getLimit={() => adminTableRef.current.totalData}
 				service={adminService}
 				url="products/bank"
 			/>

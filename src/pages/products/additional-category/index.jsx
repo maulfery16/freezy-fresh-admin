@@ -164,7 +164,7 @@ const AdditionalCategoryPage = () => {
 			<MoleculeDatatableAdditionalAction
 				column={column}
 				label="Kategori Tambahan"
-				limit={additionalCategoryTableRef.current.totalData}
+				getLimit={() => additionalCategoryTableRef.current.totalData}
 				service={additionalCategoryService}
 				url="products/additional-category"
 			/>
