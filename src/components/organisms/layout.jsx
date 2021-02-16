@@ -24,6 +24,7 @@ import {
 import { FaMoneyBill, FaMotorcycle, FaStoreAlt } from 'react-icons/fa';
 import {
 	BellOutlined,
+	BookFilled,
 	DropboxOutlined,
 	HomeFilled,
 	SettingOutlined,
@@ -116,6 +117,11 @@ const menus = [
 		name: 'Banner',
 		icon: <BsFillImageFill />,
 		link: '/banner',
+	},
+	{
+		name: 'Article',
+		icon: <BookFilled />,
+		link: '/article',
 	},
 ];
 

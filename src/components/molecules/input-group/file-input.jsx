@@ -58,8 +58,8 @@ const MoleculeFileInputGroup = (props) => {
 								imagePlaceholder ||
 								'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg'
 							}
-							height={100}
-							width={100}
+							height={170}
+							width={170}
 						/>
 					</Row>
 				</Col>
