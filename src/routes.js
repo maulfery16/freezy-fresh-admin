@@ -120,6 +120,29 @@ const routes = [
 				],
 			},
 			{
+				path: '/bank',
+				children: [
+					{
+						component: React.lazy(() =>
+							import('./pages/products/bank')
+						),
+						exact: true,
+						guard: true,
+						name: 'Bank Page',
+						path: '/',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/products/bank/add')
+						),
+						exact: true,
+						guard: true,
+						name: 'Add Bank Page',
+						path: '/add',
+					},
+				],
+			},
+			{
 				path: '/brand',
 				children: [
 					{

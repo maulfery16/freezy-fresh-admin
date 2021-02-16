@@ -30,8 +30,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 	const [isFilterVisible, setIsFilterVisible] = useState(false);
 	const [isGettingData, setIsGettingData] = useState(false);
 	const [totalData, setTotalData] = useState(0);
-
-	let filterParameter = {
+	const [filterParams, setFilterParams] = useState({
 		filter: '',
 		filters: [],
 		search: '',
@@ -39,10 +38,21 @@ const OrganismDatatable = forwardRef((props, ref) => {
 		orderBy: '',
 		page: 1,
 		sortedBy: '',
-	};
+	});
 
-	const getData = async () => {
+	const getData = async (
+		params = {
+			filter: '',
+			filters: [],
+			search: '',
+			limit: 5,
+			orderBy: '',
+			page: 1,
+			sortedBy: '',
+		}
+	) => {
 		setIsGettingData(true);
+		setFilterParams(params);
 
 		try {
 			if (props.mock) {
@@ -51,7 +61,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 			} else {
 				const { data, meta } = await datatableService.getData(
 					props.dataSourceURL,
-					filterParameter
+					params
 				);
 
 				setData(data);
@@ -65,26 +75,20 @@ const OrganismDatatable = forwardRef((props, ref) => {
 		}
 	};
 
-	useImperativeHandle(ref, () => ({
-		async refetchData() {
-			await getData();
-		},
-	}));
-
 	const addFilter = (name, operator, value) => {
 		const newFilter = { name, operator, value };
-		const existingFilterIndex = filterParameter.filters.findIndex(
+		const existingFilterIndex = filterParams.filters.findIndex(
 			(filter) => name === filter.name
 		);
 
 		existingFilterIndex > -1
-			? (filterParameter.filters[existingFilterIndex] = newFilter)
-			: filterParameter.filter.push;
+			? (filterParams.filters[existingFilterIndex] = newFilter)
+			: filterParams.filter.push;
 	};
 
 	const addMultipleFilter = (appliedFilters) => {
 		appliedFilters.forEach((applFilter) => {
-			const existingFilterIndex = filterParameter.filters.findIndex(
+			const existingFilterIndex = filterParams.filters.findIndex(
 				(filter) =>
 					newFilter.name === filter.name &&
 					applFilter.name === filter.operator
@@ -92,23 +96,23 @@ const OrganismDatatable = forwardRef((props, ref) => {
 			const newFilter = { ...applFilter };
 
 			existingFilterIndex > -1
-				? (filterParameter.filters[existingFilterIndex] = newFilter)
-				: filterParameter.filter.push;
+				? (filterParams.filters[existingFilterIndex] = newFilter)
+				: filterParams.filter.push;
 		});
 	};
 
 	const removeFilter = (name) => {
-		const filterIndex = filterParameter.filters.findIndex(
+		const filterIndex = filterParams.filters.findIndex(
 			(filter) => name === filter.name
 		);
 
-		filterParameter.filters.splice(filterIndex, 1);
+		filterParams.filters.splice(filterIndex, 1);
 	};
 
 	const setFilter = () => {
-		filterParameter = {
-			...filterParameter,
-			filter: filterParameter.filters.map(
+		const filterParameter = {
+			...filterParams,
+			filter: filterParams.filters.map(
 				(query, index) =>
 					`${index > 0 ? 'and' : ''} ${query.name} ${
 						query.operator
@@ -117,32 +121,28 @@ const OrganismDatatable = forwardRef((props, ref) => {
 			page: 1,
 		};
 		setIsFilterVisible(false);
-		getData();
+		getData(filterParameter);
 	};
 
 	const setKeyword = (search) => {
-		filterParameter = { ...filterParameter, search };
-		getData();
+		const filterParameter = { ...filterParams, search };
+		getData(filterParameter);
 	};
 
-	const setLimit = (limit) => {
-		filterParameter = { ...filterParameter, limit };
-		getData();
-	};
-
-	const setPagination = (page) => {
-		filterParameter = { ...filterParameter, page };
-		getData();
+	const setPagination = (page, limit) => {
+		const filterParameter = { ...filterParams, limit, page };
+		console.log(filterParameter);
+		getData(filterParameter);
 	};
 
 	const setSort = (orderBy, sortedBy) => {
-		filterParameter = {
-			...filterParameter,
+		const filterParameter = {
+			...filterParams,
 			orderBy,
 			page: 1,
 			sortedBy,
 		};
-		getData();
+		getData(filterParameter);
 	};
 
 	useEffect(() => {
@@ -150,6 +150,12 @@ const OrganismDatatable = forwardRef((props, ref) => {
 			await getData();
 		})();
 	}, []);
+
+	useImperativeHandle(ref, () => ({
+		async refetchData() {
+			await getData();
+		},
+	}));
 
 	return (
 		<Row className="w-100">
@@ -270,8 +276,8 @@ const OrganismDatatable = forwardRef((props, ref) => {
 								<AtomDatatableHeader
 									attr={column.dataIndex}
 									activeSort={{
-										orderBy: filterParameter.orderBy,
-										sortedBy: filterParameter.sortedBy,
+										orderBy: filterParams.orderBy,
+										sortedBy: filterParams.sortedBy,
 									}}
 									setSort={column.sort ? setSort : false}
 									title={column.title}
@@ -281,7 +287,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 						className={props.className}
 						dataSource={data}
 						pagination={{
-							current: filterParameter.page,
+							current: filterParams.page,
 							itemRender: (_, type, originalEl) => {
 								if (type === 'prev')
 									return (
@@ -297,9 +303,9 @@ const OrganismDatatable = forwardRef((props, ref) => {
 									);
 								return originalEl;
 							},
-							onChange: (page) => setPagination(page),
-							onShowSizeChange: (limit) => setLimit(limit),
-							pageSize: filterParameter.limit,
+							onChange: (page, pageSize) =>
+								setPagination(page, pageSize),
+							pageSize: filterParams.limit,
 							responsive: true,
 							total: totalData,
 						}}

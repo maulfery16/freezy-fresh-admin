@@ -1,18 +1,18 @@
 import RequestAdapterService from './request-adapter';
 
-export default class CategoryService extends RequestAdapterService {
-	async createCategory(category) {
+export default class BankService extends RequestAdapterService {
+	async createBank(bank) {
 		try {
 			const { data } = await super.sendPostMultipartRequest(
-				`${this.baseUrl}/v1/base_categories`,
-				category
+				`${this.baseUrl}/v1/banks`,
+				bank
 			);
 
 			return data;
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail creating category: ${error.response.data.message} - ${
+				`Fail creating bank: ${error.response.data.message} - ${
 					error.response.data.errors
 						? error.response.data.errors.code
 						: 'Error'
@@ -21,10 +21,10 @@ export default class CategoryService extends RequestAdapterService {
 		}
 	}
 
-	async deleteCategory(id) {
+	async deleteBank(id) {
 		try {
 			return await super.sendDeleteRequest(
-				`${this.baseUrl}/v1/base_categories/${id}`,
+				`${this.baseUrl}/v1/banks/${id}`,
 				{ id }
 			);
 		} catch (error) {
@@ -39,17 +39,18 @@ export default class CategoryService extends RequestAdapterService {
 		}
 	}
 
-	async editCategory(id, category) {
+	async editBank(id, bank) {
 		try {
-			const { data } = await super.sendPutMultipartRequest(
-				`${this.baseUrl}/v1/base_categories/${id}`,
-				category
+			const { data } = await super.sendPostMultipartRequest(
+				`${this.baseUrl}/v1/banks/${id}?_method=PATCH`,
+				bank
 			);
 
 			return data;
 		} catch (error) {
+			console.error(error);
 			throw new Error(
-				`Fail updating category: ${error.response.data.message} - ${
+				`Fail updating bank: ${error.response.data.message} - ${
 					error.response.data.errors
 						? error.response.data.errors.code
 						: 'Error'
@@ -60,13 +61,12 @@ export default class CategoryService extends RequestAdapterService {
 
 	async exportAsCSV(params, properties) {
 		try {
-			const { data } = await this.getCategories(params);
-
-			super.dowloadDataAsCSV(data, properties, 'Base Category List');
+			const { data } = await this.getBanks(params);
+			super.dowloadDataAsCSV(data, properties, 'Bank List');
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Exporting Category as CSV: ${error.response.data.message} - ${
+				`Exporting Bank as CSV: ${error.response.data.message} - ${
 					error.response.data.errors
 						? error.response.data.errors.code
 						: 'Error'
@@ -75,10 +75,10 @@ export default class CategoryService extends RequestAdapterService {
 		}
 	}
 
-	async getCategories(params) {
+	async getBanks(params) {
 		try {
 			const { data } = await super.sendGetRequest(
-				`${this.baseUrl}/v1/base_categories`,
+				`${this.baseUrl}/v1/banks`,
 				params
 			);
 
@@ -86,7 +86,7 @@ export default class CategoryService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Getting category data: ${error.response.data.message} - ${
+				`Getting bank data: ${error.response.data.message} - ${
 					error.response.data.errors
 						? error.response.data.errors.code
 						: 'Error'
@@ -95,41 +95,17 @@ export default class CategoryService extends RequestAdapterService {
 		}
 	}
 
-	async getCategoryById(id) {
+	async getBankById(id) {
 		try {
-			const data = await super.sendGetRequest(
-				`${this.baseUrl}/v1/base_categories/${id}`
+			const { data } = await super.sendGetRequest(
+				`${this.baseUrl}/v1/banks/${id}`
 			);
 
 			return data;
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail getting category detail: ${
-					error.response.data.message
-				} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
-			);
-		}
-	}
-
-	async updateCategoryActiveStatus(id, status) {
-		try {
-			const { data } = await super.sendPutRequest(
-				`${this.baseUrl}/v1/base_categories/${id}/status`,
-				status
-			);
-
-			return data;
-		} catch (error) {
-			console.error(error);
-			throw new Error(
-				`Fail updating category status: ${
-					error.response.data.message
-				} - ${
+				`Fail getting bank detail: ${error.response.data.message} - ${
 					error.response.data.errors
 						? error.response.data.errors.code
 						: 'Error'
