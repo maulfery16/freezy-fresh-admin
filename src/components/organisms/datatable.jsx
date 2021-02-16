@@ -27,12 +27,12 @@ const datatableService = new DatatableService();
 
 const OrganismDatatable = forwardRef((props, ref) => {
 	const [data, setData] = useState(null);
+	const [filters, setFilters] = useState([]);
 	const [isFilterVisible, setIsFilterVisible] = useState(false);
 	const [isGettingData, setIsGettingData] = useState(false);
 	const [totalData, setTotalData] = useState(0);
 	const [filterParams, setFilterParams] = useState({
 		filter: '',
-		filters: [],
 		search: '',
 		limit: 5,
 		orderBy: '',
@@ -40,19 +40,8 @@ const OrganismDatatable = forwardRef((props, ref) => {
 		sortedBy: '',
 	});
 
-	const getData = async (
-		params = {
-			filter: '',
-			filters: [],
-			search: '',
-			limit: 5,
-			orderBy: '',
-			page: 1,
-			sortedBy: '',
-		}
-	) => {
+	const getData = async () => {
 		setIsGettingData(true);
-		setFilterParams(params);
 
 		try {
 			if (props.mock) {
@@ -61,7 +50,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 			} else {
 				const { data, meta } = await datatableService.getData(
 					props.dataSourceURL,
-					params
+					filterParams
 				);
 
 				setData(data);
@@ -77,42 +66,47 @@ const OrganismDatatable = forwardRef((props, ref) => {
 
 	const addFilter = (name, operator, value) => {
 		const newFilter = { name, operator, value };
-		const existingFilterIndex = filterParams.filters.findIndex(
+		const existingFilterIndex = filters.findIndex(
 			(filter) => name === filter.name
 		);
 
+		const newFilters = [...filters];
 		existingFilterIndex > -1
-			? (filterParams.filters[existingFilterIndex] = newFilter)
-			: filterParams.filter.push;
+			? (newFilters[existingFilterIndex] = newFilter)
+			: newFilters.push(newFilter);
+		setFilters(newFilters);
 	};
 
 	const addMultipleFilter = (appliedFilters) => {
 		appliedFilters.forEach((applFilter) => {
-			const existingFilterIndex = filterParams.filters.findIndex(
+			const existingFilterIndex = filters.findIndex(
 				(filter) =>
 					newFilter.name === filter.name &&
 					applFilter.name === filter.operator
 			);
 			const newFilter = { ...applFilter };
 
+			const newFilters = [...filters];
 			existingFilterIndex > -1
-				? (filterParams.filters[existingFilterIndex] = newFilter)
-				: filterParams.filter.push;
+				? (newFilters[existingFilterIndex] = newFilter)
+				: newFilters.push(newFilter);
+
+			setFilters(newFilters);
 		});
 	};
 
 	const removeFilter = (name) => {
-		const filterIndex = filterParams.filters.findIndex(
-			(filter) => name === filter.name
-		);
+		const filterIndex = filters.findIndex((filter) => name === filter.name);
 
-		filterParams.filters.splice(filterIndex, 1);
+		const newFilters = [...filters];
+		newFilters.splice(filterIndex, 1);
+		setFilters(newFilters);
 	};
 
 	const setFilter = () => {
 		const filterParameter = {
 			...filterParams,
-			filter: filterParams.filters.map(
+			filter: filters.map(
 				(query, index) =>
 					`${index > 0 ? 'and' : ''} ${query.name} ${
 						query.operator
@@ -120,29 +114,26 @@ const OrganismDatatable = forwardRef((props, ref) => {
 			),
 			page: 1,
 		};
+
 		setIsFilterVisible(false);
-		getData(filterParameter);
+		setFilterParams(filterParameter);
 	};
 
 	const setKeyword = (search) => {
-		const filterParameter = { ...filterParams, search };
-		getData(filterParameter);
+		setFilterParams({ ...filterParams, search });
 	};
 
 	const setPagination = (page, limit) => {
-		const filterParameter = { ...filterParams, limit, page };
-		console.log(filterParameter);
-		getData(filterParameter);
+		setFilterParams({ ...filterParams, limit, page });
 	};
 
 	const setSort = (orderBy, sortedBy) => {
-		const filterParameter = {
+		setFilterParams({
 			...filterParams,
 			orderBy,
 			page: 1,
 			sortedBy,
-		};
-		getData(filterParameter);
+		});
 	};
 
 	useEffect(() => {
@@ -150,6 +141,12 @@ const OrganismDatatable = forwardRef((props, ref) => {
 			await getData();
 		})();
 	}, []);
+
+	useEffect(() => {
+		(async () => {
+			await getData();
+		})();
+	}, [filterParams]);
 
 	useImperativeHandle(ref, () => ({
 		async refetchData() {
