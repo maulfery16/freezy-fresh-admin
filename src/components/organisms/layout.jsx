@@ -7,14 +7,16 @@ import {
 	Breadcrumb,
 	Col,
 	Divider,
+	Dropdown,
 	Layout,
 	Menu,
+	message,
 	Row,
 	Space,
 	Typography,
 } from 'antd';
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
 	BsFillImageFill,
@@ -34,6 +36,13 @@ import {
 
 import AtomFooter from '../atoms/footer';
 import FFLogo from '../../assets/logos/ff-logo.png';
+
+import {
+	setAuthToken,
+	setLoginStatus,
+	setRefreshToken,
+	setRememberMeStatus,
+} from '../../stores/auth/actions';
 
 const menus = [
 	{
@@ -127,10 +136,57 @@ const menus = [
 
 const OrganismLayout = (props) => {
 	const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-	const [notifCount] = useState(0);
+	const [notifications] = useState([]);
 	const { user } = useSelector((state) => state.auth);
+	const dispatch = useDispatch();
 	const history = useHistory();
 	const location = useLocation();
+
+	const notificationMenus = () => (
+		<Space className="pa3" direction="vertical" style={{ width: 300 }}>
+			<Typography.Text>
+				<span className="f5 fw6">Notifikasi</span>
+			</Typography.Text>
+
+			<hr />
+
+			{notifications.length < 1 ? (
+				<Typography.Text type="secondary">
+					Tidak ada notifikasi
+				</Typography.Text>
+			) : (
+				notifications.map((notification, index) => (
+					<Typography.Text key={`_notif-${index}`} type="secondary">
+						{notification.title}
+					</Typography.Text>
+				))
+			)}
+		</Space>
+	);
+
+	const settingMenus = () => (
+		<Space className="pa3" direction="vertical">
+			<Link to="/profile/edit">
+				<span className="gray">Ubah Profil</span>
+			</Link>
+			<Typography.Text onClick={() => logout()} type="danger">
+				Logout
+			</Typography.Text>
+		</Space>
+	);
+
+	const logout = () => {
+		try {
+			dispatch(setAuthToken(null));
+			dispatch(setLoginStatus(false));
+			dispatch(setRefreshToken(null));
+			dispatch(setRememberMeStatus(null));
+			history.replace('/login');
+		} catch (error) {
+			message.error(error.message);
+			console.error(error);
+		}
+	};
 
 	return (
 		<>
@@ -192,11 +248,26 @@ const OrganismLayout = (props) => {
 								{!isSidebarCollapsed && (
 									<>
 										<Col span={7}>
-											<Space size={5}>
-												<Badge count={notifCount}>
-													<BellOutlined className="white f4 pointer" />
+											<Space size={15}>
+												<Badge
+													count={notifications.length}
+												>
+													<Dropdown
+														overlay={
+															notificationMenus
+														}
+														trigger={['click']}
+													>
+														<BellOutlined className="white f4 pointer" />
+													</Dropdown>
 												</Badge>
-												<SettingOutlined className="white f4 pointer" />
+
+												<Dropdown
+													overlay={settingMenus}
+													trigger={['click']}
+												>
+													<SettingOutlined className="white f4 pointer" />
+												</Dropdown>
 											</Space>
 										</Col>
 										<Col span={22}>
