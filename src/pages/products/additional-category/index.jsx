@@ -1,9 +1,9 @@
 /* eslint-disable react/display-name */
 import moment from 'moment';
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
 import { Link } from 'react-router-dom';
-import { Button, message, Popconfirm, Space } from 'antd';
+import { message, Popconfirm, Space } from 'antd';
 import {
 	DeleteFilled,
 	EditFilled,
@@ -14,6 +14,7 @@ import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
 import AdditionalCategoryService from '../../../services/additional-category';
+import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 const additionalCategoryService = new AdditionalCategoryService();
 
 // eslint-disable-next-line no-unused-vars
@@ -145,7 +146,6 @@ const AdditionalCategoryPage = () => {
 	];
 
 	const additionalCategoryTableRef = useRef();
-	const [isExporting, setIsExporting] = useState(false);
 
 	const deleteAdditionalCategory = async (id) => {
 		try {
@@ -159,40 +159,15 @@ const AdditionalCategoryPage = () => {
 		}
 	};
 
-	const exportAsCSV = async () => {
-		setIsExporting(true);
-
-		try {
-			const params = {
-				page: 1,
-				limit: additionalCategoryTableRef.current.totalData,
-			};
-
-			await additionalCategoryService.exportAsCSV(params, column);
-		} catch (error) {
-			message.error(error.message);
-			console.error(error);
-		} finally {
-			setIsExporting(false);
-		}
-	};
-
 	const renderAdditionalAction = () => {
 		return (
-			<Space>
-				<Button
-					className="br2 denim b--denim"
-					loading={isExporting}
-					onClick={() => exportAsCSV()}
-				>
-					Export Excel
-				</Button>
-				<Link to="/products/additional-category/add">
-					<Button className="br2 bg-denim white">
-						Tambah Kategori
-					</Button>
-				</Link>
-			</Space>
+			<MoleculeDatatableAdditionalAction
+				column={column}
+				label="Kategori Tambahan"
+				limit={additionalCategoryTableRef.current.totalData}
+				service={additionalCategoryService}
+				url="products/additional-category"
+			/>
 		);
 	};
 

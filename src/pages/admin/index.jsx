@@ -1,8 +1,8 @@
 /* eslint-disable react/display-name */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactMoment from 'react-moment';
 import { Link } from 'react-router-dom';
-import { Button, Image, message, Popconfirm, Skeleton, Space } from 'antd';
+import { Image, message, Popconfirm, Skeleton, Space } from 'antd';
 import {
 	DeleteFilled,
 	EyeFilled,
@@ -15,9 +15,10 @@ import MoleculeDatatableDateRange from '../../components/molecules/datatable/dat
 import MoleculeDatatableFilter from '../../components/molecules/datatable/filter-plugin';
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
+import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
 
-// import AdminService from '../../services/admin';
-// const adminService = new AdminService();
+import AdminService from '../../services/admin';
+const adminService = new AdminService();
 
 const mock = {
 	meta: {
@@ -138,6 +139,7 @@ const AdminPage = () => {
 			),
 		},
 	];
+	const adminTableRef = useRef();
 
 	const [totalAdmin, setTotalAdmin] = useState(null);
 
@@ -158,12 +160,14 @@ const AdminPage = () => {
 
 	const renderAdditionalAction = () => {
 		return (
-			<Space>
-				<Button className="br2 denim b--denim">Export Excel</Button>
-				<Link to="/admin/add">
-					<Button className="br2 bg-denim white">Tambah Admin</Button>
-				</Link>
-			</Space>
+			<MoleculeDatatableAdditionalAction
+				column={column}
+				label="Bank"
+				// limit={adminTableRef.current.totalData}
+				limit={0}
+				service={adminService}
+				url="products/bank"
+			/>
 		);
 	};
 
@@ -271,6 +275,7 @@ const AdminPage = () => {
 				dataSourceURL={`/v1/admins`}
 				filters={renderDatatableFilters()}
 				mock={mock}
+				ref={adminTableRef}
 				scroll={1920}
 				searchInput={true}
 				title={`Admin Menu`}

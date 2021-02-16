@@ -73,7 +73,11 @@ a {
 
 .ant-menu-root {
 	height: 60vh;
-	overflow: auto;
+	overflow: overlay;
+}
+
+.ant-menu-root::-webkit-scrollbar {
+	width: 0 !important;
 }
 
 .ant-checkbox-inner,

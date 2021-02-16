@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Image, message, Popconfirm, Space, Switch } from 'antd';
+import { Image, message, Popconfirm, Space, Switch } from 'antd';
 import {
 	DeleteFilled,
 	EditFilled,
@@ -12,6 +12,7 @@ import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
 import CategoryService from '../../../services/category';
+import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 const categoryService = new CategoryService();
 
 const CategoryPage = () => {
@@ -95,7 +96,6 @@ const CategoryPage = () => {
 		},
 	];
 	const categoryTableRef = useRef();
-	const [isExporting, setIsExporting] = useState(false);
 
 	const changeCategoryActiveStatus = async (id, status) => {
 		try {
@@ -122,40 +122,15 @@ const CategoryPage = () => {
 		}
 	};
 
-	const exportAsCSV = async () => {
-		setIsExporting(true);
-
-		try {
-			const params = {
-				page: 1,
-				limit: categoryTableRef.current.totalData,
-			};
-
-			await categoryService.exportAsCSV(params, column);
-		} catch (error) {
-			message.error(error.message);
-			console.error(error);
-		} finally {
-			setIsExporting(false);
-		}
-	};
-
 	const renderAdditionalAction = () => {
 		return (
-			<Space>
-				<Button
-					className="br2 denim b--denim"
-					loading={isExporting}
-					onClick={exportAsCSV}
-				>
-					Export Excel
-				</Button>
-				<Link to="/products/category/add">
-					<Button className="br2 bg-denim white">
-						Tambah Kategori
-					</Button>
-				</Link>
-			</Space>
+			<MoleculeDatatableAdditionalAction
+				column={column}
+				label="Kategori Dasar"
+				limit={categoryTableRef.current.totalData}
+				service={categoryService}
+				url="products/category"
+			/>
 		);
 	};
 

@@ -196,7 +196,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 			</Col>
 
 			<Col className="mt4" span={24}>
-				<Row gutter={12}>
+				<Row gutter={12} align="middle">
 					{props.searchInput && (
 						<Col span={8}>
 							<Input.Search
@@ -249,7 +249,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 									</Row>
 								</Space>
 
-								<Row className="mt5" justify="center">
+								<Row className="mt4" justify="center">
 									<Button
 										className="bg-denim white br3 w-30"
 										onClick={setFilter}

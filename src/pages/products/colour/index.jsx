@@ -1,9 +1,9 @@
 /* eslint-disable react/display-name */
 import moment from 'moment';
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
 import { Link } from 'react-router-dom';
-import { Button, Col, message, Popconfirm, Row, Space } from 'antd';
+import { Col, message, Popconfirm, Row, Space } from 'antd';
 import {
 	DeleteFilled,
 	EditFilled,
@@ -14,6 +14,7 @@ import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
 import ColourService from '../../../services/colour';
+import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 const colourService = new ColourService();
 
 // eslint-disable-next-line no-unused-vars
@@ -150,7 +151,6 @@ const ColourPage = () => {
 	];
 
 	const colourTableRef = useRef();
-	const [isExporting, setIsExporting] = useState(false);
 
 	const deleteColour = async (id) => {
 		try {
@@ -164,38 +164,15 @@ const ColourPage = () => {
 		}
 	};
 
-	const exportAsCSV = async () => {
-		setIsExporting(true);
-
-		try {
-			const params = {
-				page: 1,
-				limit: colourTableRef.current.totalData,
-			};
-
-			await colourService.exportAsCSV(params, column);
-		} catch (error) {
-			message.error(error.message);
-			console.error(error);
-		} finally {
-			setIsExporting(false);
-		}
-	};
-
 	const renderAdditionalAction = () => {
 		return (
-			<Space>
-				<Button
-					className="br2 denim b--denim"
-					loading={isExporting}
-					onClick={() => exportAsCSV()}
-				>
-					Export Excel
-				</Button>
-				<Link to="/products/colour/add">
-					<Button className="br2 bg-denim white">Tambah Warna</Button>
-				</Link>
-			</Space>
+			<MoleculeDatatableAdditionalAction
+				column={column}
+				label="Warna"
+				limit={colourService.current.totalData}
+				service={colourService}
+				url="products/colour"
+			/>
 		);
 	};
 

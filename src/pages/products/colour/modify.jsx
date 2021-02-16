@@ -1,24 +1,15 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import React, { useEffect, useState } from 'react';
-import {
-	Button,
-	Col,
-	Form,
-	message,
-	Row,
-	Skeleton,
-	Space,
-	Typography,
-	Popover,
-} from 'antd';
+import { Col, Form, message, Row, Skeleton, Typography, Popover } from 'antd';
 import { SketchPicker } from 'react-color';
-import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
 import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../../components/organisms/layout';
 
 import ColorService from '../../../services/colour';
+import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
 const colourService = new ColorService();
 
 const ColourModifyPage = () => {
@@ -191,25 +182,13 @@ const ColourModifyPage = () => {
 							</AtomCard>
 						</Col>
 
-						<Col className="mt5" span={24}>
-							<Space>
-								<Link to="/products/colour">
-									<Button
-										className="br3 denim b--denim"
-										size="large"
-									>
-										Kembali
-									</Button>
-								</Link>
-								<Button
-									className="br3 bg-denim white"
-									htmlType="submit"
-									loading={isSubmitting}
-									size="large"
-								>
-									{`${isCreating ? 'Tambah' : 'Ubah'} Warna`}
-								</Button>
-							</Space>
+						<Col className="mt4" span={24}>
+							<MoleculeModifyActionButtons
+								backUrl="/products/colour"
+								isCreating={isCreating}
+								isSubmitting={isSubmitting}
+								label="Warna"
+							/>
 						</Col>
 					</Row>
 				</Form>

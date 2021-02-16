@@ -1,13 +1,14 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import React, { useState } from 'react';
-import { Button, Col, Form, message, Row, Space, Typography } from 'antd';
-import { Link, useHistory } from 'react-router-dom';
+import { Col, Form, message, Row, Typography } from 'antd';
+import { useHistory } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
 import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../../components/organisms/layout';
 
 import BankService from '../../../services/bank';
+import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
 const bankService = new BankService();
 
 const BankModifyPage = () => {
@@ -90,25 +91,13 @@ const BankModifyPage = () => {
 						</AtomCard>
 					</Col>
 
-					<Col className="mt5" span={24}>
-						<Space>
-							<Link to="/products/bank">
-								<Button
-									className="br3 denim b--denim"
-									size="large"
-								>
-									Kembali
-								</Button>
-							</Link>
-							<Button
-								className="br3 bg-denim white"
-								htmlType="submit"
-								loading={isSubmitting}
-								size="large"
-							>
-								{`Tambah Bank`}
-							</Button>
-						</Space>
+					<Col className="mt4" span={24}>
+						<MoleculeModifyActionButtons
+							backUrl="/products/bank"
+							isCreating={true}
+							isSubmitting={isSubmitting}
+							label="Bank"
+						/>
 					</Col>
 				</Row>
 			</Form>

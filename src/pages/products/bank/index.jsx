@@ -1,15 +1,15 @@
 /* eslint-disable react/display-name */
 import moment from 'moment';
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
-import { Link } from 'react-router-dom';
-import { Button, message, Popconfirm, Space } from 'antd';
+import { message, Popconfirm, Space } from 'antd';
 import { DeleteFilled, QuestionCircleFilled } from '@ant-design/icons';
 
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
 import BankService from '../../../services/bank';
+import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 const bankService = new BankService();
 
 const BankPage = () => {
@@ -69,7 +69,6 @@ const BankPage = () => {
 		},
 	];
 	const bankTableRef = useRef();
-	const [isExporting, setIsExporting] = useState(false);
 
 	const deleteBank = async (id) => {
 		try {
@@ -83,38 +82,15 @@ const BankPage = () => {
 		}
 	};
 
-	const exportAsCSV = async () => {
-		setIsExporting(true);
-
-		try {
-			const params = {
-				page: 1,
-				limit: bankTableRef.current.totalData,
-			};
-
-			await bankService.exportAsCSV(params, column);
-		} catch (error) {
-			message.error(error.message);
-			console.error(error);
-		} finally {
-			setIsExporting(false);
-		}
-	};
-
 	const renderAdditionalAction = () => {
 		return (
-			<Space>
-				<Button
-					className="br2 denim b--denim"
-					loading={isExporting}
-					onClick={() => exportAsCSV()}
-				>
-					Export Excel
-				</Button>
-				<Link to="/products/bank/add">
-					<Button className="br2 bg-denim white">Tambah Bank</Button>
-				</Link>
-			</Space>
+			<MoleculeDatatableAdditionalAction
+				column={column}
+				label="Bank"
+				limit={bankTableRef.current.totalData}
+				service={bankService}
+				url="products/bank"
+			/>
 		);
 	};
 

@@ -1,15 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import {
-	Button,
-	Col,
-	Form,
-	message,
-	Row,
-	Skeleton,
-	Space,
-	Typography,
-} from 'antd';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Col, Form, message, Row, Skeleton, Typography } from 'antd';
+import { useLocation, useParams } from 'react-router-dom';
 
 import AtomCard from '../../components/atoms/card';
 import MoleculeFileInputGroup from '../../components/molecules/input-group/file-input';
@@ -19,6 +10,7 @@ import MoleculeTextInputGroup from '../../components/molecules/input-group/text-
 import OrganismLayout from '../../components/organisms/layout';
 
 import AdminService from '../../services/admin';
+import MoleculeModifyActionButtons from '../../components/molecules/modify-action-buttons';
 const adminService = new AdminService();
 
 const AdminModifyPage = () => {
@@ -300,25 +292,13 @@ const AdminModifyPage = () => {
 							</AtomCard>
 						</Col>
 
-						<Col className="mt5" span={24}>
-							<Space>
-								<Link to="/admin">
-									<Button
-										className="br3 denim b--denim"
-										size="large"
-									>
-										Kembali
-									</Button>
-								</Link>
-								<Button
-									className="br3 bg-denim white"
-									htmlType="submit"
-									loading={isSubmitting}
-									size="large"
-								>
-									{`${isCreating ? 'Tambah' : 'Ubah'} Admin`}
-								</Button>
-							</Space>
+						<Col className="mt4" span={24}>
+							<MoleculeModifyActionButtons
+								backUrl="/admin"
+								isCreating={isCreating}
+								isSubmitting={isSubmitting}
+								label="Admin"
+							/>
 						</Col>
 					</Row>
 				</Form>
