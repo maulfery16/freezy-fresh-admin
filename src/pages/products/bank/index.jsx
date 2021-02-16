@@ -87,7 +87,7 @@ const BankPage = () => {
 			<MoleculeDatatableAdditionalAction
 				column={column}
 				label="Bank"
-				limit={bankTableRef.current.totalData}
+				getLimit={() => bankTableRef.current.totalData}
 				service={bankService}
 				url="products/bank"
 			/>

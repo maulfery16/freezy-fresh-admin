@@ -9,13 +9,11 @@ import config from '../config';
 
 export default class RequestAdapterService {
 	constructor() {
-		const {
-			auth: { token },
-			auth: { refreshToken },
-		} = store.getState();
-		this.refreshToken = refreshToken;
+		const { auth } = store.getState();
+		const { refreshToken, token } = auth;
 
 		this.baseUrl = config.API_URL;
+		this.refreshToken = refreshToken;
 		let headers = {
 			'Content-Type': 'application/json',
 			'Content-Language': 'EN',

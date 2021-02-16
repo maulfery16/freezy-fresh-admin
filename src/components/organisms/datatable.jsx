@@ -195,7 +195,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 				</Row>
 			</Col>
 
-			<Col className="mt4" span={24}>
+			<Col className="mt1" span={24}>
 				<Row gutter={12} align="middle">
 					{props.searchInput && (
 						<Col span={8}>

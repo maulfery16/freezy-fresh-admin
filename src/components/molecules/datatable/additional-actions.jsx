@@ -11,7 +11,7 @@ const MoleculeDatatableAdditionalAction = (props) => {
 		try {
 			const params = {
 				page: 1,
-				limit: props.limit,
+				limit: props.getLimit(),
 			};
 
 			await props.service.exportAsCSV(params, props.column);

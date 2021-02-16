@@ -127,7 +127,7 @@ const CategoryPage = () => {
 			<MoleculeDatatableAdditionalAction
 				column={column}
 				label="Kategori Dasar"
-				limit={categoryTableRef.current.totalData}
+				getLimit={() => categoryTableRef.current.totalData}
 				service={categoryService}
 				url="products/category"
 			/>

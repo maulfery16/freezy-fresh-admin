@@ -20,8 +20,7 @@ const authReducer = (state = INITIAL_STATE, action) => {
 		case AuthTypes.SET_AUTH_TOKEN:
 			return {
 				...state,
-				token: action.payload.access_token,
-				refreshToken: action.payload.refresh_token,
+				token: action.payload,
 			};
 		case AuthTypes.SET_CURRENT_USER:
 			return {

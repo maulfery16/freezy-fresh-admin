@@ -169,7 +169,7 @@ const ColourPage = () => {
 			<MoleculeDatatableAdditionalAction
 				column={column}
 				label="Warna"
-				limit={colourService.current.totalData}
+				getLimit={() => colourService.current.totalData}
 				service={colourService}
 				url="products/colour"
 			/>
