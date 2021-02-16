@@ -30,7 +30,7 @@ export default class BankService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail deleting admin: ${error.response.data.message} - ${
+				`Fail deleting bank: ${error.response.data.message} - ${
 					error.response.data.errors
 						? error.response.data.errors.code
 						: 'Error'
