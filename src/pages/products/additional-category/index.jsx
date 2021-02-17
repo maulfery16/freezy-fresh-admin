@@ -3,18 +3,15 @@ import moment from 'moment';
 import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
 import { Link } from 'react-router-dom';
-import { message, Popconfirm, Space } from 'antd';
-import {
-	DeleteFilled,
-	EditFilled,
-	QuestionCircleFilled,
-} from '@ant-design/icons';
+import { Space } from 'antd';
+import { EditFilled } from '@ant-design/icons';
 
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
 import AdditionalCategoryService from '../../../services/additional-category';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
+import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
 const additionalCategoryService = new AdditionalCategoryService();
 
 // eslint-disable-next-line no-unused-vars
@@ -132,13 +129,15 @@ const AdditionalCategoryPage = () => {
 						<EditFilled className="f4 orange" />
 					</Link>
 
-					<Popconfirm
-						title="Are you sure?"
-						icon={<QuestionCircleFilled className="red" />}
-						onConfirm={() => deleteAdditionalCategory(id)}
-					>
-						<DeleteFilled className="f4 red" />
-					</Popconfirm>
+					<MoleculeDeleteConfirm
+						deleteService={() =>
+							additionalCategoryService.deleteAdditionalCategory(
+								id
+							)
+						}
+						label="banner"
+						tableRef={additionalCategoryTableRef}
+					/>
 				</Space>
 			),
 			skipExport: true,
@@ -146,18 +145,6 @@ const AdditionalCategoryPage = () => {
 	];
 
 	const additionalCategoryTableRef = useRef();
-
-	const deleteAdditionalCategory = async (id) => {
-		try {
-			await additionalCategoryService.deleteAdditionalCategory(id);
-
-			message.success('Berhasil menghapus kategori tambahan');
-			additionalCategoryTableRef.current.refetchData();
-		} catch (error) {
-			message.error(error.message);
-			console.error(error);
-		}
-	};
 
 	const renderAdditionalAction = () => {
 		return (

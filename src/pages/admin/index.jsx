@@ -2,12 +2,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ReactMoment from 'react-moment';
 import { Link } from 'react-router-dom';
-import { Image, message, Popconfirm, Skeleton, Space } from 'antd';
-import {
-	DeleteFilled,
-	EyeFilled,
-	QuestionCircleFilled,
-} from '@ant-design/icons';
+import { Image, message, Skeleton, Space } from 'antd';
+import { EyeFilled } from '@ant-design/icons';
 
 import AtomNumberFormat from '../../components/atoms/number-format';
 import MoleculeDatatableAdditionalInformation from '../../components/molecules/datatable/additional-information-card';
@@ -18,6 +14,7 @@ import OrganismLayout from '../../components/organisms/layout';
 import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
 
 import AdminService from '../../services/admin';
+import MoleculeDeleteConfirm from '../../components/molecules/delete-confirm';
 const adminService = new AdminService();
 
 const mock = {
@@ -126,15 +123,11 @@ const AdminPage = () => {
 						<EyeFilled className="f4 blue" />
 					</Link>
 
-					<Popconfirm
-						title="Are you sure？"
-						icon={<QuestionCircleFilled className="red" />}
-					>
-						<DeleteFilled
-							className="f4 red"
-							onClick={() => console.log(id)}
-						/>
-					</Popconfirm>
+					<MoleculeDeleteConfirm
+						deleteService={() => adminService.deleteAdmin(id)}
+						label="admin"
+						tableRef={adminTableRef}
+					/>
 				</Space>
 			),
 		},

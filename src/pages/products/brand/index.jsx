@@ -3,18 +3,15 @@ import moment from 'moment';
 import React, { useRef, useState } from 'react';
 import ReactMoment from 'react-moment';
 import { Link } from 'react-router-dom';
-import { Button, Image, message, Popconfirm, Space } from 'antd';
-import {
-	DeleteFilled,
-	EditFilled,
-	QuestionCircleFilled,
-} from '@ant-design/icons';
+import { Button, Image, message, Space } from 'antd';
+import { EditFilled } from '@ant-design/icons';
 
 import AtomNumberFormat from '../../../components/atoms/number-format';
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
 import BrandService from '../../../services/brand';
+import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
 const brandService = new BrandService();
 
 const BrandPage = () => {
@@ -86,13 +83,11 @@ const BrandPage = () => {
 						<EditFilled className="f4 orange" />
 					</Link>
 
-					<Popconfirm
-						title="Are you sure"
-						icon={<QuestionCircleFilled className="red" />}
-						onConfirm={() => deleteBrand(id)}
-					>
-						<DeleteFilled className="f4 red" />
-					</Popconfirm>
+					<MoleculeDeleteConfirm
+						deleteService={() => brandService.deleteBrand(id)}
+						label="banner"
+						tableRef={brandTableRef}
+					/>
 				</Space>
 			),
 			skipExport: true,
@@ -100,18 +95,6 @@ const BrandPage = () => {
 	];
 	const brandTableRef = useRef();
 	const [isExporting, setIsExporting] = useState(false);
-
-	const deleteBrand = async (id) => {
-		try {
-			await brandService.deleteBrand(id);
-
-			message.success('Berhasil menghapus brand');
-			brandTableRef.current.refetchData();
-		} catch (error) {
-			message.error(error.message);
-			console.error(error);
-		}
-	};
 
 	const exportAsCSV = async () => {
 		setIsExporting(true);

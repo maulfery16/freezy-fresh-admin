@@ -3,18 +3,15 @@ import moment from 'moment';
 import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
 import { Link } from 'react-router-dom';
-import { Col, message, Popconfirm, Row, Space } from 'antd';
-import {
-	DeleteFilled,
-	EditFilled,
-	QuestionCircleFilled,
-} from '@ant-design/icons';
+import { Col, Row, Space } from 'antd';
+import { EditFilled } from '@ant-design/icons';
 
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
 import ColourService from '../../../services/colour';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
+import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
 const colourService = new ColourService();
 
 // eslint-disable-next-line no-unused-vars
@@ -137,13 +134,11 @@ const ColourPage = () => {
 						<EditFilled className="f4 orange" />
 					</Link>
 
-					<Popconfirm
-						title="Are you sure?"
-						icon={<QuestionCircleFilled className="red" />}
-						onConfirm={() => deleteColour(id)}
-					>
-						<DeleteFilled className="f4 red" />
-					</Popconfirm>
+					<MoleculeDeleteConfirm
+						deleteService={() => colourService.deleteColour(id)}
+						label="banner"
+						tableRef={colourTableRef}
+					/>
 				</Space>
 			),
 			skipExport: true,
@@ -151,18 +146,6 @@ const ColourPage = () => {
 	];
 
 	const colourTableRef = useRef();
-
-	const deleteColour = async (id) => {
-		try {
-			await colourService.deleteColour(id);
-
-			message.success('Berhasil menghapus warna');
-			colourTableRef.current.refetchData();
-		} catch (error) {
-			message.error(error.message);
-			console.error(error);
-		}
-	};
 
 	const renderAdditionalAction = () => {
 		return (

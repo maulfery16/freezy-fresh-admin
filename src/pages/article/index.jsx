@@ -2,13 +2,8 @@
 import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
 import { Link } from 'react-router-dom';
-import { Image, message, Popconfirm, Space } from 'antd';
-import {
-	DeleteFilled,
-	EditFilled,
-	EyeFilled,
-	QuestionCircleFilled,
-} from '@ant-design/icons';
+import { Image, Space } from 'antd';
+import { EditFilled, EyeFilled } from '@ant-design/icons';
 
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
@@ -17,6 +12,7 @@ import ArticleService from '../../services/article';
 import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
 import MoleculeDatatableDateRange from '../../components/molecules/datatable/date-range-plugin';
 import MoleculeDatatableFilter from '../../components/molecules/datatable/filter-plugin';
+import MoleculeDeleteConfirm from '../../components/molecules/delete-confirm';
 const articleService = new ArticleService();
 
 const ArticlePage = () => {
@@ -65,30 +61,16 @@ const ArticlePage = () => {
 						<EditFilled className="f4 orange" />
 					</Link>
 
-					<Popconfirm
-						title="Are you sure"
-						icon={<QuestionCircleFilled className="red" />}
-						onConfirm={() => deleteArticle(id)}
-					>
-						<DeleteFilled className="f4 red" />
-					</Popconfirm>
+					<MoleculeDeleteConfirm
+						deleteService={() => articleService.deleteArticle(id)}
+						label="banner"
+						tableRef={articleTableRef}
+					/>
 				</Space>
 			),
 		},
 	];
 	const articleTableRef = useRef();
-
-	const deleteArticle = async (id) => {
-		try {
-			await articleService.deleteArticle(id);
-
-			message.success('Berhasil menghapus article');
-			articleTableRef.current.refetchData();
-		} catch (error) {
-			message.error(error.message);
-			console.error(error);
-		}
-	};
 
 	const renderAdditionalAction = () => {
 		return (

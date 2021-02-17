@@ -12,8 +12,6 @@ import MoleculeDatatableAdditionalAction from '../../components/molecules/datata
 import MoleculeDeleteConfirm from '../../components/molecules/delete-confirm';
 const bannerService = new BannerService();
 
-const mock = { data: [{ id: 1 }], pagination: { totalData: 1 } };
-
 const BannerPage = () => {
 	const column = [
 		{
@@ -86,7 +84,6 @@ const BannerPage = () => {
 				columns={column}
 				dataSourceURL={`/v1/banners`}
 				filters={renderDatatableFilters()}
-				mock={mock}
 				ref={bannerTableRef}
 				searchInput={true}
 				title={`Banner`}

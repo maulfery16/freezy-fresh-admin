@@ -251,7 +251,7 @@ const routes = [
 					{
 						component: React.lazy(() => import('./pages/banner')),
 						exact: true,
-						// guard: true,
+						guard: true,
 						name: 'Banner Page',
 						path: '/',
 					},

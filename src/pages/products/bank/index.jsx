@@ -2,14 +2,14 @@
 import moment from 'moment';
 import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
-import { message, Popconfirm, Space } from 'antd';
-import { DeleteFilled, QuestionCircleFilled } from '@ant-design/icons';
+import { Space } from 'antd';
 
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
 import BankService from '../../../services/bank';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
+import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
 const bankService = new BankService();
 
 const BankPage = () => {
@@ -56,31 +56,17 @@ const BankPage = () => {
 			dataIndex: 'id',
 			render: (id) => (
 				<Space size="middle">
-					<Popconfirm
-						title="Are you sure"
-						icon={<QuestionCircleFilled className="red" />}
-						onConfirm={() => deleteBank(id)}
-					>
-						<DeleteFilled className="f4 red" />
-					</Popconfirm>
+					<MoleculeDeleteConfirm
+						deleteService={() => bankService.deleteBank(id)}
+						label="banner"
+						tableRef={bankTableRef}
+					/>
 				</Space>
 			),
 			skipExport: true,
 		},
 	];
 	const bankTableRef = useRef();
-
-	const deleteBank = async (id) => {
-		try {
-			await bankService.deleteBank(id);
-
-			message.success('Berhasil menghapus bank');
-			bankTableRef.current.refetchData();
-		} catch (error) {
-			message.error(error.message);
-			console.error(error);
-		}
-	};
 
 	const renderAdditionalAction = () => {
 		return (

@@ -105,11 +105,11 @@ const menus = [
 		subMenus: [
 			{
 				name: 'Banner',
-				link: '/banner',
+				link: '/view/banner',
 			},
 			{
 				name: 'Artikel',
-				link: '/article',
+				link: '/view/article',
 			},
 		],
 	},

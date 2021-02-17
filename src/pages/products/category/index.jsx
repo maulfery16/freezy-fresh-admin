@@ -1,18 +1,15 @@
 /* eslint-disable react/display-name */
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Image, message, Popconfirm, Space, Switch } from 'antd';
-import {
-	DeleteFilled,
-	EditFilled,
-	QuestionCircleFilled,
-} from '@ant-design/icons';
+import { Image, message, Space, Switch } from 'antd';
+import { EditFilled } from '@ant-design/icons';
 
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
 import CategoryService from '../../../services/category';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
+import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
 const categoryService = new CategoryService();
 
 const CategoryPage = () => {
@@ -83,13 +80,11 @@ const CategoryPage = () => {
 						<EditFilled className="f4 orange" />
 					</Link>
 
-					<Popconfirm
-						icon={<QuestionCircleFilled className="red" />}
-						onConfirm={() => deleteBaseCategory(id)}
-						title="Are you sure"
-					>
-						<DeleteFilled className="f4 red" />
-					</Popconfirm>
+					<MoleculeDeleteConfirm
+						deleteService={() => categoryService.deleteCategory(id)}
+						label="banner"
+						tableRef={categoryTableRef}
+					/>
 				</Space>
 			),
 			skipExport: true,
@@ -104,18 +99,6 @@ const CategoryPage = () => {
 			});
 
 			message.success('Berhasil memperbaharui status aktif kategori');
-		} catch (error) {
-			message.error(error.message);
-			console.error(error);
-		}
-	};
-
-	const deleteBaseCategory = async (id) => {
-		try {
-			await categoryService.deleteCategory(id);
-			message.success('Berhasil menghapus kategori dasar');
-
-			categoryTableRef.current.refetchData();
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
