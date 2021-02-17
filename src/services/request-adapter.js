@@ -96,6 +96,10 @@ export default class RequestAdapterService {
 		return this.reqClient.delete(URL, requestBody);
 	}
 
+	sendPostForgotPasswordRequest(URL, requestBody) {
+		return this.reqClient.post(URL, requestBody);
+	}
+
 	sendGetRequest(URL, params) {
 		return this.reqClient.get(URL, { params });
 	}

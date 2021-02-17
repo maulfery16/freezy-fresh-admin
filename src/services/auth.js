@@ -35,4 +35,25 @@ export default class AuthService extends RequestAdapterService {
 			);
 		}
 	}
+
+	async reqForgotPassword(credential) {
+		try {
+			const { data } = await super.sendPostForgotPasswordRequest(
+				`${this.baseUrl}/v1/password/forgot`,
+				credential
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Forgot Password failed: ${error.response.data.message} \n
+				${error.response.status} - ${
+					error.response.data.errors
+						? error.response.data.errors.code
+						: 'Error'
+				} `
+			);
+		}
+	}
 }

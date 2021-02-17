@@ -1,13 +1,32 @@
 import React from 'react';
-import { Button, Col, Form, Row, Space, Typography } from 'antd';
+import { Button, Col, Form, message, Row, Space, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 
 import AuthenticationLayout from '../../components/layouts/authentication';
 import MoleculeTextInputGroup from '../../components/molecules/input-group/text-input';
 
+import AuthService from '../../services/auth';
+const authService = new AuthService();
+
 const ForgotPasswordPages = () => {
-	const onFinishFailed = (errorInfo) => {
-		console.log('Failed:', errorInfo);
+	const showForgotPasswordErrorMessage = (errorInfo) => {
+		console.error('Failed:', errorInfo);
+	};
+
+	const sendForgotPasswordRequest = async (values) => {
+		try {
+			await authService.reqForgotPassword({
+				...values,
+				reseturl: 'reset-password',
+			});
+
+			setTimeout(() => {
+				window.location = '/email-check';
+			}, 2000);
+		} catch (error) {
+			message.error(error.message);
+			console.error(error);
+		}
 	};
 
 	return (
@@ -23,7 +42,11 @@ const ForgotPasswordPages = () => {
 					sandi Anda.
 				</Typography>
 
-				<Form name="forgot-password" onFinishFailed={onFinishFailed}>
+				<Form
+					name="forgot-password"
+					onFinish={sendForgotPasswordRequest}
+					onFinishFailed={showForgotPasswordErrorMessage}
+				>
 					<Space className="w-100" direction="vertical" size={30}>
 						<MoleculeTextInputGroup
 							label="Masukkkan Email Anda"
