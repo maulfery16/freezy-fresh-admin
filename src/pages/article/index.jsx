@@ -57,7 +57,7 @@ const ArticlePage = () => {
 			dataIndex: 'id',
 			render: (id) => (
 				<Space size="middle">
-					<Link to={`/article/${id}/detail`}>
+					<Link to={`/view/article/${id}/detail`}>
 						<EyeFilled className="f4 blue" />
 					</Link>
 
@@ -138,7 +138,7 @@ const ArticlePage = () => {
 
 	return (
 		<OrganismLayout
-			breadcumbs={[{ name: 'Artikel', link: '/article' }]}
+			breadcumbs={[{ name: 'Artikel', link: '/view/article' }]}
 			title="Article Page"
 		>
 			<OrganismDatatable

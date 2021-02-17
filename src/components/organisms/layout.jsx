@@ -18,17 +18,13 @@ import {
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import {
-	BsFillImageFill,
-	BsFillPersonCheckFill,
-	BsPersonFill,
-} from 'react-icons/bs';
+import { BsFillPersonCheckFill, BsPersonFill } from 'react-icons/bs';
 import { FaMoneyBill, FaMotorcycle, FaStoreAlt } from 'react-icons/fa';
 import {
 	BellOutlined,
-	BookFilled,
 	DropboxOutlined,
 	HomeFilled,
+	LayoutFilled,
 	SettingOutlined,
 	ShoppingCartOutlined,
 	UserOutlined,
@@ -103,6 +99,21 @@ const menus = [
 		],
 	},
 	{
+		name: 'Tampilan',
+		icon: <LayoutFilled />,
+		subMenuKey: 'view',
+		subMenus: [
+			{
+				name: 'Banner',
+				link: '/banner',
+			},
+			{
+				name: 'Artikel',
+				link: '/article',
+			},
+		],
+	},
+	{
 		name: 'Membership',
 		icon: <BsFillPersonCheckFill />,
 		link: '/membership',
@@ -121,16 +132,6 @@ const menus = [
 		name: 'Kurir',
 		icon: <FaMotorcycle />,
 		link: '/courier',
-	},
-	{
-		name: 'Banner',
-		icon: <BsFillImageFill />,
-		link: '/banner',
-	},
-	{
-		name: 'Article',
-		icon: <BookFilled />,
-		link: '/article',
 	},
 ];
 

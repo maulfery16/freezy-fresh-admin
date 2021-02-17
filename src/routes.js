@@ -243,68 +243,85 @@ const routes = [
 		],
 	},
 	{
-		path: '/banner',
+		path: '/view',
 		children: [
 			{
-				component: React.lazy(() => import('./pages/banner')),
-				exact: true,
-				guard: true,
-				name: 'Banner Page',
-				path: '/',
+				path: '/banner',
+				children: [
+					{
+						component: React.lazy(() => import('./pages/banner')),
+						exact: true,
+						// guard: true,
+						name: 'Banner Page',
+						path: '/',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/banner/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Add Banner Page',
+						path: '/add',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/banner/detail')
+						),
+						exact: true,
+						guard: true,
+						name: 'Banner Detail Page',
+						path: '/:id/detail',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/banner/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Edit Banner Page',
+						path: '/:id/edit',
+					},
+				],
 			},
 			{
-				component: React.lazy(() => import('./pages/banner/modify')),
-				exact: true,
-				guard: true,
-				name: 'Add Banner Page',
-				path: '/add',
-			},
-			{
-				component: React.lazy(() => import('./pages/banner/detail')),
-				exact: true,
-				guard: true,
-				name: 'Banner Detail Page',
-				path: '/:id/detail',
-			},
-			{
-				component: React.lazy(() => import('./pages/banner/modify')),
-				exact: true,
-				guard: true,
-				name: 'Edit Banner Page',
-				path: '/:id/edit',
-			},
-		],
-	},
-	{
-		path: '/article',
-		children: [
-			{
-				component: React.lazy(() => import('./pages/article')),
-				exact: true,
-				guard: true,
-				name: 'Article Page',
-				path: '/',
-			},
-			{
-				component: React.lazy(() => import('./pages/article/modify')),
-				exact: true,
-				guard: true,
-				name: 'Add Article Page',
-				path: '/add',
-			},
-			{
-				component: React.lazy(() => import('./pages/article/detail')),
-				exact: true,
-				guard: true,
-				name: 'Article Detail Page',
-				path: '/:id/detail',
-			},
-			{
-				component: React.lazy(() => import('./pages/article/modify')),
-				exact: true,
-				guard: true,
-				name: 'Edit Article Page',
-				path: '/:id/edit',
+				path: '/article',
+				children: [
+					{
+						component: React.lazy(() => import('./pages/article')),
+						exact: true,
+						guard: true,
+						name: 'Article Page',
+						path: '/',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/article/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Add Article Page',
+						path: '/add',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/article/detail')
+						),
+						exact: true,
+						guard: true,
+						name: 'Article Detail Page',
+						path: '/:id/detail',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/article/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Edit Article Page',
+						path: '/:id/edit',
+					},
+				],
 			},
 		],
 	},

@@ -70,7 +70,7 @@ const BannerModifyPage = () => {
 				'Akan dikembalikan ke halaman daftar banner dalam 2 detik'
 			);
 			setTimeout(() => {
-				history.push('/products/banner');
+				history.push('/view/banner');
 			}, 2000);
 		} catch (error) {
 			message.error(error.message);
@@ -91,7 +91,7 @@ const BannerModifyPage = () => {
 	return (
 		<OrganismLayout
 			breadcumbs={[
-				{ name: 'Banner', link: '/products/banner' },
+				{ name: 'Banner', link: '/view/banner' },
 				{
 					name: location.pathname.includes('add') ? 'Tambah' : 'Ubah',
 					link: location.pathname,
@@ -178,7 +178,7 @@ const BannerModifyPage = () => {
 
 						<Col className="mt4" span={24}>
 							<MoleculeModifyActionButtons
-								backUrl="/banner"
+								backUrl="/view/banner"
 								isCreating={isCreating}
 								isSubmitting={isSubmitting}
 								label="Banner"

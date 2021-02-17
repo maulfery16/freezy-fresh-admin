@@ -81,7 +81,7 @@ const ArticleModifyPage = () => {
 				'Akan dikembalikan ke halaman daftar article dalam 2 detik'
 			);
 			setTimeout(() => {
-				history.push('/article');
+				history.push('/view/article');
 			}, 2000);
 		} catch (error) {
 			message.error(error.message);
@@ -102,7 +102,7 @@ const ArticleModifyPage = () => {
 	return (
 		<OrganismLayout
 			breadcumbs={[
-				{ name: 'Artikel', link: '/article' },
+				{ name: 'Artikel', link: '/view/article' },
 				{
 					name: location.pathname.includes('add') ? 'Tambah' : 'Ubah',
 					link: location.pathname,
@@ -223,7 +223,7 @@ const ArticleModifyPage = () => {
 
 						<Col className="mt4" span={24}>
 							<MoleculeModifyActionButtons
-								backUrl="/article"
+								backUrl="/view/article"
 								isCreating={isCreating}
 								isSubmitting={isSubmitting}
 								label="Artikel"
