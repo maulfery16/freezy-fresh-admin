@@ -54,6 +54,9 @@ const LoginPages = () => {
 			dispatch(setLoginStatus(true));
 			dispatch(setRefreshToken(refresh_token));
 			dispatch(setRememberMeStatus(isChecked));
+
+			authService.reqOverrideAuthToken();
+
 			window.location = '/';
 		} catch (error) {
 			message.error(error.message);

@@ -20,9 +20,7 @@ const ForgotPasswordPages = () => {
 				reseturl: 'reset-password',
 			});
 
-			setTimeout(() => {
-				window.location = '/email-check';
-			}, 2000);
+			window.location = '/email-check';
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);

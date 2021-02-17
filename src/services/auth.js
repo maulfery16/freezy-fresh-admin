@@ -21,6 +21,10 @@ export default class AuthService extends RequestAdapterService {
 		}
 	}
 
+	async reqOverrideAuthToken() {
+		return await super.overrideAuthToken();
+	}
+
 	async reqRefreshToken() {
 		try {
 			const { data } = await super.sendPostRefreshTokenRequest(
@@ -36,12 +40,14 @@ export default class AuthService extends RequestAdapterService {
 		}
 	}
 
-	async reqForgotPassword(credential) {
+	async reqForgotPassword(email) {
 		try {
 			const { data } = await super.sendPostForgotPasswordRequest(
 				`${this.baseUrl}/v1/password/forgot`,
-				credential
+				email
 			);
+
+			localStorage.setItem('email-reset', email);
 
 			return data;
 		} catch (error) {

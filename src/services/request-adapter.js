@@ -89,6 +89,10 @@ export default class RequestAdapterService {
 		this.reqClient.defaults.headers.common[
 			'Authorization'
 		] = `Bearer ${token}`;
+		this.reqClient.defaults.headers.common[
+			'Cookie'
+		] = `refreshToken=${this.refreshToken}`;
+
 		return true;
 	}
 
