@@ -275,6 +275,39 @@ const routes = [
 			},
 		],
 	},
+	{
+		path: '/article',
+		children: [
+			{
+				component: React.lazy(() => import('./pages/article')),
+				exact: true,
+				guard: true,
+				name: 'Article Page',
+				path: '/',
+			},
+			{
+				component: React.lazy(() => import('./pages/article/modify')),
+				exact: true,
+				guard: true,
+				name: 'Add Article Page',
+				path: '/add',
+			},
+			{
+				component: React.lazy(() => import('./pages/article/detail')),
+				exact: true,
+				guard: true,
+				name: 'Article Detail Page',
+				path: '/:id/detail',
+			},
+			{
+				component: React.lazy(() => import('./pages/article/modify')),
+				exact: true,
+				guard: true,
+				name: 'Edit Article Page',
+				path: '/:id/edit',
+			},
+		],
+	},
 ];
 
 export default routes;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Space, Typography } from 'antd';
 import AtomCustomSelect from '../../atoms/input/select';
 
-const MoleculeFilterPlugin = (props) => {
+const MoleculeDatatableFilter = (props) => {
 	const setFilterQuery = (selectedValue) => {
 		if (selectedValue.length > 0) {
 			props.addFilter(
@@ -40,4 +40,4 @@ const MoleculeFilterPlugin = (props) => {
 	);
 };
 
-export default MoleculeFilterPlugin;
+export default MoleculeDatatableFilter;
