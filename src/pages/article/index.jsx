@@ -126,7 +126,7 @@ const ArticlePage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`/v1/articles`}
+				dataSourceURL={`articles`}
 				filters={renderDatatableFilters()}
 				ref={articleTableRef}
 				scroll={1360}

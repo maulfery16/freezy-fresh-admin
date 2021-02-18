@@ -47,11 +47,9 @@ const ColourModifyPage = () => {
 	const submit = async (values) => {
 		try {
 			const data = new FormData();
-			data.append('code', new Date()); // deleted soon, after fixing from BE
 			data.append('hexa_code', values.hexa_code);
 			data.append('name[en]', values.en_name);
 			data.append('name[id]', values.id_name);
-			if (!isCreating) data.append('is_active', false);
 
 			if (isCreating) {
 				await colourService.createColour(data);

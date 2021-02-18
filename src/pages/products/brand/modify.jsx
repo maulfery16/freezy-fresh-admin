@@ -60,7 +60,6 @@ const BrandModifyPage = () => {
 			data.append('image', brandImage);
 			data.append('name[en]', values.en_name);
 			data.append('name[id]', values.id_name);
-			if (!isCreating) data.append('is_active', false);
 
 			if (isCreating) {
 				await brandService.createBrand(data);

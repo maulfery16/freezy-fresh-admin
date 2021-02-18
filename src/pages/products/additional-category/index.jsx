@@ -9,60 +9,9 @@ import { EditFilled } from '@ant-design/icons';
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
-import AdditionalCategoryService from '../../../services/additional-category';
+import AtomStatusSwitch from '../../../components/atoms/datatable/status-switch';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
-const additionalCategoryService = new AdditionalCategoryService();
-
-// eslint-disable-next-line no-unused-vars
-const mock = {
-	data: [
-		{
-			code: 'KT1-836732981',
-			created_at: new Date(),
-			created_by: {
-				email: 'superadmin',
-			},
-			id: 'azkvml597yxe8b9j',
-			name: {
-				id: 'Food',
-				en: 'Makanan',
-			},
-			updated_at: new Date(),
-			updated_by: {
-				email: 'superadmin',
-			},
-		},
-		{
-			code: 'KT1-836732982',
-			created_at: new Date(),
-			created_by: {
-				email: 'superadmin',
-			},
-			id: '6dpbgq5ka0axoe8r',
-			name: {
-				id: 'Drug',
-				en: 'Obat',
-			},
-			updated_at: new Date(),
-			updated_by: {
-				email: 'superadmin',
-			},
-		},
-	],
-	meta: {
-		include: [],
-		custom: [],
-		pagination: {
-			total: 2,
-			count: 2,
-			per_page: 10,
-			current_page: 1,
-			total_pages: 1,
-			links: {},
-		},
-	},
-};
 
 const AdditionalCategoryPage = () => {
 	const column = [
@@ -77,22 +26,14 @@ const AdditionalCategoryPage = () => {
 		},
 		{
 			title: 'Nama Kategori (ID)',
-			dataIndex: `name`,
+			dataIndex: `name['id']`,
+			render: (_, record) => record.name.id,
 		},
 		{
 			title: 'Nama Kategori (EN)',
-			dataIndex: `name`,
+			dataIndex: `name['en']`,
+			render: (_, record) => record.name.en,
 		},
-		// {
-		// 	title: 'Nama Kategori (ID)',
-		// 	dataIndex: `name['id']`,
-		// 	render: (_, record) => record.name.id,
-		// },
-		// {
-		// 	title: 'Nama Kategori (EN)',
-		// 	dataIndex: `name['en']`,
-		// 	render: (_, record) => record.name.en,
-		// },
 		{
 			title: 'Tanggal Dibuat',
 			dataIndex: 'created_at',
@@ -111,33 +52,42 @@ const AdditionalCategoryPage = () => {
 		},
 		{
 			title: 'Dibuat Oleh',
-			dataIndex: `created_by['email']`,
-			render: (_, record) => record.created_by.email,
+			dataIndex: 'created_by',
 		},
 		{
 			title: 'Diupdate Oleh',
-			dataIndex: `updated_by['email']`,
-			render: (_, record) =>
-				`${record.updated_by ? record.updated_by.email : '-'}`,
+			dataIndex: 'updated_by',
+		},
+		{
+			title: 'Aktif',
+			dataIndex: 'is_active',
+			render: (active, record) => (
+				<AtomStatusSwitch
+					active={active}
+					id={record.id}
+					tableRef={additionalCategoryTableRef}
+					url="additional_categories"
+				/>
+			),
+			csvRender: (item) => (item.active ? 'Aktif' : 'Tidak Aktif'),
 		},
 		{
 			title: 'Aksi',
 			dataIndex: 'id',
-			render: (id) => (
+			render: (id, record) => (
 				<Space size="middle">
 					<Link to={`/products/additional-category/${id}/edit`}>
 						<EditFilled className="f4 orange" />
 					</Link>
 
-					<MoleculeDeleteConfirm
-						deleteService={() =>
-							additionalCategoryService.deleteAdditionalCategory(
-								id
-							)
-						}
-						label="banner"
-						tableRef={additionalCategoryTableRef}
-					/>
+					{!record.is_active && (
+						<MoleculeDeleteConfirm
+							id={id}
+							label="Kategori Tambahan"
+							tableRef={additionalCategoryTableRef}
+							url="additional_categories"
+						/>
+					)}
 				</Space>
 			),
 			skipExport: true,
@@ -152,8 +102,8 @@ const AdditionalCategoryPage = () => {
 				column={column}
 				label="Kategori Tambahan"
 				getLimit={() => additionalCategoryTableRef.current.totalData}
-				service={additionalCategoryService}
-				url="/products/additional-category"
+				route="/products/additional-category"
+				url="additional_categories"
 			/>
 		);
 	};
@@ -172,10 +122,10 @@ const AdditionalCategoryPage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`/v1/additional_categories`}
-				// mock={mock}
+				dataSourceURL={`additional_categories`}
 				ref={additionalCategoryTableRef}
 				searchInput={true}
+				scroll={1360}
 				title={`Kategori Tambahan`}
 			/>
 		</OrganismLayout>

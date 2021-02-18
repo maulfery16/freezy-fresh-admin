@@ -1,16 +1,15 @@
 /* eslint-disable react/display-name */
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Image, message, Space, Switch } from 'antd';
+import { Image, Space } from 'antd';
 import { EditFilled } from '@ant-design/icons';
 
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
-import CategoryService from '../../../services/category';
+import AtomStatusSwitch from '../../../components/atoms/datatable/status-switch';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
-const categoryService = new CategoryService();
 
 const CategoryPage = () => {
 	const column = [
@@ -25,12 +24,12 @@ const CategoryPage = () => {
 		},
 		{
 			title: 'Nama Kategori (ID)',
-			dataIndex: 'name',
+			dataIndex: `name['id']`,
 			render: (_, record) => record.name.id,
 		},
 		{
 			title: 'Nama Kategori (EN)',
-			dataIndex: 'name',
+			dataIndex: `name['en']`,
 			render: (_, record) => record.name.en,
 		},
 		{
@@ -39,7 +38,6 @@ const CategoryPage = () => {
 			render: (image) => (
 				<Image preview src={image ? image.original : null} width={50} />
 			),
-
 			csvRender: (item) =>
 				item.image ? item.image.original : item.image,
 		},
@@ -59,17 +57,17 @@ const CategoryPage = () => {
 				) : (
 					'-'
 				),
-			csvRender: (item) => item.color.name.id,
+			csvRender: (item) => (item.color ? item.color.name.id : '-'),
 		},
 		{
 			title: 'Aktif',
 			dataIndex: 'is_active',
 			render: (active, record) => (
-				<Switch
-					defaultChecked={active}
-					onChange={() =>
-						changeCategoryActiveStatus(record.id, active)
-					}
+				<AtomStatusSwitch
+					active={active}
+					id={record.id}
+					tableRef={categoryTableRef}
+					url="base_categories"
 				/>
 			),
 			csvRender: (item) => (item.active ? 'Aktif' : 'Tidak Aktif'),
@@ -85,11 +83,10 @@ const CategoryPage = () => {
 
 					{!record.is_active && (
 						<MoleculeDeleteConfirm
-							deleteService={() =>
-								categoryService.deleteCategory(id)
-							}
-							label="banner"
+							id={id}
+							label="Kategori Dasar"
 							tableRef={categoryTableRef}
+							url="base_categories"
 						/>
 					)}
 				</Space>
@@ -99,29 +96,14 @@ const CategoryPage = () => {
 	];
 	const categoryTableRef = useRef();
 
-	const changeCategoryActiveStatus = async (id, status) => {
-		try {
-			await categoryService.updateCategoryActiveStatus(id, {
-				status: !status,
-			});
-
-			message.success('Berhasil memperbaharui status aktif kategori');
-
-			categoryTableRef.current.refetchData();
-		} catch (error) {
-			message.error(error.message);
-			console.error(error);
-		}
-	};
-
 	const renderAdditionalAction = () => {
 		return (
 			<MoleculeDatatableAdditionalAction
 				column={column}
 				label="Kategori Dasar"
 				getLimit={() => categoryTableRef.current.totalData}
-				service={categoryService}
-				url="/products/category"
+				route="/products/category"
+				url="base_categories"
 			/>
 		);
 	};
@@ -140,7 +122,7 @@ const CategoryPage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`/v1/base_categories`}
+				dataSourceURL={`base_categories`}
 				ref={categoryTableRef}
 				searchInput={true}
 				title={`Kategori Dasar`}

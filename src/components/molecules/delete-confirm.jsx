@@ -1,13 +1,16 @@
 import { Button, Col, message, Modal, Row, Typography } from 'antd';
-import React, { useState } from 'react';
 import { DeleteFilled } from '@ant-design/icons';
+import React, { useState } from 'react';
+
+import DatatableService from '../../services/datatable';
+const datatableService = new DatatableService();
 
 const MoleculeDeleteConfirm = (props) => {
 	const [isVisible, setIsVisible] = useState(false);
 
 	const deleteItem = async () => {
 		try {
-			await props.deleteService();
+			await datatableService.deleteData(props.id, props.url);
 
 			message.success(`Berhasil menghapus ${props.label}`);
 			setIsVisible(false);

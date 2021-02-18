@@ -1,16 +1,14 @@
 /* eslint-disable react/display-name */
+import { Space } from 'antd';
 import moment from 'moment';
 import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
-import { Space } from 'antd';
 
-import OrganismDatatable from '../../../components/organisms/datatable';
-import OrganismLayout from '../../../components/organisms/layout';
-
-import BankService from '../../../services/bank';
+import AtomStatusSwitch from '../../../components/atoms/datatable/status-switch';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
-const bankService = new BankService();
+import OrganismDatatable from '../../../components/organisms/datatable';
+import OrganismLayout from '../../../components/organisms/layout';
 
 const BankPage = () => {
 	const column = [
@@ -52,15 +50,31 @@ const BankPage = () => {
 			dataIndex: 'updated_by',
 		},
 		{
+			title: 'Aktif',
+			dataIndex: 'is_active',
+			render: (active, record) => (
+				<AtomStatusSwitch
+					active={active}
+					id={record.id}
+					tableRef={bankTableRef}
+					url="banks"
+				/>
+			),
+			csvRender: (item) => (item.active ? 'Aktif' : 'Tidak Aktif'),
+		},
+		{
 			title: 'Aksi',
 			dataIndex: 'id',
-			render: (id) => (
+			render: (id, record) => (
 				<Space size="middle">
-					<MoleculeDeleteConfirm
-						deleteService={() => bankService.deleteBank(id)}
-						label="banner"
-						tableRef={bankTableRef}
-					/>
+					{!record.is_active && (
+						<MoleculeDeleteConfirm
+							id={id}
+							label="Bank"
+							tableRef={bankTableRef}
+							url="banks"
+						/>
+					)}
 				</Space>
 			),
 			skipExport: true,
@@ -74,8 +88,8 @@ const BankPage = () => {
 				column={column}
 				label="Bank"
 				getLimit={() => bankTableRef.current.totalData}
-				service={bankService}
-				url="/products/bank"
+				route="/products/bank"
+				url="banks"
 			/>
 		);
 	};
@@ -94,7 +108,7 @@ const BankPage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`/v1/banks`}
+				dataSourceURL={`banks`}
 				ref={bankTableRef}
 				scroll={1920}
 				searchInput={true}

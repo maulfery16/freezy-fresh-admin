@@ -6,57 +6,11 @@ import { Link } from 'react-router-dom';
 import { Col, Row, Space } from 'antd';
 import { EditFilled } from '@ant-design/icons';
 
-import OrganismDatatable from '../../../components/organisms/datatable';
-import OrganismLayout from '../../../components/organisms/layout';
-
-import ColourService from '../../../services/colour';
+import AtomStatusSwitch from '../../../components/atoms/datatable/status-switch';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
-const colourService = new ColourService();
-
-// eslint-disable-next-line no-unused-vars
-const mock = {
-	data: [
-		{
-			code: 'RED',
-			created_at: new Date(),
-			created_by: 'Lisa',
-			hexa_code: '#F46A6A',
-			id: 'cnwli8r49ufajkdsc',
-			name: {
-				id: 'Merah',
-				en: 'Red',
-			},
-			updated_at: new Date(),
-			updated_by: 'Jung Kook',
-		},
-		{
-			code: 'BLU',
-			created_at: new Date(),
-			created_by: 'Lisa',
-			hexa_code: '#F46A6A',
-			id: 'cmi84thfdsckj',
-			name: {
-				id: 'Biru',
-				en: 'Blue',
-			},
-			updated_at: new Date(),
-			updated_by: 'Ji Min',
-		},
-	],
-	meta: {
-		include: [],
-		custom: [],
-		pagination: {
-			total: 5,
-			count: 5,
-			per_page: 10,
-			current_page: 1,
-			total_pages: 1,
-			links: {},
-		},
-	},
-};
+import OrganismDatatable from '../../../components/organisms/datatable';
+import OrganismLayout from '../../../components/organisms/layout';
 
 const ColourPage = () => {
 	const column = [
@@ -116,29 +70,42 @@ const ColourPage = () => {
 		},
 		{
 			title: 'Dibuat Oleh',
-			dataIndex: `created_by['email']`,
-			render: (_, record) => record.created_by.email,
+			dataIndex: 'created_by',
 		},
 		{
 			title: 'Diupdate Oleh',
-			dataIndex: `updated_by['email']`,
-			render: (_, record) =>
-				`${record.updated_by ? record.updated_by.email : '-'}`,
+			dataIndex: 'updated_by',
+		},
+		{
+			title: 'Aktif',
+			dataIndex: 'is_active',
+			render: (active, record) => (
+				<AtomStatusSwitch
+					active={active}
+					id={record.id}
+					tableRef={colourTableRef}
+					url="colors"
+				/>
+			),
+			csvRender: (item) => (item.active ? 'Aktif' : 'Tidak Aktif'),
 		},
 		{
 			title: 'Aksi',
 			dataIndex: 'id',
-			render: (id) => (
+			render: (id, record) => (
 				<Space size="middle">
 					<Link to={`/products/colour/${id}/edit`}>
 						<EditFilled className="f4 orange" />
 					</Link>
 
-					<MoleculeDeleteConfirm
-						deleteService={() => colourService.deleteColour(id)}
-						label="banner"
-						tableRef={colourTableRef}
-					/>
+					{!record.is_active && (
+						<MoleculeDeleteConfirm
+							id={id}
+							label="Warna"
+							tableRef={colourTableRef}
+							url="colors"
+						/>
+					)}
 				</Space>
 			),
 			skipExport: true,
@@ -152,9 +119,9 @@ const ColourPage = () => {
 			<MoleculeDatatableAdditionalAction
 				column={column}
 				label="Warna"
-				getLimit={() => colourService.current.totalData}
-				service={colourService}
-				url="/products/colour"
+				getLimit={() => colourTableRef.current.totalData}
+				route="/products/colour"
+				url="colors"
 			/>
 		);
 	};
@@ -173,10 +140,9 @@ const ColourPage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`/v1/colors`}
-				// mock={mock}
+				dataSourceURL={`colors`}
 				ref={colourTableRef}
-				// scroll={1920}
+				scroll={1360}
 				searchInput={true}
 				title={`Warna`}
 			/>

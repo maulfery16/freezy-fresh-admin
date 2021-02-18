@@ -1,18 +1,17 @@
 /* eslint-disable react/display-name */
 import moment from 'moment';
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
 import { Link } from 'react-router-dom';
-import { Button, Image, message, Space } from 'antd';
+import { Image, Space } from 'antd';
 import { EditFilled } from '@ant-design/icons';
 
 import AtomNumberFormat from '../../../components/atoms/number-format';
+import AtomStatusSwitch from '../../../components/atoms/datatable/status-switch';
+import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
+import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
-
-import BrandService from '../../../services/brand';
-import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
-const brandService = new BrandService();
 
 const BrandPage = () => {
 	const column = [
@@ -75,59 +74,51 @@ const BrandPage = () => {
 			dataIndex: 'updated_by',
 		},
 		{
+			title: 'Aktif',
+			dataIndex: 'is_active',
+			render: (active, record) => (
+				<AtomStatusSwitch
+					active={active}
+					id={record.id}
+					tableRef={brandTableRef}
+					url="base_categories"
+				/>
+			),
+			csvRender: (item) => (item.active ? 'Aktif' : 'Tidak Aktif'),
+		},
+		{
 			title: 'Aksi',
 			dataIndex: 'id',
-			render: (id) => (
+			render: (id, record) => (
 				<Space size="middle">
 					<Link to={`/products/brand/${id}/edit`}>
 						<EditFilled className="f4 orange" />
 					</Link>
 
-					<MoleculeDeleteConfirm
-						deleteService={() => brandService.deleteBrand(id)}
-						label="banner"
-						tableRef={brandTableRef}
-					/>
+					{!record.is_active && (
+						<MoleculeDeleteConfirm
+							id={id}
+							label="Kategori Dasar"
+							tableRef={brandTableRef}
+							url="base_categories"
+						/>
+					)}
 				</Space>
 			),
 			skipExport: true,
 		},
 	];
 	const brandTableRef = useRef();
-	const [isExporting, setIsExporting] = useState(false);
-
-	const exportAsCSV = async () => {
-		setIsExporting(true);
-
-		try {
-			const params = {
-				page: 1,
-				limit: brandTableRef.current.totalData,
-			};
-
-			await brandService.exportAsCSV(params, column);
-		} catch (error) {
-			message.error(error.message);
-			console.error(error);
-		} finally {
-			setIsExporting(false);
-		}
-	};
 
 	const renderAdditionalAction = () => {
 		return (
-			<Space>
-				<Button
-					className="br2 denim b--denim"
-					loading={isExporting}
-					onClick={() => exportAsCSV()}
-				>
-					Export Excel
-				</Button>
-				<Link to="/products/brand/add">
-					<Button className="br2 bg-denim white">Tambah Brand</Button>
-				</Link>
-			</Space>
+			<MoleculeDatatableAdditionalAction
+				column={column}
+				label="Brand"
+				getLimit={() => brandTableRef.current.totalData}
+				route="/products/brand"
+				url="brands"
+			/>
 		);
 	};
 
@@ -145,7 +136,7 @@ const BrandPage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`/v1/brands`}
+				dataSourceURL={`brands`}
 				ref={brandTableRef}
 				scroll={1920}
 				searchInput={true}
