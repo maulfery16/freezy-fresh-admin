@@ -4,7 +4,7 @@ export default class AdminService extends RequestAdapterService {
 	async getOptions(url, params) {
 		try {
 			const { data } = await super.sendGetRequest(
-				`${this.baseUrl}${url}`,
+				`${this.baseUrl}/v1/${url}`,
 				params
 			);
 

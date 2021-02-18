@@ -161,7 +161,7 @@ const CategoryModifyPage = () => {
 											name="colour"
 											placeholder="Pilih Warna"
 											data={{
-												url: '/v1/colors',
+												url: 'colors',
 												generateCustomOption: (
 													item
 												) => ({

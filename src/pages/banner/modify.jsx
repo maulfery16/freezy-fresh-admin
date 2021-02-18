@@ -148,7 +148,7 @@ const BannerModifyPage = () => {
 											name="promo"
 											placeholder="Pilih Promo"
 											data={{
-												url: '/v1/colors',
+												url: 'colors',
 												generateCustomOption: (
 													item
 												) => ({

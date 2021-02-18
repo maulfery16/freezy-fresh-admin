@@ -164,28 +164,16 @@ const AdminPage = () => {
 		return [
 			<MoleculeDatatableFilter
 				name="branches"
-				operator="eq"
+				operator=":"
 				identifier="branches-filter"
 				label="Cabang"
 				key="branches-filter"
 				placeholder="Semua cabang"
-				data={{
-					url: '/branches',
-					mock: [
-						{
-							label: 'Bandung',
-							value: 'Bandung',
-						},
-						{
-							label: 'Garut',
-							value: 'Garut',
-						},
-					],
-				}}
+				data={{ url: 'branches' }}
 			/>,
 			<MoleculeDatatableFilter
 				name="roles"
-				operator="eq"
+				operator=":"
 				identifier="roles-filter"
 				label="Peran"
 				key="roles-filter"
@@ -195,18 +183,18 @@ const AdminPage = () => {
 					mock: [
 						{
 							label: 'Administrator',
-							value: 1,
+							value: 'asdasd',
 						},
 						{
 							label: 'Kasir',
-							value: 2,
+							value: 'aihkbfiu3',
 						},
 					],
 				}}
 			/>,
 			<MoleculeDatatableDateRange
 				name="joined_at"
-				operator="eq"
+				operator=":"
 				identifier="daterangefilter"
 				key="daterange"
 				label="Tanggal Register"

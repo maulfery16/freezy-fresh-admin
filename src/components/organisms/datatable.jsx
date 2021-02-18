@@ -73,25 +73,29 @@ const OrganismDatatable = forwardRef((props, ref) => {
 		existingFilterIndex > -1
 			? (newFilters[existingFilterIndex] = newFilter)
 			: newFilters.push(newFilter);
+
 		setFilters(newFilters);
 	};
 
 	const addMultipleFilter = (appliedFilters) => {
+		const multipleFilters = [];
+		const existingFilter = [...filters];
+
 		appliedFilters.forEach((applFilter) => {
+			const newFilter = { ...applFilter };
 			const existingFilterIndex = filters.findIndex(
 				(filter) =>
 					newFilter.name === filter.name &&
 					applFilter.name === filter.operator
 			);
-			const newFilter = { ...applFilter };
 
-			const newFilters = [...filters];
-			existingFilterIndex > -1
-				? (newFilters[existingFilterIndex] = newFilter)
-				: newFilters.push(newFilter);
+			if (existingFilterIndex > -1)
+				existingFilter.splice(existingFilterIndex, 1);
 
-			setFilters(newFilters);
+			multipleFilters.push(newFilter);
 		});
+
+		setFilters([...existingFilter, ...multipleFilters]);
 	};
 
 	const removeFilter = (name) => {
@@ -103,14 +107,17 @@ const OrganismDatatable = forwardRef((props, ref) => {
 	};
 
 	const setFilter = () => {
+		const keyword =
+			filterParams.search.split(';')[0].includes(':') ||
+			filterParams.search.split(';')[0].length === 0
+				? ''
+				: `${filterParams.search.split(';')[0]};`;
+
 		const filterParameter = {
 			...filterParams,
-			filter: filters.map(
-				(query, index) =>
-					`${index > 0 ? 'and' : ''} ${query.name} ${
-						query.operator
-					} ${query.value} `
-			),
+			search: `${keyword}${filters
+				.map((query) => `${query.name}${query.operator}${query.value}`)
+				.join(';')}`,
 			page: 1,
 		};
 
@@ -119,7 +126,14 @@ const OrganismDatatable = forwardRef((props, ref) => {
 	};
 
 	const setKeyword = (search) => {
-		setFilterParams({ ...filterParams, search });
+		const keyword = filterParams.search.split(';');
+
+		if (keyword[0].length === 0 || !keyword[0].includes[':']) {
+			setFilterParams({ ...filterParams, search });
+		} else {
+			keyword.unshift(search);
+			setFilterParams({ ...filterParams, search: keyword.join(';') });
+		}
 	};
 
 	const setPagination = (page, limit) => {

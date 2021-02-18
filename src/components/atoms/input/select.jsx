@@ -12,7 +12,7 @@ const AtomCustomSelect = (props) => {
 			return props.data.generateCustomOption(item);
 
 		return {
-			label: item.label,
+			label: item.name,
 			value: item.id,
 		};
 	};
@@ -24,9 +24,7 @@ const AtomCustomSelect = (props) => {
 			const { data } = await masterService.getOptions(props.data.url);
 
 			const options = data.map((item) => generateOption(item));
-
-			if (props.addblankoption)
-				options.unshift({ label: 'Semua', value: '' });
+			options.unshift({ label: 'Semua', value: '' });
 
 			setOptions(options);
 		}
@@ -50,7 +48,7 @@ const AtomCustomSelect = (props) => {
 			))}
 		</Select>
 	) : (
-		<Skeleton active />
+		<Skeleton active title={{ width: '100%' }} paragraph={{ rows: 0 }} />
 	);
 };
 

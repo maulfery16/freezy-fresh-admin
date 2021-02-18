@@ -177,7 +177,7 @@ const ArticleModifyPage = () => {
 											name="category"
 											placeholder="Pilih Kategori"
 											data={{
-												url: '/v1/colors',
+												url: 'colors',
 												generateCustomOption: (
 													item
 												) => ({
