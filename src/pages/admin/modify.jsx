@@ -172,17 +172,7 @@ const AdminModifyPage = () => {
 											name="bank"
 											placeholder="Bank (Opsional)"
 											data={{
-												url: '/banks',
-												mock: [
-													{
-														label: 'Mandiri',
-														value: 'Mandiri',
-													},
-													{
-														label: 'BCA',
-														value: 'BCA',
-													},
-												],
+												url: 'banks',
 											}}
 										/>
 									</Col>
@@ -251,15 +241,15 @@ const AdminModifyPage = () => {
 											placeholder="Peranan"
 											required
 											data={{
-												url: '/roles',
+												url: 'roles',
 												mock: [
 													{
-														label: 'Staff',
-														value: 'staff',
+														label: 'Administrator',
+														value: 'asdasd',
 													},
 													{
-														label: 'Administrator',
-														value: 'Administrator',
+														label: 'Kasir',
+														value: 'aihkbfiu3',
 													},
 												],
 											}}
@@ -274,17 +264,7 @@ const AdminModifyPage = () => {
 											mode="multiple"
 											required
 											data={{
-												url: '/branches',
-												mock: [
-													{
-														label: 'Bandung',
-														value: 'Bandung',
-													},
-													{
-														label: 'Garut',
-														value: 'Garut',
-													},
-												],
+												url: 'branches',
 											}}
 										/>
 									</Col>

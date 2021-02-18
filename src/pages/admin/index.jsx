@@ -84,7 +84,7 @@ const AdminPage = () => {
 			dataIndex: 'id',
 			render: (id) => (
 				<Space size="middle">
-					<Link to={`/admin/${id}`}>
+					<Link to={`/admin/${id}/detail`}>
 						<EyeFilled className="f4 blue" />
 					</Link>
 
@@ -179,7 +179,7 @@ const AdminPage = () => {
 				key="roles-filter"
 				placeholder="Semua roles"
 				data={{
-					url: '/roles',
+					url: 'roles',
 					mock: [
 						{
 							label: 'Administrator',

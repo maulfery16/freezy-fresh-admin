@@ -37,7 +37,19 @@ const AtomCustomSelect = (props) => {
 	}, []);
 
 	return options ? (
-		<Select {...props}>
+		<Select
+			{...props}
+			showSearch
+			optionFilterProp="children"
+			filterOption={(input, option) =>
+				option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+			}
+			filterSort={(optionA, optionB) =>
+				optionA.children
+					.toLowerCase()
+					.localeCompare(optionB.children.toLowerCase())
+			}
+		>
 			{options.map((option, index) => (
 				<Select.Option
 					key={`${props.indentifier || ''}_input-select_${index}`}

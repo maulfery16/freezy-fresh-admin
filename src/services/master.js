@@ -5,7 +5,10 @@ export default class AdminService extends RequestAdapterService {
 		try {
 			const { data } = await super.sendGetRequest(
 				`${this.baseUrl}/v1/${url}`,
-				params
+				{
+					...params,
+					limit: 300,
+				}
 			);
 
 			return data;
