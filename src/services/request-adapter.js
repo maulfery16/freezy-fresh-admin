@@ -41,6 +41,10 @@ export default class RequestAdapterService {
 	dowloadDataAsCSV(data, properties, filename) {
 		let csv = '';
 
+		console.log(data);
+		console.log(properties);
+		console.log(filename);
+
 		const headers = properties.map((property) =>
 			property.skipExport ? '' : property.title
 		);

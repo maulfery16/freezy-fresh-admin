@@ -22,10 +22,11 @@ const AdditionalCategoryModifyPage = () => {
 
 	const getAdditionalCategoryDetail = async (id) => {
 		try {
-			const {
-				data: additionalCategory,
-			} = await additionalCategoryService.getAdditionalCategoryById(id);
-			setAdditionalCategory(additionalCategory);
+			const additionalCategory = await additionalCategoryService.getAdditionalCategoryById(
+				id
+			);
+
+			setAdditionalCategory(additionalCategory.data);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
@@ -33,14 +34,14 @@ const AdditionalCategoryModifyPage = () => {
 	};
 
 	const setAdditionalCategoryInitialValues = () => {
-		return isCreating
+		console.log(additionalCategory);
+
+		return isCreating || !additionalCategory
 			? {}
 			: {
-					code: additionalCategory.data.code,
-					en_name: additionalCategory.data.name,
-					id_name: additionalCategory.data.name,
-					// en_name: additionalCategory.name.en,
-					// id_name: additionalCategory.name.id,
+					code: additionalCategory.code,
+					en_name: additionalCategory.name.en,
+					id_name: additionalCategory.name.id,
 			  };
 	};
 
@@ -49,11 +50,9 @@ const AdditionalCategoryModifyPage = () => {
 			setIsSubmitting(true);
 
 			const data = new FormData();
-			// data.append('code', values.code);
-			// data.append('name[en]', values.en_name);
-			// data.append('name[id]', values.id_name);
-			data.append('name', values.name);
-			if (!isCreating) data.append('is_active', false);
+			data.append('code', values.code);
+			data.append('name[en]', values.en_name);
+			data.append('name[id]', values.id_name);
 
 			if (isCreating) {
 				await additionalCategoryService.createAdditionalCategory(data);

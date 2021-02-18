@@ -1,19 +1,15 @@
 /* eslint-disable react/display-name */
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Image, message, Popconfirm, Space, Switch } from 'antd';
-import {
-	DeleteFilled,
-	EditFilled,
-	QuestionCircleFilled,
-} from '@ant-design/icons';
+import { Image, Space } from 'antd';
+import { EditFilled } from '@ant-design/icons';
 
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
-import CategoryService from '../../../services/category';
+import AtomStatusSwitch from '../../../components/atoms/datatable/status-switch';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
-const categoryService = new CategoryService();
+import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
 
 const CategoryPage = () => {
 	const column = [
@@ -28,12 +24,12 @@ const CategoryPage = () => {
 		},
 		{
 			title: 'Nama Kategori (ID)',
-			dataIndex: 'name',
+			dataIndex: `name['id']`,
 			render: (_, record) => record.name.id,
 		},
 		{
 			title: 'Nama Kategori (EN)',
-			dataIndex: 'name',
+			dataIndex: `name['en']`,
 			render: (_, record) => record.name.en,
 		},
 		{
@@ -42,34 +38,36 @@ const CategoryPage = () => {
 			render: (image) => (
 				<Image preview src={image ? image.original : null} width={50} />
 			),
-
 			csvRender: (item) =>
 				item.image ? item.image.original : item.image,
 		},
 		{
 			title: 'Warna',
 			dataIndex: 'color',
-			render: (color) => (
-				<div
-					className="br2 ba b--black-20"
-					style={{
-						background: color.hexa_code,
-						height: '50px',
-						width: '50px',
-					}}
-				/>
-			),
-			csvRender: (item) => item.color.name.id,
+			render: (color) =>
+				color ? (
+					<div
+						className="br2 ba b--black-20"
+						style={{
+							background: color.hexa_code,
+							height: '50px',
+							width: '50px',
+						}}
+					/>
+				) : (
+					'-'
+				),
+			csvRender: (item) => (item.color ? item.color.name.id : '-'),
 		},
 		{
 			title: 'Aktif',
 			dataIndex: 'is_active',
 			render: (active, record) => (
-				<Switch
-					defaultChecked={active}
-					onChange={() =>
-						changeCategoryActiveStatus(record.id, active)
-					}
+				<AtomStatusSwitch
+					active={active}
+					id={record.id}
+					tableRef={categoryTableRef}
+					url="base_categories"
 				/>
 			),
 			csvRender: (item) => (item.active ? 'Aktif' : 'Tidak Aktif'),
@@ -77,19 +75,20 @@ const CategoryPage = () => {
 		{
 			title: 'Aksi',
 			dataIndex: 'id',
-			render: (id) => (
+			render: (id, record) => (
 				<Space size="middle">
 					<Link to={`/products/category/${id}/edit`}>
 						<EditFilled className="f4 orange" />
 					</Link>
 
-					<Popconfirm
-						icon={<QuestionCircleFilled className="red" />}
-						onConfirm={() => deleteBaseCategory(id)}
-						title="Are you sure"
-					>
-						<DeleteFilled className="f4 red" />
-					</Popconfirm>
+					{!record.is_active && (
+						<MoleculeDeleteConfirm
+							id={id}
+							label="Kategori Dasar"
+							tableRef={categoryTableRef}
+							url="base_categories"
+						/>
+					)}
 				</Space>
 			),
 			skipExport: true,
@@ -97,39 +96,14 @@ const CategoryPage = () => {
 	];
 	const categoryTableRef = useRef();
 
-	const changeCategoryActiveStatus = async (id, status) => {
-		try {
-			await categoryService.updateCategoryActiveStatus(id, {
-				status: !status,
-			});
-
-			message.success('Berhasil memperbaharui status aktif kategori');
-		} catch (error) {
-			message.error(error.message);
-			console.error(error);
-		}
-	};
-
-	const deleteBaseCategory = async (id) => {
-		try {
-			await categoryService.deleteCategory(id);
-			message.success('Berhasil menghapus kategori dasar');
-
-			categoryTableRef.current.refetchData();
-		} catch (error) {
-			message.error(error.message);
-			console.error(error);
-		}
-	};
-
 	const renderAdditionalAction = () => {
 		return (
 			<MoleculeDatatableAdditionalAction
 				column={column}
 				label="Kategori Dasar"
 				getLimit={() => categoryTableRef.current.totalData}
-				service={categoryService}
-				url="products/category"
+				route="/products/category"
+				url="base_categories"
 			/>
 		);
 	};
@@ -148,7 +122,7 @@ const CategoryPage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`/v1/base_categories`}
+				dataSourceURL={`base_categories`}
 				ref={categoryTableRef}
 				searchInput={true}
 				title={`Kategori Dasar`}

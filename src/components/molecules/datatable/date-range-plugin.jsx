@@ -6,14 +6,14 @@ const MoleculeDatatableDateRange = (props) => {
 		if (selectedValue.length > 0) {
 			props.addMultipleFilter([
 				{
-					name: props.dataIndex || 'created_at',
+					name: props.name || 'created_at',
 					value: selectedValue[0].format(),
-					operator: 'gte',
+					operator: props.operator,
 				},
 				{
-					name: props.dataIndex || 'created_at',
+					name: props.name || 'created_at',
 					value: selectedValue[1].format(),
-					operator: 'lte',
+					operator: props.operator,
 				},
 			]);
 		} else {

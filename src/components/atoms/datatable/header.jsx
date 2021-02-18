@@ -15,7 +15,7 @@ const AtomDatatableHeader = (props) => {
 		if (order === 'asc') setOrder('desc');
 		if (order === 'desc') setOrder(null);
 
-		props.setSort(order, props.attr);
+		props.setSort(!order ? '' : order, !order ? '' : props.attr);
 	};
 
 	return (
@@ -32,10 +32,10 @@ const AtomDatatableHeader = (props) => {
 					size={-14}
 				>
 					<CaretUpFilled
-						className={`${order === 'asc' && 'denim'}`}
+						className={`${order === 'asc' && 'turbo'}`}
 					/>
 					<CaretDownFilled
-						className={`${order === 'desc' && 'denim'}`}
+						className={`${order === 'desc' && 'turbo'}`}
 					/>
 				</Space>
 			)}

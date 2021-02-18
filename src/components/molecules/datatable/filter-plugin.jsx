@@ -27,7 +27,6 @@ const MoleculeDatatableFilter = (props) => {
 			</Typography.Text>
 
 			<AtomCustomSelect
-				addblankoption
 				className="input-plugin"
 				data={props.data}
 				onChange={setFilterQuery}

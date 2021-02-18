@@ -2,6 +2,9 @@ import { Button, message, Space } from 'antd';
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 
+import DatatableService from '../../../services/datatable';
+const datatableService = new DatatableService();
+
 const MoleculeDatatableAdditionalAction = (props) => {
 	const [isExporting, setIsExporting] = useState(false);
 
@@ -13,8 +16,7 @@ const MoleculeDatatableAdditionalAction = (props) => {
 				page: 1,
 				limit: props.getLimit(),
 			};
-
-			await props.service.exportAsCSV(params, props.column);
+			await datatableService.exportAsCSV(params, props.column, props.url);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
@@ -32,7 +34,7 @@ const MoleculeDatatableAdditionalAction = (props) => {
 			>
 				Export Excel
 			</Button>
-			<Link to={`${props.url}/add`}>
+			<Link to={`${props.route}/add`}>
 				<Button className="br2 bg-denim white">
 					Tambah {props.label}
 				</Button>

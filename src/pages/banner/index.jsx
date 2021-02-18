@@ -1,19 +1,15 @@
 /* eslint-disable react/display-name */
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Image, message, Popconfirm, Space } from 'antd';
-import {
-	DeleteFilled,
-	EditFilled,
-	EyeFilled,
-	QuestionCircleFilled,
-} from '@ant-design/icons';
+import { Image, Space } from 'antd';
+import { EditFilled, EyeFilled } from '@ant-design/icons';
 
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
 
 import BannerService from '../../services/banner';
 import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
+import MoleculeDeleteConfirm from '../../components/molecules/delete-confirm';
 const bannerService = new BannerService();
 
 const BannerPage = () => {
@@ -43,38 +39,24 @@ const BannerPage = () => {
 			dataIndex: 'id',
 			render: (id) => (
 				<Space size="middle">
-					<Link to={`/banner/${id}/detail`}>
+					<Link to={`/view/banner/${id}/detail`}>
 						<EyeFilled className="f4 blue" />
 					</Link>
 
-					<Link to={`/brand/${id}/edit`}>
+					<Link to={`/view/brand/${id}/edit`}>
 						<EditFilled className="f4 orange" />
 					</Link>
 
-					<Popconfirm
-						title="Are you sure"
-						icon={<QuestionCircleFilled className="red" />}
-						onConfirm={() => deleteBanner(id)}
-					>
-						<DeleteFilled className="f4 red" />
-					</Popconfirm>
+					<MoleculeDeleteConfirm
+						deleteService={() => bannerService.deleteBanner(id)}
+						label="banner"
+						tableRef={bannerTableRef}
+					/>
 				</Space>
 			),
 		},
 	];
 	const bannerTableRef = useRef();
-
-	const deleteBanner = async (id) => {
-		try {
-			await bannerService.deleteBanner(id);
-
-			message.success('Berhasil menghapus banner');
-			bannerTableRef.current.refetchData();
-		} catch (error) {
-			message.error(error.message);
-			console.error(error);
-		}
-	};
 
 	const renderAdditionalAction = () => {
 		return (
@@ -94,7 +76,7 @@ const BannerPage = () => {
 
 	return (
 		<OrganismLayout
-			breadcumbs={[{ name: 'Banner', link: '/banner' }]}
+			breadcumbs={[{ name: 'Banner', link: '/view/banner' }]}
 			title="Banner Page"
 		>
 			<OrganismDatatable

@@ -1,16 +1,14 @@
 /* eslint-disable react/display-name */
+import { Space } from 'antd';
 import moment from 'moment';
 import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
-import { message, Popconfirm, Space } from 'antd';
-import { DeleteFilled, QuestionCircleFilled } from '@ant-design/icons';
 
+import AtomStatusSwitch from '../../../components/atoms/datatable/status-switch';
+import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
+import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
-
-import BankService from '../../../services/bank';
-import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
-const bankService = new BankService();
 
 const BankPage = () => {
 	const column = [
@@ -52,17 +50,31 @@ const BankPage = () => {
 			dataIndex: 'updated_by',
 		},
 		{
+			title: 'Aktif',
+			dataIndex: 'is_active',
+			render: (active, record) => (
+				<AtomStatusSwitch
+					active={active}
+					id={record.id}
+					tableRef={bankTableRef}
+					url="banks"
+				/>
+			),
+			csvRender: (item) => (item.active ? 'Aktif' : 'Tidak Aktif'),
+		},
+		{
 			title: 'Aksi',
 			dataIndex: 'id',
-			render: (id) => (
+			render: (id, record) => (
 				<Space size="middle">
-					<Popconfirm
-						title="Are you sure"
-						icon={<QuestionCircleFilled className="red" />}
-						onConfirm={() => deleteBank(id)}
-					>
-						<DeleteFilled className="f4 red" />
-					</Popconfirm>
+					{!record.is_active && (
+						<MoleculeDeleteConfirm
+							id={id}
+							label="Bank"
+							tableRef={bankTableRef}
+							url="banks"
+						/>
+					)}
 				</Space>
 			),
 			skipExport: true,
@@ -70,26 +82,14 @@ const BankPage = () => {
 	];
 	const bankTableRef = useRef();
 
-	const deleteBank = async (id) => {
-		try {
-			await bankService.deleteBank(id);
-
-			message.success('Berhasil menghapus bank');
-			bankTableRef.current.refetchData();
-		} catch (error) {
-			message.error(error.message);
-			console.error(error);
-		}
-	};
-
 	const renderAdditionalAction = () => {
 		return (
 			<MoleculeDatatableAdditionalAction
 				column={column}
 				label="Bank"
 				getLimit={() => bankTableRef.current.totalData}
-				service={bankService}
-				url="products/bank"
+				route="/products/bank"
+				url="banks"
 			/>
 		);
 	};
@@ -108,7 +108,7 @@ const BankPage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`/v1/banks`}
+				dataSourceURL={`banks`}
 				ref={bankTableRef}
 				scroll={1920}
 				searchInput={true}

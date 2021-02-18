@@ -2,59 +2,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ReactMoment from 'react-moment';
 import { Link } from 'react-router-dom';
-import { Image, message, Popconfirm, Skeleton, Space } from 'antd';
-import {
-	DeleteFilled,
-	EyeFilled,
-	QuestionCircleFilled,
-} from '@ant-design/icons';
+import { Image, message, Skeleton, Space } from 'antd';
+import { EyeFilled } from '@ant-design/icons';
 
 import AtomNumberFormat from '../../components/atoms/number-format';
+import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
 import MoleculeDatatableAdditionalInformation from '../../components/molecules/datatable/additional-information-card';
 import MoleculeDatatableDateRange from '../../components/molecules/datatable/date-range-plugin';
 import MoleculeDatatableFilter from '../../components/molecules/datatable/filter-plugin';
+import MoleculeDeleteConfirm from '../../components/molecules/delete-confirm';
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
-import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
-
-import AdminService from '../../services/admin';
-const adminService = new AdminService();
-
-const mock = {
-	meta: {
-		total_data: 2,
-	},
-	data: [
-		{
-			account_number: '2829000024',
-			bank: 'BCA',
-			branches: ['Bandung', 'Garut'],
-			created_at: new Date(),
-			email: 'johndoe@gmail.com',
-			gender: 'Pria',
-			id: 'FF-836732982',
-			image:
-				'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
-			name: 'John Doe',
-			phone_number: '0856752837',
-			role: 'Manager Toko',
-		},
-		{
-			account_number: '2829000024',
-			bank: 'BRI',
-			branches: ['Jakarta'],
-			created_at: new Date(),
-			email: 'johndoe2@gmail.com',
-			gender: 'Pria',
-			id: 'FF-836732981',
-			image:
-				'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
-			name: 'John Doe 2',
-			phone_number: '0856752837',
-			role: 'Kasir',
-		},
-	],
-};
 
 const AdminPage = () => {
 	const column = [
@@ -69,12 +27,13 @@ const AdminPage = () => {
 		},
 		{
 			title: 'Nama Admin',
-			dataIndex: 'name',
+			dataIndex: 'first_name',
 			sort: true,
+			render: (_, record) => `${record.first_name} ${record.last_name}`,
 		},
 		{
 			title: 'Foto',
-			dataIndex: 'image',
+			dataIndex: 'profile_image',
 			render: (image) => <Image preview src={image} width={100} />,
 		},
 		{
@@ -103,7 +62,8 @@ const AdminPage = () => {
 			title: 'Cabang',
 			dataIndex: 'branches',
 			sort: true,
-			render: (branches) => branches.join(', '),
+			render: (branches) =>
+				branches.map((branch) => branch.name).join(', '),
 		},
 		{
 			title: 'Jenis Kelamin',
@@ -111,30 +71,29 @@ const AdminPage = () => {
 		},
 		{
 			title: 'Nomor Rek',
-			dataIndex: 'account_number',
+			dataIndex: 'bank_info',
+			render: (bank) => bank.account_number,
 		},
 		{
 			title: 'Bank',
-			dataIndex: 'bank',
+			dataIndex: 'bank_info',
+			render: (bank) => bank.bank,
 		},
 		{
 			title: 'Aksi',
 			dataIndex: 'id',
 			render: (id) => (
 				<Space size="middle">
-					<Link to={`/admin/${id}`}>
+					<Link to={`/admin/${id}/detail`}>
 						<EyeFilled className="f4 blue" />
 					</Link>
 
-					<Popconfirm
-						title="Are you sure？"
-						icon={<QuestionCircleFilled className="red" />}
-					>
-						<DeleteFilled
-							className="f4 red"
-							onClick={() => console.log(id)}
-						/>
-					</Popconfirm>
+					<MoleculeDeleteConfirm
+						id={id}
+						label="Admin"
+						tableRef={adminTableRef}
+						url="admins"
+					/>
 				</Space>
 			),
 		},
@@ -162,10 +121,10 @@ const AdminPage = () => {
 		return (
 			<MoleculeDatatableAdditionalAction
 				column={column}
-				label="Bank"
+				label="Admin"
 				getLimit={() => adminTableRef.current.totalData}
-				service={adminService}
-				url="products/bank"
+				route="/admin"
+				url="admins"
 			/>
 		);
 	};
@@ -205,49 +164,37 @@ const AdminPage = () => {
 		return [
 			<MoleculeDatatableFilter
 				name="branches"
-				operator="eq"
+				operator=":"
 				identifier="branches-filter"
 				label="Cabang"
 				key="branches-filter"
 				placeholder="Semua cabang"
-				data={{
-					url: '/branches',
-					mock: [
-						{
-							label: 'Bandung',
-							value: 'Bandung',
-						},
-						{
-							label: 'Garut',
-							value: 'Garut',
-						},
-					],
-				}}
+				data={{ url: 'branches' }}
 			/>,
 			<MoleculeDatatableFilter
 				name="roles"
-				operator="eq"
+				operator=":"
 				identifier="roles-filter"
 				label="Peran"
 				key="roles-filter"
 				placeholder="Semua roles"
 				data={{
-					url: '/roles',
+					url: 'roles',
 					mock: [
 						{
 							label: 'Administrator',
-							value: 1,
+							value: 'asdasd',
 						},
 						{
 							label: 'Kasir',
-							value: 2,
+							value: 'aihkbfiu3',
 						},
 					],
 				}}
 			/>,
 			<MoleculeDatatableDateRange
 				name="joined_at"
-				operator="eq"
+				operator=":"
 				identifier="daterangefilter"
 				key="daterange"
 				label="Tanggal Register"
@@ -271,9 +218,8 @@ const AdminPage = () => {
 				additionalAction={renderAdditionalAction()}
 				additionalInformation={renderAdditionalInformation()}
 				columns={column}
-				dataSourceURL={`/v1/admins`}
+				dataSourceURL={`admins`}
 				filters={renderDatatableFilters()}
-				mock={mock}
 				ref={adminTableRef}
 				scroll={1920}
 				searchInput={true}

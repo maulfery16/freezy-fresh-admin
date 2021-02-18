@@ -21,24 +21,6 @@ export default class AdminService extends RequestAdapterService {
 		}
 	}
 
-	async deleteAdmin(id) {
-		try {
-			return await super.sendDeleteRequest(
-				`${this.baseUrl}/v1/admins/${id}`,
-				{ id }
-			);
-		} catch (error) {
-			console.error(error);
-			throw new Error(
-				`Fail deleting admin: ${error.response.data.message} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
-			);
-		}
-	}
-
 	async editAdmin(id, admin) {
 		try {
 			const { data } = await super.sendPutMultipartRequest(

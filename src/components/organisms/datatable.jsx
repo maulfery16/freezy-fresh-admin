@@ -14,7 +14,6 @@ import {
 	message,
 	Modal,
 	Row,
-	Skeleton,
 	Space,
 	Table,
 	Typography,
@@ -74,25 +73,29 @@ const OrganismDatatable = forwardRef((props, ref) => {
 		existingFilterIndex > -1
 			? (newFilters[existingFilterIndex] = newFilter)
 			: newFilters.push(newFilter);
+
 		setFilters(newFilters);
 	};
 
 	const addMultipleFilter = (appliedFilters) => {
+		const multipleFilters = [];
+		const existingFilter = [...filters];
+
 		appliedFilters.forEach((applFilter) => {
+			const newFilter = { ...applFilter };
 			const existingFilterIndex = filters.findIndex(
 				(filter) =>
 					newFilter.name === filter.name &&
 					applFilter.name === filter.operator
 			);
-			const newFilter = { ...applFilter };
 
-			const newFilters = [...filters];
-			existingFilterIndex > -1
-				? (newFilters[existingFilterIndex] = newFilter)
-				: newFilters.push(newFilter);
+			if (existingFilterIndex > -1)
+				existingFilter.splice(existingFilterIndex, 1);
 
-			setFilters(newFilters);
+			multipleFilters.push(newFilter);
 		});
+
+		setFilters([...existingFilter, ...multipleFilters]);
 	};
 
 	const removeFilter = (name) => {
@@ -104,14 +107,17 @@ const OrganismDatatable = forwardRef((props, ref) => {
 	};
 
 	const setFilter = () => {
+		const keyword =
+			filterParams.search.split(';')[0].includes(':') ||
+			filterParams.search.split(';')[0].length === 0
+				? ''
+				: `${filterParams.search.split(';')[0]};`;
+
 		const filterParameter = {
 			...filterParams,
-			filter: filters.map(
-				(query, index) =>
-					`${index > 0 ? 'and' : ''} ${query.name} ${
-						query.operator
-					} ${query.value} `
-			),
+			search: `${keyword}${filters
+				.map((query) => `${query.name}${query.operator}${query.value}`)
+				.join(';')}`,
 			page: 1,
 		};
 
@@ -120,14 +126,21 @@ const OrganismDatatable = forwardRef((props, ref) => {
 	};
 
 	const setKeyword = (search) => {
-		setFilterParams({ ...filterParams, search });
+		const keyword = filterParams.search.split(';');
+
+		if (keyword[0].length === 0 || !keyword[0].includes[':']) {
+			setFilterParams({ ...filterParams, search });
+		} else {
+			keyword.unshift(search);
+			setFilterParams({ ...filterParams, search: keyword.join(';') });
+		}
 	};
 
 	const setPagination = (page, limit) => {
 		setFilterParams({ ...filterParams, limit, page });
 	};
 
-	const setSort = (orderBy, sortedBy) => {
+	const setSort = (sortedBy, orderBy) => {
 		setFilterParams({
 			...filterParams,
 			orderBy,
@@ -152,6 +165,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 		async refetchData() {
 			await getData();
 		},
+		totalData,
 	}));
 
 	return (
@@ -262,55 +276,52 @@ const OrganismDatatable = forwardRef((props, ref) => {
 			</Col>
 
 			<Col className="mt4" span={24}>
-				{isGettingData ? (
-					<Skeleton active />
-				) : (
-					<Table
-						bordered={true}
-						columns={props.columns.map((column) => ({
-							...column,
-							title: (
-								<AtomDatatableHeader
-									attr={column.dataIndex}
-									activeSort={{
-										orderBy: filterParams.orderBy,
-										sortedBy: filterParams.sortedBy,
-									}}
-									setSort={column.sort ? setSort : false}
-									title={column.title}
-								/>
-							),
-						}))}
-						className={props.className}
-						dataSource={data}
-						pagination={{
-							current: filterParams.page,
-							itemRender: (_, type, originalEl) => {
-								if (type === 'prev')
-									return (
-										<a className="bg-white pa2 br2 ba b--black-50">
-											Sebelumnya
-										</a>
-									);
-								if (type === 'next')
-									return (
-										<a className="bg-white pa2 br2 ba b--black-50">
-											Seleanjutnya
-										</a>
-									);
-								return originalEl;
-							},
-							onChange: (page, pageSize) =>
-								setPagination(page, pageSize),
-							pageSize: filterParams.limit,
-							responsive: true,
-							total: totalData,
-						}}
-						rowKey={props.rowKey || 'id'}
-						scroll={{ x: props.scroll || 1080 }}
-						style={{ width: '100%' }}
-					/>
-				)}
+				<Table
+					bordered={true}
+					columns={props.columns.map((column) => ({
+						...column,
+						title: (
+							<AtomDatatableHeader
+								attr={column.dataIndex}
+								activeSort={{
+									orderBy: filterParams.orderBy,
+									sortedBy: filterParams.sortedBy,
+								}}
+								setSort={column.sort ? setSort : false}
+								title={column.title}
+							/>
+						),
+					}))}
+					className={props.className}
+					dataSource={data}
+					loading={isGettingData}
+					pagination={{
+						current: filterParams.page,
+						itemRender: (_, type, originalEl) => {
+							if (type === 'prev')
+								return (
+									<a className="bg-white pa2 br2 ba b--black-50">
+										Sebelumnya
+									</a>
+								);
+							if (type === 'next')
+								return (
+									<a className="bg-white pa2 br2 ba b--black-50">
+										Seleanjutnya
+									</a>
+								);
+							return originalEl;
+						},
+						onChange: (page, pageSize) =>
+							setPagination(page, pageSize),
+						pageSize: filterParams.limit,
+						responsive: true,
+						total: totalData,
+					}}
+					rowKey={props.rowKey || 'id'}
+					scroll={{ x: props.scroll || 1080 }}
+					style={{ width: '100%' }}
+				/>
 			</Col>
 		</Row>
 	);

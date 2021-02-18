@@ -69,7 +69,7 @@ const ArticleModifyPage = () => {
 	return (
 		<OrganismLayout
 			breadcumbs={[
-				{ name: 'Artikel', link: '/article' },
+				{ name: 'Artikel', link: '/view/article' },
 				{ name: 'Detail', link: location.pathname },
 			]}
 			title="Detail Artikel"
@@ -191,7 +191,7 @@ const ArticleModifyPage = () => {
 
 					<Col className="mt4" span={24}>
 						<Space>
-							<Link to="/article">
+							<Link to="/view/article">
 								<Button
 									className="br3 denim b--denim"
 									size="large"
