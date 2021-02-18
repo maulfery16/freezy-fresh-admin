@@ -16,6 +16,8 @@ import { useDispatch } from 'react-redux';
 import AuthenticationLayout from '../../components/layouts/authentication';
 import {
 	setAuthToken,
+	// eslint-disable-next-line no-unused-vars
+	setCurrentUser,
 	setLoginStatus,
 	setRefreshToken,
 	setRememberMeStatus,
@@ -55,7 +57,8 @@ const LoginPages = () => {
 			dispatch(setRefreshToken(refresh_token));
 			dispatch(setRememberMeStatus(isChecked));
 
-			authService.reqOverrideAuthToken();
+			const { data } = await authService.getAuthenticatedUser();
+			dispatch(setCurrentUser(data));
 
 			window.location = '/';
 		} catch (error) {

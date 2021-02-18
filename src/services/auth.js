@@ -23,7 +23,7 @@ export default class AuthService extends RequestAdapterService {
 
 	async getAuthenticatedUser() {
 		try {
-			const { data } = await super.sendPostRequest(
+			const { data } = await super.sendGetRequest(
 				`${this.baseUrl}/v1/user/profile`,
 				{}
 			);

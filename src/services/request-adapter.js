@@ -85,13 +85,13 @@ export default class RequestAdapterService {
 		);
 	}
 
-	overrideAuthToken(token) {
+	overrideAuthToken(token, refreshToken) {
 		this.reqClient.defaults.headers.common[
 			'Authorization'
 		] = `Bearer ${token}`;
 		this.reqClient.defaults.headers.common[
 			'Cookie'
-		] = `refreshToken=${this.refreshToken}`;
+		] = `refreshToken=${refreshToken}`;
 
 		return true;
 	}
