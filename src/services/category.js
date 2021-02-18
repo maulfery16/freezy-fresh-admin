@@ -41,8 +41,8 @@ export default class CategoryService extends RequestAdapterService {
 
 	async editCategory(id, category) {
 		try {
-			const { data } = await super.sendPutMultipartRequest(
-				`${this.baseUrl}/v1/base_categories/${id}`,
+			const { data } = await super.sendPostMultipartRequest(
+				`${this.baseUrl}/v1/base_categories/${id}?_method=PATCH`,
 				category
 			);
 
@@ -97,10 +97,9 @@ export default class CategoryService extends RequestAdapterService {
 
 	async getCategoryById(id) {
 		try {
-			const data = await super.sendGetRequest(
+			const { data } = await super.sendGetRequest(
 				`${this.baseUrl}/v1/base_categories/${id}`
 			);
-
 			return data;
 		} catch (error) {
 			console.error(error);
@@ -118,9 +117,11 @@ export default class CategoryService extends RequestAdapterService {
 
 	async updateCategoryActiveStatus(id, status) {
 		try {
-			const { data } = await super.sendPutRequest(
-				`${this.baseUrl}/v1/base_categories/${id}/status`,
-				status
+			const { data } = await super.sendPostRequest(
+				`${this.baseUrl}/v1/base_categories/${id}/${
+					status ? 'deactivate' : 'activate'
+				}`,
+				{}
 			);
 
 			return data;

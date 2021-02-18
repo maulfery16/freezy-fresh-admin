@@ -28,10 +28,10 @@ const CategoryModifyPage = () => {
 	const getCategoryDetail = async (id) => {
 		try {
 			const category = await categoryService.getCategoryById(id);
-			setCategory(category);
+			setCategory(category.data);
 
 			const brandImageFile = await RequestAdapterService.convertImageURLtoFile(
-				category.image.original
+				category.image ? category.image.original : null
 			);
 			setCategoryImage(brandImageFile);
 		} catch (error) {
@@ -41,7 +41,7 @@ const CategoryModifyPage = () => {
 	};
 
 	const setCategoryInitialValues = () => {
-		return isCreating
+		return isCreating || !category
 			? {}
 			: {
 					colour: category.color.id,

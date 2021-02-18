@@ -158,7 +158,7 @@ const AdminPage = () => {
 				label="Bank"
 				getLimit={() => adminTableRef.current.totalData}
 				service={adminService}
-				url="products/bank"
+				url="/products/bank"
 			/>
 		);
 	};

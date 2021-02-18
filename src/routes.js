@@ -20,7 +20,7 @@ const routes = [
 		path: '/login',
 	},
 	{
-		path: 'reset-password',
+		path: '/reset-password',
 		children: [
 			{
 				component: React.lazy(() =>

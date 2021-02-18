@@ -46,16 +46,19 @@ const CategoryPage = () => {
 		{
 			title: 'Warna',
 			dataIndex: 'color',
-			render: (color) => (
-				<div
-					className="br2 ba b--black-20"
-					style={{
-						background: color.hexa_code,
-						height: '50px',
-						width: '50px',
-					}}
-				/>
-			),
+			render: (color) =>
+				color ? (
+					<div
+						className="br2 ba b--black-20"
+						style={{
+							background: color.hexa_code,
+							height: '50px',
+							width: '50px',
+						}}
+					/>
+				) : (
+					'-'
+				),
 			csvRender: (item) => item.color.name.id,
 		},
 		{
@@ -74,17 +77,21 @@ const CategoryPage = () => {
 		{
 			title: 'Aksi',
 			dataIndex: 'id',
-			render: (id) => (
+			render: (id, record) => (
 				<Space size="middle">
 					<Link to={`/products/category/${id}/edit`}>
 						<EditFilled className="f4 orange" />
 					</Link>
 
-					<MoleculeDeleteConfirm
-						deleteService={() => categoryService.deleteCategory(id)}
-						label="banner"
-						tableRef={categoryTableRef}
-					/>
+					{!record.is_active && (
+						<MoleculeDeleteConfirm
+							deleteService={() =>
+								categoryService.deleteCategory(id)
+							}
+							label="banner"
+							tableRef={categoryTableRef}
+						/>
+					)}
 				</Space>
 			),
 			skipExport: true,
@@ -99,6 +106,8 @@ const CategoryPage = () => {
 			});
 
 			message.success('Berhasil memperbaharui status aktif kategori');
+
+			categoryTableRef.current.refetchData();
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
@@ -112,7 +121,7 @@ const CategoryPage = () => {
 				label="Kategori Dasar"
 				getLimit={() => categoryTableRef.current.totalData}
 				service={categoryService}
-				url="products/category"
+				url="/products/category"
 			/>
 		);
 	};

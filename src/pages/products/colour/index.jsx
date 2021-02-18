@@ -154,7 +154,7 @@ const ColourPage = () => {
 				label="Warna"
 				getLimit={() => colourService.current.totalData}
 				service={colourService}
-				url="products/colour"
+				url="/products/colour"
 			/>
 		);
 	};

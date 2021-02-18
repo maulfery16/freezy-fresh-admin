@@ -75,7 +75,7 @@ const BankPage = () => {
 				label="Bank"
 				getLimit={() => bankTableRef.current.totalData}
 				service={bankService}
-				url="products/bank"
+				url="/products/bank"
 			/>
 		);
 	};

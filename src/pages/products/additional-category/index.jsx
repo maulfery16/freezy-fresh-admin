@@ -153,7 +153,7 @@ const AdditionalCategoryPage = () => {
 				label="Kategori Tambahan"
 				getLimit={() => additionalCategoryTableRef.current.totalData}
 				service={additionalCategoryService}
-				url="products/additional-category"
+				url="/products/additional-category"
 			/>
 		);
 	};
