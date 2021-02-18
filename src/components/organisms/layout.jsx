@@ -111,6 +111,10 @@ const menus = [
 				name: 'Artikel',
 				link: '/view/article',
 			},
+			{
+				name: 'Kategori Artikel',
+				link: '/view/article-category',
+			},
 		],
 	},
 	{

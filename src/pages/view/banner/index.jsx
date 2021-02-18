@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom';
 import { Image, Space } from 'antd';
 import { EditFilled, EyeFilled } from '@ant-design/icons';
 
-import OrganismDatatable from '../../components/organisms/datatable';
-import OrganismLayout from '../../components/organisms/layout';
+import OrganismDatatable from '../../../components/organisms/datatable';
+import OrganismLayout from '../../../components/organisms/layout';
 
-import BannerService from '../../services/banner';
-import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
-import MoleculeDeleteConfirm from '../../components/molecules/delete-confirm';
+import BannerService from '../../../services/banner';
+import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
+import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
 const bannerService = new BannerService();
 
 const BannerPage = () => {

@@ -3,15 +3,15 @@ import React, { useEffect, useState } from 'react';
 import { Col, Form, message, Row, Skeleton, Space, Typography } from 'antd';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
-import AtomCard from '../../components/atoms/card';
-import MoleculeFileInputGroup from '../../components/molecules/input-group/file-input';
-import MoleculeTextInputGroup from '../../components/molecules/input-group/text-input';
-import OrganismLayout from '../../components/organisms/layout';
+import AtomCard from '../../../components/atoms/card';
+import MoleculeFileInputGroup from '../../../components/molecules/input-group/file-input';
+import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
+import OrganismLayout from '../../../components/organisms/layout';
 
-import RequestAdapterService from '../../services/request-adapter';
-import BannerService from '../../services/banner';
-import MoleculeModifyActionButtons from '../../components/molecules/modify-action-buttons';
-import MoleculeSelectInputGroup from '../../components/molecules/input-group/select-input';
+import RequestAdapterService from '../../../services/request-adapter';
+import BannerService from '../../../services/banner';
+import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
+import MoleculeSelectInputGroup from '../../../components/molecules/input-group/select-input';
 const bannerService = new BannerService();
 
 const BannerModifyPage = () => {

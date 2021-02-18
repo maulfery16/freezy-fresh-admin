@@ -13,9 +13,9 @@ import {
 } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 
-import AtomCard from '../../components/atoms/card';
-import MoleculeInfoGroup from '../../components/molecules/info-group';
-import OrganismLayout from '../../components/organisms/layout';
+import AtomCard from '../../../components/atoms/card';
+import MoleculeInfoGroup from '../../../components/molecules/info-group';
+import OrganismLayout from '../../../components/organisms/layout';
 
 // import BannerService from '../../services/banner';
 // const bannerService = new BannerService();

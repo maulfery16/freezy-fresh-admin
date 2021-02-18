@@ -249,7 +249,9 @@ const routes = [
 				path: '/banner',
 				children: [
 					{
-						component: React.lazy(() => import('./pages/banner')),
+						component: React.lazy(() =>
+							import('./pages/view/banner')
+						),
 						exact: true,
 						guard: true,
 						name: 'Banner Page',
@@ -257,7 +259,7 @@ const routes = [
 					},
 					{
 						component: React.lazy(() =>
-							import('./pages/banner/modify')
+							import('./pages/view/banner/modify')
 						),
 						exact: true,
 						guard: true,
@@ -266,7 +268,7 @@ const routes = [
 					},
 					{
 						component: React.lazy(() =>
-							import('./pages/banner/detail')
+							import('./pages/view/banner/detail')
 						),
 						exact: true,
 						guard: true,
@@ -275,7 +277,7 @@ const routes = [
 					},
 					{
 						component: React.lazy(() =>
-							import('./pages/banner/modify')
+							import('./pages/view/banner/modify')
 						),
 						exact: true,
 						guard: true,
@@ -319,6 +321,38 @@ const routes = [
 						exact: true,
 						guard: true,
 						name: 'Edit Article Page',
+						path: '/:id/edit',
+					},
+				],
+			},
+			{
+				path: '/article-category',
+				children: [
+					{
+						component: React.lazy(() =>
+							import('./pages/view/article-category')
+						),
+						exact: true,
+						guard: true,
+						name: 'Article Category Page',
+						path: '/',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/view/article-category/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Add Article Category Page',
+						path: '/add',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/view/article-category/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Edit Article Category Page',
 						path: '/:id/edit',
 					},
 				],
