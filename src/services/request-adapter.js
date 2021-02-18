@@ -100,20 +100,8 @@ export default class RequestAdapterService {
 		return this.reqClient.delete(URL, requestBody);
 	}
 
-	sendPostForgotPasswordRequest(URL, requestBody) {
-		return this.reqClient.post(URL, requestBody);
-	}
-
 	sendGetRequest(URL, params) {
 		return this.reqClient.get(URL, { params });
-	}
-
-	sendPostRefreshTokenRequest(URL) {
-		return this.reqClient.post(URL, {
-			headers: {
-				Cookie: `refreshToken=${this.refreshToken}`,
-			},
-		});
 	}
 
 	sendPostMultipartRequest(URL, formData) {
@@ -124,16 +112,12 @@ export default class RequestAdapterService {
 		});
 	}
 
-	sendPostRequest(URL, requestBody) {
-		return this.reqClient.post(URL, requestBody);
-	}
-
-	sendPutRequest(URL, requestBody) {
-		return this.reqClient.put(URL, requestBody);
-	}
-
 	sendPatchRequest(URL, formData) {
 		return this.reqClient.patch(URL, formData);
+	}
+
+	sendPostRequest(URL, requestBody) {
+		return this.reqClient.post(URL, requestBody);
 	}
 
 	sendPutMultipartRequest(URL, formData) {
@@ -142,6 +126,10 @@ export default class RequestAdapterService {
 				'Content-Type': 'multipart/form-data',
 			},
 		});
+	}
+
+	sendPutRequest(URL, requestBody) {
+		return this.reqClient.put(URL, requestBody);
 	}
 
 	static convertImageURLtoFile = async (url) => {

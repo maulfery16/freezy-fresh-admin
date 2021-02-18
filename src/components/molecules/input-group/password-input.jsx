@@ -13,10 +13,20 @@ const MoleculePasswordInputGroup = (props) => {
 				noStyle
 				rules={[
 					{
-						message: props.requiredMessage || `${props.label} tidak boleh kosong`,
+						message:
+							props.requiredMessage ||
+							`${props.label} tidak boleh kosong`,
 						required: true,
 						type: props.type || 'string',
 					},
+					({ getFieldValue }) => ({
+						validator(_, value) {
+							if (!value || getFieldValue('password') === value) {
+								return Promise.resolve();
+							}
+							return Promise.reject('Password tidak sama!');
+						},
+					}),
 				]}
 			>
 				<Input.Password

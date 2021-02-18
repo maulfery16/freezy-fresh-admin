@@ -21,14 +21,37 @@ export default class AuthService extends RequestAdapterService {
 		}
 	}
 
+	async getAuthenticatedUser() {
+		try {
+			const { data } = await super.sendPostRequest(
+				`${this.baseUrl}/v1/user/profile`,
+				{}
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Get authenticated user failed: ${
+					error.response.data.message
+				} - ${
+					error.response.data.errors
+						? error.response.data.errors.code
+						: 'Error'
+				} `
+			);
+		}
+	}
+
 	async reqOverrideAuthToken() {
 		return await super.overrideAuthToken();
 	}
 
 	async reqRefreshToken() {
 		try {
-			const { data } = await super.sendPostRefreshTokenRequest(
-				`${this.baseUrl}/v1/clients/web/admin/refresh`
+			const { data } = await super.sendPostRequest(
+				`${this.baseUrl}/v1/clients/web/admin/refresh`,
+				{}
 			);
 
 			return data;
@@ -42,18 +65,37 @@ export default class AuthService extends RequestAdapterService {
 
 	async reqForgotPassword(email) {
 		try {
-			const { data } = await super.sendPostForgotPasswordRequest(
+			const { data } = await super.sendPostRequest(
 				`${this.baseUrl}/v1/password/forgot`,
 				email
 			);
-
-			localStorage.setItem('email-reset', email);
 
 			return data;
 		} catch (error) {
 			console.error(error);
 			throw new Error(
 				`Forgot Password failed: ${error.response.data.message} \n
+				${error.response.status} - ${
+					error.response.data.errors
+						? error.response.data.errors.code
+						: 'Error'
+				} `
+			);
+		}
+	}
+
+	async reqResetPassword(credential) {
+		try {
+			const { data } = await super.sendPostRequest(
+				`${this.baseUrl}/v1/password/reset`,
+				credential
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Reset Password failed: ${error.response.data.message} \n
 				${error.response.status} - ${
 					error.response.data.errors
 						? error.response.data.errors.code
