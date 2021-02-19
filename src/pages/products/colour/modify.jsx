@@ -18,6 +18,7 @@ const ColourModifyPage = () => {
 	const location = useLocation();
 	const isCreating = location.pathname.includes('add') ? true : false;
 
+	const [form] = Form.useForm();
 	const [colour, setColour] = useState(null);
 	const [hexaCode, setHexaCode] = useState('');
 	const [isSubmitting, setIsSubmitting] = useState(false);
@@ -81,6 +82,12 @@ const ColourModifyPage = () => {
 		})();
 	}, []);
 
+	useEffect(() => {
+		form.setFieldsValue({
+			hexa_code: hexaCode,
+		});
+	}, [hexaCode]);
+
 	const handleChangeColorComplete = (color) => {
 		setHexaCode(color.hex);
 	};
@@ -123,6 +130,7 @@ const ColourModifyPage = () => {
 				<Form
 					className="w-100 mt4"
 					name="modify_colour"
+					form={form}
 					initialValues={setColourInitialValues()}
 					onFinish={submit}
 					onFinishFailed={(error) => {

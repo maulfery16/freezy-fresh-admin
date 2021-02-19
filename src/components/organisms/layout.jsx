@@ -219,7 +219,7 @@ const OrganismLayout = (props) => {
 							<Avatar
 								icon={<UserOutlined />}
 								size={50}
-								src={user.image}
+								src={user.profile_image}
 							/>
 						</Col>
 						<Col span={18}>
@@ -233,7 +233,10 @@ const OrganismLayout = (props) => {
 											>
 												<Typography.Text>
 													<span className="yellow f5 fw7">
-														{user.name}
+														{`${user.first_name} ${
+															user.last_name &&
+															user.last_name
+														}`}
 													</span>
 												</Typography.Text>
 												<Typography.Text>
@@ -285,7 +288,7 @@ const OrganismLayout = (props) => {
 														<ReactMoment format="D MMM YYYY">
 															{
 																new Date(
-																	user.joined_at
+																	user.created_at
 																)
 															}
 														</ReactMoment>
@@ -296,9 +299,10 @@ const OrganismLayout = (props) => {
 														className="white fw7"
 														style={{ fontSize: 10 }}
 													>
-														{user.branches.join(
-															', '
-														)}
+														{user.branches &&
+															user.branches.join(
+																', '
+															)}
 													</span>
 												</Typography.Text>
 											</Space>

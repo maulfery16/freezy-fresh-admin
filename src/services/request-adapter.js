@@ -85,10 +85,14 @@ export default class RequestAdapterService {
 		);
 	}
 
-	overrideAuthToken(token) {
+	overrideAuthToken(token, refreshToken) {
 		this.reqClient.defaults.headers.common[
 			'Authorization'
 		] = `Bearer ${token}`;
+		this.reqClient.defaults.headers.common[
+			'Cookie'
+		] = `refreshToken=${refreshToken}`;
+
 		return true;
 	}
 
@@ -100,14 +104,6 @@ export default class RequestAdapterService {
 		return this.reqClient.get(URL, { params });
 	}
 
-	sendPostRefreshTokenRequest(URL) {
-		return this.reqClient.post(URL, {
-			headers: {
-				Cookie: `refreshToken=${this.refreshToken}`,
-			},
-		});
-	}
-
 	sendPostMultipartRequest(URL, formData) {
 		return this.reqClient.post(URL, formData, {
 			headers: {
@@ -116,16 +112,12 @@ export default class RequestAdapterService {
 		});
 	}
 
-	sendPostRequest(URL, requestBody) {
-		return this.reqClient.post(URL, requestBody);
-	}
-
-	sendPutRequest(URL, requestBody) {
-		return this.reqClient.put(URL, requestBody);
-	}
-
 	sendPatchRequest(URL, formData) {
 		return this.reqClient.patch(URL, formData);
+	}
+
+	sendPostRequest(URL, requestBody) {
+		return this.reqClient.post(URL, requestBody);
 	}
 
 	sendPutMultipartRequest(URL, formData) {
@@ -134,6 +126,10 @@ export default class RequestAdapterService {
 				'Content-Type': 'multipart/form-data',
 			},
 		});
+	}
+
+	sendPutRequest(URL, requestBody) {
+		return this.reqClient.put(URL, requestBody);
 	}
 
 	static convertImageURLtoFile = async (url) => {

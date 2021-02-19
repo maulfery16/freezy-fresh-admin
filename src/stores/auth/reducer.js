@@ -6,11 +6,11 @@ const INITIAL_STATE = {
 	token: '',
 	refreshToken: '',
 	user: {
-		domicile: 'Bandung',
 		id: null,
-		name: 'John Doe',
+		first_name: 'John',
+		last_name: 'Doe',
 		role: 'Administrator',
-		joined_at: new Date(),
+		created_at: new Date(),
 		branches: ['Jakarta Pusat', 'Jakarta Barat', 'Bandung'],
 	},
 };
