@@ -30,7 +30,7 @@ const BannerModifyPage = () => {
 
 			setBanner(banner);
 			const bannerImageFile = await RequestAdapterService.convertImageURLtoFile(
-				banner.image.original
+				banner.image
 			);
 			setBannerImage(bannerImageFile);
 		} catch (error) {

@@ -180,16 +180,10 @@ const AdminPage = () => {
 				placeholder="Semua roles"
 				data={{
 					url: 'roles',
-					mock: [
-						{
-							label: 'Administrator',
-							value: 'asdasd',
-						},
-						{
-							label: 'Kasir',
-							value: 'aihkbfiu3',
-						},
-					],
+					generateCustomOption: (item) => ({
+						value: item.name,
+						label: item.name,
+					}),
 				}}
 			/>,
 			<MoleculeDatatableDateRange

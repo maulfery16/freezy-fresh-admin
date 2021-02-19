@@ -35,11 +35,8 @@ const CategoryPage = () => {
 		{
 			title: 'Foto Icon',
 			dataIndex: 'image',
-			render: (image) => (
-				<Image preview src={image ? image.original : null} width={50} />
-			),
-			csvRender: (item) =>
-				item.image ? item.image.original : item.image,
+			render: (image) => <Image preview src={image} width={50} />,
+			csvRender: (item) => item.iamge,
 		},
 		{
 			title: 'Warna',

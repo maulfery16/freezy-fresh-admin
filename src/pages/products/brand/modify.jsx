@@ -30,7 +30,7 @@ const BrandModifyPage = () => {
 
 			setBrand(brand);
 			const brandImageFile = await RequestAdapterService.convertImageURLtoFile(
-				brand.image.original
+				brand.image
 			);
 			setBrandImage(brandImageFile);
 		} catch (error) {

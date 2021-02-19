@@ -33,7 +33,7 @@ const ArticleModifyPage = () => {
 
 			setArticle(article);
 			const articleImageFile = await RequestAdapterService.convertImageURLtoFile(
-				article.image.original
+				article.image
 			);
 			setArticleImage(articleImageFile);
 			setContentId(article.content.id);

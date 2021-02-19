@@ -43,7 +43,7 @@ export default class AdminService extends RequestAdapterService {
 
 	async getAdminById(id) {
 		try {
-			const data = await super.sendGetRequest(
+			const { data } = await super.sendGetRequest(
 				`${this.baseUrl}/v1/admins/${id}`
 			);
 
