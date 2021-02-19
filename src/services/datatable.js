@@ -67,7 +67,7 @@ export default class DatatableService extends RequestAdapterService {
 	async updateActiveStatus(id, url) {
 		try {
 			const { data } = await super.sendPatchRequest(
-				`${this.baseUrl}/v1/${url}/status-changes/${id}`,
+				`${this.baseUrl}/v1/${url}/status-change/${id}`,
 				{}
 			);
 
