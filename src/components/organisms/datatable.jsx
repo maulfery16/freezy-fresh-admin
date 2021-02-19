@@ -307,7 +307,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 							if (type === 'next')
 								return (
 									<a className="bg-white pa2 br2 ba b--black-50">
-										Seleanjutnya
+										Selanjutnya
 									</a>
 								);
 							return originalEl;

@@ -98,7 +98,7 @@ const ArticleCategoryPage = () => {
 	return (
 		<OrganismLayout
 			breadcumbs={[
-				{ name: 'View', link: location.pathname },
+				{ name: 'Tampilan', link: location.pathname },
 				{
 					name: 'Kategori Artikel',
 					link: location.pathname,
