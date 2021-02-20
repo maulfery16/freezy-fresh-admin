@@ -5,14 +5,14 @@ import { Link } from 'react-router-dom';
 import { Image, Space } from 'antd';
 import { EditFilled, EyeFilled } from '@ant-design/icons';
 
-import OrganismDatatable from '../../components/organisms/datatable';
-import OrganismLayout from '../../components/organisms/layout';
+import OrganismDatatable from '../../../components/organisms/datatable';
+import OrganismLayout from '../../../components/organisms/layout';
 
-import ArticleService from '../../services/article';
-import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
-import MoleculeDatatableDateRange from '../../components/molecules/datatable/date-range-plugin';
-import MoleculeDatatableFilter from '../../components/molecules/datatable/filter-plugin';
-import MoleculeDeleteConfirm from '../../components/molecules/delete-confirm';
+import ArticleService from '../../../services/article';
+import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
+import MoleculeDatatableDateRange from '../../../components/molecules/datatable/date-range-plugin';
+import MoleculeDatatableFilter from '../../../components/molecules/datatable/filter-plugin';
+import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
 const articleService = new ArticleService();
 
 const ArticlePage = () => {
@@ -57,13 +57,13 @@ const ArticlePage = () => {
 						<EyeFilled className="f4 blue" />
 					</Link>
 
-					<Link to={`/brand/${id}/edit`}>
+					<Link to={`/article/${id}/edit`}>
 						<EditFilled className="f4 orange" />
 					</Link>
 
 					<MoleculeDeleteConfirm
 						deleteService={() => articleService.deleteArticle(id)}
-						label="banner"
+						label="article"
 						tableRef={articleTableRef}
 					/>
 				</Space>
@@ -79,6 +79,7 @@ const ArticlePage = () => {
 				label="Artikel"
 				getLimit={() => articleTableRef.current.totalData}
 				service={articleService}
+				route="/view/article"
 				url="article"
 			/>
 		);
@@ -94,7 +95,7 @@ const ArticlePage = () => {
 				key="category-filter"
 				placeholder="Semua kategori"
 				data={{
-					url: '/cateory',
+					url: '/category',
 					mock: [
 						{
 							label: 'Bandung',
@@ -120,7 +121,10 @@ const ArticlePage = () => {
 
 	return (
 		<OrganismLayout
-			breadcumbs={[{ name: 'Artikel', link: '/view/article' }]}
+			breadcumbs={[
+				{ name: 'Tampilan', link: location.pathname },
+				{ name: 'Artikel', link: '/view/article' },
+			]}
 			title="Article Page"
 		>
 			<OrganismDatatable

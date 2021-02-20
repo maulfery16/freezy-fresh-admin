@@ -3,16 +3,16 @@ import React, { useEffect, useState } from 'react';
 import { Col, Form, message, Row, Skeleton, Space, Typography } from 'antd';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
-import AtomCard from '../../components/atoms/card';
-import MoleculeFileInputGroup from '../../components/molecules/input-group/file-input';
-import MoleculeTextInputGroup from '../../components/molecules/input-group/text-input';
-import OrganismLayout from '../../components/organisms/layout';
+import AtomCard from '../../../components/atoms/card';
+import MoleculeFileInputGroup from '../../../components/molecules/input-group/file-input';
+import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
+import OrganismLayout from '../../../components/organisms/layout';
 
-import RequestAdapterService from '../../services/request-adapter';
-import ArticleService from '../../services/article';
-import MoleculeModifyActionButtons from '../../components/molecules/modify-action-buttons';
-import MoleculeSelectInputGroup from '../../components/molecules/input-group/select-input';
-import MoleculeTextEditorGroup from '../../components/molecules/input-group/text-editor';
+import RequestAdapterService from '../../../services/request-adapter';
+import ArticleService from '../../../services/article';
+import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
+import MoleculeSelectInputGroup from '../../../components/molecules/input-group/select-input';
+import MoleculeTextEditorGroup from '../../../components/molecules/input-group/text-editor';
 const articleService = new ArticleService();
 
 const ArticleModifyPage = () => {
