@@ -22,7 +22,8 @@ const ArticleModifyPage = () => {
 	const isCreating = location.pathname.includes('add') ? true : false;
 
 	const [article, setArticle] = useState(null);
-	const [articleImage, setArticleImage] = useState(null);
+	const [articleImageMobile, setArticleImageMobile] = useState(null);
+	const [articleImageDekstop, setArticleImageDekstop] = useState(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [contentId, setContentId] = useState('');
 	const [contentEn, setContentEn] = useState('');
@@ -32,10 +33,17 @@ const ArticleModifyPage = () => {
 			const { data: article } = await articleService.getArticleById(id);
 
 			setArticle(article);
-			const articleImageFile = await RequestAdapterService.convertImageURLtoFile(
+
+			const articleImageMobileFile = await RequestAdapterService.convertImageURLtoFile(
 				article.image
 			);
-			setArticleImage(articleImageFile);
+			const articleImageDekstopFile = await RequestAdapterService.convertImageURLtoFile(
+				article.image
+			);
+
+			setArticleImageMobile(articleImageMobileFile);
+			setArticleImageDekstop(articleImageDekstopFile);
+
 			setContentId(article.content.id);
 			setContentEn(article.content.en);
 		} catch (error) {
@@ -51,7 +59,8 @@ const ArticleModifyPage = () => {
 					category: article.category,
 					en_title: article.title.en,
 					id_title: article.title.id,
-					image: articleImage,
+					imageMobile: articleImageMobile,
+					imageDekstop: articleImageDekstop,
 					video_url: article.video_url,
 			  };
 	};
@@ -64,7 +73,8 @@ const ArticleModifyPage = () => {
 			data.append('category', values.category);
 			data.append('content[en]', contentEn);
 			data.append('content[id]', contentId);
-			data.append('image', articleImage);
+			data.append('image', articleImageMobile);
+			data.append('image', articleImageDekstop);
 			data.append('title[en]', values.en_title);
 			data.append('title[id]', values.id_title);
 			data.append('video_url', values.video_url);
@@ -151,14 +161,25 @@ const ArticleModifyPage = () => {
 										/>
 									</Col>
 
-									<Col span={24}>
+									<Col span={12}>
 										<MoleculeFileInputGroup
-											defaultValue={articleImage}
-											label="Foto Artikel"
-											id="article-photo-upload"
+											defaultValue={articleImageMobile}
+											label="Foto Artikel Mobile"
+											id="article-photo-upload-mobile"
 											name="image"
 											placeholder="png"
-											setImage={setArticleImage}
+											setImage={setArticleImageMobile}
+										/>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeFileInputGroup
+											defaultValue={articleImageDekstop}
+											label="Foto Artikel Dekstop"
+											id="article-photo-upload-mobile"
+											name="image"
+											placeholder="png"
+											setImage={setArticleImageDekstop}
 										/>
 									</Col>
 
