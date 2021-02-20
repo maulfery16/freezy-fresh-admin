@@ -290,7 +290,9 @@ const routes = [
 				path: '/article',
 				children: [
 					{
-						component: React.lazy(() => import('./pages/article')),
+						component: React.lazy(() =>
+							import('./pages/view/article')
+						),
 						exact: true,
 						guard: true,
 						name: 'Article Page',
@@ -298,7 +300,7 @@ const routes = [
 					},
 					{
 						component: React.lazy(() =>
-							import('./pages/article/modify')
+							import('./pages/view/article/modify')
 						),
 						exact: true,
 						guard: true,
@@ -307,7 +309,7 @@ const routes = [
 					},
 					{
 						component: React.lazy(() =>
-							import('./pages/article/detail')
+							import('./pages/view/article/detail')
 						),
 						exact: true,
 						guard: true,
@@ -316,7 +318,7 @@ const routes = [
 					},
 					{
 						component: React.lazy(() =>
-							import('./pages/article/modify')
+							import('./pages/view/article/modify')
 						),
 						exact: true,
 						guard: true,
