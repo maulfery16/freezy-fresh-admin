@@ -13,12 +13,12 @@ import {
 } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 
-import AtomCard from '../../components/atoms/card';
-import MoleculeInfoGroup from '../../components/molecules/info-group';
-import OrganismLayout from '../../components/organisms/layout';
-import MoleculeMarkdownRenderer from '../../components/molecules/markdown-renderer';
+import AtomCard from '../../../components/atoms/card';
+import MoleculeInfoGroup from '../../../components/molecules/info-group';
+import OrganismLayout from '../../../components/organisms/layout';
+import MoleculeMarkdownRenderer from '../../../components/molecules/markdown-renderer';
 
-// import ArticleService from '../../services/article';
+// import ArticleService from '../../../services/article';
 // const articleService = new ArticleService();
 
 const ArticleModifyPage = () => {
@@ -69,6 +69,7 @@ const ArticleModifyPage = () => {
 	return (
 		<OrganismLayout
 			breadcumbs={[
+				{ name: 'Tampilan', link: '/view/article' },
 				{ name: 'Artikel', link: '/view/article' },
 				{ name: 'Detail', link: location.pathname },
 			]}

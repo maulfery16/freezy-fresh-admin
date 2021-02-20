@@ -9,6 +9,7 @@ import OrganismLayout from '../../../components/organisms/layout';
 
 import BannerService from '../../../services/banner';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
+import MoleculeDatatableFilter from '../../../components/molecules/datatable/filter-plugin';
 import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
 const bannerService = new BannerService();
 
@@ -20,11 +21,24 @@ const BannerPage = () => {
 			render: (id, _, index) => index + 1,
 		},
 		{
-			title: 'Title Banner',
-			dataIndex: 'title',
+			title: 'Title Banner (ID)',
+			dataIndex: `title['id']`,
+			render: (_, record) => record.title.id,
 		},
 		{
-			title: 'Foto Banner',
+			title: 'Title Banner (EN)',
+			dataIndex: `title['en']`,
+			render: (_, record) => record.title.en,
+		},
+		{
+			title: 'Foto Banner Mobile',
+			dataIndex: 'image',
+			render: (image) => (
+				<Image preview src={image} height={60} width={70} />
+			),
+		},
+		{
+			title: 'Foto Banner Desktop',
 			dataIndex: 'image',
 			render: (image) => (
 				<Image preview src={image} height={60} width={70} />
@@ -65,18 +79,65 @@ const BannerPage = () => {
 				label="Banner"
 				getLimit={() => bannerTableRef.current.totalData}
 				service={bannerService}
+				route="/view/banner"
 				url="banner"
 			/>
 		);
 	};
 
 	const renderDatatableFilters = () => {
-		return [<></>];
+		return [
+			<MoleculeDatatableFilter
+				name="title"
+				operator="eq"
+				identifier="title-filter"
+				label="Title Banner (ID)"
+				key="title-filter"
+				placeholder="Semua"
+				data={{
+					url: '/banner',
+					mock: [
+						{
+							label: 'Banner1',
+							value: '1',
+						},
+						{
+							label: 'Banner2',
+							value: '2',
+						},
+					],
+				}}
+			/>,
+			<MoleculeDatatableFilter
+				name="promo"
+				operator="eq"
+				identifier="promo-filter"
+				label="Nama Promo (ID)"
+				key="promo-filter"
+				placeholder="Semua"
+				data={{
+					url: '/banner',
+					mock: [
+						{
+							label: 'Promo1',
+							value: '1',
+						},
+						{
+							label: 'Promo2',
+							value: '2',
+						},
+					],
+				}}
+			/>,
+		];
 	};
 
 	return (
 		<OrganismLayout
-			breadcumbs={[{ name: 'Banner', link: '/view/banner' }]}
+			breadcumbs={[
+				{ name: 'Tampilan', link: location.pathname },
+				{ name: 'Banner', link: '/view/banner' },
+			]}
 			title="Banner Page"
 		>
 			<OrganismDatatable

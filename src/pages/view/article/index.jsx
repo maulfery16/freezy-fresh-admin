@@ -6,15 +6,15 @@ import { Link } from 'react-router-dom';
 import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
 
-import AtomColorInfoGroup from '../../components/atoms/color-info-group';
-import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
-import MoleculeDatatableDateRange from '../../components/molecules/datatable/date-range-plugin';
-import MoleculeDatatableFilter from '../../components/molecules/datatable/filter-plugin';
-import MoleculeDeleteConfirm from '../../components/molecules/delete-confirm';
-import OrganismDatatable from '../../components/organisms/datatable';
-import OrganismLayout from '../../components/organisms/layout';
+import AtomColorInfoGroup from '../../../components/atoms/color-info-group';
+import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
+import MoleculeDatatableDateRange from '../../../components/molecules/datatable/date-range-plugin';
+import MoleculeDatatableFilter from '../../../components/molecules/datatable/filter-plugin';
+import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
+import OrganismDatatable from '../../../components/organisms/datatable';
+import OrganismLayout from '../../../components/organisms/layout';
 
-import ArticleService from '../../services/article';
+import ArticleService from '../../../services/article';
 const articleService = new ArticleService();
 
 const mock = {
@@ -125,7 +125,7 @@ const ArticlePage = () => {
 						<EyeFilled className="f4 blue" />
 					</Link>
 
-					<Link to={`/brand/${id}/edit`}>
+					<Link to={`/article/${id}/edit`}>
 						<EditFilled className="f4 orange" />
 					</Link>
 
@@ -166,7 +166,7 @@ const ArticlePage = () => {
 				key="category-filter"
 				placeholder="Semua kategori"
 				data={{
-					url: '/cateory',
+					url: '/category',
 					mock: [
 						{
 							label: 'Bandung',
@@ -202,7 +202,10 @@ const ArticlePage = () => {
 
 	return (
 		<OrganismLayout
-			breadcumbs={[{ name: 'Artikel', link: '/view/article' }]}
+			breadcumbs={[
+				{ name: 'Tampilan', link: location.pathname },
+				{ name: 'Artikel', link: '/view/article' },
+			]}
 			title="Article Page"
 		>
 			<OrganismDatatable
