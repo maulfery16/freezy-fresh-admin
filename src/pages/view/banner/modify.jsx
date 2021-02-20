@@ -21,7 +21,8 @@ const BannerModifyPage = () => {
 	const isCreating = location.pathname.includes('add') ? true : false;
 
 	const [banner, setBanner] = useState(null);
-	const [bannerImage, setBannerImage] = useState(null);
+	const [bannerMobileImage, setBannerMobileImage] = useState(null);
+	const [bannerWebsiteImage, setBannerWebsiteImage] = useState(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const getBannerDetail = async (id) => {
@@ -29,10 +30,14 @@ const BannerModifyPage = () => {
 			const { data: banner } = await bannerService.getBannerById(id);
 
 			setBanner(banner);
-			const bannerImageFile = await RequestAdapterService.convertImageURLtoFile(
-				banner.image.original
+			const bannerMobileImageFile = await RequestAdapterService.convertImageURLtoFile(
+				banner.mobileImage.original
 			);
-			setBannerImage(bannerImageFile);
+			setBannerMobileImage(bannerMobileImageFile);
+			const bannerWebsiteImageFile = await RequestAdapterService.convertImageURLtoFile(
+				banner.websiteImage.original
+			);
+			setBannerWebsiteImage(bannerWebsiteImageFile);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
@@ -45,7 +50,8 @@ const BannerModifyPage = () => {
 			: {
 					title: banner.title,
 					promo: banner.promo,
-					image: bannerImage,
+					mobileImage: bannerMobileImage,
+					websiteImage: bannerWebsiteImage,
 			  };
 	};
 
@@ -54,9 +60,11 @@ const BannerModifyPage = () => {
 			setIsSubmitting(true);
 
 			const data = new FormData();
-			data.append('image', bannerImage);
-			data.append('name[en]', values.en_name);
-			data.append('name[id]', values.id_name);
+			data.append('mobile_image', bannerMobileImage);
+			data.append('website_image', bannerWebsiteImage);
+			data.append('title[id]', values.title_id);
+			data.append('title[en]', values.title_en);
+			data.append('promo', values.promo);
 
 			if (isCreating) {
 				await bannerService.createBanner(data);
@@ -124,21 +132,45 @@ const BannerModifyPage = () => {
 								<Row gutter={12}>
 									<Col span={24}>
 										<MoleculeTextInputGroup
-											name="title"
-											label="Title Banner"
-											placeholder="Title Banner"
+											name="title_id"
+											label="Title Banner (ID)"
+											placeholder="Title Banner (ID)"
 											type="text"
 										/>
 									</Col>
 
 									<Col span={24}>
+										<MoleculeTextInputGroup
+											name="title_en"
+											label="Title Banner (EN)"
+											placeholder="Title Banner (EN)"
+											type="text"
+										/>
+									</Col>
+
+									<Col span={12}>
 										<MoleculeFileInputGroup
-											defaultValue={bannerImage}
-											label="Logo Banner"
-											id="banner-logo-upload"
-											name="image"
+											defaultValue={bannerMobileImage}
+											height="100"
+											label="Foto Banner Mobile"
+											id="banner-mobile-upload"
+											name="mobile_image"
 											placeholder="png"
-											setImage={setBannerImage}
+											setImage={setBannerMobileImage}
+											width="100"
+										/>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeFileInputGroup
+											defaultValue={bannerWebsiteImage}
+											height="100"
+											id="banner-website-upload"
+											label="Foto Banner Website"
+											name="website_image"
+											placeholder="png"
+											setImage={setBannerWebsiteImage}
+											width="100"
 										/>
 									</Col>
 

@@ -31,14 +31,18 @@ const BannerModifyPage = () => {
 
 			setTimeout(() => {
 				setBanner({
+					active: true,
 					phone_number: '087739893738467',
 					promo: 'Promo Misqueen',
 					registered_at: new Date(),
 					registered_by: 'Kim Ji Yeon',
-					title: 'Super Banner',
+					title_id: 'Banner Hebat',
+					title_en: 'Super Banner',
 					updated_at: new Date(),
 					updated_by: 'Dita Karang',
-					banner_photo:
+					banner_photo_mobile:
+						'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
+					banner_photo_website:
 						'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
 				});
 			}, 1000);
@@ -57,6 +61,7 @@ const BannerModifyPage = () => {
 	return (
 		<OrganismLayout
 			breadcumbs={[
+				{ name: 'Tampilan', link: '/view/banner' },
 				{ name: 'Banner', link: '/view/banner' },
 				{ name: 'Detail', link: location.pathname },
 			]}
@@ -75,28 +80,50 @@ const BannerModifyPage = () => {
 							<Row gutter={[12, 24]}>
 								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Title Banner"
-										content={banner.title}
-									/>
-								</Col>
-
-								<Col span={12}>
-									<MoleculeInfoGroup
-										title="Nama Promo"
-										content={banner.promo}
-									/>
-								</Col>
-
-								<Col span={12}>
-									<MoleculeInfoGroup
-										title="Foto Banner"
+										title="Foto Banner Mobile"
 										content={
 											<Image
 												preview
-												src={banner.banner}
+												src={banner.banner_photo_mobile}
 												width="100%"
 											/>
 										}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
+										title="Foto Banner Website"
+										content={
+											<Image
+												preview
+												src={
+													banner.banner_photo_website
+												}
+												width="100%"
+											/>
+										}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
+										title="Title Banner (ID)"
+										content={banner.title_id}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
+										title="Title Banner (EN)"
+										content={banner.title_en}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
+										title="Nama Promo (ID)"
+										content={banner.promo}
 									/>
 								</Col>
 
@@ -109,6 +136,14 @@ const BannerModifyPage = () => {
 												: 'Tidak Aktif'
 										}
 									/>
+								</Col>
+
+								<Col span={24} style={{ paddingTop: '2rem' }}>
+									<Typography.Text strong>
+										<span className="denim f5">
+											INFO UPDATE PRODUK
+										</span>
+									</Typography.Text>
 								</Col>
 
 								<Col span={12}>
@@ -124,7 +159,7 @@ const BannerModifyPage = () => {
 
 								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Tanggal di Perbaharui"
+										title="Tanggal di Update"
 										content={
 											<ReactMoment format="DD-MM-YYYY">
 												{banner.updated_at}
@@ -142,7 +177,7 @@ const BannerModifyPage = () => {
 
 								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Didaftarkan Oleh"
+										title="Diupdate Oleh"
 										content={banner.updated_by}
 									/>
 								</Col>
