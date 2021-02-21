@@ -132,9 +132,9 @@ const ArticlePage = () => {
 					{!record.is_active && (
 						<MoleculeDeleteConfirm
 							id={id}
-							label="Kategori Dasar"
+							label="Artikel"
 							tableRef={articleTableRef}
-							url="base_categories"
+							url="articles"
 						/>
 					)}
 				</Space>
@@ -148,7 +148,7 @@ const ArticlePage = () => {
 		return (
 			<MoleculeDatatableAdditionalAction
 				column={column}
-				label="Kategori Dasar"
+				label="Artikel"
 				getLimit={() => articleTableRef.current.totalData}
 				route="/view/article"
 				url="articles"

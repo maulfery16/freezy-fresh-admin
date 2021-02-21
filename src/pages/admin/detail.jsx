@@ -40,7 +40,6 @@ const AdminModifyPage = () => {
 		})();
 	}, []);
 
-	console.log(admin);
 	return (
 		<OrganismLayout
 			breadcumbs={[
