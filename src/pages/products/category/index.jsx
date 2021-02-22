@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom';
 import { Image, Space } from 'antd';
 import { EditFilled } from '@ant-design/icons';
 
-import OrganismDatatable from '../../../components/organisms/datatable';
-import OrganismLayout from '../../../components/organisms/layout';
-
+import AtomColorInfoGroup from '../../../components/atoms/color-info-group';
 import AtomStatusSwitch from '../../../components/atoms/datatable/status-switch';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
+import OrganismDatatable from '../../../components/organisms/datatable';
+import OrganismLayout from '../../../components/organisms/layout';
 
 const CategoryPage = () => {
 	const column = [
@@ -35,24 +35,17 @@ const CategoryPage = () => {
 		{
 			title: 'Foto Icon',
 			dataIndex: 'image',
-			render: (image) => (
-				<Image preview src={image ? image.original : null} width={50} />
-			),
-			csvRender: (item) =>
-				item.image ? item.image.original : item.image,
+			render: (image) => <Image preview src={image} width={50} />,
+			csvRender: (item) => item.iamge,
 		},
 		{
 			title: 'Warna',
 			dataIndex: 'color',
 			render: (color) =>
 				color ? (
-					<div
-						className="br2 ba b--black-20"
-						style={{
-							background: color.hexa_code,
-							height: '50px',
-							width: '50px',
-						}}
+					<AtomColorInfoGroup
+						hexa={color.hexa_code}
+						label={color.name}
 					/>
 				) : (
 					'-'

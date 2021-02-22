@@ -143,7 +143,7 @@ const BannerPage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`/v1/banners`}
+				dataSourceURL={`banners`}
 				filters={renderDatatableFilters()}
 				ref={bannerTableRef}
 				searchInput={true}

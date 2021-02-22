@@ -30,10 +30,10 @@ const CategoryModifyPage = () => {
 			const category = await categoryService.getCategoryById(id);
 			setCategory(category.data);
 
-			const brandImageFile = await RequestAdapterService.convertImageURLtoFile(
-				category.image ? category.image.original : null
+			const categoryImage = await RequestAdapterService.convertImageURLtoFile(
+				category.image
 			);
-			setCategoryImage(brandImageFile);
+			setCategoryImage(categoryImage);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);

@@ -17,46 +17,17 @@ import AtomCard from '../../components/atoms/card';
 import MoleculeInfoGroup from '../../components/molecules/info-group';
 import OrganismLayout from '../../components/organisms/layout';
 
-// import AdminService from '../../services/admin';
-// const adminService = new AdminService();
+import AdminService from '../../services/admin';
+const adminService = new AdminService();
 
 const AdminModifyPage = () => {
 	const { id } = useParams();
 	const [admin, setAdmin] = useState(null);
 
-	const getAdminDetail = () => {
+	const getAdminDetail = async () => {
 		try {
-			// const admin = adminService.getAdminDetail(adminId);
-			// setAdmin(admin);
-
-			setTimeout(() => {
-				setAdmin({
-					bank: 'Hana Bank',
-					email: 'sejeong.kim@gududan.co.kr',
-					first_name: 'Kim',
-					gender: 'Wanita',
-					last_name: 'Sejeong',
-					phone_number: '087739893738467',
-					registered_at: new Date(),
-					registered_by: 'Kim Ji Yeon',
-					rek_number: '994850284596048',
-					role: 'Super Admin',
-					updated_at: new Date(),
-					updated_by: 'Dita Karang',
-					branches: [
-						'Banjar',
-						'Ciamis',
-						'Garut',
-						'Pangandaran',
-						'Sumedang',
-						'Tasik',
-					],
-					id_card_photo:
-						'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
-					profile_photo:
-						'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
-				});
-			}, 1000);
+			const admin = await adminService.getAdminById(id);
+			setAdmin(admin.data);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
@@ -135,14 +106,14 @@ const AdminModifyPage = () => {
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Bank (Opsional)"
-										content={admin.bank}
+										content={admin.bank_info.bank}
 									/>
 								</Col>
 
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="No Rekening"
-										content={admin.rek_number}
+										content={admin.bank_info.account_number}
 									/>
 								</Col>
 							</Row>
@@ -157,7 +128,7 @@ const AdminModifyPage = () => {
 										title="Tanggal Daftar"
 										content={
 											<ReactMoment format="DD-MM-YY">
-												{admin.registered_at}
+												{admin.created_at}
 											</ReactMoment>
 										}
 									/>
@@ -166,7 +137,7 @@ const AdminModifyPage = () => {
 								<Col span={24}>
 									<MoleculeInfoGroup
 										title="Otorisasi Pendaftaran oleh"
-										content={admin.registered_by}
+										content={admin.created_by.first_name}
 									/>
 								</Col>
 

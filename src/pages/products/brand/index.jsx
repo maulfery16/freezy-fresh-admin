@@ -38,9 +38,9 @@ const BrandPage = () => {
 			title: 'Foto Brand',
 			dataIndex: 'image',
 			render: (_, record) => (
-				<Image preview src={record.image.original} width={100} />
+				<Image preview src={record.image} width={100} />
 			),
-			csvRender: (item) => item.image.original,
+			csvRender: (item) => item.image,
 		},
 		{
 			title: 'Jumlah Sosmed Follower',

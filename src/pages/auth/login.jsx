@@ -57,6 +57,8 @@ const LoginPages = () => {
 			dispatch(setRefreshToken(refresh_token));
 			dispatch(setRememberMeStatus(isChecked));
 
+			authService.overrideAuthToken(access_token);
+
 			const { data } = await authService.getAuthenticatedUser();
 			dispatch(setCurrentUser(data));
 

@@ -1,21 +1,24 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import React, { useEffect, useState } from 'react';
 import { Col, Form, message, Row, Skeleton, Typography } from 'antd';
-import { useLocation, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import AtomCard from '../../components/atoms/card';
 import MoleculeFileInputGroup from '../../components/molecules/input-group/file-input';
+import MoleculeModifyActionButtons from '../../components/molecules/modify-action-buttons';
 import MoleculePasswordInputGroup from '../../components/molecules/input-group/password-input';
 import MoleculeSelectInputGroup from '../../components/molecules/input-group/select-input';
 import MoleculeTextInputGroup from '../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../components/organisms/layout';
 
 import AdminService from '../../services/admin';
-import MoleculeModifyActionButtons from '../../components/molecules/modify-action-buttons';
+import RequestAdapterService from '../../services/request-adapter';
 const adminService = new AdminService();
 
 const AdminModifyPage = () => {
 	const { id } = useParams();
 	const location = useLocation();
+	const history = useHistory();
 	const isCreating = location.pathname.includes('add') ? true : false;
 
 	const [admin, setAdmin] = useState(null);
@@ -23,10 +26,21 @@ const AdminModifyPage = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [profileImage, setProfileImage] = useState(null);
 
-	const getAdminDetail = (id) => {
+	const getAdminDetail = async (id) => {
 		try {
-			const admin = adminService.getAdminById(id);
+			let admin = await adminService.getAdminById(id);
+			admin = admin.data;
 			setAdmin(admin);
+
+			const profileImage = await RequestAdapterService.convertImageURLtoFile(
+				admin.profileImage
+			);
+			setProfileImage(profileImage);
+
+			const IdCardImage = await RequestAdapterService.convertImageURLtoFile(
+				admin.idcard_image
+			);
+			setIdCardImage(IdCardImage);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
@@ -38,8 +52,8 @@ const AdminModifyPage = () => {
 			setIsSubmitting(true);
 			const data = new FormData();
 
-			data.append('bank_account_name', values.bank.name);
-			data.append('bank_account_number', values.bank.account_number);
+			data.append('bank[account_number]', values.rek_number);
+			data.append('bank[name]', values.bank);
 			data.append('email', values.email);
 			data.append('first_name', values.first_name);
 			data.append('gender', values.gender);
@@ -48,9 +62,9 @@ const AdminModifyPage = () => {
 			data.append('phone_number', values.phone_number);
 			data.append('profile_image', profileImage);
 			data.append('role_name', values.role);
-			if (!isCreating) data.append('password', values.password);
+			if (isCreating) data.append('password', values.password);
 			values.branches.forEach((branch) => {
-				data.append('brand_id[]', branch);
+				data.append('branch_id[]', branch);
 			});
 
 			if (isCreating) {
@@ -74,6 +88,26 @@ const AdminModifyPage = () => {
 		} finally {
 			setIsSubmitting(false);
 		}
+	};
+
+	const setAdminInitialValues = () => {
+		return isCreating || !admin
+			? {}
+			: {
+					bank: admin.bank_info ? admin.bank_info.name : null,
+					branch: admin.branch,
+					email: admin.email,
+					first_name: admin.first_name,
+					profile_image: admin.profile_image,
+					idcard_image: admin.idcard_image,
+					gender: admin.gender,
+					last_name: admin.last_name,
+					phone_number: admin.phone_number,
+					rek_number: admin.bank_info
+						? admin.bank_info.account_number
+						: null,
+					role: admin.role,
+			  };
 	};
 
 	useEffect(() => {
@@ -107,7 +141,7 @@ const AdminModifyPage = () => {
 				<Form
 					className="w-100 mt4"
 					name="modify_admin"
-					initialValues={{ ...admin }}
+					initialValues={setAdminInitialValues()}
 					onFinish={submit}
 					onFinishFailed={(error) => {
 						message.error(`Failed: ${error}`);
@@ -146,11 +180,11 @@ const AdminModifyPage = () => {
 												mock: [
 													{
 														label: 'Pria',
-														value: 'MAN',
+														value: 'male',
 													},
 													{
-														label: 'WANITA',
-														value: 'WOMAN',
+														label: 'Wanita',
+														value: 'female',
 													},
 												],
 											}}
@@ -252,6 +286,12 @@ const AdminModifyPage = () => {
 														value: 'aihkbfiu3',
 													},
 												],
+												generateCustomOption: (
+													item
+												) => ({
+													value: item.name,
+													label: item.name,
+												}),
 											}}
 										/>
 									</Col>
