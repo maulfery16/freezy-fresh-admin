@@ -246,6 +246,20 @@ const routes = [
 		path: '/view',
 		children: [
 			{
+				component: React.lazy(() => import('./pages/view/')),
+				exact: true,
+				guard: true,
+				name: 'Tampilan Page Page',
+				path: '/',
+			},
+			{
+				component: React.lazy(() => import('./pages/view/detail')),
+				exact: true,
+				guard: true,
+				name: 'Tampilan Page Detail',
+				path: '/:id/detail',
+			},
+			{
 				path: '/banner',
 				children: [
 					{
