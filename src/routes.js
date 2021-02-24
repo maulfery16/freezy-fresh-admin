@@ -300,6 +300,30 @@ const routes = [
 					},
 				],
 			},
+
+			{
+				path: '/holiday',
+				children: [
+					{
+						component: React.lazy(() =>
+							import('./pages/view/holiday')
+						),
+						exact: true,
+						guard: true,
+						name: 'Holiday Page',
+						path: '/',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/view/holiday/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Edit Holiday Page',
+						path: '/edit',
+					},
+				],
+			},
 			{
 				path: '/article',
 				children: [

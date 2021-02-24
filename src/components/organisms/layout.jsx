@@ -112,6 +112,10 @@ const menus = [
 				link: '/view/banner',
 			},
 			{
+				name: 'Holiday',
+				link: '/view/holiday',
+			},
+			{
 				name: 'Artikel',
 				link: '/view/article',
 			},

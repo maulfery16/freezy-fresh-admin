@@ -174,7 +174,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 				<Row align="middle" justify="space-between">
 					<Space align="middle" size={50}>
 						<Typography.Title level={props.titleSize || 4}>
-							{props.title.toUpperCase() || ''}
+							{props.title && props.title.toUpperCase()}
 						</Typography.Title>
 					</Space>
 
