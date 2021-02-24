@@ -41,10 +41,6 @@ export default class RequestAdapterService {
 	dowloadDataAsCSV(data, properties, filename) {
 		let csv = '';
 
-		console.log(data);
-		console.log(properties);
-		console.log(filename);
-
 		const headers = properties.map((property) =>
 			property.skipExport ? '' : property.title
 		);
@@ -131,13 +127,6 @@ export default class RequestAdapterService {
 	sendPutRequest(URL, requestBody) {
 		return this.reqClient.put(URL, requestBody);
 	}
-
-	static convertImageURLtoFile = async (url) => {
-		const response = await fetch(url);
-		const contentType = response.headers.get('content-type');
-		const blob = await response.blob();
-		return new File([blob], 'Image', { contentType });
-	};
 
 	static getURLParams = (url) => {
 		const searchParams = new URLSearchParams(url);
