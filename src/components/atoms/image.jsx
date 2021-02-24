@@ -9,8 +9,8 @@ const AtomImage = (props) => {
 			{...props}
 			preview
 			src={
-				props.src
-					? `${config.API_URL}/${props.src}`
+				typeof props.src === 'string'
+					? `${config.API_URL}/storage/${props.src}`
 					: `https://www.eurobitume.eu/typo3conf/ext/pits_downloadcenter/Resources/Public/Icons/noimage.jpg`
 			}
 		/>

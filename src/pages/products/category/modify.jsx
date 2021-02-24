@@ -17,13 +17,13 @@ const categoryService = new CategoryService();
 
 const CategoryModifyPage = () => {
 	const { id } = useParams();
+	const categoryImageRef = useRef();
 	const history = useHistory();
 	const location = useLocation();
 	const isCreating = location.pathname.includes('add') ? true : false;
 
 	const [category, setCategory] = useState(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
-	const categoryImageRef = useRef();
 
 	const getCategoryDetail = async (id) => {
 		try {
