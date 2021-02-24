@@ -3,7 +3,7 @@ import { Space, Typography } from 'antd';
 
 const MoleculeInfoGroup = (props) => {
 	return (
-		<Space direction="vertical" size={0}>
+		<Space direction="vertical" size={0} className="w-100">
 			<Typography.Text>
 				<span className="gray fw7">{props.title}</span>
 			</Typography.Text>
