@@ -4,11 +4,11 @@ import moment from 'moment';
 import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
 
-import AtomStatusSwitch from '../../../components/atoms/datatable/status-switch';
-import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
-import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
-import OrganismDatatable from '../../../components/organisms/datatable';
-import OrganismLayout from '../../../components/organisms/layout';
+import AtomStatusSwitch from '../../components/atoms/datatable/status-switch';
+import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
+import MoleculeDeleteConfirm from '../../components/molecules/delete-confirm';
+import OrganismDatatable from '../../components/organisms/datatable';
+import OrganismLayout from '../../components/organisms/layout';
 
 const BankPage = () => {
 	const column = [
@@ -88,7 +88,7 @@ const BankPage = () => {
 				column={column}
 				label="Bank"
 				getLimit={() => bankTableRef.current.totalData}
-				route="/products/bank"
+				route="/bank"
 				url="banks"
 			/>
 		);
@@ -97,7 +97,6 @@ const BankPage = () => {
 	return (
 		<OrganismLayout
 			breadcumbs={[
-				{ name: 'Produk', link: location.pathname },
 				{
 					name: 'Bank',
 					link: location.pathname,
