@@ -133,3 +133,8 @@ a {
 	border-width: 0.125rem !important;
 	padding: 0 1rem !important;
 }
+
+.ant-upload.ant-upload-select-picture-card {
+	height: 150px !important;
+	width: 150px !important;
+}

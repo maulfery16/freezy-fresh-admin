@@ -1,10 +1,11 @@
 /* eslint-disable react/display-name */
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Image, Space } from 'antd';
+import { Space } from 'antd';
 import { EditFilled } from '@ant-design/icons';
 
 import AtomColorInfoGroup from '../../../components/atoms/color-info-group';
+import AtomImage from '../../../components/atoms/image';
 import AtomStatusSwitch from '../../../components/atoms/datatable/status-switch';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
@@ -33,26 +34,33 @@ const CategoryPage = () => {
 			render: (_, record) => record.name.en,
 		},
 		{
+			align: 'center',
 			title: 'Foto Icon',
 			dataIndex: 'image',
-			render: (image) => <Image preview src={image} width={50} />,
+			render: (image) => <AtomImage preview src={image} width={70} />,
 			csvRender: (item) => item.iamge,
 		},
 		{
+			align: 'center',
 			title: 'Warna',
 			dataIndex: 'color',
 			render: (color) =>
 				color ? (
 					<AtomColorInfoGroup
 						hexa={color.hexa_code}
-						label={color.name}
+						label={
+							typeof color.name === 'string'
+								? color.name
+								: `${color.name.id} / ${color.name.en}`
+						}
 					/>
 				) : (
 					'-'
 				),
-			csvRender: (item) => (item.color ? item.color.name.id : '-'),
+			csvRender: (item) => (item.color ? item.color.name : '-'),
 		},
 		{
+			align: 'center',
 			title: 'Aktif',
 			dataIndex: 'is_active',
 			render: (active, record) => (
@@ -66,6 +74,7 @@ const CategoryPage = () => {
 			csvRender: (item) => (item.active ? 'Aktif' : 'Tidak Aktif'),
 		},
 		{
+			align: 'center',
 			title: 'Aksi',
 			dataIndex: 'id',
 			render: (id, record) => (

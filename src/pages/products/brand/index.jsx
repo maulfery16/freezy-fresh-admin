@@ -3,9 +3,10 @@ import moment from 'moment';
 import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
 import { Link } from 'react-router-dom';
-import { Image, Space } from 'antd';
+import { Space } from 'antd';
 import { EditFilled } from '@ant-design/icons';
 
+import AtomImage from '../../../components/atoms/image';
 import AtomNumberFormat from '../../../components/atoms/number-format';
 import AtomStatusSwitch from '../../../components/atoms/datatable/status-switch';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
@@ -35,10 +36,11 @@ const BrandPage = () => {
 			render: (_, record) => record.name.en,
 		},
 		{
+			align: 'center',
 			title: 'Foto Brand',
 			dataIndex: 'image',
 			render: (_, record) => (
-				<Image preview src={record.image} width={100} />
+				<AtomImage preview src={record.image} width={100} />
 			),
 			csvRender: (item) => item.image,
 		},
@@ -74,6 +76,7 @@ const BrandPage = () => {
 			dataIndex: 'updated_by',
 		},
 		{
+			align: 'center',
 			title: 'Aktif',
 			dataIndex: 'is_active',
 			render: (active, record) => (
@@ -87,6 +90,7 @@ const BrandPage = () => {
 			csvRender: (item) => (item.active ? 'Aktif' : 'Tidak Aktif'),
 		},
 		{
+			align: 'center',
 			title: 'Aksi',
 			dataIndex: 'id',
 			render: (id, record) => (
@@ -98,9 +102,9 @@ const BrandPage = () => {
 					{!record.is_active && (
 						<MoleculeDeleteConfirm
 							id={id}
-							label="Kategori Dasar"
+							label="Brand"
 							tableRef={brandTableRef}
-							url="base_categories"
+							url="brands"
 						/>
 					)}
 				</Space>
