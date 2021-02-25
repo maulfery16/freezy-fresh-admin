@@ -9,7 +9,9 @@ import { Modal, Upload } from 'antd';
 
 import UploadDekstopIcon from '../../../assets/icons/desktop-upload.svg';
 import UploadMobileIcon from '../../../assets/icons/mobile-upload.svg';
+
 import config from '../../../config';
+// import RequestAdapterService from '../../../services/request-adapter';
 
 const AtomFileInput = forwardRef((props, ref) => {
 	const [fileList, setfileList] = useState([]);
@@ -19,12 +21,13 @@ const AtomFileInput = forwardRef((props, ref) => {
 
 	const closeImagePreview = () => setPreviewVisible(false);
 
-	const convertImageURLtoFile = async (url) => {
-		const response = await fetch(url);
-		const contentType = response.headers.get('content-type');
-		const blob = await response.blob();
-		return new File([blob], 'Image', { contentType });
-	};
+	// const convertImageURLtoFile = async (url) => {
+	// 	const imageService = new RequestAdapterService();
+	// 	const response = await imageService.sendGetRequest(url);
+	// 	const contentType = response.headers.get('content-type');
+	// 	const blob = await response.blob();
+	// 	return new File([blob], 'Image', { contentType });
+	// };
 
 	const getBase64 = (file) => {
 		if (file) {
@@ -77,7 +80,7 @@ const AtomFileInput = forwardRef((props, ref) => {
 			if (fileList[0].originFileObj) {
 				image = fileList[0].originFileObj;
 			} else {
-				image = await convertImageURLtoFile(fileList[0].url);
+				image = fileList[0].url;
 			}
 
 			return image;
