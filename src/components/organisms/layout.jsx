@@ -193,8 +193,6 @@ const OrganismLayout = (props) => {
 	const history = useHistory();
 	const location = useLocation();
 
-	console.log(user);
-
 	const notificationMenus = () => (
 		<Space className="pa3" direction="vertical" style={{ width: 300 }}>
 			<Typography.Text>
