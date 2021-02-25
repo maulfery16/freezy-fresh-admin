@@ -37,7 +37,7 @@ const CategoryPage = () => {
 			align: 'center',
 			title: 'Foto Icon',
 			dataIndex: 'image',
-			render: (image) => <AtomImage preview src={image} width={70} />,
+			render: (image) => <AtomImage preview src={image} size={70} />,
 			csvRender: (item) => item.iamge,
 		},
 		{
