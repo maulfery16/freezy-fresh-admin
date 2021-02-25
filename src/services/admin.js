@@ -23,8 +23,8 @@ export default class AdminService extends RequestAdapterService {
 
 	async editAdmin(id, admin) {
 		try {
-			const { data } = await super.sendPutMultipartRequest(
-				`${this.baseUrl}/v1/admins/${id}`,
+			const { data } = await super.sendPostMultipartRequest(
+				`${this.baseUrl}/v1/admins/${id}?_method=PATCH`,
 				admin
 			);
 
@@ -60,11 +60,10 @@ export default class AdminService extends RequestAdapterService {
 		}
 	}
 
-	async getTotalAdmin(params) {
+	async getTotalAdmin() {
 		try {
-			const data = await super.sendGetRequest(
-				`${this.baseUrl}/v1/admins/count`,
-				params
+			const { data } = await super.sendGetRequest(
+				`${this.baseUrl}/v1/admins/total`
 			);
 
 			return data;

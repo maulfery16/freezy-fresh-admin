@@ -24,7 +24,7 @@ const AtomCustomSelect = (props) => {
 			const { data } = await masterService.getOptions(props.data.url);
 
 			const options = data.map((item) => generateOption(item));
-			options.unshift({ label: 'Semua', value: '' });
+			options.unshift({ label: 'Semua', value: '', disabled: true });
 
 			setOptions(options);
 		}
@@ -52,6 +52,7 @@ const AtomCustomSelect = (props) => {
 		>
 			{options.map((option, index) => (
 				<Select.Option
+					disabled={option.disabled}
 					key={`${props.indentifier || ''}_input-select_${index}`}
 					value={option.value}
 				>

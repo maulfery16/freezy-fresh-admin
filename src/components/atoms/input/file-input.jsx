@@ -77,13 +77,17 @@ const AtomFileInput = forwardRef((props, ref) => {
 	useImperativeHandle(ref, () => ({
 		async getImage() {
 			let image;
-			if (fileList[0].originFileObj) {
-				image = fileList[0].originFileObj;
-			} else {
-				image = fileList[0].url;
-			}
+			if (fileList[0]) {
+				if (fileList[0].originFileObj) {
+					image = fileList[0].originFileObj;
+				} else {
+					image = fileList[0].url;
+				}
 
-			return image;
+				return image;
+			} else {
+				if (props.required) throw new Error('Image is required');
+			}
 		},
 	}));
 
@@ -91,7 +95,7 @@ const AtomFileInput = forwardRef((props, ref) => {
 		<>
 			<Upload
 				accept={props.accept || 'image/png, image/jpeg'}
-				action={() => {}}
+				beforeUpload={() => false}
 				listType="picture-card"
 				fileList={fileList}
 				onPreview={setImagePreview}

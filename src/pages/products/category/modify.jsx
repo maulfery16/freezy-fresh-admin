@@ -16,8 +16,9 @@ import CategoryService from '../../../services/category';
 const categoryService = new CategoryService();
 
 const CategoryModifyPage = () => {
-	const { id } = useParams();
 	const categoryImageRef = useRef();
+
+	const { id } = useParams();
 	const history = useHistory();
 	const location = useLocation();
 	const isCreating = location.pathname.includes('add') ? true : false;
