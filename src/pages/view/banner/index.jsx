@@ -1,16 +1,18 @@
 /* eslint-disable react/display-name */
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Image, Space } from 'antd';
+import { Space } from 'antd';
 import { EditFilled, EyeFilled } from '@ant-design/icons';
 
+import AtomImage from '../../../components/atoms/image';
+import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
+import MoleculeDatatableFilter from '../../../components/molecules/datatable/filter-plugin';
+import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
 import BannerService from '../../../services/banner';
-import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
-import MoleculeDatatableFilter from '../../../components/molecules/datatable/filter-plugin';
-import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
+import AtomStatusSwitch from '../../../components/atoms/datatable/status-switch';
 const bannerService = new BannerService();
 
 const BannerPage = () => {
@@ -33,39 +35,55 @@ const BannerPage = () => {
 		{
 			title: 'Foto Banner Mobile',
 			dataIndex: 'image',
-			render: (image) => (
-				<Image preview src={image} height={60} width={70} />
-			),
+			render: (image) => <AtomImage src={image} />,
+			csvRender: (item) => item.image_mobile,
 		},
 		{
 			title: 'Foto Banner Desktop',
 			dataIndex: 'image',
-			render: (image) => (
-				<Image preview src={image} height={60} width={70} />
-			),
+			render: (image) => <AtomImage src={image} />,
+			csvRender: (item) => item.image_dekstop,
 		},
 		{
 			title: 'Nama Promo',
-			dataIndex: 'promo',
+			dataIndex: 'promotion[`title`][`id`]',
+			render: (promo) => `${promo.title.id} / ${promo.title.en}`,
+		},
+		{
+			align: 'center',
+			title: 'Aktif',
+			dataIndex: 'is_active',
+			render: (active, record) => (
+				<AtomStatusSwitch
+					active={active}
+					id={record.id}
+					tableRef={bannerTableRef}
+					url="banners"
+				/>
+			),
+			csvRender: (item) => (item.is_active ? 'Aktif' : 'Tidak Aktif'),
 		},
 		{
 			title: 'Aksi',
 			dataIndex: 'id',
-			render: (id) => (
+			render: (id, record) => (
 				<Space size="middle">
 					<Link to={`/view/banner/${id}/detail`}>
 						<EyeFilled className="f4 blue" />
 					</Link>
 
-					<Link to={`/view/brand/${id}/edit`}>
+					<Link to={`/view/banner/${id}/edit`}>
 						<EditFilled className="f4 orange" />
 					</Link>
 
-					<MoleculeDeleteConfirm
-						deleteService={() => bannerService.deleteBanner(id)}
-						label="banner"
-						tableRef={bannerTableRef}
-					/>
+					{!record.is_active && (
+						<MoleculeDeleteConfirm
+							id={id}
+							label="Banner"
+							tableRef={bannerTableRef}
+							url="banners"
+						/>
+					)}
 				</Space>
 			),
 		},
@@ -80,7 +98,7 @@ const BannerPage = () => {
 				getLimit={() => bannerTableRef.current.totalData}
 				service={bannerService}
 				route="/view/banner"
-				url="banner"
+				url="banners"
 			/>
 		);
 	};
@@ -88,46 +106,13 @@ const BannerPage = () => {
 	const renderDatatableFilters = () => {
 		return [
 			<MoleculeDatatableFilter
-				name="title"
-				operator="eq"
-				identifier="title-filter"
-				label="Title Banner (ID)"
-				key="title-filter"
-				placeholder="Semua"
-				data={{
-					url: '/banner',
-					mock: [
-						{
-							label: 'Banner1',
-							value: '1',
-						},
-						{
-							label: 'Banner2',
-							value: '2',
-						},
-					],
-				}}
-			/>,
-			<MoleculeDatatableFilter
-				name="promo"
-				operator="eq"
-				identifier="promo-filter"
-				label="Nama Promo (ID)"
-				key="promo-filter"
-				placeholder="Semua"
-				data={{
-					url: '/banner',
-					mock: [
-						{
-							label: 'Promo1',
-							value: '1',
-						},
-						{
-							label: 'Promo2',
-							value: '2',
-						},
-					],
-				}}
+				name="promotions"
+				operator=":"
+				identifier="promotions-filter"
+				label="Nama Promo"
+				key="promotions-filter"
+				placeholder="Semua promo"
+				data={{ url: 'promotions' }}
 			/>,
 		];
 	};
