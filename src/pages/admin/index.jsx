@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import ReactMoment from 'react-moment';
 import { Link } from 'react-router-dom';
 import { message, Skeleton, Space } from 'antd';
-import { EyeFilled } from '@ant-design/icons';
+import { EditFilled, EyeFilled } from '@ant-design/icons';
 
 import AtomImage from '../../components/atoms/image';
 import AtomNumberFormat from '../../components/atoms/number-format';
@@ -16,6 +16,9 @@ import MoleculeDatatableFilter from '../../components/molecules/datatable/filter
 import MoleculeDeleteConfirm from '../../components/molecules/delete-confirm';
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
+
+import AdminService from '../../services/admin';
+const adminService = new AdminService();
 
 const AdminPage = () => {
 	const column = [
@@ -101,22 +104,30 @@ const AdminPage = () => {
 			csvRender: (item) => (item.active ? 'Aktif' : 'Tidak Aktif'),
 		},
 		{
+			align: 'center',
 			title: 'Aksi',
 			dataIndex: 'id',
-			render: (id) => (
+			render: (id, record) => (
 				<Space size="middle">
 					<Link to={`/admin/${id}/detail`}>
 						<EyeFilled className="f4 blue" />
 					</Link>
 
-					<MoleculeDeleteConfirm
-						id={id}
-						label="Admin"
-						tableRef={adminTableRef}
-						url="admins"
-					/>
+					<Link to={`/admin/${id}/edit`}>
+						<EditFilled className="f4 orange" />
+					</Link>
+
+					{!record.is_active && (
+						<MoleculeDeleteConfirm
+							id={id}
+							label="Admin"
+							tableRef={adminTableRef}
+							url="admins"
+						/>
+					)}
 				</Space>
 			),
+			skipExport: true,
 		},
 	];
 	const adminTableRef = useRef();
@@ -125,8 +136,9 @@ const AdminPage = () => {
 
 	const getTotalAdmin = async () => {
 		try {
-			// const total = adminService.getTotalAdmin();
-			// setTotalAdmin(total);
+			const total = await adminService.getTotalAdmin();
+
+			setTotalAdmin(total);
 
 			setTimeout(
 				setTotalAdmin({ registered: 99999, active: 99999 }),
@@ -162,7 +174,7 @@ const AdminPage = () => {
 							Terdaftar
 						</>
 					}
-					value={<AtomNumberFormat value={totalAdmin.registered} />}
+					value={<AtomNumberFormat value={totalAdmin.total} />}
 				/>,
 				<MoleculeDatatableAdditionalInformation
 					key="admin-aktif"
@@ -173,7 +185,7 @@ const AdminPage = () => {
 							Aktif
 						</>
 					}
-					value={<AtomNumberFormat value={totalAdmin.active} />}
+					value={<AtomNumberFormat value={totalAdmin.actives} />}
 				/>,
 			]
 		) : (

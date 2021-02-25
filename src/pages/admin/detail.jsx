@@ -1,19 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import ReactMoment from 'react-moment';
 
-import {
-	Button,
-	Col,
-	Image,
-	message,
-	Row,
-	Skeleton,
-	Space,
-	Typography,
-} from 'antd';
+import { Button, Col, message, Row, Skeleton, Space, Typography } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 
 import AtomCard from '../../components/atoms/card';
+import AtomImage from '../../components/atoms/image';
 import MoleculeInfoGroup from '../../components/molecules/info-group';
 import OrganismLayout from '../../components/organisms/layout';
 
@@ -60,18 +52,26 @@ const AdminModifyPage = () => {
 						<AtomCard title="Info Admin">
 							<Row gutter={[12, 24]}>
 								<Col span={12}>
-									<Image
-										preview
-										src={admin.profile_photo}
-										width="100%"
+									<MoleculeInfoGroup
+										title="Foto Profil"
+										content={
+											<AtomImage
+												src={admin.profile_image}
+												size={170}
+											/>
+										}
 									/>
 								</Col>
 
 								<Col span={12}>
-									<Image
-										preview
-										src={admin.id_card_photo}
-										width="100%"
+									<MoleculeInfoGroup
+										title="Foto KTP"
+										content={
+											<AtomImage
+												src={admin.idcard_image}
+												size={170}
+											/>
+										}
 									/>
 								</Col>
 
@@ -89,14 +89,14 @@ const AdminModifyPage = () => {
 									/>
 								</Col>
 
-								<Col span={24}>
+								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Jenis Kelamin"
 										content={admin.gender}
 									/>
 								</Col>
 
-								<Col span={24}>
+								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Nomor Handphone"
 										content={admin.phone_number}
@@ -105,7 +105,7 @@ const AdminModifyPage = () => {
 
 								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Bank (Opsional)"
+										title="Bank"
 										content={admin.bank_info.bank}
 									/>
 								</Col>
@@ -175,7 +175,9 @@ const AdminModifyPage = () => {
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Peran"
-										content={admin.role}
+										content={admin.roles
+											.map((role) => role.name)
+											.join(', ')}
 									/>
 								</Col>
 
@@ -197,15 +199,6 @@ const AdminModifyPage = () => {
 									size="large"
 								>
 									Kembali
-								</Button>
-							</Link>
-							<Link to={`/admin/${id}/edit`}>
-								<Button
-									className="br3 bg-denim white"
-									size="large"
-									type="submit"
-								>
-									Ubah Admin
 								</Button>
 							</Link>
 						</Space>
