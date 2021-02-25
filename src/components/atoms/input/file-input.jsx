@@ -9,6 +9,7 @@ import { Modal, Upload } from 'antd';
 
 import UploadDekstopIcon from '../../../assets/icons/desktop-upload.svg';
 import UploadMobileIcon from '../../../assets/icons/mobile-upload.svg';
+import config from '../../../config';
 
 const AtomFileInput = forwardRef((props, ref) => {
 	const [fileList, setfileList] = useState([]);
@@ -64,7 +65,7 @@ const AtomFileInput = forwardRef((props, ref) => {
 					uid: '-1',
 					name: filename[filename.length - 1],
 					status: 'done',
-					url: props.defaultValue,
+					url: `${config.STORAGE_URL}/${props.defaultValue}`,
 				},
 			]);
 		}
