@@ -132,6 +132,7 @@ const AdditionalCategoryModifyPage = () => {
 											label="Nama Kategori Tambahan (ID)"
 											placeholder="Nama Kategori Tambahan (ID)"
 											type="text"
+											required
 										/>
 									</Col>
 
@@ -141,6 +142,7 @@ const AdditionalCategoryModifyPage = () => {
 											label="Nama Kategori Tambahan (EN)"
 											placeholder="Nama Kategori Tambahan (EN)"
 											type="text"
+											required
 										/>
 									</Col>
 
@@ -150,6 +152,7 @@ const AdditionalCategoryModifyPage = () => {
 											label="Kode Kategori Tambahan"
 											placeholder="Kode Kategori Tambahan"
 											type="text"
+											required
 										/>
 									</Col>
 								</Row>
