@@ -38,7 +38,6 @@ const BrandModifyPage = () => {
 		return isCreating
 			? {}
 			: {
-					code: brand.code,
 					en_name: brand.name.en,
 					followers: brand.social_media_followers || 1,
 					id_name: brand.name.id,
@@ -51,7 +50,6 @@ const BrandModifyPage = () => {
 			const brandImage = await brandImageRef.current.getImage();
 
 			const data = new FormData();
-			data.append('code', values.code);
 			data.append('image', brandImage);
 			data.append('name[en]', values.en_name);
 			data.append('name[id]', values.id_name);
@@ -122,15 +120,6 @@ const BrandModifyPage = () => {
 						<Col span={15}>
 							<AtomCard title="Info Brand">
 								<Row gutter={12}>
-									<Col span={24}>
-										<MoleculeTextInputGroup
-											name="code"
-											label="Kode"
-											placeholder="Kode"
-											type="text"
-										/>
-									</Col>
-
 									<Col span={12}>
 										<MoleculeTextInputGroup
 											name="id_name"

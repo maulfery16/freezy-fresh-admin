@@ -184,7 +184,9 @@ const AdminModifyPage = () => {
 								<Col span={24}>
 									<MoleculeInfoGroup
 										title="Cabang"
-										content={admin.branches.join(', ')}
+										content={admin.branches
+											.map((branch) => branch.name)
+											.join(', ')}
 									/>
 								</Col>
 							</Row>

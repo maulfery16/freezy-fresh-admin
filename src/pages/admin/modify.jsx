@@ -31,6 +31,9 @@ const AdminModifyPage = () => {
 			let admin = await adminService.getAdminById(id);
 			admin = admin.data;
 			admin.roles = admin.roles.map((role) => role.name);
+			admin.branches = admin.branches.map((branch) => branch.id);
+
+			console.log(admin);
 
 			setAdmin(admin);
 		} catch (error) {
@@ -90,8 +93,8 @@ const AdminModifyPage = () => {
 		return isCreating || !admin
 			? {}
 			: {
-					bank: admin.banl_account_name,
-					branch: admin.branch,
+					bank: admin.bank_info.bank.name,
+					branches: admin.branch,
 					email: admin.email,
 					first_name: admin.first_name,
 					profile_image: admin.profile_image,
@@ -99,7 +102,7 @@ const AdminModifyPage = () => {
 					gender: admin.gender,
 					last_name: admin.last_name,
 					phone_number: admin.phone_number,
-					rek_number: admin.bank_account_number,
+					rek_number: admin.bank_info.account_number,
 					role: admin.roles,
 			  };
 	};

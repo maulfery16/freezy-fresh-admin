@@ -15,6 +15,7 @@ export default class RequestAdapterService {
 		this.baseUrl = config.API_URL;
 		this.refreshToken = refreshToken;
 		let headers = {
+			'Access-Control-Allow-Origin': '*',
 			'Content-Type': 'application/json',
 			'Content-Language': 'EN',
 		};
