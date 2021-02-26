@@ -50,7 +50,7 @@ const BrandModifyPage = () => {
 			const brandImage = await brandImageRef.current.getImage();
 
 			const data = new FormData();
-			data.append('image', brandImage);
+			if (brandImage) data.append('image', brandImage);
 			data.append('name[en]', values.en_name);
 			data.append('name[id]', values.id_name);
 			data.append('social_media_followers', values.followers);
