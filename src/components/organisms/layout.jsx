@@ -18,6 +18,7 @@ import {
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { AiTwotoneBank } from 'react-icons/ai';
 import { BsFillPersonCheckFill, BsPersonFill } from 'react-icons/bs';
 import { FaMoneyBill, FaMotorcycle, FaStoreAlt } from 'react-icons/fa';
 import {
@@ -77,6 +78,10 @@ const menus = [
 		subMenuKey: 'produts',
 		subMenus: [
 			{
+				name: 'Produk',
+				link: '/products',
+			},
+			{
 				name: 'Kategori Dasar',
 				link: '/products/category',
 			},
@@ -85,16 +90,12 @@ const menus = [
 				link: '/products/additional-category',
 			},
 			{
-				name: 'Warna',
-				link: '/products/colour',
-			},
-			{
 				name: 'Brand',
 				link: '/products/brand',
 			},
 			{
-				name: 'Bank',
-				link: '/products/bank',
+				name: 'Warna',
+				link: '/products/colour',
 			},
 		],
 	},
@@ -105,11 +106,43 @@ const menus = [
 		subMenus: [
 			{
 				name: 'Tampilan',
-				link: '/view/',
+				link: '/view',
 			},
 			{
 				name: 'Banner',
 				link: '/view/banner',
+			},
+			{
+				name: 'Holiday',
+				link: '/view/holiday',
+			},
+			{
+				name: 'Daily Deals',
+				link: '/view/daily-deals',
+			},
+			{
+				name: 'Flash Sale',
+				link: '/view/flash-sale',
+			},
+			{
+				name: 'Special Benefit',
+				link: '/view/special-benefit',
+			},
+			{
+				name: 'Bundling Deals',
+				link: '/view/bundling-deals',
+			},
+			{
+				name: 'Produk Baru',
+				link: '/view/produk-baru',
+			},
+			{
+				name: `Circle's Favorite`,
+				link: '/view/circles-favorite',
+			},
+			{
+				name: 'Based on Search',
+				link: '/view/based-on-search',
 			},
 			{
 				name: 'Artikel',
@@ -119,7 +152,16 @@ const menus = [
 				name: 'Kategori Artikel',
 				link: '/view/article-category',
 			},
+			{
+				name: 'Promo',
+				link: '/view/promo',
+			},
 		],
+	},
+	{
+		name: 'Bank',
+		icon: <AiTwotoneBank />,
+		link: '/bank',
 	},
 	{
 		name: 'Membership',
@@ -127,7 +169,7 @@ const menus = [
 		link: '/membership',
 	},
 	{
-		name: 'Cabang',
+		name: 'Cabang Toko',
 		icon: <FaStoreAlt />,
 		link: '/branch',
 	},
@@ -211,7 +253,7 @@ const OrganismLayout = (props) => {
 						setIsSidebarCollapsed((collapsed) => !collapsed)
 					}
 					width={300}
-					style={{ height: '100vh' }}
+					style={{ minHeight: '100vh' }}
 				>
 					<div className="pa2 mv3 mh4">
 						<img src={FFLogo} alt="Logo" />
@@ -249,7 +291,13 @@ const OrganismLayout = (props) => {
 												</Typography.Text>
 												<Typography.Text>
 													<span className="white f6">
-														{user.role}
+														{user.roles &&
+															user.roles
+																.map(
+																	(res) =>
+																		res.display_name
+																)
+																.join(', ')}
 													</span>
 												</Typography.Text>
 											</Space>
@@ -307,10 +355,14 @@ const OrganismLayout = (props) => {
 														className="white fw7"
 														style={{ fontSize: 10 }}
 													>
-														{user.branches &&
-															user.branches.join(
-																', '
-															)}
+														{user.branches.length >
+															0 &&
+															user.branches
+																.map(
+																	(res) =>
+																		res.name
+																)
+																.join(', ')}
 													</span>
 												</Typography.Text>
 											</Space>

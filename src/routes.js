@@ -48,6 +48,32 @@ const routes = [
 		path: '/',
 	},
 	{
+		path: '/bank',
+		children: [
+			{
+				component: React.lazy(() => import('./pages/bank')),
+				exact: true,
+				guard: true,
+				name: 'Bank Page',
+				path: '/',
+			},
+			{
+				component: React.lazy(() => import('./pages/bank/modify')),
+				exact: true,
+				guard: true,
+				name: 'Add Bank Page',
+				path: '/add',
+			},
+			{
+				component: React.lazy(() => import('./pages/bank/modify')),
+				exact: true,
+				guard: true,
+				name: 'Edit Bank Page',
+				path: '/:id/edit',
+			},
+		],
+	},
+	{
 		path: '/admin',
 		children: [
 			{
@@ -116,29 +142,6 @@ const routes = [
 						guard: true,
 						name: 'Edit Additional Category Page',
 						path: '/:id/edit',
-					},
-				],
-			},
-			{
-				path: '/bank',
-				children: [
-					{
-						component: React.lazy(() =>
-							import('./pages/products/bank')
-						),
-						exact: true,
-						guard: true,
-						name: 'Bank Page',
-						path: '/',
-					},
-					{
-						component: React.lazy(() =>
-							import('./pages/products/bank/add')
-						),
-						exact: true,
-						guard: true,
-						name: 'Add Bank Page',
-						path: '/add',
 					},
 				],
 			},
@@ -297,6 +300,30 @@ const routes = [
 						guard: true,
 						name: 'Edit Banner Page',
 						path: '/:id/edit',
+					},
+				],
+			},
+
+			{
+				path: '/holiday',
+				children: [
+					{
+						component: React.lazy(() =>
+							import('./pages/view/holiday')
+						),
+						exact: true,
+						guard: true,
+						name: 'Holiday Page',
+						path: '/',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/view/holiday/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Edit Holiday Page',
+						path: '/edit',
 					},
 				],
 			},

@@ -9,7 +9,11 @@ const INITIAL_STATE = {
 		id: null,
 		first_name: 'John',
 		last_name: 'Doe',
-		role: 'Administrator',
+		roles: [
+			{
+				display_name: 'Administrator Role',
+			},
+		],
 		created_at: new Date(),
 		branches: ['Jakarta Pusat', 'Jakarta Barat', 'Bandung'],
 	},
