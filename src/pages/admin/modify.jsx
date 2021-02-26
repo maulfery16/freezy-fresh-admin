@@ -55,12 +55,12 @@ const AdminModifyPage = () => {
 			data.append('email', values.email);
 			data.append('first_name', values.first_name);
 			data.append('gender', values.gender);
-			data.append('idcard_image', idCardImage);
 			data.append('last_name', values.last_name);
 			data.append('phone_number', values.phone_number);
-			data.append('profile_image', profileImage);
 			data.append('role_name', values.role);
 			data.append('company', values.company);
+			if (idCardImage) data.append('idcard_image', idCardImage);
+			if (profileImage) data.append('profile_image', profileImage);
 			if (isCreating) data.append('password', values.password);
 			values.branches.forEach((branch) => {
 				data.append('branch_id[]', branch);
