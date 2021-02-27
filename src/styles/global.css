@@ -138,3 +138,11 @@ a {
 	height: 150px !important;
 	width: 150px !important;
 }
+
+.ant-select-multiple .ant-select-selection-item {
+	background: #127ec5 !important;
+	border-radius: 5px !important;
+	color: white !important;
+	font-size: 13px !important;
+	height: 30px !important;
+}
