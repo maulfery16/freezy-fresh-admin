@@ -20,7 +20,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { AiTwotoneBank } from 'react-icons/ai';
 import { BsFillPersonCheckFill, BsPersonFill } from 'react-icons/bs';
-import { FaMoneyBill, FaMotorcycle, FaStoreAlt } from 'react-icons/fa';
+import {
+	FaBuilding,
+	FaMoneyBill,
+	FaMotorcycle,
+	FaStoreAlt,
+} from 'react-icons/fa';
 import {
 	BellOutlined,
 	DropboxOutlined,
@@ -158,20 +163,26 @@ const menus = [
 			},
 		],
 	},
-	{
-		name: 'Bank',
-		icon: <AiTwotoneBank />,
-		link: '/bank',
-	},
+
 	{
 		name: 'Membership',
 		icon: <BsFillPersonCheckFill />,
 		link: '/membership',
 	},
 	{
-		name: 'Cabang Toko',
+		name: 'Cabang Freezy',
 		icon: <FaStoreAlt />,
 		link: '/branch',
+	},
+	{
+		name: 'Bank',
+		icon: <AiTwotoneBank />,
+		link: '/bank',
+	},
+	{
+		name: 'Perusahaan',
+		icon: <FaBuilding />,
+		link: '/perusahaan',
 	},
 	{
 		name: 'Pendapatan',

@@ -3,14 +3,17 @@ import { Space } from 'antd';
 import moment from 'moment';
 import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
+import { EditFilled } from '@ant-design/icons';
 
+import AtomImage from '../../components/atoms/image';
 import AtomStatusSwitch from '../../components/atoms/datatable/status-switch';
 import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
 import MoleculeDeleteConfirm from '../../components/molecules/delete-confirm';
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
+import { Link } from 'react-router-dom';
 
-const BankPage = () => {
+const PerusahaanPage = () => {
 	const column = [
 		{
 			title: 'No',
@@ -18,11 +21,18 @@ const BankPage = () => {
 			render: (id, _, index) => index + 1,
 		},
 		{
-			title: 'Nama Bank',
+			title: 'Nama Perusahaan',
 			dataIndex: `name`,
 		},
 		{
-			title: 'Kode Bank',
+			align: 'center',
+			title: 'Logo',
+			dataIndex: 'image',
+			render: (image) => <AtomImage preview src={image} size={70} />,
+			csvRender: (item) => item.iamge,
+		},
+		{
+			title: 'Kode Perusahaan',
 			dataIndex: `code`,
 		},
 		{
@@ -57,24 +67,28 @@ const BankPage = () => {
 				<AtomStatusSwitch
 					active={active}
 					id={record.id}
-					tableRef={bankTableRef}
-					url="banks"
+					tableRef={perusahaanTableRef}
+					url="product_owners"
 				/>
 			),
 			csvRender: (item) => (item.active ? 'Aktif' : 'Tidak Aktif'),
 		},
 		{
-			align: 'center',
+			align: ' center',
 			title: 'Aksi',
 			dataIndex: 'id',
 			render: (id, record) => (
 				<Space size="middle">
+					<Link to={`/perusahaan/${id}/edit`}>
+						<EditFilled className="f4 orange" />
+					</Link>
+
 					{!record.is_active && (
 						<MoleculeDeleteConfirm
 							id={id}
-							label="Bank"
-							tableRef={bankTableRef}
-							url="banks"
+							label="Perusahaan"
+							tableRef={perusahaanTableRef}
+							url="product_owners"
 						/>
 					)}
 				</Space>
@@ -82,16 +96,16 @@ const BankPage = () => {
 			skipExport: true,
 		},
 	];
-	const bankTableRef = useRef();
+	const perusahaanTableRef = useRef();
 
 	const renderAdditionalAction = () => {
 		return (
 			<MoleculeDatatableAdditionalAction
 				column={column}
-				label="Bank"
-				getLimit={() => bankTableRef.current.totalData}
-				route="/bank"
-				url="banks"
+				label="Perusahaan"
+				getLimit={() => perusahaanTableRef.current.totalData}
+				route="/perusahaan"
+				url="product_owners"
 			/>
 		);
 	};
@@ -100,23 +114,23 @@ const BankPage = () => {
 		<OrganismLayout
 			breadcumbs={[
 				{
-					name: 'Bank',
+					name: 'Perusahaan',
 					link: location.pathname,
 				},
 			]}
-			title="Product Page Bank"
+			title="Product Page Perusahaan"
 		>
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`banks`}
-				ref={bankTableRef}
+				dataSourceURL={`product_owners`}
+				ref={perusahaanTableRef}
 				scroll={1920}
 				searchInput={true}
-				title={`Bank`}
+				title={`Perusahaan`}
 			/>
 		</OrganismLayout>
 	);
 };
 
-export default BankPage;
+export default PerusahaanPage;
