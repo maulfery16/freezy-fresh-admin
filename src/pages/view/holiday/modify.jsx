@@ -1,6 +1,7 @@
 /* eslint-disable react/display-name */
 import React, { useEffect, useRef, useState } from 'react';
 import { Col, Row, Skeleton, Typography, message, Form, Tabs } from 'antd';
+import { useHistory } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
 import AtomNumberFormat from '../../../components/atoms/number-format';
@@ -75,13 +76,48 @@ const HolidayModifyPage = () => {
 		},
 	];
 	const viewTableRef = useRef();
+	const holidayImageMobileRef = useRef();
+	const holidayImageDekstopRef = useRef();
+	const holidayImageSmall1Ref = useRef();
+	const holidayImageSmall2Ref = useRef();
+	const holidayImageSmall3Ref = useRef();
 
-	const [holiday, setHoliday] = useState(null);
-	const [holidayImageDekstop, setHolidayImageDekstop] = useState(null);
-	const [holidayImageMobile, setHolidayImageMobile] = useState(null);
-	const [holidayImageSmall1, setHolidayImageSmall1] = useState(null);
-	const [holidayImageSmall2, setHolidayImageSmall2] = useState(null);
-	const [holidayImageSmall3, setHolidayImageSmall3] = useState(null);
+	const history = useHistory();
+
+	const [holiday] = useState({
+		short_desc: {
+			id: 'Deskripsi Singkat',
+			en: 'Short Description',
+		},
+		long_desc: {
+			id: 'Deskripsi Panjang',
+			en: 'Long Description',
+		},
+		banner_mobile_image:
+			'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
+		banner_desktop_image:
+			'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
+		banner_small1_image:
+			'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
+		banner_small2_image:
+			'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
+		banner_small3_image:
+			'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
+		title: {
+			id: 'Artikel Super',
+			en: 'Super View',
+		},
+		term_and_condition: {
+			id: ` Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam et turpis tincidunt lacus ornare malesuada. Integer purus nulla, vestibulum non lectus at, mollis semper dui. Etiam mattis velit id vehicula faucibus. Donec bibendum tempus mi, sit amet venenatis erat finibus ut. Suspendisse vitae cursus urna, ac pulvinar magna. Nullam viverra sapien arcu, at congue orci lacinia quis. Quisque sapien eros, facilisis in maximus eu, finibus eu mauris. Morbi bibendum ligula in rhoncus dictum. Aenean fermentum blandit elit vitae vehicula.
+
+Phasellus ac enim ac diam malesuada semper. Fusce sem nisi, luctus ut tellus ut, dictum blandit massa. In id molestie eros, eu varius libero. Curabitur non neque non elit pellentesque ornare. Duis libero arcu, placerat eu lorem nec, consectetur hendrerit mi. Pellentesque nec diam ut eros rhoncus luctus. Ut a ultrices felis.
+
+Ut luctus ex non eleifend ullamcorper. Nullam elementum nisi sem, id egestas nisi pretium nec. Sed pretium interdum tristique. Mauris at porttitor enim. In a mi et massa porttitor molestie. Fusce varius, lorem ut cursus consectetur, sapien diam tincidunt magna, nec ultrices quam quam malesuada ante. Sed auctor mi eu finibus finibus. Quisque iaculis malesuada metus, eget ornare magna laoreet nec. Morbi interdum gravida bibendum. `,
+			en: ` Suspendisse at nisl nisi. Praesent at diam mattis, porta arcu blandit, efficitur nisi. Sed suscipit massa diam, et vehicula mauris ornare a. Nunc blandit metus vitae lacus ultrices ornare. Aenean eget justo fringilla, pharetra odio at, cursus augue. Donec lacinia dolor malesuada ipsum vestibulum ornare. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse molestie, ipsum et porttitor ultricies, sem arcu pharetra risus, non finibus diam tortor ac odio. Morbi est mauris, lobortis eu mauris a, fringilla pellentesque orci. Morbi mollis rhoncus orci nec convallis. Proin efficitur, eros sit amet pellentesque tincidunt, libero turpis hendrerit sem, quis convallis arcu ante quis ligula. Phasellus porta aliquet dolor, vel mattis libero interdum a. In in dui ex.
+
+Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris volutpat luctus nec id nulla. Nulla pretium libero a ante cursus, vitae pellentesque mauris efficitur. Mauris ut dolor porta, fermentum leo nec, rutrum mauris. Nam felis nunc, rhoncus quis lorem id, mollis rutrum velit. Nulla facilisi. Vestibulum quis cursus ante. In molestie sapien ullamcorper orci elementum ullamcorper. Proin eget convallis ex, eu iaculis nisl. Vestibulum congue nulla eu tristique faucibus. Etiam mollis in turpis sed posuere. Nunc interdum ac enim a varius. Morbi euismod porta nisi, quis egestas massa sollicitudin eu. Aliquam dapibus condimentum metus porta rutrum. Sed vehicula ac lacus in aliquam. Quisque tempor dolor ac venenatis blandit. `,
+		},
+	});
 	const [longDescEn, setLongDescEn] = useState('');
 	const [longDescId, setLongDescId] = useState('');
 	const [termEn, setTermEn] = useState('');
@@ -92,51 +128,10 @@ const HolidayModifyPage = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [isCreating, setIsCreating] = useState(null);
 
-	const getHoliday = async () => {
+	const getHoliday = () => {
 		try {
 			// const holiday = holidayService.getHolidayDetail(holidayID);
 			// setHoliday(holiday);
-
-			await setHoliday({
-				short_desc: {
-					id: 'Deskripsi Singkat',
-					en: 'Short Description',
-				},
-				long_desc: {
-					id: 'Deskripsi Panjang',
-					en: 'Long Description',
-				},
-				banner_mobile_image:
-					'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
-				banner_desktop_image:
-					'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
-				banner_small1_image:
-					'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
-				banner_small2_image:
-					'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
-				banner_small3_image:
-					'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
-				title: {
-					id: 'Artikel Super',
-					en: 'Super View',
-				},
-				term_and_condition: {
-					id: ` Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam et turpis tincidunt lacus ornare malesuada. Integer purus nulla, vestibulum non lectus at, mollis semper dui. Etiam mattis velit id vehicula faucibus. Donec bibendum tempus mi, sit amet venenatis erat finibus ut. Suspendisse vitae cursus urna, ac pulvinar magna. Nullam viverra sapien arcu, at congue orci lacinia quis. Quisque sapien eros, facilisis in maximus eu, finibus eu mauris. Morbi bibendum ligula in rhoncus dictum. Aenean fermentum blandit elit vitae vehicula.
-
-Phasellus ac enim ac diam malesuada semper. Fusce sem nisi, luctus ut tellus ut, dictum blandit massa. In id molestie eros, eu varius libero. Curabitur non neque non elit pellentesque ornare. Duis libero arcu, placerat eu lorem nec, consectetur hendrerit mi. Pellentesque nec diam ut eros rhoncus luctus. Ut a ultrices felis.
-
-Ut luctus ex non eleifend ullamcorper. Nullam elementum nisi sem, id egestas nisi pretium nec. Sed pretium interdum tristique. Mauris at porttitor enim. In a mi et massa porttitor molestie. Fusce varius, lorem ut cursus consectetur, sapien diam tincidunt magna, nec ultrices quam quam malesuada ante. Sed auctor mi eu finibus finibus. Quisque iaculis malesuada metus, eget ornare magna laoreet nec. Morbi interdum gravida bibendum. `,
-					en: ` Suspendisse at nisl nisi. Praesent at diam mattis, porta arcu blandit, efficitur nisi. Sed suscipit massa diam, et vehicula mauris ornare a. Nunc blandit metus vitae lacus ultrices ornare. Aenean eget justo fringilla, pharetra odio at, cursus augue. Donec lacinia dolor malesuada ipsum vestibulum ornare. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse molestie, ipsum et porttitor ultricies, sem arcu pharetra risus, non finibus diam tortor ac odio. Morbi est mauris, lobortis eu mauris a, fringilla pellentesque orci. Morbi mollis rhoncus orci nec convallis. Proin efficitur, eros sit amet pellentesque tincidunt, libero turpis hendrerit sem, quis convallis arcu ante quis ligula. Phasellus porta aliquet dolor, vel mattis libero interdum a. In in dui ex.
-
-Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris volutpat luctus nec id nulla. Nulla pretium libero a ante cursus, vitae pellentesque mauris efficitur. Mauris ut dolor porta, fermentum leo nec, rutrum mauris. Nam felis nunc, rhoncus quis lorem id, mollis rutrum velit. Nulla facilisi. Vestibulum quis cursus ante. In molestie sapien ullamcorper orci elementum ullamcorper. Proin eget convallis ex, eu iaculis nisl. Vestibulum congue nulla eu tristique faucibus. Etiam mollis in turpis sed posuere. Nunc interdum ac enim a varius. Morbi euismod porta nisi, quis egestas massa sollicitudin eu. Aliquam dapibus condimentum metus porta rutrum. Sed vehicula ac lacus in aliquam. Quisque tempor dolor ac venenatis blandit. `,
-				},
-			});
-
-			setHolidayImageMobile(holiday.banner_mobile_image);
-			setHolidayImageDekstop(holiday.banner_desktop_image);
-			setHolidayImageSmall1(holiday.banner_small1_image);
-			setHolidayImageSmall2(holiday.banner_small2_image);
-			setHolidayImageSmall3(holiday.banner_small3_image);
 
 			setLongDescId(holiday.long_desc.id);
 			setLongDescEn(holiday.long_desc.en);
@@ -189,11 +184,16 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 			setIsSubmitting(true);
 
 			const data = new FormData();
-			data.append('imageMobile', holidayImageMobile);
-			data.append('imageDekstop', holidayImageDekstop);
-			data.append('imageSmall1', holidayImageSmall1);
-			data.append('imageSmall2', holidayImageSmall2);
-			data.append('imageSmall3', holidayImageSmall3);
+			if (holidayImageMobileRef)
+				data.append('imageMobile', holidayImageMobileRef);
+			if (holidayImageDekstopRef)
+				data.append('imageDekstop', holidayImageDekstopRef);
+			if (holidayImageSmall1Ref)
+				data.append('imageSmall1', holidayImageSmall1Ref);
+			if (holidayImageSmall2Ref)
+				data.append('imageSmall2', holidayImageSmall2Ref);
+			if (holidayImageSmall3Ref)
+				data.append('imageSmall3', holidayImageSmall3Ref);
 			data.append('title[id]', values.id_title);
 			data.append('title[en]', values.en_title);
 			data.append('short_desc[id]', values.id_short_desc);
@@ -203,13 +203,8 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 			data.append('term[id]', termId);
 			data.append('term[en]', termEn);
 
-			// if (isCreating) {
-			// 	await holidayService.createArticle(data);
-			// 	message.success('Berhasil menambah article');
-			// } else {
-			// 	await holidayService.editArticle(id, data);
-			// 	message.success('Berhasil mengubah article');
-			// }
+			// 	await holidayService.editHoliday(id, data);
+			// 	message.success('Berhasil mengubah holiday');
 
 			message.info(
 				'Akan dikembalikan ke halaman daftar holiday dalam 2 detik'
@@ -278,83 +273,75 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 										>
 											<Col span={4}>
 												<MoleculeFileInputGroup
-													defaultValue={
-														holidayImageMobile
-													}
 													label="Foto Banner Mobile"
-													id="banner-photo-upload-mobile"
-													name="image"
-													placeholder="png"
-													setImage={
-														setHolidayImageMobile
-													}
+													fileInputs={[
+														{
+															defaultValue: holiday
+																? holiday.banner_mobile_image
+																: null,
+															ref: holidayImageMobileRef,
+														},
+													]}
 												/>
 											</Col>
 											<Col span={4}>
 												<MoleculeFileInputGroup
-													defaultValue={
-														holidayImageDekstop
-													}
 													label="Foto Banner Desktop"
-													id="banner-photo-upload-desktop"
-													name="image"
-													placeholder="png"
-													setImage={
-														setHolidayImageDekstop
-													}
+													fileInputs={[
+														{
+															defaultValue: holiday
+																? holiday.banner_desktop_image
+																: null,
+															ref: holidayImageDekstopRef,
+														},
+													]}
 												/>
 											</Col>
 											<Col span={4}>
 												<MoleculeFileInputGroup
-													defaultValue={
-														holidayImageSmall1
-													}
 													label="Foto Banner Kecil 1"
-													id="banner-photo-upload-small1"
-													name="image"
-													placeholder="png"
-													setImage={
-														setHolidayImageSmall1
-													}
+													fileInputs={[
+														{
+															defaultValue: holiday
+																? holiday.banner_small1_image
+																: null,
+															ref: holidayImageSmall1Ref,
+														},
+													]}
 												/>
 											</Col>
 											<Col span={4}>
 												<MoleculeFileInputGroup
-													defaultValue={
-														holidayImageSmall2
-													}
 													label="Foto Banner Kecil 2"
-													id="banner-photo-upload-small2"
-													name="image"
-													placeholder="png"
-													setImage={
-														setHolidayImageSmall2
-													}
+													fileInputs={[
+														{
+															defaultValue: holiday
+																? holiday.banner_small2_image
+																: null,
+															ref: holidayImageSmall2Ref,
+														},
+													]}
 												/>
 											</Col>
 											<Col span={4}>
 												<MoleculeFileInputGroup
-													defaultValue={
-														holidayImageSmall3
-													}
 													label="Foto Banner Kecil 3"
-													id="banner-photo-upload-small3"
-													name="image"
-													placeholder="png"
-													setImage={
-														setHolidayImageSmall3
-													}
+													fileInputs={[
+														{
+															defaultValue: holiday
+																? holiday.banner_small3_image
+																: null,
+															ref: holidayImageSmall3Ref,
+														},
+													]}
 												/>
 											</Col>
 
 											<Row>
 												<Col span={24}>
 													<Typography.Text>
-														<span className="dark-gray fw5 f6">
-															{`Format gambar .jpg .jpeg .png. Untuk foto banner mobile ukuran minumum 0 x 0 px (Untuk gambar optimal gunakan ukuran ninimum 0 x 0 px)`}
-														</span>
-														<span className="dark-gray fw5 f6">
-															{`Untuk foto banner desktop ukuran minumum 0 x 0 px (Untuk gambar optimal gunakan ukuran ninimum 0 x 0 px)`}
+														<span className="dark-gray fw5 f7">
+															{`Format gambar .jpg .jpeg .png. Untuk foto banner mobile ukuran minumum 0 x 0 px (Untuk gambar optimal gunakan ukuran ninimum 0 x 0 px). Untuk foto banner desktop ukuran minumum 0 x 0 px (Untuk gambar optimal gunakan ukuran ninimum 0 x 0 px)`}
 														</span>
 													</Typography.Text>
 												</Col>
@@ -382,19 +369,27 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 
 											<Col span={12}>
 												<MoleculeTextInputGroup
-													name="id_short_desc"
+													autoSize={{
+														minRows: 2,
+														maxRows: 6,
+													}}
 													label="Deskripsi Singkat (ID)"
+													name="id_short_desc"
 													placeholder="Deskripsi Singkat (ID)"
-													type="text"
+													type="textarea"
 												/>
 											</Col>
 
 											<Col span={12}>
 												<MoleculeTextInputGroup
+													autoSize={{
+														minRows: 2,
+														maxRows: 6,
+													}}
 													name="en_short_desc"
 													label="Deskripsi Singkat (ED)"
 													placeholder="Deskripsi Singkat (EN)"
-													type="text"
+													type="textarea"
 												/>
 											</Col>
 
