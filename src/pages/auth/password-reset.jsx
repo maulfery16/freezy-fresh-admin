@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, Form, message, Space, Typography } from 'antd';
+import { Form, message, Space, Typography } from 'antd';
 import { useLocation } from 'react-router-dom';
 
+import AtomPrimaryButton from '../../components/atoms/button/primary-button';
 import MoleculePasswordInputGroup from '../../components/molecules/input-group/password-input';
 import ResetPasswordLayout from '../../components/layouts/reset-password';
 
@@ -65,15 +66,15 @@ const PasswordResetPages = () => {
 							requiredMessage="Password tidak boleh kosong"
 						/>
 
-						<Button
+						<AtomPrimaryButton
 							block
-							className="bg-denim f6 fw5 ph5 pv2 shadow-3 white"
+							className="f6 fw5 ph5 pv2"
 							htmlType="submit"
 							size="large"
 							style={{ borderRadius: '8px' }}
 						>
 							Submit
-						</Button>
+						</AtomPrimaryButton>
 					</Space>
 				</Form>
 			</Space>

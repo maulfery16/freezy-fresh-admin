@@ -1,4 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Form, Typography } from 'antd';
 
@@ -34,6 +35,19 @@ const MoleculeSelectInputGroup = (props) => {
 			</Form.Item>
 		</Form.Item>
 	);
+};
+
+MoleculeSelectInputGroup.propTypes = {
+	label: PropTypes.string,
+	name: PropTypes.string.isRequired,
+	placeholder: PropTypes.string,
+	data: PropTypes.arrayOf(
+		PropTypes.shape({
+			generateCustomOption: PropTypes.func,
+			mock: PropTypes.array,
+			url: PropTypes.url,
+		})
+	),
 };
 
 export default MoleculeSelectInputGroup;

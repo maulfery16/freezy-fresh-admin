@@ -1,4 +1,5 @@
 import { Typography } from 'antd';
+import PropTypes from 'prop-types';
 import React from 'react';
 
 const AtomCard = (props) => {
@@ -15,6 +16,11 @@ const AtomCard = (props) => {
 			<div className="mt3">{props.children}</div>
 		</div>
 	);
+};
+
+AtomCard.propTypes = {
+	children: PropTypes.node.isRequired,
+	title: PropTypes.string.isRequired,
 };
 
 export default AtomCard;

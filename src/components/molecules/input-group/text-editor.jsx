@@ -1,5 +1,7 @@
 import { Form, Typography } from 'antd';
+import PropTypes from 'prop-types';
 import React from 'react';
+
 import AtomTextEditor from '../../atoms/input/text-editor';
 
 const MoleculeTextEditorGroup = (props) => {
@@ -12,6 +14,12 @@ const MoleculeTextEditorGroup = (props) => {
 			<AtomTextEditor {...props} />
 		</Form.Item>
 	);
+};
+
+MoleculeTextEditorGroup.propTypes = {
+	label: PropTypes.string,
+	onChange: PropTypes.func,
+	value: PropTypes.string,
 };
 
 export default MoleculeTextEditorGroup;

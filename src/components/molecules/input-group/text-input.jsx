@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Form, Input, Typography } from 'antd';
 
@@ -50,6 +51,13 @@ const MoleculeTextInputGroup = (props) => {
 			</Form.Item>
 		</Form.Item>
 	);
+};
+
+MoleculeTextInputGroup.propTypes = {
+	label: PropTypes.string,
+	name: PropTypes.string.isRequired,
+	placeholder: PropTypes.string,
+	type: PropTypes.string,
 };
 
 export default MoleculeTextInputGroup;

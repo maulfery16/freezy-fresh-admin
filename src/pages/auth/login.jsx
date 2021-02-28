@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-	Button,
 	Checkbox,
 	Col,
 	Form,
@@ -16,12 +15,12 @@ import { useDispatch } from 'react-redux';
 import AuthenticationLayout from '../../components/layouts/authentication';
 import {
 	setAuthToken,
-	// eslint-disable-next-line no-unused-vars
 	setCurrentUser,
 	setLoginStatus,
 	setRefreshToken,
 	setRememberMeStatus,
 } from '../../stores/auth/actions';
+import AtomPrimaryButton from '../../components/atoms/button/primary-button';
 
 import AuthService from '../../services/auth';
 const authService = new AuthService();
@@ -144,16 +143,16 @@ const LoginPages = () => {
 
 						<Row justify="end">
 							<Col span={12}>
-								<Button
+								<AtomPrimaryButton
 									block
-									className="bg-denim f6 fw5 shadow-3 white"
+									className="f6 fw5"
 									htmlType="submit"
 									// loading={isLoggingIn}
 									size="large"
 									style={{ borderRadius: '8px' }}
 								>
 									LOGIN
-								</Button>
+								</AtomPrimaryButton>
 							</Col>
 						</Row>
 					</Space>

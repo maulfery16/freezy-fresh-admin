@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, Space, Typography } from 'antd';
+import { Space, Typography } from 'antd';
 
+import AtomPrimaryButton from '../../components/atoms/button/primary-button';
 import ResetPasswordLayout from '../../components/layouts/reset-password';
 
 import ResetPasswordSuccess from '../../assets/images/reset-password-success.svg';
@@ -24,16 +25,16 @@ const PasswordResetSuccessPages = () => {
 					ke akun Anda.
 				</Typography>
 
-				<Button
+				<AtomPrimaryButton
 					block
 					href="/login"
-					className="bg-denim f7 fw5 shadow-3 white pv2 ph4"
+					className="f7 fw5 pv2 ph4"
 					htmlType="button"
 					size="large"
 					style={{ borderRadius: '8px' }}
 				>
 					Kembali
-				</Button>
+				</AtomPrimaryButton>
 			</Space>
 		</ResetPasswordLayout>
 	);

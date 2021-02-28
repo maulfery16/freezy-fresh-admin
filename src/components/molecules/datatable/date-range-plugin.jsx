@@ -1,5 +1,6 @@
-import React from 'react';
 import { DatePicker, Space, Typography } from 'antd';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const MoleculeDatatableDateRange = (props) => {
 	const setDateRangeFilter = (selectedValue) => {
@@ -37,6 +38,15 @@ const MoleculeDatatableDateRange = (props) => {
 	) : (
 		<>Daterange plugin is invalid</>
 	);
+};
+
+MoleculeDatatableDateRange.propTypes = {
+	addMultipleFilter: PropTypes.func,
+	filterName: PropTypes.string,
+	label: PropTypes.string,
+	name: PropTypes.string,
+	operator: PropTypes.string,
+	removeFilter: PropTypes.func,
 };
 
 export default MoleculeDatatableDateRange;

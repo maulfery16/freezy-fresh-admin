@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import ReactMoment from 'react-moment';
 
-import { Button, Col, message, Row, Skeleton, Space, Typography } from 'antd';
+import { Col, message, Row, Skeleton, Space, Typography } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
 import AtomImage from '../../../components/atoms/image';
+import AtomSecondaryButton from '../../../components/atoms/button/secondary-button';
 import MoleculeInfoGroup from '../../../components/molecules/info-group';
 import OrganismLayout from '../../../components/organisms/layout';
 
@@ -185,12 +186,9 @@ const BannerModifyPage = () => {
 					<Col className="mt4" span={24}>
 						<Space>
 							<Link to="/view/banner">
-								<Button
-									className="br3 denim b--denim"
-									size="large"
-								>
+								<AtomSecondaryButton size="large">
 									Kembali
-								</Button>
+								</AtomSecondaryButton>
 							</Link>
 						</Space>
 					</Col>
