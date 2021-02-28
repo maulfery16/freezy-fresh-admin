@@ -145,7 +145,7 @@ const LoginPages = () => {
 							<Col span={12}>
 								<AtomPrimaryButton
 									block
-									className="f6 fw5"
+									additionalClassName="f6 fw5 shadow-3"
 									htmlType="submit"
 									// loading={isLoggingIn}
 									size="large"
