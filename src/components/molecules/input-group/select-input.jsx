@@ -41,13 +41,11 @@ MoleculeSelectInputGroup.propTypes = {
 	label: PropTypes.string,
 	name: PropTypes.string.isRequired,
 	placeholder: PropTypes.string,
-	data: PropTypes.arrayOf(
-		PropTypes.shape({
-			generateCustomOption: PropTypes.func,
-			mock: PropTypes.array,
-			url: PropTypes.url,
-		})
-	),
+	data: PropTypes.shape({
+		generateCustomOption: PropTypes.func,
+		mock: PropTypes.array,
+		url: PropTypes.url,
+	}),
 };
 
 export default MoleculeSelectInputGroup;
