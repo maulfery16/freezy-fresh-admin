@@ -56,7 +56,7 @@ const MoleculeFileInputGroup = (props) => {
 	);
 };
 
-MoleculeFileInputGroup.PropTypes = {
+MoleculeFileInputGroup.propTypes = {
 	label: PropTypes.string,
 	filterInputs: PropTypes.arrayOf(
 		PropTypes.shape({
