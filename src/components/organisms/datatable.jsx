@@ -337,10 +337,6 @@ OrganismDatatable.propTypes = {
 	title: PropTypes.string,
 	titleSize: PropTypes.number,
 	dataSourceURL: PropTypes.string.isRequired,
-	ref: PropTypes.oneOfType([
-		PropTypes.func,
-		PropTypes.shape({ current: PropTypes.any }),
-	]).isRequired,
 	searchInput: PropTypes.oneOfType([
 		PropTypes.bool,
 		PropTypes.shape({
