@@ -10,7 +10,6 @@ import MoleculeModifyActionButtons from '../../../components/molecules/modify-ac
 import MoleculeSelectInputGroup from '../../../components/molecules/input-group/select-input';
 import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../../components/organisms/layout';
-// import OrganismProductDatatable from '../../../components/organisms/product-datatable';
 
 import CategoryService from '../../../services/category';
 const categoryService = new CategoryService();
@@ -183,10 +182,6 @@ const CategoryModifyPage = () => {
 									</Col>
 								</Row>
 							</AtomCard>
-						</Col>
-
-						<Col className="mt4" span={24}>
-							{/* <OrganismProductDatatable /> */}
 						</Col>
 
 						<Col className="mt4" span={24}>
