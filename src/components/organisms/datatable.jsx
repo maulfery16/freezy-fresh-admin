@@ -1,6 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable react/display-name */
 /* eslint-disable react-hooks/exhaustive-deps */
+import PropTypes from 'prop-types';
 import React, {
 	forwardRef,
 	useEffect,
@@ -326,5 +327,26 @@ const OrganismDatatable = forwardRef((props, ref) => {
 		</Row>
 	);
 });
+
+OrganismDatatable.propTypes = {
+	additionalAction: PropTypes.node,
+	additionalInformation: PropTypes.node,
+	columns: PropTypes.array.isRequired,
+	filters: PropTypes.arrayOf(PropTypes.node),
+	scroll: PropTypes.number,
+	title: PropTypes.string,
+	titleSize: PropTypes.number,
+	dataSourceURL: PropTypes.string.isRequired,
+	ref: PropTypes.oneOfType([
+		PropTypes.func,
+		PropTypes.shape({ current: PropTypes.any }),
+	]).isRequired,
+	searchInput: PropTypes.oneOfType([
+		PropTypes.bool,
+		PropTypes.shape({
+			placeholder: PropTypes.string,
+		}),
+	]),
+};
 
 export default OrganismDatatable;

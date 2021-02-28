@@ -1,5 +1,6 @@
 import { Button, message, Space } from 'antd';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
 import DatatableService from '../../../services/datatable';
@@ -34,13 +35,22 @@ const MoleculeDatatableAdditionalAction = (props) => {
 			>
 				Export Excel
 			</Button>
-			<Link to={`${props.route}/add`}>
-				<Button className="br2 bg-denim white">
-					Tambah {props.label}
-				</Button>
-			</Link>
+			{!props.withoutAddButton && (
+				<Link to={`${props.route}/add`}>
+					<Button className="br2 bg-denim white">
+						Tambah {props.label}
+					</Button>
+				</Link>
+			)}
 		</Space>
 	);
+};
+
+MoleculeDatatableAdditionalAction.propTypes = {
+	getLimit: PropTypes.func.isRequired,
+	label: PropTypes.string.isRequired,
+	route: PropTypes.string.isRequired,
+	withoutAddButton: PropTypes.bool,
 };
 
 export default MoleculeDatatableAdditionalAction;

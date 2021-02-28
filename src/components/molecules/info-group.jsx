@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Space, Typography } from 'antd';
 
@@ -13,6 +14,11 @@ const MoleculeInfoGroup = (props) => {
 			</Typography.Text>
 		</Space>
 	);
+};
+
+MoleculeInfoGroup.propTypes = {
+	content: PropTypes.node.isRequired,
+	title: PropTypes.string.isRequired,
 };
 
 export default MoleculeInfoGroup;

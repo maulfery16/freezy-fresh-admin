@@ -1,4 +1,5 @@
 /* eslint-disable react/display-name */
+import PropTypes from 'prop-types';
 import React, {
 	forwardRef,
 	useEffect,
@@ -113,5 +114,11 @@ const AtomFileInput = forwardRef((props, ref) => {
 		</>
 	);
 });
+
+AtomFileInput.propTypes = {
+	accept: PropTypes.string,
+	defaultValue: PropTypes.string,
+	isMobileImage: PropTypes.bool,
+};
 
 export default AtomFileInput;

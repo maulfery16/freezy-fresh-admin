@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Col, Row, Typography } from 'antd';
 
@@ -33,6 +34,19 @@ const MoleculeFileInputGroup = (props) => {
 			</div>
 		</>
 	);
+};
+
+MoleculeFileInputGroup.PropTypes = {
+	label: PropTypes.string,
+	filterInputs: PropTypes.arrayOf(
+		PropTypes.shape({
+			defaultValue: PropTypes.string,
+			ref: PropTypes.oneOfType([
+				PropTypes.func,
+				PropTypes.shape({ current: PropTypes.any }),
+			]).isRequired,
+		})
+	),
 };
 
 export default MoleculeFileInputGroup;

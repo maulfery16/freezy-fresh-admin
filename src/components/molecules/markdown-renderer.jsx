@@ -1,6 +1,7 @@
-import React from 'react';
 import _ from 'underscore';
 import MathJax from 'react-mathjax';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const changeLatex1 = (text) => {
 	let prefix = false;
@@ -80,6 +81,11 @@ const MoleculeMarkdownRenderer = ({ text, withBorder }) => {
 			)}
 		</>
 	);
+};
+
+MoleculeMarkdownRenderer.propTypes = {
+	text: PropTypes.string,
+	withBorder: PropTypes.bool,
 };
 
 export default MoleculeMarkdownRenderer;

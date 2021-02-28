@@ -1,6 +1,7 @@
 import { Button, Space } from 'antd';
-import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const MoleculeModifyActionButtons = (props) => {
 	return (
@@ -20,6 +21,12 @@ const MoleculeModifyActionButtons = (props) => {
 			</Button>
 		</Space>
 	);
+};
+
+MoleculeModifyActionButtons.propTypes = {
+	isCreating: PropTypes.bool.isRequired,
+	isSubmitting: PropTypes.bool.isRequired,
+	label: PropTypes.string.isRequired,
 };
 
 export default MoleculeModifyActionButtons;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Form, InputNumber, Space, Typography } from 'antd';
 
@@ -19,6 +20,16 @@ const MoleculeNumberInputGroup = (props) => {
 			</Space>
 		</Form.Item>
 	);
+};
+
+MoleculeNumberInputGroup.propTypes = {
+	className: PropTypes.string,
+	formatter: PropTypes.func,
+	id: PropTypes.string,
+	label: PropTypes.string,
+	name: PropTypes.string.isRequired,
+	placeholder: PropTypes.string,
+	parser: PropTypes.func,
 };
 
 export default MoleculeNumberInputGroup;

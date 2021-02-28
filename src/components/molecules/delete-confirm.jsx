@@ -1,5 +1,6 @@
 import { Button, Col, message, Modal, Row, Typography } from 'antd';
 import { DeleteFilled } from '@ant-design/icons';
+import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
 import DatatableService from '../../services/datatable';
@@ -71,6 +72,16 @@ const MoleculeDeleteConfirm = (props) => {
 			</Modal>
 		</>
 	);
+};
+
+MoleculeDeleteConfirm.propTypes = {
+	id: PropTypes.string.isRequired,
+	label: PropTypes.string,
+	url: PropTypes.string.isRequired,
+	tableRef: PropTypes.oneOfType([
+		PropTypes.func,
+		PropTypes.shape({ current: PropTypes.any }),
+	]).isRequired,
 };
 
 export default MoleculeDeleteConfirm;

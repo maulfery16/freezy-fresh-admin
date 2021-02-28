@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import AtomFooter from '../atoms/footer';
@@ -34,6 +35,10 @@ const ResetPasswordLayout = (props) => {
 			<AtomFooter />
 		</div>
 	);
+};
+
+ResetPasswordLayout.propTypes = {
+	children: PropTypes.node,
 };
 
 export default ResetPasswordLayout;

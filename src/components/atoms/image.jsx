@@ -1,4 +1,5 @@
 import { Image } from 'antd';
+import PropTypes from 'prop-types';
 import React from 'react';
 
 const AtomImage = (props) => {
@@ -11,6 +12,11 @@ const AtomImage = (props) => {
 			width={props.size || 100}
 		/>
 	);
+};
+
+AtomImage.propTypes = {
+	size: PropTypes.number,
+	src: PropTypes.string,
 };
 
 export default AtomImage;
