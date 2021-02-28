@@ -1,7 +1,10 @@
-import { Button, message, Space } from 'antd';
+import { message, Space } from 'antd';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+
+import AtomPrimaryButton from '../../atoms/button/primary-button';
+import AtomSecondaryButton from '../../atoms/button/secondary-button';
 
 import DatatableService from '../../../services/datatable';
 const datatableService = new DatatableService();
@@ -28,18 +31,15 @@ const MoleculeDatatableAdditionalAction = (props) => {
 
 	return (
 		<Space>
-			<Button
-				className="br2 denim b--denim"
+			<AtomSecondaryButton
 				loading={isExporting}
 				onClick={() => exportAsCSV()}
 			>
 				Export Excel
-			</Button>
+			</AtomSecondaryButton>
 			{!props.withoutAddButton && (
 				<Link to={`${props.route}/add`}>
-					<Button className="br2 bg-denim white">
-						Tambah {props.label}
-					</Button>
+					<AtomPrimaryButton>Tambah {props.label}</AtomPrimaryButton>
 				</Link>
 			)}
 		</Space>

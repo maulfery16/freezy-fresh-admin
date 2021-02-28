@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import { Button, Image, message, Space } from 'antd';
+import { Image, message, Space } from 'antd';
 import { EditFilled, EyeFilled, CheckOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
@@ -7,6 +7,8 @@ import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
 
 import AtomColorInfoGroup from '../../../components/atoms/color-info-group';
+import AtomPrimaryButton from '../../../components/atoms/button/primary-button';
+import AtomSecondaryButton from '../../../components/atoms/secondary-button';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 import MoleculeDatatableDateRange from '../../../components/molecules/datatable/date-range-plugin';
 import MoleculeDatatableFilter from '../../../components/molecules/datatable/filter-plugin';
@@ -102,18 +104,21 @@ const ArticlePage = () => {
 			align: 'center',
 			title: 'Set as Prirmary',
 			dataIndex: `is_primary`,
-			render: (is_primary, record) => (
-				<Button
-					className={`${
-						is_primary ? 'bg-denim white' : 'denim b--denim'
-					}`}
-					disabled={is_primary}
-					onClick={() => setAsPrimary(record.id)}
-					shape="circle"
-				>
-					<CheckOutlined />
-				</Button>
-			),
+			render: (is_primary, record) => {
+				const PrimaryButton = is_primary
+					? AtomPrimaryButton
+					: AtomSecondaryButton;
+
+				return (
+					<PrimaryButton
+						disabled={is_primary}
+						onClick={() => setAsPrimary(record.id)}
+						shape="circle"
+					>
+						<CheckOutlined />
+					</PrimaryButton>
+				);
+			},
 			skipExport: true,
 		},
 		{

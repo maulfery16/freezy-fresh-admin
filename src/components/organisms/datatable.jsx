@@ -9,7 +9,6 @@ import React, {
 	useState,
 } from 'react';
 import {
-	Button,
 	Col,
 	Input,
 	message,
@@ -21,6 +20,7 @@ import {
 } from 'antd';
 
 import AtomDatatableHeader from '../atoms/datatable/header';
+import AtomPrimaryButton from '../atoms/button/primary-button';
 
 import DatatableService from '../../services/datatable';
 const datatableService = new DatatableService();
@@ -223,12 +223,12 @@ const OrganismDatatable = forwardRef((props, ref) => {
 
 					{props.filters && (
 						<Col span={4}>
-							<Button
-								className="bg-denim white br2 w-100"
+							<AtomPrimaryButton
+								className="w-100"
 								onClick={() => setIsFilterVisible(true)}
 							>
 								Filter
-							</Button>
+							</AtomPrimaryButton>
 
 							<Modal
 								footer={null}
@@ -262,13 +262,13 @@ const OrganismDatatable = forwardRef((props, ref) => {
 								</Space>
 
 								<Row className="mt4" justify="center">
-									<Button
-										className="bg-denim white br3 w-30"
+									<AtomPrimaryButton
+										className="br3 w-30"
 										onClick={setFilter}
 										size="large"
 									>
 										Filter
-									</Button>
+									</AtomPrimaryButton>
 								</Row>
 							</Modal>
 						</Col>
