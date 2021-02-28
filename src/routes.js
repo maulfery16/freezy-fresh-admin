@@ -74,6 +74,37 @@ const routes = [
 		],
 	},
 	{
+		path: '/perusahaan',
+		children: [
+			{
+				component: React.lazy(() => import('./pages/product-owners')),
+				exact: true,
+				guard: true,
+				name: 'Perusahaan Page',
+				path: '/',
+			},
+			{
+				component: React.lazy(() =>
+					import('./pages/product-owners/modify')
+				),
+				exact: true,
+				guard: true,
+				name: 'Add Perusahaan Page',
+				path: '/add',
+			},
+
+			{
+				component: React.lazy(() =>
+					import('./pages/product-owners/modify')
+				),
+				exact: true,
+				guard: true,
+				name: 'Edit Perusahaan Page',
+				path: '/:id/edit',
+			},
+		],
+	},
+	{
 		path: '/admin',
 		children: [
 			{

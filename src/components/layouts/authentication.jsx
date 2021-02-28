@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Col, Row } from 'antd';
 
 import AtomFooter from '../atoms/footer';
-import FFLogo from '../../assets/logos/ff-logo.png';
 import AuthBanner from '../../assets/images/background-auth.svg';
+import FFLogo from '../../assets/logos/ff-logo.png';
 
 const AuthenticationLayout = (props) => {
 	return (
@@ -38,6 +39,10 @@ const AuthenticationLayout = (props) => {
 			<div className="w2 bg-denim" span={1}></div>
 		</Row>
 	);
+};
+
+AuthenticationLayout.propTypes = {
+	children: PropTypes.node,
 };
 
 export default AuthenticationLayout;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Col, Row, Typography } from 'antd';
 
@@ -18,6 +19,11 @@ const MoleculeDatatableAdditionalInformation = (props) => {
 			</Col>
 		</Row>
 	);
+};
+
+MoleculeDatatableAdditionalInformation.propTypes = {
+	title: PropTypes.string,
+	value: PropTypes.string,
 };
 
 export default MoleculeDatatableAdditionalInformation;

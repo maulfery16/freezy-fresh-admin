@@ -33,8 +33,6 @@ const AdminModifyPage = () => {
 			admin.roles = admin.roles.map((role) => role.name);
 			admin.branches = admin.branches.map((branch) => branch.id);
 
-			console.log(admin);
-
 			setAdmin(admin);
 		} catch (error) {
 			message.error(error.message);

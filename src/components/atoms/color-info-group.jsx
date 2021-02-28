@@ -1,4 +1,5 @@
 import { Space, Typography } from 'antd';
+import PropTypes from 'prop-types';
 import React from 'react';
 
 const AtomColorInfoGroup = (props) => {
@@ -16,6 +17,12 @@ const AtomColorInfoGroup = (props) => {
 			<Typography.Text>{props.label}</Typography.Text>
 		</Space>
 	);
+};
+
+AtomColorInfoGroup.propTypes = {
+	hexa: PropTypes.string,
+	label: PropTypes.string,
+	size: PropTypes.string,
 };
 
 export default AtomColorInfoGroup;

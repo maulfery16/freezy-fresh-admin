@@ -1,43 +1,39 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Col, Form, message, Row, Skeleton, Space, Typography } from 'antd';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
 import MoleculeFileInputGroup from '../../../components/molecules/input-group/file-input';
+import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
+import MoleculeSelectInputGroup from '../../../components/molecules/input-group/select-input';
 import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../../components/organisms/layout';
 
-import RequestAdapterService from '../../../services/request-adapter';
 import BannerService from '../../../services/banner';
-import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
-import MoleculeSelectInputGroup from '../../../components/molecules/input-group/select-input';
 const bannerService = new BannerService();
 
 const BannerModifyPage = () => {
+	const dekstopImageRef = useRef();
+	const mobileImageRef = useRef();
+
 	const { id } = useParams();
 	const history = useHistory();
 	const location = useLocation();
 	const isCreating = location.pathname.includes('add') ? true : false;
 
 	const [banner, setBanner] = useState(null);
-	const [bannerMobileImage, setBannerMobileImage] = useState(null);
-	const [bannerWebsiteImage, setBannerWebsiteImage] = useState(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const getBannerDetail = async (id) => {
 		try {
-			const { data: banner } = await bannerService.getBannerById(id);
+			let { data: banner } = await bannerService.getBannerById(id);
+			banner.promotions = banner.promotions
+				? banner.promotions.map((promo) => promo.id)
+				: null;
+			banner.branches = banner.branches.map((branch) => branch.id);
 
 			setBanner(banner);
-			const bannerMobileImageFile = await RequestAdapterService.convertImageURLtoFile(
-				banner.mobileImage.original
-			);
-			setBannerMobileImage(bannerMobileImageFile);
-			const bannerWebsiteImageFile = await RequestAdapterService.convertImageURLtoFile(
-				banner.websiteImage.original
-			);
-			setBannerWebsiteImage(bannerWebsiteImageFile);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
@@ -48,23 +44,29 @@ const BannerModifyPage = () => {
 		return isCreating
 			? {}
 			: {
-					title: banner.title,
+					branches: banner.branches,
 					promo: banner.promo,
-					mobileImage: bannerMobileImage,
-					websiteImage: bannerWebsiteImage,
+					title_en: banner.title.en,
+					title_id: banner.title.id,
 			  };
 	};
 
 	const submit = async (values) => {
+		const dekstopImage = await dekstopImageRef.current.getImage();
+		const mobileImage = await mobileImageRef.current.getImage();
+
 		try {
 			setIsSubmitting(true);
 
 			const data = new FormData();
-			data.append('mobile_image', bannerMobileImage);
-			data.append('website_image', bannerWebsiteImage);
+			data.append('image_mobile', mobileImage);
+			data.append('image_desktop', dekstopImage);
 			data.append('title[id]', values.title_id);
 			data.append('title[en]', values.title_en);
 			data.append('promo', values.promo);
+			values.branches.forEach((branch) => {
+				data.append('branches[]', branch);
+			});
 
 			if (isCreating) {
 				await bannerService.createBanner(data);
@@ -131,6 +133,35 @@ const BannerModifyPage = () => {
 							<AtomCard title="Info Banner">
 								<Row gutter={12}>
 									<Col span={24}>
+										<MoleculeFileInputGroup
+											label="Foto Banner"
+											description="
+												Format gambar .jpg .jpeg .png, Untuk foto banner mobile ukuran minimum 0 x 0px (Untuk
+												gambar optimal gunakan ukuran minimum 0 x 0 px) Untuk foto banner desktop ukuran
+												minimum 0 x 0px (Untuk gambar optimal gunakan ukuran minimum 0 x 0 px)
+											"
+											fileInputs={[
+												{
+													defaultValue: banner
+														? banner.image_mobile
+														: null,
+													isMobileImage: true,
+													label: 'Foro Banner Mobile',
+													ref: mobileImageRef,
+												},
+												{
+													defaultValue: banner
+														? banner.image_desktop
+														: null,
+													label:
+														'Foro Banner Dekstop',
+													ref: dekstopImageRef,
+												},
+											]}
+										/>
+									</Col>
+
+									<Col span={24}>
 										<MoleculeTextInputGroup
 											name="title_id"
 											label="Title Banner (ID)"
@@ -148,39 +179,13 @@ const BannerModifyPage = () => {
 										/>
 									</Col>
 
-									<Col span={12}>
-										<MoleculeFileInputGroup
-											defaultValue={bannerMobileImage}
-											height="100"
-											label="Foto Banner Mobile"
-											id="banner-mobile-upload"
-											name="mobile_image"
-											placeholder="png"
-											setImage={setBannerMobileImage}
-											width="100"
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeFileInputGroup
-											defaultValue={bannerWebsiteImage}
-											height="100"
-											id="banner-website-upload"
-											label="Foto Banner Website"
-											name="website_image"
-											placeholder="png"
-											setImage={setBannerWebsiteImage}
-											width="100"
-										/>
-									</Col>
-
 									<Col span={24}>
 										<MoleculeSelectInputGroup
 											label="Pilih Promo"
 											name="promo"
 											placeholder="Pilih Promo"
 											data={{
-												url: 'colors',
+												url: 'promotions',
 												generateCustomOption: (
 													item
 												) => ({
@@ -196,11 +201,24 @@ const BannerModifyPage = () => {
 																	width: 20,
 																}}
 															/>
-															{item.name.en} /
-															{item.name.id}
+															{item.title.en} /
+															{item.title.id}
 														</Space>
 													),
 												}),
+											}}
+										/>
+									</Col>
+
+									<Col span={24}>
+										<MoleculeSelectInputGroup
+											label="Cabang"
+											name="branches"
+											placeholder="Cabang"
+											mode="multiple"
+											required
+											data={{
+												url: 'branches',
 											}}
 										/>
 									</Col>

@@ -1,6 +1,10 @@
-import { Button, Col, message, Modal, Row, Typography } from 'antd';
+import { Col, message, Modal, Row, Typography } from 'antd';
 import { DeleteFilled } from '@ant-design/icons';
+import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+
+import AtomPrimaryButton from '../atoms/button/primary-button';
+import AtomSecondaryButton from '../atoms/button/secondary-button';
 
 import DatatableService from '../../services/datatable';
 const datatableService = new DatatableService();
@@ -45,25 +49,23 @@ const MoleculeDeleteConfirm = (props) => {
 					<Col className="mt4" span={24}>
 						<Row gutter={24} justify="center">
 							<Col span={12}>
-								<Button
+								<AtomSecondaryButton
 									block
-									className="br2 denim b--denim"
 									onClick={() => setIsVisible(false)}
 									size="middle"
 								>
 									Kembali
-								</Button>
+								</AtomSecondaryButton>
 							</Col>
 
 							<Col span={12}>
-								<Button
+								<AtomPrimaryButton
 									block
-									className="br2 bg-denim white"
 									onClick={() => deleteItem()}
 									size="middle"
 								>
 									Hapus
-								</Button>
+								</AtomPrimaryButton>
 							</Col>
 						</Row>
 					</Col>
@@ -71,6 +73,16 @@ const MoleculeDeleteConfirm = (props) => {
 			</Modal>
 		</>
 	);
+};
+
+MoleculeDeleteConfirm.propTypes = {
+	id: PropTypes.string.isRequired,
+	label: PropTypes.string,
+	url: PropTypes.string.isRequired,
+	tableRef: PropTypes.oneOfType([
+		PropTypes.func,
+		PropTypes.shape({ current: PropTypes.any }),
+	]).isRequired,
 };
 
 export default MoleculeDeleteConfirm;

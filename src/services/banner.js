@@ -77,7 +77,7 @@ export default class BannerService extends RequestAdapterService {
 
 	async getBannerById(id) {
 		try {
-			const data = await super.sendGetRequest(
+			const { data } = await super.sendGetRequest(
 				`${this.baseUrl}/v1/banners/${id}`
 			);
 
