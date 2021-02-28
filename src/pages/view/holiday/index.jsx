@@ -2,16 +2,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ReactMoment from 'react-moment';
 
-import { Col, Image, message, Row, Skeleton, Tabs, Typography } from 'antd';
+import { Col, Image, Row, Skeleton, Tabs, Typography, message } from 'antd';
 import { useParams } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
+import AtomNumberFormat from '../../../components/atoms/number-format';
+import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
+import MoleculeDatatableFilter from '../../../components/molecules/datatable/filter-plugin';
 import MoleculeInfoGroup from '../../../components/molecules/info-group';
 import MoleculeMarkdownRenderer from '../../../components/molecules/markdown-renderer';
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
-import AtomNumberFormat from '../../../components/atoms/number-format';
-import MoleculeDatatableFilter from '../../../components/molecules/datatable/filter-plugin';
 
 const { TabPane } = Tabs;
 
@@ -41,10 +42,6 @@ const mock = {
 };
 
 const HolidayPage = () => {
-	function handleTabChange(key) {
-		console.log(key);
-	}
-
 	const column = [
 		{
 			title: 'SKUID',
@@ -91,22 +88,17 @@ const HolidayPage = () => {
 
 			setTimeout(() => {
 				setHoliday({
-					category: {
-						color: {
-							hexa_code: '#000000',
-						},
-						name: 'Kategori 1',
-					},
 					created_at: new Date(),
 					created_by: 'Jeong Dajeong',
-					phone_number: '087739893738467',
 					registered_at: new Date(),
 					registered_by: 'Kim Ji Yeon',
 					updated_at: new Date(),
 					updated_by: 'Dita Karang',
 					short_desc: {
-						id: 'Deskripsi Singkat',
-						en: 'Short Description',
+						id:
+							'Deskripsi Singkat Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam et turpis tincidunt lacus ornare malesuada. Integer purus nulla, vestibulum',
+						en:
+							'Short Description Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam et turpis tincidunt lacus ornare malesuada. Integer purus nulla, vestibulum',
 					},
 					long_desc: {
 						id: 'Deskripsi Panjang',
@@ -116,10 +108,6 @@ const HolidayPage = () => {
 						'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
 					en_image:
 						'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
-					content: {
-						id: 'Hallo mate',
-						en: 'Hallo mate',
-					},
 					title: {
 						id: 'Artikel Super',
 						en: 'Super View',
@@ -179,14 +167,31 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 			]}
 			title="Holiday"
 		>
-			<Typography.Title level={4}>
-				<span className="fw7">{`Holiday`.toUpperCase()}</span>
-			</Typography.Title>
+			<Row>
+				<Col span={24}>
+					<Row align="middle" justify="space-between">
+						<Typography.Title level={4}>
+							<span className="fw7">
+								{`Holiday`.toUpperCase()}
+							</span>
+						</Typography.Title>
+
+						<MoleculeDatatableAdditionalAction
+							column={column}
+							isEdit={true}
+							label="Holiday"
+							getLimit={0}
+							route="/view/holiday"
+							url="holiday"
+						/>
+					</Row>
+				</Col>
+			</Row>
 
 			{!holiday ? (
 				<Skeleton active />
 			) : (
-				<Tabs defaultActiveKey="1" onChange={handleTabChange}>
+				<Tabs defaultActiveKey="1">
 					<TabPane tab={`Info Holiday`.toUpperCase()} key="1">
 						<Row align="top" gutter={24}>
 							<Col span={24}>
@@ -281,28 +286,14 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 										<Col span={12}>
 											<MoleculeInfoGroup
 												title="Deskripsi Singkat (ID)"
-												content={
-													<MoleculeMarkdownRenderer
-														text={
-															holiday.short_desc
-																.id
-														}
-													/>
-												}
+												content={holiday.short_desc.id}
 											/>
 										</Col>
 
 										<Col span={12}>
 											<MoleculeInfoGroup
 												title="Deskripsi Singkat (EN)"
-												content={
-													<MoleculeMarkdownRenderer
-														text={
-															holiday.short_desc
-																.en
-														}
-													/>
-												}
+												content={holiday.short_desc.en}
 											/>
 										</Col>
 
@@ -402,7 +393,7 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 									<Row gutter={[12, 24]}>
 										<Col span={24}>
 											<MoleculeInfoGroup
-												title="Deskripsi Lengkap (ID)"
+												title={`Syarat & Ketentuan (ID)`}
 												content={
 													<MoleculeMarkdownRenderer
 														withBorder
@@ -418,7 +409,7 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 
 										<Col span={24}>
 											<MoleculeInfoGroup
-												title="Deskripsi Lengkap (EN)"
+												title={`Syarat & Ketentuan (EN)`}
 												content={
 													<MoleculeMarkdownRenderer
 														withBorder
