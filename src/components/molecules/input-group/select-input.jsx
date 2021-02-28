@@ -45,7 +45,7 @@ MoleculeSelectInputGroup.propTypes = {
 		PropTypes.shape({
 			generateCustomOption: PropTypes.func,
 			mock: PropTypes.array,
-			url: PropTypes.url.isRequired,
+			url: PropTypes.url,
 		})
 	),
 };

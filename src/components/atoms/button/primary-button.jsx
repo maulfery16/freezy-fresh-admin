@@ -5,10 +5,7 @@ import { Button } from 'antd';
 
 const AtomPrimaryButton = (props) => {
 	return (
-		<Button
-			className={`br3 bg-denim white shadow-3 ${props.className}`}
-			{...props}
-		>
+		<Button className={`br3 bg-denim white ${props.className}`} {...props}>
 			{props.children}
 		</Button>
 	);

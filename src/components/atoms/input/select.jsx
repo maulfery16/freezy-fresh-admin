@@ -71,7 +71,7 @@ AtomCustomSelect.propTypes = {
 	data: PropTypes.shape({
 		generateCustomOption: PropTypes.func,
 		mock: PropTypes.array,
-		url: PropTypes.string.isRequired,
+		url: PropTypes.string,
 	}),
 };
 

@@ -53,7 +53,7 @@ const MoleculeTextInputGroup = (props) => {
 	);
 };
 
-MoleculeTextInputGroup.PropTypes = {
+MoleculeTextInputGroup.propTypes = {
 	label: PropTypes.string,
 	name: PropTypes.string.isRequired,
 	placeholder: PropTypes.string,

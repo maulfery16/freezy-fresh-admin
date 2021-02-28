@@ -8,7 +8,7 @@ import ReactMoment from 'react-moment';
 
 import AtomColorInfoGroup from '../../../components/atoms/color-info-group';
 import AtomPrimaryButton from '../../../components/atoms/button/primary-button';
-import AtomSecondaryButton from '../../../components/atoms/secondary-button';
+import AtomSecondaryButton from '../../../components/atoms/button/secondary-button';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 import MoleculeDatatableDateRange from '../../../components/molecules/datatable/date-range-plugin';
 import MoleculeDatatableFilter from '../../../components/molecules/datatable/filter-plugin';
