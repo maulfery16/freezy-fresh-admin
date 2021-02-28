@@ -33,21 +33,26 @@ const BannerPage = () => {
 			render: (_, record) => record.title.en,
 		},
 		{
+			align: 'center',
 			title: 'Foto Banner Mobile',
 			dataIndex: 'image',
-			render: (image) => <AtomImage src={image} />,
+			render: (image) => <AtomImage src={image} size={75} />,
 			csvRender: (item) => item.image_mobile,
 		},
 		{
+			align: 'center',
 			title: 'Foto Banner Desktop',
 			dataIndex: 'image',
-			render: (image) => <AtomImage src={image} />,
+			render: (image) => <AtomImage src={image} size={75} />,
 			csvRender: (item) => item.image_dekstop,
 		},
 		{
 			title: 'Nama Promo',
 			dataIndex: 'promotion[`title`][`id`]',
-			render: (promo) => `${promo.title.id} / ${promo.title.en}`,
+			render: (_, record) =>
+				record.promotion
+					? `${record.promotion.title.id} / ${record.promotion.title.en}`
+					: '-',
 		},
 		{
 			align: 'center',
@@ -112,7 +117,25 @@ const BannerPage = () => {
 				label="Nama Promo"
 				key="promotions-filter"
 				placeholder="Semua promo"
-				data={{ url: 'promotions' }}
+				data={{
+					url: 'promotions',
+					generateCustomOption: (item) => ({
+						value: item.id,
+						label: (
+							<Space>
+								<div
+									className="br2"
+									style={{
+										background: item.hexa_code,
+										height: 20,
+										width: 20,
+									}}
+								/>
+								{item.title.en} /{item.title.id}
+							</Space>
+						),
+					}),
+				}}
 			/>,
 		];
 	};
