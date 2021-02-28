@@ -47,7 +47,7 @@ const ForgotPasswordPages = () => {
 				>
 					<Space className="w-100" direction="vertical" size={30}>
 						<MoleculeTextInputGroup
-							label="Masukkkan Email Anda"
+							label="Masukkan Email Anda"
 							name="email"
 							required={true}
 							validationMessage="Email harus dalam bentuk email"

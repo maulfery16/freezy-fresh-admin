@@ -148,6 +148,7 @@ const ColourModifyPage = () => {
 											name="id_name"
 											placeholder="Nama Warna (ID)"
 											type="text"
+											required
 										/>
 									</Col>
 
@@ -157,6 +158,7 @@ const ColourModifyPage = () => {
 											name="en_name"
 											placeholder="Nama Warna (EN)"
 											type="text"
+											required
 										/>
 									</Col>
 
@@ -168,6 +170,7 @@ const ColourModifyPage = () => {
 											placeholder="Kode Hexa"
 											type="text"
 											value={hexaCode || ''}
+											required
 										/>
 									</Col>
 

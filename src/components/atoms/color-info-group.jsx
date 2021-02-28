@@ -3,13 +3,13 @@ import React from 'react';
 
 const AtomColorInfoGroup = (props) => {
 	return (
-		<Space>
+		<Space size="middle">
 			<div
 				className="br2 ba b--black-20"
 				style={{
-					background: props.hexa,
-					height: '50px',
-					width: '50px',
+					background: `#${props.hexa}`,
+					height: props.size || '50px',
+					width: props.size || '50px',
 				}}
 			/>
 

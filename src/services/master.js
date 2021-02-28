@@ -1,6 +1,6 @@
 import RequestAdapterService from './request-adapter';
 
-export default class AdminService extends RequestAdapterService {
+export default class MasterService extends RequestAdapterService {
 	async getOptions(url, params) {
 		try {
 			const { data } = await super.sendGetRequest(

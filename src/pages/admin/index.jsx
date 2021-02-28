@@ -1,11 +1,14 @@
 /* eslint-disable react/display-name */
+import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactMoment from 'react-moment';
 import { Link } from 'react-router-dom';
-import { Image, message, Skeleton, Space } from 'antd';
-import { EyeFilled } from '@ant-design/icons';
+import { message, Skeleton, Space } from 'antd';
+import { EditFilled, EyeFilled } from '@ant-design/icons';
 
+import AtomImage from '../../components/atoms/image';
 import AtomNumberFormat from '../../components/atoms/number-format';
+import AtomStatusSwitch from '../../components/atoms/datatable/status-switch';
 import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
 import MoleculeDatatableAdditionalInformation from '../../components/molecules/datatable/additional-information-card';
 import MoleculeDatatableDateRange from '../../components/molecules/datatable/date-range-plugin';
@@ -14,27 +17,41 @@ import MoleculeDeleteConfirm from '../../components/molecules/delete-confirm';
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
 
+import AdminService from '../../services/admin';
+const adminService = new AdminService();
+
 const AdminPage = () => {
 	const column = [
 		{
+			align: 'center',
 			title: 'No',
 			dataIndex: 'id',
 			render: (id, _, index) => index + 1,
+		},
+		{
+			align: 'center',
+			title: 'Foto',
+			dataIndex: 'profile_image',
+			render: (image) => <AtomImage src={image} />,
+			csvRender: (item) => item.profile_image,
 		},
 		{
 			title: 'ID',
 			dataIndex: 'id',
 		},
 		{
+			title: 'Tgl. Gabung',
+			dataIndex: 'created_at',
+			render: (date) => (
+				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
+			),
+			csvRender: (item) => moment(item.created_at).format('DD/MM/YYYY'),
+		},
+		{
 			title: 'Nama Admin',
 			dataIndex: 'first_name',
 			sort: true,
 			render: (_, record) => `${record.first_name} ${record.last_name}`,
-		},
-		{
-			title: 'Foto',
-			dataIndex: 'profile_image',
-			render: (image) => <Image preview src={image} width={100} />,
 		},
 		{
 			title: 'Email',
@@ -46,22 +63,15 @@ const AdminPage = () => {
 			dataIndex: 'phone_number',
 			sort: true,
 		},
-		{
-			title: 'Tgl. Gabung',
-			dataIndex: 'created_at',
-			render: (date) => (
-				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
-			),
-		},
+
 		{
 			title: 'Peranan',
-			dataIndex: 'role',
-			sort: true,
+			dataIndex: 'roles',
+			render: (roles) => roles.map((role) => role.name).join(', '),
 		},
 		{
 			title: 'Cabang',
 			dataIndex: 'branches',
-			sort: true,
 			render: (branches) =>
 				branches.map((branch) => branch.name).join(', '),
 		},
@@ -80,22 +90,44 @@ const AdminPage = () => {
 			render: (bank) => bank.bank,
 		},
 		{
+			align: 'center',
+			title: 'Aktif',
+			dataIndex: 'is_active',
+			render: (active, record) => (
+				<AtomStatusSwitch
+					active={active}
+					id={record.id}
+					tableRef={adminTableRef}
+					url="admins"
+				/>
+			),
+			csvRender: (item) => (item.is_active ? 'Aktif' : 'Tidak Aktif'),
+		},
+		{
+			align: 'center',
 			title: 'Aksi',
 			dataIndex: 'id',
-			render: (id) => (
+			render: (id, record) => (
 				<Space size="middle">
 					<Link to={`/admin/${id}/detail`}>
 						<EyeFilled className="f4 blue" />
 					</Link>
 
-					<MoleculeDeleteConfirm
-						id={id}
-						label="Admin"
-						tableRef={adminTableRef}
-						url="admins"
-					/>
+					<Link to={`/admin/${id}/edit`}>
+						<EditFilled className="f4 orange" />
+					</Link>
+
+					{!record.is_active && (
+						<MoleculeDeleteConfirm
+							id={id}
+							label="Admin"
+							tableRef={adminTableRef}
+							url="admins"
+						/>
+					)}
 				</Space>
 			),
+			skipExport: true,
 		},
 	];
 	const adminTableRef = useRef();
@@ -104,8 +136,9 @@ const AdminPage = () => {
 
 	const getTotalAdmin = async () => {
 		try {
-			// const total = adminService.getTotalAdmin();
-			// setTotalAdmin(total);
+			const total = await adminService.getTotalAdmin();
+
+			setTotalAdmin(total);
 
 			setTimeout(
 				setTotalAdmin({ registered: 99999, active: 99999 }),
@@ -141,7 +174,7 @@ const AdminPage = () => {
 							Terdaftar
 						</>
 					}
-					value={<AtomNumberFormat value={totalAdmin.registered} />}
+					value={<AtomNumberFormat value={totalAdmin.total} />}
 				/>,
 				<MoleculeDatatableAdditionalInformation
 					key="admin-aktif"
@@ -152,7 +185,7 @@ const AdminPage = () => {
 							Aktif
 						</>
 					}
-					value={<AtomNumberFormat value={totalAdmin.active} />}
+					value={<AtomNumberFormat value={totalAdmin.actives} />}
 				/>,
 			]
 		) : (

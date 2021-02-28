@@ -3,12 +3,12 @@ import React, { useState } from 'react';
 import { Col, Form, message, Row, Typography } from 'antd';
 import { useHistory } from 'react-router-dom';
 
-import AtomCard from '../../../components/atoms/card';
-import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
-import OrganismLayout from '../../../components/organisms/layout';
+import AtomCard from '../../components/atoms/card';
+import MoleculeTextInputGroup from '../../components/molecules/input-group/text-input';
+import OrganismLayout from '../../components/organisms/layout';
 
-import BankService from '../../../services/bank';
-import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
+import BankService from '../../services/bank';
+import MoleculeModifyActionButtons from '../../components/molecules/modify-action-buttons';
 const bankService = new BankService();
 
 const BankModifyPage = () => {
@@ -31,7 +31,7 @@ const BankModifyPage = () => {
 				'Akan dikembalikan ke halaman daftar bank dalam 2 detik'
 			);
 			setTimeout(() => {
-				history.push('/products/bank');
+				history.push('/bank');
 			}, 2000);
 		} catch (error) {
 			message.error(error.message);
@@ -44,8 +44,7 @@ const BankModifyPage = () => {
 	return (
 		<OrganismLayout
 			breadcumbs={[
-				{ name: 'Produk', link: '/products/bank' },
-				{ name: 'Bank', link: '/products/bank' },
+				{ name: 'Bank', link: '/bank' },
 				{
 					name: location.pathname.includes('add') ? 'Tambah' : 'Ubah',
 					link: location.pathname,
@@ -93,7 +92,7 @@ const BankModifyPage = () => {
 
 					<Col className="mt4" span={24}>
 						<MoleculeModifyActionButtons
-							backUrl="/products/bank"
+							backUrl="/bank"
 							isCreating={true}
 							isSubmitting={isSubmitting}
 							label="Bank"

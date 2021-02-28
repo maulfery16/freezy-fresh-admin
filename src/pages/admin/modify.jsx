@@ -1,5 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Col, Form, message, Row, Skeleton, Typography } from 'antd';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
@@ -12,35 +12,30 @@ import MoleculeTextInputGroup from '../../components/molecules/input-group/text-
 import OrganismLayout from '../../components/organisms/layout';
 
 import AdminService from '../../services/admin';
-import RequestAdapterService from '../../services/request-adapter';
 const adminService = new AdminService();
 
 const AdminModifyPage = () => {
+	const profileImageRef = useRef();
+	const idCardImageRef = useRef();
+
 	const { id } = useParams();
 	const location = useLocation();
 	const history = useHistory();
 	const isCreating = location.pathname.includes('add') ? true : false;
 
 	const [admin, setAdmin] = useState(null);
-	const [idCardImage, setIdCardImage] = useState(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [profileImage, setProfileImage] = useState(null);
 
 	const getAdminDetail = async (id) => {
 		try {
 			let admin = await adminService.getAdminById(id);
 			admin = admin.data;
+			admin.roles = admin.roles.map((role) => role.name);
+			admin.branches = admin.branches.map((branch) => branch.id);
+
+			console.log(admin);
+
 			setAdmin(admin);
-
-			const profileImage = await RequestAdapterService.convertImageURLtoFile(
-				admin.profileImage
-			);
-			setProfileImage(profileImage);
-
-			const IdCardImage = await RequestAdapterService.convertImageURLtoFile(
-				admin.idcard_image
-			);
-			setIdCardImage(IdCardImage);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
@@ -49,19 +44,23 @@ const AdminModifyPage = () => {
 
 	const submit = async (values) => {
 		try {
+			const profileImage = await profileImageRef.current.getImage();
+			const idCardImage = await idCardImageRef.current.getImage();
+
 			setIsSubmitting(true);
 			const data = new FormData();
 
-			data.append('bank[account_number]', values.rek_number);
-			data.append('bank[name]', values.bank);
+			data.append('bank_account_number', values.rek_number);
+			data.append('bank_account_name', values.bank);
 			data.append('email', values.email);
 			data.append('first_name', values.first_name);
 			data.append('gender', values.gender);
-			data.append('idcard_image', idCardImage);
 			data.append('last_name', values.last_name);
 			data.append('phone_number', values.phone_number);
-			data.append('profile_image', profileImage);
 			data.append('role_name', values.role);
+			data.append('company', values.company);
+			if (idCardImage) data.append('idcard_image', idCardImage);
+			if (profileImage) data.append('profile_image', profileImage);
 			if (isCreating) data.append('password', values.password);
 			values.branches.forEach((branch) => {
 				data.append('branch_id[]', branch);
@@ -94,8 +93,8 @@ const AdminModifyPage = () => {
 		return isCreating || !admin
 			? {}
 			: {
-					bank: admin.bank_info ? admin.bank_info.name : null,
-					branch: admin.branch,
+					bank: admin.bank_info.bank.name,
+					branches: admin.branch,
 					email: admin.email,
 					first_name: admin.first_name,
 					profile_image: admin.profile_image,
@@ -103,10 +102,8 @@ const AdminModifyPage = () => {
 					gender: admin.gender,
 					last_name: admin.last_name,
 					phone_number: admin.phone_number,
-					rek_number: admin.bank_info
-						? admin.bank_info.account_number
-						: null,
-					role: admin.role,
+					rek_number: admin.bank_info.account_number,
+					role: admin.roles,
 			  };
 	};
 
@@ -170,7 +167,7 @@ const AdminModifyPage = () => {
 										/>
 									</Col>
 
-									<Col span={24}>
+									<Col span={12}>
 										<MoleculeSelectInputGroup
 											label="Jenis Kelamin"
 											name="gender"
@@ -191,7 +188,7 @@ const AdminModifyPage = () => {
 										/>
 									</Col>
 
-									<Col span={24}>
+									<Col span={12}>
 										<MoleculeTextInputGroup
 											name="phone_number"
 											label="Nomor Handpone"
@@ -200,7 +197,7 @@ const AdminModifyPage = () => {
 										/>
 									</Col>
 
-									<Col span={8}>
+									<Col span={12}>
 										<MoleculeSelectInputGroup
 											label="Bank (Opsional)"
 											name="bank"
@@ -211,7 +208,7 @@ const AdminModifyPage = () => {
 										/>
 									</Col>
 
-									<Col span={16}>
+									<Col span={12}>
 										<MoleculeTextInputGroup
 											name="rek_number"
 											label="Nomor Rekening"
@@ -222,23 +219,29 @@ const AdminModifyPage = () => {
 
 									<Col span={24}>
 										<MoleculeFileInputGroup
-											defaultValue={profileImage}
 											label="Foto Profile"
-											id="profile-photo-upload"
-											name="profile_photo"
-											placeholder="jpg, png"
-											setImage={setProfileImage}
+											fileInputs={[
+												{
+													defaultValue: admin
+														? admin.profile_image
+														: null,
+													ref: profileImageRef,
+												},
+											]}
 										/>
 									</Col>
 
 									<Col span={24}>
 										<MoleculeFileInputGroup
-											defaultValue={idCardImage}
 											label="Foto KTP"
-											name="id_card_photo"
-											id="card-photo-upload"
-											placeholder="jpg, png"
-											setImage={setIdCardImage}
+											fileInputs={[
+												{
+													defaultValue: admin
+														? admin.idcard_image
+														: null,
+													ref: idCardImageRef,
+												},
+											]}
 										/>
 									</Col>
 								</Row>
@@ -268,7 +271,7 @@ const AdminModifyPage = () => {
 										</Col>
 									)}
 
-									<Col span={isCreating ? 10 : 12}>
+									<Col span={12}>
 										<MoleculeSelectInputGroup
 											label="Peranan"
 											name="role"
@@ -276,16 +279,6 @@ const AdminModifyPage = () => {
 											required
 											data={{
 												url: 'roles',
-												mock: [
-													{
-														label: 'Administrator',
-														value: 'asdasd',
-													},
-													{
-														label: 'Kasir',
-														value: 'aihkbfiu3',
-													},
-												],
 												generateCustomOption: (
 													item
 												) => ({
@@ -296,7 +289,7 @@ const AdminModifyPage = () => {
 										/>
 									</Col>
 
-									<Col span={isCreating ? 14 : 24}>
+									<Col span={12}>
 										<MoleculeSelectInputGroup
 											label="Cabang"
 											name="branches"
@@ -305,6 +298,24 @@ const AdminModifyPage = () => {
 											required
 											data={{
 												url: 'branches',
+											}}
+										/>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeSelectInputGroup
+											label="Perusahaan"
+											name="company"
+											placeholder="Perusahaan"
+											required
+											data={{
+												url: 'companies',
+												mock: [
+													{
+														label: 'Sampingan',
+														value: 'Sampingan',
+													},
+												],
 											}}
 										/>
 									</Col>

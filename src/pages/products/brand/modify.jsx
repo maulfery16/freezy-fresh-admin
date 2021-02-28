@@ -1,27 +1,26 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Col, Form, message, Row, Skeleton, Typography } from 'antd';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
 import MoleculeFileInputGroup from '../../../components/molecules/input-group/file-input';
+import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
 import MoleculeNumberInputGroup from '../../../components/molecules/input-group/number-input';
 import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../../components/organisms/layout';
 
-import RequestAdapterService from '../../../services/request-adapter';
 import BrandService from '../../../services/brand';
-import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
 const brandService = new BrandService();
 
 const BrandModifyPage = () => {
 	const { id } = useParams();
+	const brandImageRef = useRef();
 	const history = useHistory();
 	const location = useLocation();
 	const isCreating = location.pathname.includes('add') ? true : false;
 
 	const [brand, setBrand] = useState(null);
-	const [brandImage, setBrandImage] = useState(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const getBrandDetail = async (id) => {
@@ -29,10 +28,6 @@ const BrandModifyPage = () => {
 			const { data: brand } = await brandService.getBrandById(id);
 
 			setBrand(brand);
-			const brandImageFile = await RequestAdapterService.convertImageURLtoFile(
-				brand.image
-			);
-			setBrandImage(brandImageFile);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
@@ -43,21 +38,19 @@ const BrandModifyPage = () => {
 		return isCreating
 			? {}
 			: {
-					code: brand.code,
 					en_name: brand.name.en,
 					followers: brand.social_media_followers || 1,
 					id_name: brand.name.id,
-					image: brandImage,
 			  };
 	};
 
 	const submit = async (values) => {
 		try {
 			setIsSubmitting(true);
+			const brandImage = await brandImageRef.current.getImage();
 
 			const data = new FormData();
-			data.append('code', values.code);
-			data.append('image', brandImage);
+			if (brandImage) data.append('image', brandImage);
 			data.append('name[en]', values.en_name);
 			data.append('name[id]', values.id_name);
 			data.append('social_media_followers', values.followers);
@@ -127,15 +120,6 @@ const BrandModifyPage = () => {
 						<Col span={15}>
 							<AtomCard title="Info Brand">
 								<Row gutter={12}>
-									<Col span={24}>
-										<MoleculeTextInputGroup
-											name="code"
-											label="Kode"
-											placeholder="Kode"
-											type="text"
-										/>
-									</Col>
-
 									<Col span={12}>
 										<MoleculeTextInputGroup
 											name="id_name"
@@ -156,12 +140,15 @@ const BrandModifyPage = () => {
 
 									<Col span={24}>
 										<MoleculeFileInputGroup
-											defaultValue={brandImage}
-											label="Logo Brand"
-											id="brand-logo-upload"
-											name="image"
-											placeholder="png"
-											setImage={setBrandImage}
+											label="Foto Icon"
+											fileInputs={[
+												{
+													defaultValue: brand
+														? brand.image
+														: null,
+													ref: brandImageRef,
+												},
+											]}
 										/>
 									</Col>
 
