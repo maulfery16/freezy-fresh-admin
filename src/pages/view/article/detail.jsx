@@ -1,23 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import ReactMoment from 'react-moment';
 
-import {
-	Button,
-	Col,
-	Image,
-	message,
-	Row,
-	Skeleton,
-	Space,
-	Typography,
-} from 'antd';
+import { Col, Image, message, Row, Skeleton, Space, Typography } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
-import MoleculeInfoGroup from '../../../components/molecules/info-group';
-import OrganismLayout from '../../../components/organisms/layout';
-import MoleculeMarkdownRenderer from '../../../components/molecules/markdown-renderer';
 import AtomColorInfoGroup from '../../../components/atoms/color-info-group';
+import AtomSecondaryButton from '../../../components/atoms/button/secondary-button';
+import MoleculeInfoGroup from '../../../components/molecules/info-group';
+import MoleculeMarkdownRenderer from '../../../components/molecules/markdown-renderer';
+import OrganismLayout from '../../../components/organisms/layout';
 
 // import ArticleService from '../../../services/article';
 // const articleService = new ArticleService();
@@ -230,12 +222,9 @@ const ArticleModifyPage = () => {
 					<Col className="mt4" span={24}>
 						<Space>
 							<Link to="/view/article">
-								<Button
-									className="br3 denim b--denim"
-									size="large"
-								>
+								<AtomSecondaryButton size="large">
 									Kembali
-								</Button>
+								</AtomSecondaryButton>
 							</Link>
 						</Space>
 					</Col>

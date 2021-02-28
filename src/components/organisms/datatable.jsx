@@ -1,6 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable react/display-name */
 /* eslint-disable react-hooks/exhaustive-deps */
+import PropTypes from 'prop-types';
 import React, {
 	forwardRef,
 	useEffect,
@@ -8,7 +9,6 @@ import React, {
 	useState,
 } from 'react';
 import {
-	Button,
 	Col,
 	Input,
 	message,
@@ -20,6 +20,7 @@ import {
 } from 'antd';
 
 import AtomDatatableHeader from '../atoms/datatable/header';
+import AtomPrimaryButton from '../atoms/button/primary-button';
 
 import DatatableService from '../../services/datatable';
 const datatableService = new DatatableService();
@@ -222,12 +223,12 @@ const OrganismDatatable = forwardRef((props, ref) => {
 
 					{props.filters && (
 						<Col span={4}>
-							<Button
-								className="bg-denim white br2 w-100"
+							<AtomPrimaryButton
+								className="w-100"
 								onClick={() => setIsFilterVisible(true)}
 							>
 								Filter
-							</Button>
+							</AtomPrimaryButton>
 
 							<Modal
 								footer={null}
@@ -261,13 +262,13 @@ const OrganismDatatable = forwardRef((props, ref) => {
 								</Space>
 
 								<Row className="mt4" justify="center">
-									<Button
-										className="bg-denim white br3 w-30"
+									<AtomPrimaryButton
+										className="br3 w-30"
 										onClick={setFilter}
 										size="large"
 									>
 										Filter
-									</Button>
+									</AtomPrimaryButton>
 								</Row>
 							</Modal>
 						</Col>
@@ -326,5 +327,22 @@ const OrganismDatatable = forwardRef((props, ref) => {
 		</Row>
 	);
 });
+
+OrganismDatatable.propTypes = {
+	additionalAction: PropTypes.node,
+	additionalInformation: PropTypes.node,
+	columns: PropTypes.array.isRequired,
+	filters: PropTypes.arrayOf(PropTypes.node),
+	scroll: PropTypes.number,
+	title: PropTypes.string,
+	titleSize: PropTypes.number,
+	dataSourceURL: PropTypes.string.isRequired,
+	searchInput: PropTypes.oneOfType([
+		PropTypes.bool,
+		PropTypes.shape({
+			placeholder: PropTypes.string,
+		}),
+	]),
+};
 
 export default OrganismDatatable;

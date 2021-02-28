@@ -1,5 +1,6 @@
-import React from 'react';
 import NumberFormat from 'react-number-format';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const AtomNumberFormat = (props) => {
 	return (
@@ -11,6 +12,11 @@ const AtomNumberFormat = (props) => {
 			value={props.value}
 		/>
 	);
+};
+
+AtomNumberFormat.propTypes = {
+	prefix: PropTypes.string,
+	value: PropTypes.number,
 };
 
 export default AtomNumberFormat;

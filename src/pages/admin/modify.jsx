@@ -31,6 +31,7 @@ const AdminModifyPage = () => {
 			let admin = await adminService.getAdminById(id);
 			admin = admin.data;
 			admin.roles = admin.roles.map((role) => role.name);
+			admin.branches = admin.branches.map((branch) => branch.id);
 
 			setAdmin(admin);
 		} catch (error) {
@@ -52,12 +53,12 @@ const AdminModifyPage = () => {
 			data.append('email', values.email);
 			data.append('first_name', values.first_name);
 			data.append('gender', values.gender);
-			data.append('idcard_image', idCardImage);
 			data.append('last_name', values.last_name);
 			data.append('phone_number', values.phone_number);
-			data.append('profile_image', profileImage);
 			data.append('role_name', values.role);
 			data.append('company', values.company);
+			if (idCardImage) data.append('idcard_image', idCardImage);
+			if (profileImage) data.append('profile_image', profileImage);
 			if (isCreating) data.append('password', values.password);
 			values.branches.forEach((branch) => {
 				data.append('branch_id[]', branch);
@@ -90,8 +91,8 @@ const AdminModifyPage = () => {
 		return isCreating || !admin
 			? {}
 			: {
-					bank: admin.banl_account_name,
-					branch: admin.branch,
+					bank: admin.bank_info.bank.name,
+					branches: admin.branch,
 					email: admin.email,
 					first_name: admin.first_name,
 					profile_image: admin.profile_image,
@@ -99,7 +100,7 @@ const AdminModifyPage = () => {
 					gender: admin.gender,
 					last_name: admin.last_name,
 					phone_number: admin.phone_number,
-					rek_number: admin.bank_account_number,
+					rek_number: admin.bank_info.account_number,
 					role: admin.roles,
 			  };
 	};

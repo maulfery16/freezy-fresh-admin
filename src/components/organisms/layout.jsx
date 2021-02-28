@@ -18,9 +18,19 @@ import {
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { AiTwotoneBank } from 'react-icons/ai';
-import { BsFillPersonCheckFill, BsPersonFill } from 'react-icons/bs';
-import { FaMoneyBill, FaMotorcycle, FaStoreAlt } from 'react-icons/fa';
+import {
+	AiFillGift,
+	AiOutlineTransaction,
+	AiTwotoneCustomerService,
+	AiTwotoneBank,
+} from 'react-icons/ai';
+import { BsPersonFill } from 'react-icons/bs';
+import {
+	FaBuilding,
+	FaMoneyBill,
+	FaMotorcycle,
+	FaStoreAlt,
+} from 'react-icons/fa';
 import {
 	BellOutlined,
 	DropboxOutlined,
@@ -59,16 +69,12 @@ const menus = [
 		subMenuKey: 'order',
 		subMenus: [
 			{
-				name: 'Pesanan Baru',
-				link: '/order/new',
+				name: 'Pesanan Dikomplain',
+				link: '/order/complain',
 			},
 			{
-				name: 'Pesanan Diproses',
-				link: '/order/proceed',
-			},
-			{
-				name: 'Pesanan Batal',
-				link: '/order/cancel',
+				name: 'Ulasan',
+				link: '/order/review',
 			},
 		],
 	},
@@ -82,6 +88,10 @@ const menus = [
 				link: '/products',
 			},
 			{
+				name: 'Brand',
+				link: '/products/brand',
+			},
+			{
 				name: 'Kategori Dasar',
 				link: '/products/category',
 			},
@@ -90,12 +100,20 @@ const menus = [
 				link: '/products/additional-category',
 			},
 			{
-				name: 'Brand',
-				link: '/products/brand',
+				name: 'Rekomendasi',
+				link: '/products/recomandation',
 			},
 			{
 				name: 'Warna',
 				link: '/products/colour',
+			},
+			{
+				name: 'Wishlist',
+				link: '/products/wishlist',
+			},
+			{
+				name: 'Zona',
+				link: '/products/zone',
 			},
 		],
 	},
@@ -159,24 +177,65 @@ const menus = [
 		],
 	},
 	{
+		name: ' Pelanggan',
+		icon: <AiTwotoneCustomerService />,
+		subMenuKey: 'customer',
+		subMenus: [
+			{
+				name: 'Pelanggan',
+				link: '/customer',
+			},
+			{
+				name: 'Daftar Teman',
+				link: '/customer/friend-list',
+			},
+			{
+				name: 'Daftar Keluarga',
+				link: '/customer/family-list',
+			},
+			{
+				name: 'Favorite',
+				link: '/customer/favorite',
+			},
+			{
+				name: 'My Catalog',
+				link: '/customer/catalog',
+			},
+			{
+				name: 'MGM',
+				link: '/customer/mgm',
+			},
+		],
+	},
+	{
+		name: 'Transaksi',
+		icon: <AiOutlineTransaction />,
+		link: '/membership',
+	},
+	{
+		name: 'Cabang',
+		icon: <FaStoreAlt />,
+		link: '/branch',
+	},
+	{
+		name: 'Perusahaan',
+		icon: <FaBuilding />,
+		link: '/perusahaan',
+	},
+	{
 		name: 'Bank',
 		icon: <AiTwotoneBank />,
 		link: '/bank',
 	},
 	{
-		name: 'Membership',
-		icon: <BsFillPersonCheckFill />,
-		link: '/membership',
-	},
-	{
-		name: 'Cabang Toko',
-		icon: <FaStoreAlt />,
-		link: '/branch',
-	},
-	{
 		name: 'Pendapatan',
 		icon: <FaMoneyBill />,
 		link: '/income',
+	},
+	{
+		name: 'Voucher',
+		icon: <AiFillGift />,
+		link: '/voucher',
 	},
 	{
 		name: 'Kurir',

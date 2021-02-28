@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Form, Input, Typography } from 'antd';
 
@@ -28,6 +29,12 @@ const MoleculeTextInputGroup = (props) => {
 		},
 	];
 
+	const inputProps = {
+		...props,
+		className: `br3 ba bw1 b--black-10 pv2 ph3 ${props.className || ''}`,
+		size: 'middle',
+	};
+
 	if (props.required)
 		rules.push({
 			message:
@@ -42,14 +49,21 @@ const MoleculeTextInputGroup = (props) => {
 			</Typography.Text>
 
 			<Form.Item name={props.name} noStyle rules={rules}>
-				<Input
-					{...props}
-					className={`br3 ba bw1 b--black-10 pv2 ph3 ${props.className}`}
-					size="middle"
-				/>
+				{props.type === 'textarea' ? (
+					<Input.TextArea {...inputProps} />
+				) : (
+					<Input {...inputProps} />
+				)}
 			</Form.Item>
 		</Form.Item>
 	);
+};
+
+MoleculeTextInputGroup.propTypes = {
+	label: PropTypes.string,
+	name: PropTypes.string.isRequired,
+	placeholder: PropTypes.string,
+	type: PropTypes.string,
 };
 
 export default MoleculeTextInputGroup;

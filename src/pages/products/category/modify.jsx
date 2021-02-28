@@ -12,7 +12,6 @@ import MoleculeTextInputGroup from '../../../components/molecules/input-group/te
 import OrganismLayout from '../../../components/organisms/layout';
 
 import CategoryService from '../../../services/category';
-
 const categoryService = new CategoryService();
 
 const CategoryModifyPage = () => {

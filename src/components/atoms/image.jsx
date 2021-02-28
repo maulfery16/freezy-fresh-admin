@@ -1,24 +1,22 @@
 import { Image } from 'antd';
+import PropTypes from 'prop-types';
 import React from 'react';
-
-import config from '../../config';
 
 const AtomImage = (props) => {
 	return (
 		<Image
 			{...props}
 			preview
-			src={
-				typeof props.src === 'string'
-					? ['https', 'http'].includes(props.src)
-						? props.src
-						: `${config.STORAGE_URL}/${props.src}`
-					: `https://www.eurobitume.eu/typo3conf/ext/pits_downloadcenter/Resources/Public/Icons/noimage.jpg`
-			}
+			src={props.src}
 			height={props.size || 100}
 			width={props.size || 100}
 		/>
 	);
+};
+
+AtomImage.propTypes = {
+	size: PropTypes.number,
+	src: PropTypes.string,
 };
 
 export default AtomImage;

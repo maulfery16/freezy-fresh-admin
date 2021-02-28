@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, Col, Form, message, Row, Space, Typography } from 'antd';
+import { Col, Form, message, Row, Space, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 
+import AtomPrimaryButton from '../../components/atoms/button/primary-button';
 import AuthenticationLayout from '../../components/layouts/authentication';
 import MoleculeTextInputGroup from '../../components/molecules/input-group/text-input';
 
@@ -64,15 +65,15 @@ const ForgotPasswordPages = () => {
 								</Link>
 							</Col>
 							<Col span={10}>
-								<Button
+								<AtomPrimaryButton
 									block
-									className="bg-denim f6 fw5 shadow-3 white"
+									className="f6 fw5"
 									htmlType="submit"
 									size="large"
 									style={{ borderRadius: '8px' }}
 								>
 									SUBMIT
-								</Button>
+								</AtomPrimaryButton>
 							</Col>
 						</Row>
 

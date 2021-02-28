@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { Select, Skeleton } from 'antd';
 
@@ -63,6 +64,15 @@ const AtomCustomSelect = (props) => {
 	) : (
 		<Skeleton active title={{ width: '100%' }} paragraph={{ rows: 0 }} />
 	);
+};
+
+AtomCustomSelect.propTypes = {
+	indentifier: PropTypes.string,
+	data: PropTypes.shape({
+		generateCustomOption: PropTypes.func,
+		mock: PropTypes.array,
+		url: PropTypes.string,
+	}),
 };
 
 export default AtomCustomSelect;

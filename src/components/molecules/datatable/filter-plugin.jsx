@@ -1,5 +1,7 @@
-import React from 'react';
 import { Space, Typography } from 'antd';
+import PropTypes from 'prop-types';
+import React from 'react';
+
 import AtomCustomSelect from '../../atoms/input/select';
 
 const MoleculeDatatableFilter = (props) => {
@@ -37,6 +39,14 @@ const MoleculeDatatableFilter = (props) => {
 	) : (
 		<>Filter plugin is invalid</>
 	);
+};
+
+MoleculeDatatableFilter.propTypes = {
+	addFilter: PropTypes.func,
+	name: PropTypes.string,
+	operator: PropTypes.string,
+	placeholder: PropTypes.string,
+	removeFilter: PropTypes.func,
 };
 
 export default MoleculeDatatableFilter;

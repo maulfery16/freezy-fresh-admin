@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
 import { Space, Typography } from 'antd';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 
 import { CaretDownFilled, CaretUpFilled } from '@ant-design/icons';
 
@@ -41,6 +42,14 @@ const AtomDatatableHeader = (props) => {
 			)}
 		</Space>
 	);
+};
+
+AtomDatatableHeader.propTypes = {
+	attr: PropTypes.string,
+	activeSort: PropTypes.shape({
+		orderBy: PropTypes.string,
+		sortedBy: PropTypes.string,
+	}),
 };
 
 export default AtomDatatableHeader;

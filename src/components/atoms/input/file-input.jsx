@@ -1,4 +1,5 @@
 /* eslint-disable react/display-name */
+import PropTypes from 'prop-types';
 import React, {
 	forwardRef,
 	useEffect,
@@ -10,9 +11,6 @@ import { Modal, Upload } from 'antd';
 import UploadDekstopIcon from '../../../assets/icons/desktop-upload.svg';
 import UploadMobileIcon from '../../../assets/icons/mobile-upload.svg';
 
-import config from '../../../config';
-// import RequestAdapterService from '../../../services/request-adapter';
-
 const AtomFileInput = forwardRef((props, ref) => {
 	const [fileList, setfileList] = useState([]);
 	const [previewVisible, setPreviewVisible] = useState(false);
@@ -20,14 +18,6 @@ const AtomFileInput = forwardRef((props, ref) => {
 	const [previewTitle, setPreviewTitle] = useState('');
 
 	const closeImagePreview = () => setPreviewVisible(false);
-
-	// const convertImageURLtoFile = async (url) => {
-	// 	const imageService = new RequestAdapterService();
-	// 	const response = await imageService.sendGetRequest(url);
-	// 	const contentType = response.headers.get('content-type');
-	// 	const blob = await response.blob();
-	// 	return new File([blob], 'Image', { contentType });
-	// };
 
 	const getBase64 = (file) => {
 		if (file) {
@@ -68,7 +58,7 @@ const AtomFileInput = forwardRef((props, ref) => {
 					uid: '-1',
 					name: filename[filename.length - 1],
 					status: 'done',
-					url: `${config.STORAGE_URL}/${props.defaultValue}`,
+					url: props.defaultValue,
 				},
 			]);
 		}
@@ -81,7 +71,7 @@ const AtomFileInput = forwardRef((props, ref) => {
 				if (fileList[0].originFileObj) {
 					image = fileList[0].originFileObj;
 				} else {
-					image = fileList[0].url;
+					image = undefined;
 				}
 
 				return image;
@@ -124,5 +114,11 @@ const AtomFileInput = forwardRef((props, ref) => {
 		</>
 	);
 });
+
+AtomFileInput.propTypes = {
+	accept: PropTypes.string,
+	defaultValue: PropTypes.string,
+	isMobileImage: PropTypes.bool,
+};
 
 export default AtomFileInput;

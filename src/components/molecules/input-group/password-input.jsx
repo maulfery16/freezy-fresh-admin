@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Form, Input, Typography } from 'antd';
 
@@ -48,6 +49,13 @@ const MoleculePasswordInputGroup = (props) => {
 			</Form.Item>
 		</Form.Item>
 	);
+};
+
+MoleculePasswordInputGroup.propTypes = {
+	label: PropTypes.string,
+	name: PropTypes.string.isRequired,
+	required: PropTypes.bool,
+	requiredMessage: PropTypes.string,
 };
 
 export default MoleculePasswordInputGroup;
