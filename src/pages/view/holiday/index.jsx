@@ -1,28 +1,18 @@
 /* eslint-disable react/display-name */
 import React, { useEffect, useRef, useState } from 'react';
 import ReactMoment from 'react-moment';
-import { Link } from 'react-router-dom';
 
-import {
-	Button,
-	Col,
-	Image,
-	Row,
-	Skeleton,
-	Space,
-	Tabs,
-	Typography,
-	message,
-} from 'antd';
+import { Col, Image, Row, Skeleton, Tabs, Typography, message } from 'antd';
 import { useParams } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
+import AtomNumberFormat from '../../../components/atoms/number-format';
+import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
+import MoleculeDatatableFilter from '../../../components/molecules/datatable/filter-plugin';
 import MoleculeInfoGroup from '../../../components/molecules/info-group';
 import MoleculeMarkdownRenderer from '../../../components/molecules/markdown-renderer';
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
-import AtomNumberFormat from '../../../components/atoms/number-format';
-import MoleculeDatatableFilter from '../../../components/molecules/datatable/filter-plugin';
 
 const { TabPane } = Tabs;
 
@@ -51,7 +41,7 @@ const mock = {
 	},
 };
 
-const HolidayPage = (props) => {
+const HolidayPage = () => {
 	const column = [
 		{
 			title: 'SKUID',
@@ -186,20 +176,14 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 							</span>
 						</Typography.Title>
 
-						<Space>
-							<Button
-								className="br2 denim b--denim"
-								// loading={isExporting}
-								// onClick={() => exportAsCSV()}
-							>
-								Export Excel
-							</Button>
-							<Link to={`${props.location.pathname}/edit`}>
-								<Button className="br2 bg-denim white">
-									Edit Detail
-								</Button>
-							</Link>
-						</Space>
+						<MoleculeDatatableAdditionalAction
+							column={column}
+							isEdit={true}
+							label="Holiday"
+							getLimit={0}
+							route="/view/holiday"
+							url="holiday"
+						/>
 					</Row>
 				</Col>
 			</Row>

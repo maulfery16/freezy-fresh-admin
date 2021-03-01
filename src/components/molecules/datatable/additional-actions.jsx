@@ -38,8 +38,10 @@ const MoleculeDatatableAdditionalAction = (props) => {
 				Export Excel
 			</AtomSecondaryButton>
 			{!props.withoutAddButton && (
-				<Link to={`${props.route}/add`}>
-					<AtomPrimaryButton>Tambah {props.label}</AtomPrimaryButton>
+				<Link to={`${props.route}/${props.isEdit ? 'edit' : 'add'}`}>
+					<AtomPrimaryButton>{`${props.isEdit ? 'Edit' : 'Tambah'} ${
+						props.label
+					}`}</AtomPrimaryButton>
 				</Link>
 			)}
 		</Space>
@@ -51,6 +53,7 @@ MoleculeDatatableAdditionalAction.propTypes = {
 	label: PropTypes.string.isRequired,
 	route: PropTypes.string.isRequired,
 	withoutAddButton: PropTypes.bool,
+	isEdit: PropTypes.bool,
 };
 
 export default MoleculeDatatableAdditionalAction;
