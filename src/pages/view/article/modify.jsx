@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import React, { useEffect, useState } from 'react';
-import { Col, Form, message, Row, Skeleton, Space, Typography } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
+import { Col, Form, message, Row, Skeleton, Typography } from 'antd';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
@@ -8,22 +8,23 @@ import MoleculeFileInputGroup from '../../../components/molecules/input-group/fi
 import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../../components/organisms/layout';
 
-import RequestAdapterService from '../../../services/request-adapter';
-import ArticleService from '../../../services/article';
 import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
 import MoleculeSelectInputGroup from '../../../components/molecules/input-group/select-input';
 import MoleculeTextEditorGroup from '../../../components/molecules/input-group/text-editor';
+
+import ArticleService from '../../../services/article';
 const articleService = new ArticleService();
 
 const ArticleModifyPage = () => {
+	const dekstopImageRef = useRef();
+	const mobileImageRef = useRef();
+
 	const { id } = useParams();
 	const history = useHistory();
 	const location = useLocation();
 	const isCreating = location.pathname.includes('add') ? true : false;
 
 	const [article, setArticle] = useState(null);
-	const [articleImageMobile, setArticleImageMobile] = useState(null);
-	const [articleImageDekstop, setArticleImageDekstop] = useState(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [contentId, setContentId] = useState('');
 	const [contentEn, setContentEn] = useState('');
@@ -33,17 +34,6 @@ const ArticleModifyPage = () => {
 			const { data: article } = await articleService.getArticleById(id);
 
 			setArticle(article);
-
-			const articleImageMobileFile = await RequestAdapterService.convertImageURLtoFile(
-				article.image
-			);
-			const articleImageDekstopFile = await RequestAdapterService.convertImageURLtoFile(
-				article.image
-			);
-
-			setArticleImageMobile(articleImageMobileFile);
-			setArticleImageDekstop(articleImageDekstopFile);
-
 			setContentId(article.content.id);
 			setContentEn(article.content.en);
 		} catch (error) {
@@ -59,25 +49,26 @@ const ArticleModifyPage = () => {
 					category: article.category,
 					en_title: article.title.en,
 					id_title: article.title.id,
-					imageMobile: articleImageMobile,
-					imageDekstop: articleImageDekstop,
-					video_url: article.video_url,
+					video_link: article.video_link,
 			  };
 	};
 
 	const submit = async (values) => {
+		const dekstopImage = await dekstopImageRef.current.getImage();
+		const mobileImage = await mobileImageRef.current.getImage();
+
 		try {
 			setIsSubmitting(true);
 
 			const data = new FormData();
-			data.append('category', values.category);
+			data.append('article_category_id', values.article_category);
 			data.append('content[en]', contentEn);
 			data.append('content[id]', contentId);
-			data.append('image', articleImageMobile);
-			data.append('image', articleImageDekstop);
+			data.append('dekstop_image', dekstopImage);
+			data.append('mobile_image', mobileImage);
 			data.append('title[en]', values.en_title);
 			data.append('title[id]', values.id_title);
-			data.append('video_url', values.video_url);
+			data.append('video_link', values.video_link);
 
 			if (isCreating) {
 				await articleService.createArticle(data);
@@ -143,6 +134,36 @@ const ArticleModifyPage = () => {
 						<Col span={24}>
 							<AtomCard title="Info Artikel">
 								<Row gutter={12}>
+									<Col span={24}>
+										<MoleculeFileInputGroup
+											label="Foto Artikel"
+											description="
+												Format gambar .jpg .jpeg .png, Untuk foto banner mobile ukuran minimum 0 x 0px (Untuk
+												gambar optimal gunakan ukuran minimum 0 x 0 px) Untuk foto banner desktop ukuran
+												minimum 0 x 0px (Untuk gambar optimal gunakan ukuran minimum 0 x 0 px)
+											"
+											fileInputs={[
+												{
+													defaultValue: article
+														? article.image_mobile
+														: null,
+													isMobileImage: true,
+													label:
+														'Foro Artikel Mobile',
+													ref: mobileImageRef,
+												},
+												{
+													defaultValue: article
+														? article.image_desktop
+														: null,
+													label:
+														'Foro Artikel Dekstop',
+													ref: dekstopImageRef,
+												},
+											]}
+										/>
+									</Col>
+
 									<Col span={12}>
 										<MoleculeTextInputGroup
 											name="id_title"
@@ -162,68 +183,34 @@ const ArticleModifyPage = () => {
 									</Col>
 
 									<Col span={12}>
-										<MoleculeFileInputGroup
-											defaultValue={articleImageMobile}
-											label="Foto Artikel Mobile"
-											id="article-photo-upload-mobile"
-											name="image"
-											placeholder="png"
-											setImage={setArticleImageMobile}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeFileInputGroup
-											defaultValue={articleImageDekstop}
-											label="Foto Artikel Dekstop"
-											id="article-photo-upload-mobile"
-											name="image"
-											placeholder="png"
-											setImage={setArticleImageDekstop}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeTextInputGroup
-											name="video_url"
-											label="Link Video"
-											placeholder="Link Video"
-											type="text"
-										/>
-									</Col>
-
-									<Col span={12}>
 										<MoleculeSelectInputGroup
-											label="Pilih Kategori Artikel"
-											name="category"
-											placeholder="Pilih Kategori"
+											label="Kategori Artikel"
+											name="article_category"
+											placeholder="Kategori Artikel"
+											mode="article_category"
+											required
 											data={{
-												url: 'colors',
+												url: 'article-categories',
 												generateCustomOption: (
 													item
 												) => ({
 													value: item.id,
-													label: (
-														<Space>
-															<div
-																className="br2"
-																style={{
-																	background:
-																		item.hexa_code,
-																	height: 20,
-																	width: 20,
-																}}
-															/>
-															{item.name.en} /
-															{item.name.id}
-														</Space>
-													),
+													label: `${item.name.id} / ${item.name.en}`,
 												}),
 											}}
 										/>
 									</Col>
 
 									<Col span={12}>
+										<MoleculeTextInputGroup
+											name="video_link"
+											label="Link Video"
+											placeholder="Link Video"
+											type="text"
+										/>
+									</Col>
+
+									<Col span={24}>
 										<MoleculeTextEditorGroup
 											label="Konten Artikel (ID)"
 											onChange={setContentId}
@@ -231,7 +218,7 @@ const ArticleModifyPage = () => {
 										/>
 									</Col>
 
-									<Col span={12}>
+									<Col span={24}>
 										<MoleculeTextEditorGroup
 											label="Konten Artikel (EN)"
 											onChange={setContentEn}

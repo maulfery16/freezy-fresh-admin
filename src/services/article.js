@@ -1,6 +1,6 @@
 import RequestAdapterService from './request-adapter';
 
-export default class ArticleService extends RequestAdapterService {
+export default class articleservice extends RequestAdapterService {
 	async createArticle(article) {
 		try {
 			const { data } = await super.sendPostMultipartRequest(

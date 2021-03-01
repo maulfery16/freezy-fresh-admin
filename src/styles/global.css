@@ -146,3 +146,7 @@ a {
 	font-size: 13px !important;
 	height: 30px !important;
 }
+
+.ql-editor {
+	min-height: 250px;
+}

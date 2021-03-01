@@ -5,8 +5,8 @@ import { Col, message, Row, Skeleton, Space, Typography } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
-import AtomImage from '../../../components/atoms/image';
 import AtomSecondaryButton from '../../../components/atoms/button/secondary-button';
+import MoleculeImageGroup from '../../../components/molecules/molecule-image-group';
 import MoleculeInfoGroup from '../../../components/molecules/info-group';
 import OrganismLayout from '../../../components/organisms/layout';
 
@@ -57,48 +57,22 @@ const BannerModifyPage = () => {
 									<MoleculeInfoGroup
 										title="Foto Banner"
 										content={
-											<Row
-												className="ba b--black-20 br3 pv5"
-												gutter={48}
-												justify="center"
-												style={{
-													marginLeft: '0px',
-													maxWidth: '100%',
-												}}
-											>
-												<Col>
-													<Space
-														align="center"
-														direction="vertical"
-													>
-														<AtomImage
-															src={
-																banner.image_mobile
-															}
-														/>
-
-														<p>
-															Foto Banner Mobile
-														</p>
-													</Space>
-												</Col>
-												<Col>
-													<Space
-														align="center"
-														direction="vertical"
-													>
-														<AtomImage
-															src={
-																banner.image_desktop
-															}
-														/>
-
-														<p>
-															Foto Banner Dekstop
-														</p>
-													</Space>
-												</Col>
-											</Row>
+											<MoleculeImageGroup
+												images={[
+													{
+														source:
+															banner.image_mobile,
+														label:
+															' Foto Banner Mobile',
+													},
+													{
+														source:
+															banner.image_dekstop,
+														label:
+															' Foto Banner Dekstop',
+													},
+												]}
+											/>
 										}
 									/>
 								</Col>
