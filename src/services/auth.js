@@ -12,11 +12,7 @@ export default class AuthService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Login failed: ${error.response.data.message} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Login failed:${super.generateErrorMessage(error)}`
 			);
 		}
 	}
@@ -32,13 +28,9 @@ export default class AuthService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Get authenticated user failed: ${
-					error.response.data.message
-				} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Get authenticated user failed: ${super.generateErrorMessage(
+					error
+				)}`
 			);
 		}
 	}

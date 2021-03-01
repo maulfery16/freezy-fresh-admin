@@ -12,11 +12,7 @@ export default class BrandService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail creating brand: ${error.response.data.message} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail creating brand:${super.generateErrorMessage(error)}`
 			);
 		}
 	}
@@ -32,11 +28,7 @@ export default class BrandService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail updating brand: ${error.response.data.message} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail updating brand:${super.generateErrorMessage(error)}`
 			);
 		}
 	}
@@ -51,11 +43,9 @@ export default class BrandService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail getting brand detail: ${error.response.data.message} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail getting brand detail: ${${super.generateErrorMessage(error)}(
+					error
+				)}`
 			);
 		}
 	}

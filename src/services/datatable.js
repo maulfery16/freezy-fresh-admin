@@ -10,13 +10,10 @@ export default class DatatableService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail deleting ${url.replaceAll('_', ' ')}: ${
-					error.response.data.message
-				} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail deleting ${url.replaceAll(
+					'_',
+					' '
+				)}: ${super.generateErrorMessage(error)}`
 			);
 		}
 	}
@@ -33,13 +30,10 @@ export default class DatatableService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Exporting ${url.replaceAll('_', ' ')} as CSV: ${
-					error.response.data.message
-				} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Exporting ${url.replaceAll(
+					'_',
+					' '
+				)} as CSV: ${super.generateErrorMessage(error)}`
 			);
 		}
 	}
@@ -55,11 +49,7 @@ export default class DatatableService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Getting list: ${error.response.data.message} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Getting list:${super.generateErrorMessage(error)}`
 			);
 		}
 	}
@@ -75,13 +65,9 @@ export default class DatatableService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail updating active status: ${
-					error.response.data.message
-				} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail updating active status: ${super.generateErrorMessage(
+					error
+				)}`
 			);
 		}
 	}

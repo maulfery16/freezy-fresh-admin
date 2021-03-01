@@ -12,11 +12,7 @@ export default class CategoryService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail creating category: ${error.response.data.message} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail creating category:${super.generateErrorMessage(error)}`
 			);
 		}
 	}
@@ -31,11 +27,7 @@ export default class CategoryService extends RequestAdapterService {
 			return data;
 		} catch (error) {
 			throw new Error(
-				`Fail updating category: ${error.response.data.message} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail updating category:${super.generateErrorMessage(error)}`
 			);
 		}
 	}
@@ -49,13 +41,9 @@ export default class CategoryService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail getting category detail: ${
-					error.response.data.message
-				} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail getting category detail: ${super.generateErrorMessage(
+					error
+				)}`
 			);
 		}
 	}

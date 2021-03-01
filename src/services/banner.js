@@ -12,11 +12,7 @@ export default class BannerService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail creating banner: ${error.response.data.message} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail creating banner:${super.generateErrorMessage(error)}`
 			);
 		}
 	}
@@ -30,11 +26,7 @@ export default class BannerService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail deleting banner: ${error.response.data.message} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail deleting banner:${super.generateErrorMessage(error)}`
 			);
 		}
 	}
@@ -50,11 +42,7 @@ export default class BannerService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail updating banner: ${error.response.data.message} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail updating banner:${super.generateErrorMessage(error)}`
 			);
 		}
 	}
@@ -66,11 +54,7 @@ export default class BannerService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Exporting Banner as CSV: ${error.response.data.message} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Exporting Banner as CSV:${super.generateErrorMessage(error)}`
 			);
 		}
 	}
@@ -85,11 +69,9 @@ export default class BannerService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail getting banner detail: ${error.response.data.message} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail getting banner detail: ${${super.generateErrorMessage(error)}(
+					error
+				)}`
 			);
 		}
 	}
