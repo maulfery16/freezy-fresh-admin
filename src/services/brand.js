@@ -43,7 +43,7 @@ export default class BrandService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail getting brand detail: ${${super.generateErrorMessage(error)}(
+				`Fail getting brand detail: ${super.generateErrorMessage(
 					error
 				)}`
 			);

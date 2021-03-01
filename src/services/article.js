@@ -43,7 +43,9 @@ export default class ArticleService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail getting article detail: ${super.generateErrorMessage(error)}`
+				`Fail getting article detail: ${super.generateErrorMessage(
+					error
+				)}`
 			);
 		}
 	}
@@ -61,7 +63,7 @@ export default class ArticleService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Setting article as primary: ${${super.generateErrorMessage(error)}(
+				`Setting article as primary: ${super.generateErrorMessage(
 					error
 				)}`
 			);

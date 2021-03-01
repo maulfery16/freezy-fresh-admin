@@ -69,7 +69,7 @@ export default class BannerService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail getting banner detail: ${${super.generateErrorMessage(error)}(
+				`Fail getting banner detail: ${super.generateErrorMessage(
 					error
 				)}`
 			);

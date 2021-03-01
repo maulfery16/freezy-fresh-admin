@@ -43,7 +43,7 @@ export default class AdminService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail getting admin detail: ${${super.generateErrorMessage(error)}(
+				`Fail getting admin detail: ${super.generateErrorMessage(
 					error
 				)}`
 			);
