@@ -107,11 +107,17 @@ const OrganismDatatable = forwardRef((props, ref) => {
 	};
 
 	const setDatatableMetadata = (pagination, _, sorter) => {
+		console.log(pagination);
 		const { current, pageSize } = pagination;
 		const { field, order } = sorter;
 
-		setPagination(current, pageSize);
-		setSort(field, order ? order.replace('end', '') : null);
+		setFilterParams({
+			...filterParams,
+			limit: pageSize,
+			orderBy: field,
+			page: current,
+			sortedBy: order ? order.replace('end', '') : '',
+		});
 	};
 
 	const setFilter = () => {
@@ -142,19 +148,6 @@ const OrganismDatatable = forwardRef((props, ref) => {
 			keyword.unshift(search);
 			setFilterParams({ ...filterParams, search: keyword.join(';') });
 		}
-	};
-
-	const setPagination = (page, limit) => {
-		setFilterParams({ ...filterParams, limit, page });
-	};
-
-	const setSort = (sortedBy, orderBy) => {
-		setFilterParams({
-			...filterParams,
-			orderBy,
-			page: 1,
-			sortedBy,
-		});
 	};
 
 	useEffect(() => {
