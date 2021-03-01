@@ -19,7 +19,6 @@ import {
 	Typography,
 } from 'antd';
 
-import AtomDatatableHeader from '../atoms/datatable/header';
 import AtomPrimaryButton from '../atoms/button/primary-button';
 
 import DatatableService from '../../services/datatable';
@@ -107,6 +106,20 @@ const OrganismDatatable = forwardRef((props, ref) => {
 		setFilters(newFilters);
 	};
 
+	const setDatatableMetadata = (pagination, _, sorter) => {
+		console.log(pagination);
+		const { current, pageSize } = pagination;
+		const { field, order } = sorter;
+
+		setFilterParams({
+			...filterParams,
+			limit: pageSize,
+			orderBy: field,
+			page: current,
+			sortedBy: order ? order.replace('end', '') : '',
+		});
+	};
+
 	const setFilter = () => {
 		const keyword =
 			filterParams.search.split(';')[0].includes(':') ||
@@ -135,19 +148,6 @@ const OrganismDatatable = forwardRef((props, ref) => {
 			keyword.unshift(search);
 			setFilterParams({ ...filterParams, search: keyword.join(';') });
 		}
-	};
-
-	const setPagination = (page, limit) => {
-		setFilterParams({ ...filterParams, limit, page });
-	};
-
-	const setSort = (sortedBy, orderBy) => {
-		setFilterParams({
-			...filterParams,
-			orderBy,
-			page: 1,
-			sortedBy,
-		});
 	};
 
 	useEffect(() => {
@@ -224,8 +224,9 @@ const OrganismDatatable = forwardRef((props, ref) => {
 					{props.filters && (
 						<Col span={4}>
 							<AtomPrimaryButton
-								additionalClassName="w-100"
+								className="w-100"
 								onClick={() => setIsFilterVisible(true)}
+								size="large"
 							>
 								Filter
 							</AtomPrimaryButton>
@@ -263,7 +264,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 
 								<Row className="mt4" justify="center">
 									<AtomPrimaryButton
-										additionalClassName="br3 w-30"
+										className="br3 w-30"
 										onClick={setFilter}
 										size="large"
 									>
@@ -279,23 +280,11 @@ const OrganismDatatable = forwardRef((props, ref) => {
 			<Col className="mt4" span={24}>
 				<Table
 					bordered={true}
-					columns={props.columns.map((column) => ({
-						...column,
-						title: (
-							<AtomDatatableHeader
-								attr={column.dataIndex}
-								activeSort={{
-									orderBy: filterParams.orderBy,
-									sortedBy: filterParams.sortedBy,
-								}}
-								setSort={column.sort ? setSort : false}
-								title={column.title}
-							/>
-						),
-					}))}
+					columns={props.columns}
 					className={props.className}
 					dataSource={data}
 					loading={isGettingData}
+					onChange={setDatatableMetadata}
 					pagination={{
 						current: filterParams.page,
 						itemRender: (_, type, originalEl) => {
@@ -313,8 +302,6 @@ const OrganismDatatable = forwardRef((props, ref) => {
 								);
 							return originalEl;
 						},
-						onChange: (page, pageSize) =>
-							setPagination(page, pageSize),
 						pageSize: filterParams.limit,
 						responsive: true,
 						total: totalData,

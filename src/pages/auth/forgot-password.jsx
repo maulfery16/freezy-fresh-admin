@@ -67,7 +67,7 @@ const ForgotPasswordPages = () => {
 							<Col span={10}>
 								<AtomPrimaryButton
 									block
-									additionalClassName="f6 fw5"
+									className="f6 fw5"
 									htmlType="submit"
 									size="large"
 									style={{ borderRadius: '8px' }}
