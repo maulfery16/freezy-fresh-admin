@@ -36,7 +36,7 @@ const EmailCheckPages = () => {
 				<AtomPrimaryButton
 					block
 					href="/login"
-					className="f7 fw5 shadow-3 pv2 ph4 mt3"
+					additionalClassName="f7 fw5 shadow-3 pv2 ph4 mt3"
 					htmlType="button"
 					size="large"
 					style={{ borderRadius: '8px' }}
