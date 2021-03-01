@@ -74,12 +74,21 @@ export default class AuthService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Forgot Password failed: ${error.response.data.message} \n
-				${error.response.status} - ${
-					error.response.data.errors
+				`Forgot Password failed: ${
+					error.response.status === 404
+						? 'Your account is not registered'
+						: error.response.data.message +
+						  // eslint-disable-next-line no-mixed-spaces-and-tabs
+						  ' ' +
+						  // eslint-disable-next-line no-mixed-spaces-and-tabs
+						  error.response.status +
+						  // eslint-disable-next-line no-mixed-spaces-and-tabs
+						  ' ' +
+						  // eslint-disable-next-line no-mixed-spaces-and-tabs
+						  error.response.data.errors
 						? error.response.data.errors.code
 						: 'Error'
-				} `
+				}`
 			);
 		}
 	}
