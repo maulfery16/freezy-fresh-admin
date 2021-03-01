@@ -152,7 +152,7 @@ export default class RequestAdapterService {
 					errors[key].forEach((err) => detail.push(`${key}: ${err}`));
 				});
 
-				detail.join(', ');
+				detail = detail.join(', ');
 			} else if (typeof errors === 'string') {
 				detail = errors;
 			}
