@@ -28,6 +28,8 @@ const authService = new AuthService();
 const LoginPages = () => {
 	const dispatch = useDispatch();
 	const [isChecked, setIsChecked] = useState(false);
+	const [validateStatus, setValidateStatus] = useState();
+	const [validateMessage, setValidateMessage] = useState();
 
 	const handleCheckChanged = () => {
 		setIsChecked(!isChecked);
@@ -45,6 +47,8 @@ const LoginPages = () => {
 	};
 
 	const login = async (values) => {
+		setValidateStatus('');
+		setValidateMessage('');
 		try {
 			const { access_token, refresh_token } = await authService.login({
 				...values,
@@ -63,6 +67,8 @@ const LoginPages = () => {
 
 			window.location = '/';
 		} catch (error) {
+			setValidateStatus('error');
+			setValidateMessage('Email dan password tidak sesuai');
 			message.error(error.message);
 			console.error(error);
 		}
@@ -84,6 +90,10 @@ const LoginPages = () => {
 						<Form.Item
 							className="mb0"
 							name="email"
+							onChange={() => {
+								setValidateStatus('');
+								setValidateMessage('');
+							}}
 							rules={[
 								{
 									type: 'email',
@@ -92,6 +102,7 @@ const LoginPages = () => {
 									required: true,
 								},
 							]}
+							validateStatus={validateStatus}
 						>
 							<Input
 								className={`br3 ba bw1 b--black-10 pv2 ph3`}
@@ -102,12 +113,18 @@ const LoginPages = () => {
 
 						<Form.Item
 							className="mb0"
+							help={validateMessage}
 							name="password"
+							onChange={() => {
+								setValidateStatus('');
+								setValidateMessage('');
+							}}
 							rules={[
 								{
 									required: true,
 								},
 							]}
+							validateStatus={validateStatus}
 						>
 							<Input.Password
 								className={`br3 ba bw1 b--black-10 pv2 ph3`}

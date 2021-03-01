@@ -1,5 +1,5 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import RequestAdapterService from './request-adapter';
-
 export default class AuthService extends RequestAdapterService {
 	async login(credential) {
 		try {
@@ -78,13 +78,9 @@ export default class AuthService extends RequestAdapterService {
 					error.response.status === 404
 						? 'Your account is not registered'
 						: error.response.data.message +
-						  // eslint-disable-next-line no-mixed-spaces-and-tabs
 						  ' ' +
-						  // eslint-disable-next-line no-mixed-spaces-and-tabs
 						  error.response.status +
-						  // eslint-disable-next-line no-mixed-spaces-and-tabs
 						  ' ' +
-						  // eslint-disable-next-line no-mixed-spaces-and-tabs
 						  error.response.data.errors
 						? error.response.data.errors.code
 						: 'Error'
