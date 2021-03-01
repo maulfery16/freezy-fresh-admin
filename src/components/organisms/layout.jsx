@@ -124,7 +124,7 @@ const menus = [
 		subMenus: [
 			{
 				name: 'Tampilan',
-				link: '/view',
+				link: '/view/',
 			},
 			{
 				name: 'Banner',

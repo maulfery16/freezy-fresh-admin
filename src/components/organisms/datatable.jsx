@@ -19,7 +19,6 @@ import {
 	Typography,
 } from 'antd';
 
-import AtomDatatableHeader from '../atoms/datatable/header';
 import AtomPrimaryButton from '../atoms/button/primary-button';
 
 import DatatableService from '../../services/datatable';
@@ -105,6 +104,14 @@ const OrganismDatatable = forwardRef((props, ref) => {
 		const newFilters = [...filters];
 		newFilters.splice(filterIndex, 1);
 		setFilters(newFilters);
+	};
+
+	const setDatatableMetadata = (pagination, _, sorter) => {
+		const { current, pageSize } = pagination;
+		const { field, order } = sorter;
+
+		setPagination(current, pageSize);
+		setSort(field, order ? order.replace('end', '') : null);
 	};
 
 	const setFilter = () => {
@@ -224,8 +231,9 @@ const OrganismDatatable = forwardRef((props, ref) => {
 					{props.filters && (
 						<Col span={4}>
 							<AtomPrimaryButton
-								additionalClassName="w-100"
+								className="w-100"
 								onClick={() => setIsFilterVisible(true)}
+								size="large"
 							>
 								Filter
 							</AtomPrimaryButton>
@@ -263,7 +271,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 
 								<Row className="mt4" justify="center">
 									<AtomPrimaryButton
-										additionalClassName="br3 w-30"
+										className="br3 w-30"
 										onClick={setFilter}
 										size="large"
 									>
@@ -279,23 +287,11 @@ const OrganismDatatable = forwardRef((props, ref) => {
 			<Col className="mt4" span={24}>
 				<Table
 					bordered={true}
-					columns={props.columns.map((column) => ({
-						...column,
-						title: (
-							<AtomDatatableHeader
-								attr={column.dataIndex}
-								activeSort={{
-									orderBy: filterParams.orderBy,
-									sortedBy: filterParams.sortedBy,
-								}}
-								setSort={column.sort ? setSort : false}
-								title={column.title}
-							/>
-						),
-					}))}
+					columns={props.columns}
 					className={props.className}
 					dataSource={data}
 					loading={isGettingData}
+					onChange={setDatatableMetadata}
 					pagination={{
 						current: filterParams.page,
 						itemRender: (_, type, originalEl) => {
@@ -313,8 +309,6 @@ const OrganismDatatable = forwardRef((props, ref) => {
 								);
 							return originalEl;
 						},
-						onChange: (page, pageSize) =>
-							setPagination(page, pageSize),
 						pageSize: filterParams.limit,
 						responsive: true,
 						total: totalData,

@@ -6,8 +6,8 @@ import { Button } from 'antd';
 const AtomSecondaryButton = (props) => {
 	return (
 		<Button
-			className={`br3 denim b--denim white ${props.className}`}
 			{...props}
+			className={`br3 denim b--denim white ${props.className}`}
 		>
 			{props.children}
 		</Button>

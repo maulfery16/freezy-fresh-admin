@@ -28,7 +28,7 @@ const PasswordResetSuccessPages = () => {
 				<AtomPrimaryButton
 					block
 					href="/login"
-					additionalClassName="f7 fw5 pv2 ph4"
+					className="f7 fw5 pv2 ph4"
 					htmlType="button"
 					size="large"
 					style={{ borderRadius: '8px' }}
