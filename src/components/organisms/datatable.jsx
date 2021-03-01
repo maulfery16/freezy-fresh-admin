@@ -224,7 +224,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 					{props.filters && (
 						<Col span={4}>
 							<AtomPrimaryButton
-								className="w-100"
+								additionalClassName="w-100"
 								onClick={() => setIsFilterVisible(true)}
 							>
 								Filter
@@ -263,7 +263,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 
 								<Row className="mt4" justify="center">
 									<AtomPrimaryButton
-										className="br3 w-30"
+										additionalClassName="br3 w-30"
 										onClick={setFilter}
 										size="large"
 									>
