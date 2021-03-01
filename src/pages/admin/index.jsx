@@ -46,34 +46,40 @@ const AdminPage = () => {
 				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
 			),
 			csvRender: (item) => moment(item.created_at).format('DD/MM/YYYY'),
+			sorter: true,
 		},
 		{
 			title: 'Nama Admin',
 			dataIndex: 'first_name',
 			sort: true,
 			render: (_, record) => `${record.first_name} ${record.last_name}`,
+			sorter: true,
 		},
 		{
 			title: 'Email',
 			dataIndex: 'email',
 			sort: true,
+			sorter: true,
 		},
 		{
 			title: 'No. Hp',
 			dataIndex: 'phone_number',
 			sort: true,
+			sorter: true,
 		},
 
 		{
 			title: 'Peranan',
 			dataIndex: 'roles',
 			render: (roles) => roles.map((role) => role.name).join(', '),
+			sorter: true,
 		},
 		{
 			title: 'Cabang',
 			dataIndex: 'branches',
 			render: (branches) =>
 				branches.map((branch) => branch.name).join(', '),
+			sorter: true,
 		},
 		{
 			title: 'Jenis Kelamin',
