@@ -69,7 +69,7 @@ const PasswordResetPages = () => {
 
 								<AtomPrimaryButton
 									block
-									additionalClassName="f6 fw5 ph5 pv2"
+									className="f6 fw5 ph5 pv2"
 									htmlType="submit"
 									size="large"
 									style={{ borderRadius: '8px' }}

@@ -12,13 +12,9 @@ export default class ProductOwnersService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail creating product owner: ${
-					error.response.data.message
-				} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail creating product owner: ${super.generateErrorMessage(
+					error
+				)}`
 			);
 		}
 	}
@@ -33,13 +29,9 @@ export default class ProductOwnersService extends RequestAdapterService {
 			return data;
 		} catch (error) {
 			throw new Error(
-				`Fail updating product owner: ${
-					error.response.data.message
-				} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail updating product owner: ${super.generateErrorMessage(
+					error
+				)}`
 			);
 		}
 	}
@@ -53,13 +45,9 @@ export default class ProductOwnersService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail getting product owner detail: ${
-					error.response.data.message
-				} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail getting product owner detail: ${super.generateErrorMessage(
+					error
+				)}`
 			);
 		}
 	}

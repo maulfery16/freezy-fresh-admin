@@ -3,12 +3,14 @@ import { Image, message, Space } from 'antd';
 import { EditFilled, EyeFilled, CheckOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
+import moment from 'moment';
 import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
 
-import AtomColorInfoGroup from '../../../components/atoms/color-info-group';
+// import AtomColorInfoGroup from '../../../components/atoms/color-info-group';
 import AtomPrimaryButton from '../../../components/atoms/button/primary-button';
 import AtomSecondaryButton from '../../../components/atoms/button/secondary-button';
+import AtomStatusSwitch from '../../../components/atoms/datatable/status-switch';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 import MoleculeDatatableDateRange from '../../../components/molecules/datatable/date-range-plugin';
 import MoleculeDatatableFilter from '../../../components/molecules/datatable/filter-plugin';
@@ -18,32 +20,6 @@ import OrganismLayout from '../../../components/organisms/layout';
 
 import ArticleService from '../../../services/article';
 const articleService = new ArticleService();
-
-const mock = {
-	data: [
-		{
-			id: 1,
-			title: {
-				id: 'Indonesian title',
-				en: 'English title',
-			},
-			category: {
-				color: {
-					hex_code: '#000000',
-					name: 'Black',
-				},
-				name: 'Kategori 1',
-			},
-			created_at: new Date(),
-			created_by: 'Boramiyu',
-			dekstop_image: '',
-			mobile_image: '',
-		},
-	],
-	meta: {
-		pagination: { totalData: 1 },
-	},
-};
 
 const ArticlePage = () => {
 	const column = [
@@ -57,13 +33,16 @@ const ArticlePage = () => {
 			title: 'Judul Artikel (ID)',
 			dataIndex: `title['id']`,
 			render: (_, record) => record.title.id,
+			sorter: true,
 		},
 		{
 			title: 'Judul Artikel (EN)',
 			dataIndex: `title['en']`,
 			render: (_, record) => record.title.en,
+			sorter: true,
 		},
 		{
+			align: 'center',
 			title: 'Foto Artikel Mobile',
 			dataIndex: 'mobile_image',
 			render: (image) => (
@@ -72,6 +51,7 @@ const ArticlePage = () => {
 			csvRender: (item) => item.mobile_image,
 		},
 		{
+			align: 'center',
 			title: 'Foto Artikel Dekstop',
 			dataIndex: 'dekstop_image',
 			render: (image) => (
@@ -79,26 +59,32 @@ const ArticlePage = () => {
 			),
 			csvRender: (item) => item.dekstop_image,
 		},
-		{
-			title: 'Kategori Artikel',
-			dataIndex: 'category',
-			render: (_, record) => (
-				<AtomColorInfoGroup
-					hexa={record.category.color.hexa_code}
-					label={record.category.name}
-				/>
-			),
-		},
+		// {
+		// 	title: 'Kategori Artikel',
+		// 	dataIndex: 'category',
+		// 	sorter: true,
+		// 	render: (_, record) => (
+		// 		<AtomColorInfoGroup
+		// 			hexa={record.category.color.hexa_code}
+		// 			label={record.category.name}
+		// 		/>
+		// 	),
+		// csvRender: (item) => item.articleCaregoty.name
+		// },
 		{
 			title: 'Dibuat Oleh',
 			dataIndex: 'created_by',
+			sorter: true,
 		},
 		{
 			title: 'Tgl. Dibuat',
 			dataIndex: 'created_at',
+			sorter: true,
 			render: (date) => (
 				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
 			),
+			csvRender: (item) =>
+				moment(new Date(item.date)).format('DD-MM-YYYY'),
 		},
 		{
 			align: 'center',
@@ -122,6 +108,21 @@ const ArticlePage = () => {
 			skipExport: true,
 		},
 		{
+			align: 'center',
+			title: 'Aktif',
+			dataIndex: 'is_active',
+			render: (active, record) => (
+				<AtomStatusSwitch
+					active={active}
+					id={record.id}
+					tableRef={articleTableRef}
+					url="banners"
+				/>
+			),
+			csvRender: (item) => (item.is_active ? 'Aktif' : 'Tidak Aktif'),
+		},
+		{
+			align: 'center',
 			title: 'Aksi',
 			dataIndex: 'id',
 			render: (id, record) => (
@@ -165,28 +166,22 @@ const ArticlePage = () => {
 		return [
 			<MoleculeDatatableFilter
 				name="category"
-				operator="eq"
+				operator=":"
 				identifier="category-filter"
-				label="Kategori"
+				label="Kategori Artikel"
 				key="category-filter"
 				placeholder="Semua kategori"
 				data={{
-					url: '/category',
-					mock: [
-						{
-							label: 'Bandung',
-							value: 'Bandung',
-						},
-						{
-							label: 'Garut',
-							value: 'Garut',
-						},
-					],
+					url: 'article-categories',
+					generateCustomOption: (item) => ({
+						value: item.id,
+						label: `${item.name.id} / ${item.name.en}`,
+					}),
 				}}
 			/>,
 			<MoleculeDatatableDateRange
 				name="created_at"
-				operator="eq"
+				operator=":"
 				identifier="daterangefilter"
 				key="daterange"
 				label="Tanggal Dibuat"
@@ -219,7 +214,6 @@ const ArticlePage = () => {
 				dataSourceURL={`articles`}
 				filters={renderDatatableFilters()}
 				ref={articleTableRef}
-				mock={mock}
 				scroll={1360}
 				searchInput={true}
 				title={`Artikel`}

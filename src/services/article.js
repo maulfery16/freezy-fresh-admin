@@ -1,6 +1,6 @@
 import RequestAdapterService from './request-adapter';
 
-export default class ArticleService extends RequestAdapterService {
+export default class articleservice extends RequestAdapterService {
 	async createArticle(article) {
 		try {
 			const { data } = await super.sendPostMultipartRequest(
@@ -12,11 +12,7 @@ export default class ArticleService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail creating article: ${error.response.data.message} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail creating article:${super.generateErrorMessage(error)}`
 			);
 		}
 	}
@@ -32,11 +28,7 @@ export default class ArticleService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail updating article: ${error.response.data.message} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail updating article:${super.generateErrorMessage(error)}`
 			);
 		}
 	}
@@ -51,13 +43,9 @@ export default class ArticleService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail getting article detail: ${
-					error.response.data.message
-				} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail getting article detail: ${super.generateErrorMessage(
+					error
+				)}`
 			);
 		}
 	}
@@ -75,11 +63,9 @@ export default class ArticleService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Setting article as primary: ${error.response.data.message} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Setting article as primary: ${super.generateErrorMessage(
+					error
+				)}`
 			);
 		}
 	}

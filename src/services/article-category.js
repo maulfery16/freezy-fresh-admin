@@ -12,13 +12,9 @@ export default class ArticleCategoryService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail creating article category: ${
-					error.response.data.message
-				} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail creating article category: ${super.generateErrorMessage(
+					error
+				)}`
 			);
 		}
 	}
@@ -33,13 +29,9 @@ export default class ArticleCategoryService extends RequestAdapterService {
 			return data;
 		} catch (error) {
 			throw new Error(
-				`Fail updating article category: ${
-					error.response.data.message
-				} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail updating article category: ${super.generateErrorMessage(
+					error
+				)}`
 			);
 		}
 	}
@@ -53,13 +45,9 @@ export default class ArticleCategoryService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail getting article category detail: ${
-					error.response.data.message
-				} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail getting article category detail: ${super.generateErrorMessage(
+					error
+				)}`
 			);
 		}
 	}

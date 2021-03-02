@@ -12,11 +12,7 @@ export default class AdminService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail creating admin: ${error.response.data.message} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail creating admin: ${super.generateErrorMessage(error)}`
 			);
 		}
 	}
@@ -32,11 +28,7 @@ export default class AdminService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail updating admin: ${error.response.data.message} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail updating admin:${super.generateErrorMessage(error)}`
 			);
 		}
 	}
@@ -51,11 +43,9 @@ export default class AdminService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail getting admin detail: ${error.response.data.message} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail getting admin detail: ${super.generateErrorMessage(
+					error
+				)}`
 			);
 		}
 	}
@@ -70,11 +60,7 @@ export default class AdminService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail getting total admin: ${error.response.data.message} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail getting total admin: ${super.generateErrorMessage(error)}`
 			);
 		}
 	}

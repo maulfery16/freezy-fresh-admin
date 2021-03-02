@@ -12,7 +12,9 @@ export default class AdditionalCategoryService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail creating additional category: ${error.response.data.message} - ${error.response.status} `
+				`Fail creating additional category: ${super.generateErrorMessage(
+					error
+				)}`
 			);
 		}
 	}
@@ -28,7 +30,9 @@ export default class AdditionalCategoryService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail updating additional category:  ${error.response.data.message} - ${error.response.status} `
+				`Fail updating additional category:  ${super.generateErrorMessage(
+					error
+				)}`
 			);
 		}
 	}
@@ -43,7 +47,9 @@ export default class AdditionalCategoryService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail getting additional category detail: ${error.response.data.message} - ${error.response.status} `
+				`Fail getting additional category detail: ${super.generateErrorMessage(
+					error
+				)}`
 			);
 		}
 	}

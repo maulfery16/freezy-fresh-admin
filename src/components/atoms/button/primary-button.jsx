@@ -6,8 +6,8 @@ import { Button } from 'antd';
 const AtomPrimaryButton = (props) => {
 	return (
 		<Button
-			className={`br3 bg-denim white ${props.additionalClassName}`}
 			{...props}
+			className={`${props.className || ''} br3 bg-denim white`}
 		>
 			{props.children}
 		</Button>
@@ -16,7 +16,7 @@ const AtomPrimaryButton = (props) => {
 
 AtomPrimaryButton.propTypes = {
 	children: PropTypes.node,
-	additionalClassName: PropTypes.string,
+	className: PropTypes.string,
 	onChange: PropTypes.string,
 };
 

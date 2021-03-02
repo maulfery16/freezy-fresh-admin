@@ -12,7 +12,7 @@ export default class ColourService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail creating colour: ${error.response.data.message} - ${error.response.status} `
+				`Fail creating colour: ${super.generateErrorMessage(error)}`
 			);
 		}
 	}
@@ -28,7 +28,7 @@ export default class ColourService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail updating colour: ${error.response.data.message} - ${error.response.status} `
+				`Fail updating colour: ${super.generateErrorMessage(error)}`
 			);
 		}
 	}
@@ -43,7 +43,9 @@ export default class ColourService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail getting colour detail: ${error.response.data.message} - ${error.response.status} `
+				`Fail getting colour detail: ${super.generateErrorMessage(
+					error
+				)}`
 			);
 		}
 	}

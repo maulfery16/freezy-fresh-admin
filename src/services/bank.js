@@ -12,11 +12,7 @@ export default class BankService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail creating bank: ${error.response.data.message} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail creating bank:${super.generateErrorMessage(error)}`
 			);
 		}
 	}
@@ -32,11 +28,7 @@ export default class BankService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail updating bank: ${error.response.data.message} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail updating bank:${super.generateErrorMessage(error)}`
 			);
 		}
 	}
@@ -51,11 +43,7 @@ export default class BankService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail getting bank detail: ${error.response.data.message} - ${
-					error.response.data.errors
-						? error.response.data.errors.code
-						: 'Error'
-				} `
+				`Fail getting bank detail:${super.generateErrorMessage(error)}`
 			);
 		}
 	}

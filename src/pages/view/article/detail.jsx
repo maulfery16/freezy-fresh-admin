@@ -1,60 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import ReactMoment from 'react-moment';
+import ReactPlayer from 'react-player/youtube';
 
-import { Col, Image, message, Row, Skeleton, Space, Typography } from 'antd';
+import { Col, message, Row, Skeleton, Space, Typography } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
-import AtomColorInfoGroup from '../../../components/atoms/color-info-group';
+// import AtomColorInfoGroup from '../../../components/atoms/color-info-group';
 import AtomSecondaryButton from '../../../components/atoms/button/secondary-button';
+import MoleculeImageGroup from '../../../components/molecules/molecule-image-group';
 import MoleculeInfoGroup from '../../../components/molecules/info-group';
 import MoleculeMarkdownRenderer from '../../../components/molecules/markdown-renderer';
 import OrganismLayout from '../../../components/organisms/layout';
 
-// import ArticleService from '../../../services/article';
-// const articleService = new ArticleService();
+import ArticleService from '../../../services/article';
+const articleService = new ArticleService();
 
 const ArticleModifyPage = () => {
 	const { id } = useParams();
 	const [article, setArticle] = useState(null);
 
-	const getArticleDetail = () => {
+	const getArticleDetail = async () => {
 		try {
-			// const article = articleService.getArticleDetail(articleId);
-			// setArticle(article);
-
-			setTimeout(() => {
-				setArticle({
-					category: {
-						color: {
-							hexa_code: '#000000',
-						},
-						name: 'Kategori 1',
-					},
-					created_at: new Date(),
-					created_by: 'Jeong Dajeong',
-					phone_number: '087739893738467',
-					promo: 'Promo Misqueen',
-					registered_at: new Date(),
-					registered_by: 'Kim Ji Yeon',
-					updated_at: new Date(),
-					updated_by: 'Dita Karang',
-					content: {
-						id: 'Hallo mate',
-						en: 'Hallo mate',
-					},
-					title: {
-						id: 'Artikel Super',
-						en: 'Super Article',
-					},
-					video_url:
-						'https://www.youtube.com/watch?v=syro-BlScbM&ab_channel=PerjalananHijrah',
-					id_image:
-						'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
-					en_image:
-						'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
-				});
-			}, 1000);
+			const { data: article } = await articleService.getArticleById(id);
+			setArticle(article);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
@@ -87,6 +56,30 @@ const ArticleModifyPage = () => {
 					<Col span={24}>
 						<AtomCard title="Info Artikel">
 							<Row gutter={[12, 24]}>
+								<Col span={24}>
+									<MoleculeInfoGroup
+										title="Foto Banner"
+										content={
+											<MoleculeImageGroup
+												images={[
+													{
+														source:
+															article.image_mobile,
+														label:
+															' Foto Banner Mobile',
+													},
+													{
+														source:
+															article.image_dekstop,
+														label:
+															' Foto Banner Dekstop',
+													},
+												]}
+											/>
+										}
+									/>
+								</Col>
+
 								<Col span={8}>
 									<MoleculeInfoGroup
 										title="Judul Artikel (ID)"
@@ -94,14 +87,14 @@ const ArticleModifyPage = () => {
 									/>
 								</Col>
 
-								<Col span={8}>
+								<Col span={16}>
 									<MoleculeInfoGroup
 										title="Judul Artikel (EN)"
 										content={article.title.en}
 									/>
 								</Col>
 
-								<Col span={8}>
+								{/* <Col span={24}>
 									<MoleculeInfoGroup
 										title="Kategori Artikel"
 										content={
@@ -114,46 +107,15 @@ const ArticleModifyPage = () => {
 											/>
 										}
 									/>
-								</Col>
+								</Col> */}
 
-								<Col span={8}>
-									<MoleculeInfoGroup
-										title="Foto Artikel Mobile"
-										content={
-											<Image
-												preview
-												src={article.id_image}
-												width={300}
-											/>
-										}
-									/>
-								</Col>
-
-								<Col span={8}>
-									<MoleculeInfoGroup
-										title="Foto Artikel Dekstop"
-										content={
-											<Image
-												preview
-												src={article.en_image}
-												width={300}
-											/>
-										}
-									/>
-								</Col>
-
-								<Col span={8}>
+								<Col span={24}>
 									<MoleculeInfoGroup
 										title="Nama Promo"
 										content={
-											<a
-												className="pointer"
-												href={article.video_url}
-												rel="noreferrer"
-												target="_blank"
-											>
-												Video
-											</a>
+											<ReactPlayer
+												url={article.video_link}
+											/>
 										}
 									/>
 								</Col>
@@ -169,12 +131,12 @@ const ArticleModifyPage = () => {
 									/>
 								</Col>
 
-								<Col span={8}>
+								<Col span={16}>
 									<MoleculeInfoGroup
-										title="Tanggal di Daftarkan"
+										title="Tanggal di Diperbaharui"
 										content={
 											<ReactMoment format="DD-MM-YYYY">
-												{article.registered_at}
+												{article.updated_at}
 											</ReactMoment>
 										}
 									/>
@@ -187,10 +149,10 @@ const ArticleModifyPage = () => {
 									/>
 								</Col>
 
-								<Col span={8}>
+								<Col span={16}>
 									<MoleculeInfoGroup
-										title="Didaftarkan Oleh"
-										content={article.registered_by}
+										title="Diperbaharui Oleh"
+										content={article.updated_by}
 									/>
 								</Col>
 
@@ -200,6 +162,7 @@ const ArticleModifyPage = () => {
 										content={
 											<MoleculeMarkdownRenderer
 												text={article.content.id}
+												withBorder
 											/>
 										}
 									/>
@@ -211,6 +174,7 @@ const ArticleModifyPage = () => {
 										content={
 											<MoleculeMarkdownRenderer
 												text={article.content.en}
+												withBorder
 											/>
 										}
 									/>

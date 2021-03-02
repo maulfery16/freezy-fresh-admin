@@ -136,4 +136,30 @@ export default class RequestAdapterService {
 
 		return params;
 	};
+
+	generateErrorMessage(error) {
+		console.error(error);
+
+		const message = error.response.data.message;
+		let detail;
+
+		if (error.response.data.errors) {
+			const errors = error.response.data.errors;
+
+			if (typeof errors === 'object') {
+				detail = [];
+				Object.keys(errors).forEach((key) => {
+					errors[key].forEach((err) => detail.push(`${key}: ${err}`));
+				});
+
+				detail = detail.join(', ');
+			} else if (typeof errors === 'string') {
+				detail = errors;
+			}
+		} else {
+			detail = 'error';
+		}
+
+		return `${message} - ${detail}`;
+	}
 }

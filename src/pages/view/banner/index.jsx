@@ -26,11 +26,13 @@ const BannerPage = () => {
 			title: 'Title Banner (ID)',
 			dataIndex: `title['id']`,
 			render: (_, record) => record.title.id,
+			sorter: true,
 		},
 		{
 			title: 'Title Banner (EN)',
 			dataIndex: `title['en']`,
 			render: (_, record) => record.title.en,
+			sorter: true,
 		},
 		{
 			align: 'center',
@@ -53,6 +55,7 @@ const BannerPage = () => {
 				record.promotion
 					? `${record.promotion.title.id} / ${record.promotion.title.en}`
 					: '-',
+			sorter: true,
 		},
 		{
 			align: 'center',
