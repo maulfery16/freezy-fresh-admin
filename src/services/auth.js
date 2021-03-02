@@ -1,5 +1,5 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import RequestAdapterService from './request-adapter';
-
 export default class AuthService extends RequestAdapterService {
 	async login(credential) {
 		try {
@@ -66,12 +66,17 @@ export default class AuthService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Forgot Password failed: ${error.response.data.message} \n
-				${error.response.status} - ${
-					error.response.data.errors
+				`Forgot Password failed: ${
+					error.response.status === 404
+						? 'Your account is not registered'
+						: error.response.data.message +
+						  ' ' +
+						  error.response.status +
+						  ' ' +
+						  error.response.data.errors
 						? error.response.data.errors.code
 						: 'Error'
-				} `
+				}`
 			);
 		}
 	}

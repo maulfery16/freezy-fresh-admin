@@ -28,6 +28,17 @@ const MoleculePasswordInputGroup = (props) => {
 							return Promise.reject('Password tidak sama!');
 						},
 					}),
+					({ getFieldValue }) => ({
+						// eslint-disable-next-line no-unused-vars
+						validator(_, value) {
+							if (getFieldValue('password').length < 6) {
+								return Promise.reject(
+									'Password minimal harus 6 karakter'
+								);
+							}
+							return Promise.resolve();
+						},
+					}),
 				]}
 			>
 				<Input.Password
