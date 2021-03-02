@@ -91,8 +91,9 @@ const AdminModifyPage = () => {
 		return isCreating || !admin
 			? {}
 			: {
-					bank: admin.bank_info.bank.name,
-					branches: admin.branch,
+					bank: admin.bank_info.bank,
+					branches: admin.branches,
+					company: admin.company,
 					email: admin.email,
 					first_name: admin.first_name,
 					profile_image: admin.profile_image,
@@ -175,11 +176,11 @@ const AdminModifyPage = () => {
 												mock: [
 													{
 														label: 'Pria',
-														value: 'male',
+														value: 'MALE',
 													},
 													{
 														label: 'Wanita',
-														value: 'female',
+														value: 'FEMALE',
 													},
 												],
 											}}
@@ -307,13 +308,7 @@ const AdminModifyPage = () => {
 											placeholder="Perusahaan"
 											required
 											data={{
-												url: 'companies',
-												mock: [
-													{
-														label: 'Sampingan',
-														value: 'Sampingan',
-													},
-												],
+												url: 'product_owners',
 											}}
 										/>
 									</Col>
