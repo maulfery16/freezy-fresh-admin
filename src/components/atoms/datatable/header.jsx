@@ -46,7 +46,7 @@ const AtomDatatableHeader = (props) => {
 
 AtomDatatableHeader.propTypes = {
 	attr: PropTypes.string,
-	activeSort: PropTypes.shape({
+	activesorter: PropTypes.shape({
 		orderBy: PropTypes.string,
 		sortedBy: PropTypes.string,
 	}),

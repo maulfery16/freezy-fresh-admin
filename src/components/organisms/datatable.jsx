@@ -233,7 +233,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 
 							<Modal
 								footer={null}
-								title="Filter"
+								title="Filter  by"
 								visible={isFilterVisible}
 								width={350}
 								onCancel={() => setIsFilterVisible(false)}
@@ -264,11 +264,11 @@ const OrganismDatatable = forwardRef((props, ref) => {
 
 								<Row className="mt4" justify="center">
 									<AtomPrimaryButton
-										className="br3 w-30"
+										className="br3 w-50"
 										onClick={setFilter}
 										size="large"
 									>
-										Filter
+										Terapkan
 									</AtomPrimaryButton>
 								</Row>
 							</Modal>

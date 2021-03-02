@@ -51,20 +51,17 @@ const AdminPage = () => {
 		{
 			title: 'Nama Admin',
 			dataIndex: 'first_name',
-			sort: true,
-			render: (_, record) => `${record.first_name} ${record.last_name}`,
 			sorter: true,
+			render: (_, record) => `${record.first_name} ${record.last_name}`,
 		},
 		{
 			title: 'Email',
 			dataIndex: 'email',
-			sort: true,
 			sorter: true,
 		},
 		{
 			title: 'No. Hp',
 			dataIndex: 'phone_number',
-			sort: true,
 			sorter: true,
 		},
 
@@ -227,7 +224,7 @@ const AdminPage = () => {
 				}}
 			/>,
 			<MoleculeDatatableDateRange
-				name="joined_at"
+				name="created_at"
 				operator=":"
 				identifier="daterangefilter"
 				key="daterange"
