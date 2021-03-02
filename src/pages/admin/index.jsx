@@ -84,6 +84,7 @@ const AdminPage = () => {
 		{
 			title: 'Jenis Kelamin',
 			dataIndex: 'gender',
+			render: (gender) => adminService.translateGenderEnum(gender),
 		},
 		{
 			title: 'Nomor Rek',

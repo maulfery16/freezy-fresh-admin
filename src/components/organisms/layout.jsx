@@ -351,7 +351,7 @@ const OrganismLayout = (props) => {
 												<Typography.Text>
 													<span className="white f6">
 														{user.roles &&
-															user.roles
+															user.roles.data
 																.map(
 																	(res) =>
 																		res.display_name
