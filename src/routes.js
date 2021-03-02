@@ -334,7 +334,6 @@ const routes = [
 					},
 				],
 			},
-
 			{
 				path: '/holiday',
 				children: [
@@ -354,6 +353,29 @@ const routes = [
 						exact: true,
 						guard: true,
 						name: 'Edit Holiday Page',
+						path: '/edit',
+					},
+				],
+			},
+			{
+				path: '/new-product',
+				children: [
+					{
+						component: React.lazy(() =>
+							import('./pages/view/new-product')
+						),
+						exact: true,
+						guard: true,
+						name: 'New Product Page',
+						path: '/',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/view/new-product/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Edit New Product Page',
 						path: '/edit',
 					},
 				],
