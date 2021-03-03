@@ -93,7 +93,9 @@ const AdminModifyPage = () => {
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Jenis Kelamin"
-										content={admin.gender}
+										content={adminService.translateGenderEnum(
+											admin.gender
+										)}
 									/>
 								</Col>
 

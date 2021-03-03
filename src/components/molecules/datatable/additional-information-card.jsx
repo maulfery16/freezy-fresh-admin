@@ -22,8 +22,8 @@ const MoleculeDatatableAdditionalInformation = (props) => {
 };
 
 MoleculeDatatableAdditionalInformation.propTypes = {
-	title: PropTypes.string,
-	value: PropTypes.string,
+	title: PropTypes.node,
+	value: PropTypes.node,
 };
 
 export default MoleculeDatatableAdditionalInformation;

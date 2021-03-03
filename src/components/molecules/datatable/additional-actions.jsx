@@ -34,14 +34,15 @@ const MoleculeDatatableAdditionalAction = (props) => {
 			<AtomSecondaryButton
 				loading={isExporting}
 				onClick={() => exportAsCSV()}
+				size="large"
 			>
 				Export Excel
 			</AtomSecondaryButton>
 			{!props.withoutAddButton && (
 				<Link to={`${props.route}/${props.isEdit ? 'edit' : 'add'}`}>
-					<AtomPrimaryButton>{`${props.isEdit ? 'Edit' : 'Tambah'} ${
-						props.label
-					}`}</AtomPrimaryButton>
+					<AtomPrimaryButton size="large">{`${
+						props.isEdit ? 'Edit' : 'Tambah'
+					} ${props.label}`}</AtomPrimaryButton>
 				</Link>
 			)}
 		</Space>
