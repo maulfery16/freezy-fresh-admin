@@ -21,8 +21,8 @@ export default class ArticleCategoryService extends RequestAdapterService {
 
 	async editArticleCategory(id, category) {
 		try {
-			const { data } = await super.sendPatchRequest(
-				`${this.baseUrl}/v1/article-categories/${id}`,
+			const { data } = await super.sendPostMultipartRequest(
+				`${this.baseUrl}/v1/article-categories/${id}?_method=PATCH`,
 				category
 			);
 

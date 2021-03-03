@@ -12,7 +12,11 @@ export default class AuthService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Login failed:${super.generateErrorMessage(error)}`
+				`Login failed: ${
+					error.response.status === 400
+						? 'Incorrect Email/Password combination'
+						: super.generateErrorMessage(error)
+				}`
 			);
 		}
 	}

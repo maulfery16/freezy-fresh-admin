@@ -34,12 +34,9 @@ const AdditionalCategoryModifyPage = () => {
 	};
 
 	const setAdditionalCategoryInitialValues = () => {
-		console.log(additionalCategory);
-
 		return isCreating || !additionalCategory
 			? {}
 			: {
-					code: additionalCategory.code,
 					en_name: additionalCategory.name.en,
 					id_name: additionalCategory.name.id,
 			  };
@@ -50,7 +47,6 @@ const AdditionalCategoryModifyPage = () => {
 			setIsSubmitting(true);
 
 			const data = new FormData();
-			data.append('code', values.code);
 			data.append('name[en]', values.en_name);
 			data.append('name[id]', values.id_name);
 
@@ -141,16 +137,6 @@ const AdditionalCategoryModifyPage = () => {
 											name="en_name"
 											label="Nama Kategori Tambahan (EN)"
 											placeholder="Nama Kategori Tambahan (EN)"
-											type="text"
-											required
-										/>
-									</Col>
-
-									<Col span={24}>
-										<MoleculeTextInputGroup
-											name="code"
-											label="Kode Kategori Tambahan"
-											placeholder="Kode Kategori Tambahan"
 											type="text"
 											required
 										/>

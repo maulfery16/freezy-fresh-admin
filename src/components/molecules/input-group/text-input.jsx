@@ -7,6 +7,7 @@ const TYPE_ENUM = {
 	number: 'angka',
 	phone: 'angka',
 	text: 'huruf',
+	hex_color: 'hexa warna',
 };
 
 const MoleculeTextInputGroup = (props) => {
@@ -16,6 +17,8 @@ const MoleculeTextInputGroup = (props) => {
 			return new RegExp(
 				/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 			);
+		if (props.type === 'hex_color')
+			return new RegExp(/^#(?:[0-9a-fA-F]{3}){1,2}$/);
 
 		return null;
 	};

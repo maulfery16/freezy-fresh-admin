@@ -28,7 +28,7 @@ const ColourModifyPage = () => {
 			const { data: colour } = await colourService.getColourById(id);
 
 			setColour(colour);
-			setHexaCode(colour.data.hexa_code);
+			setHexaCode(`#${colour.data.hexa_code}`);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
@@ -40,7 +40,7 @@ const ColourModifyPage = () => {
 			? {}
 			: {
 					en_name: colour.data.name.en,
-					hexa_code: colour.data.hexa_code,
+					hexa_code: hexaCode,
 					id_name: colour.data.name.id,
 			  };
 	};
@@ -48,7 +48,7 @@ const ColourModifyPage = () => {
 	const submit = async (values) => {
 		try {
 			const data = new FormData();
-			data.append('hexa_code', values.hexa_code);
+			data.append('hexa_code', values.hexa_code.substring(1));
 			data.append('name[en]', values.en_name);
 			data.append('name[id]', values.id_name);
 
@@ -168,7 +168,7 @@ const ColourModifyPage = () => {
 											name="hexa_code"
 											onChange={handleChangeHexaCode}
 											placeholder="Kode Hexa"
-											type="text"
+											type="hex_color"
 											value={hexaCode || ''}
 											required
 										/>
