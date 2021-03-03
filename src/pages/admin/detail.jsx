@@ -109,7 +109,11 @@ const AdminModifyPage = () => {
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Bank"
-										content={admin.bank_info.bank}
+										content={
+											admin.bank_info.bank
+												? admin.bank_info.bank.name
+												: '-'
+										}
 									/>
 								</Col>
 

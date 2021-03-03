@@ -50,6 +50,7 @@ const ArticleModifyPage = () => {
 					en_title: article.title.en,
 					id_title: article.title.id,
 					video_link: article.video_link,
+					article_category: article.article_categories.id,
 			  };
 	};
 
@@ -145,7 +146,7 @@ const ArticleModifyPage = () => {
 											fileInputs={[
 												{
 													defaultValue: article
-														? article.image_mobile
+														? article.dekstop_image
 														: null,
 													isMobileImage: true,
 													label:
@@ -154,7 +155,7 @@ const ArticleModifyPage = () => {
 												},
 												{
 													defaultValue: article
-														? article.image_desktop
+														? article.mobile_image
 														: null,
 													label:
 														'Foro Artikel Dekstop',
