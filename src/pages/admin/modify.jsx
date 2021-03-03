@@ -49,7 +49,7 @@ const AdminModifyPage = () => {
 			const data = new FormData();
 
 			data.append('bank_account_number', values.rek_number);
-			data.append('bank_account_name', values.bank);
+			data.append('bank_id', values.bank);
 			data.append('email', values.email);
 			data.append('first_name', values.first_name);
 			data.append('gender', values.gender);
@@ -91,7 +91,7 @@ const AdminModifyPage = () => {
 		return isCreating || !admin
 			? {}
 			: {
-					bank: admin.bank_info.bank,
+					bank: admin.bank_info.bank ? admin.bank_info.bank.id : null,
 					branches: admin.branches,
 					company: admin.company,
 					email: admin.email,
