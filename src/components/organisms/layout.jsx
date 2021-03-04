@@ -79,13 +79,13 @@ const menus = [
 		],
 	},
 	{
-		name: 'Produk-Poduk',
+		name: 'Produk-Produk',
 		icon: <DropboxOutlined />,
-		subMenuKey: 'produts',
+		subMenuKey: 'products',
 		subMenus: [
 			{
 				name: 'Produk',
-				link: '/products',
+				link: '/products/',
 			},
 			{
 				name: 'Brand',

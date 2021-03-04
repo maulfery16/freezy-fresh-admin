@@ -2,13 +2,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ReactMoment from 'react-moment';
 
-import { Col, Image, Row, Skeleton, Tabs, Typography, message } from 'antd';
+import { Col, Row, Skeleton, Tabs, Typography, message } from 'antd';
 import { useParams } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
 import AtomNumberFormat from '../../../components/atoms/number-format';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 import MoleculeDatatableFilter from '../../../components/molecules/datatable/filter-plugin';
+import MoleculeImageGroup from '../../../components/molecules/molecule-image-group';
 import MoleculeInfoGroup from '../../../components/molecules/info-group';
 import MoleculeMarkdownRenderer from '../../../components/molecules/markdown-renderer';
 import OrganismDatatable from '../../../components/organisms/datatable';
@@ -104,9 +105,15 @@ const HolidayPage = () => {
 						id: 'Deskripsi Panjang',
 						en: 'Long Description',
 					},
-					id_image:
+					desktop_image:
 						'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
-					en_image:
+					mobile_image:
+						'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
+					small_image_1:
+						'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
+					small_image_2:
+						'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
+					small_image_3:
 						'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
 					title: {
 						id: 'Artikel Super',
@@ -193,82 +200,52 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 			) : (
 				<Tabs defaultActiveKey="1">
 					<TabPane tab={`Info Holiday`.toUpperCase()} key="1">
-						<Row align="top" gutter={24}>
+						<Row align="top" className="mt4" gutter={24}>
 							<Col span={24}>
 								<AtomCard>
-									<Typography.Text>
-										<span className="gray fw7">
-											Foto Banner
-										</span>
-									</Typography.Text>
-									<Row
-										align="bottom"
-										justify="space-between"
-										className={`br3 ba bw1 b--black-10 pv2 ph3 mb3`}
-									>
-										<Col span={4}>
-											<MoleculeInfoGroup
-												title="Foto Banner Mobile"
-												content={
-													<Image
-														preview
-														src={holiday.id_image}
-														width={100}
-													/>
-												}
-											/>
-										</Col>
-										<Col span={4}>
-											<MoleculeInfoGroup
-												title="Foto Banner Desktop"
-												content={
-													<Image
-														preview
-														src={holiday.id_image}
-														width={100}
-													/>
-												}
-											/>
-										</Col>
-										<Col span={4}>
-											<MoleculeInfoGroup
-												title="Foto Banner Kecil 1"
-												content={
-													<Image
-														preview
-														src={holiday.id_image}
-														width={100}
-													/>
-												}
-											/>
-										</Col>
-										<Col span={4}>
-											<MoleculeInfoGroup
-												title="Foto Banner Kecil 2"
-												content={
-													<Image
-														preview
-														src={holiday.id_image}
-														width={100}
-													/>
-												}
-											/>
-										</Col>
-										<Col span={4}>
-											<MoleculeInfoGroup
-												title="Foto Banner Kecil 3"
-												content={
-													<Image
-														preview
-														src={holiday.id_image}
-														width={100}
-													/>
-												}
-											/>
-										</Col>
-									</Row>
-
 									<Row gutter={[24, 24]}>
+										<Col span={24}>
+											<MoleculeInfoGroup
+												title="Foto Banner"
+												content={
+													<MoleculeImageGroup
+														images={[
+															{
+																source:
+																	holiday.image_mobile,
+																label:
+																	' Foto Banner Mobile',
+															},
+															{
+																source:
+																	holiday.image_dekstop,
+																label:
+																	' Foto Banner Dekstop',
+															},
+															{
+																source:
+																	holiday.image_small_1,
+																label:
+																	' Foto Banner Kecil 1',
+															},
+															{
+																source:
+																	holiday.image_small_2,
+																label:
+																	' Foto Banner Kecil 2',
+															},
+															{
+																source:
+																	holiday.image_small_3,
+																label:
+																	' Foto Banner Kecil 3',
+															},
+														]}
+													/>
+												}
+											/>
+										</Col>
+
 										<Col span={12}>
 											<MoleculeInfoGroup
 												title="Title (ID)"
