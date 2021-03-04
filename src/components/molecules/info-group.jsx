@@ -15,7 +15,7 @@ const MoleculeInfoGroup = (props) => {
 };
 
 MoleculeInfoGroup.propTypes = {
-	content: PropTypes.node.isRequired,
+	content: PropTypes.node,
 	title: PropTypes.string.isRequired,
 };
 

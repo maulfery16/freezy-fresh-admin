@@ -3,7 +3,7 @@ import RequestAdapterService from './request-adapter';
 export default class ColourService extends RequestAdapterService {
 	async createColour(colour) {
 		try {
-			const { data } = await super.sendPostRequest(
+			const { data } = await super.sendPostMultipartRequest(
 				`${this.baseUrl}/v1/colors`,
 				colour
 			);
@@ -19,8 +19,8 @@ export default class ColourService extends RequestAdapterService {
 
 	async editColour(id, colour) {
 		try {
-			const { data } = await super.sendPatchRequest(
-				`${this.baseUrl}/v1/colors/${id}`,
+			const { data } = await super.sendPostMultipartRequest(
+				`${this.baseUrl}/v1/colors/${id}?_method=PATCH`,
 				colour
 			);
 

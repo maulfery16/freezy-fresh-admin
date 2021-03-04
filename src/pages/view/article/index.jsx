@@ -7,7 +7,7 @@ import moment from 'moment';
 import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
 
-// import AtomColorInfoGroup from '../../../components/atoms/color-info-group';
+import AtomColorInfoGroup from '../../../components/atoms/color-info-group';
 import AtomPrimaryButton from '../../../components/atoms/button/primary-button';
 import AtomSecondaryButton from '../../../components/atoms/button/secondary-button';
 import AtomStatusSwitch from '../../../components/atoms/datatable/status-switch';
@@ -33,13 +33,11 @@ const ArticlePage = () => {
 			title: 'Judul Artikel (ID)',
 			dataIndex: `title['id']`,
 			render: (_, record) => record.title.id,
-			sorter: true,
 		},
 		{
 			title: 'Judul Artikel (EN)',
 			dataIndex: `title['en']`,
 			render: (_, record) => record.title.en,
-			sorter: true,
 		},
 		{
 			align: 'center',
@@ -59,18 +57,22 @@ const ArticlePage = () => {
 			),
 			csvRender: (item) => item.dekstop_image,
 		},
-		// {
-		// 	title: 'Kategori Artikel',
-		// 	dataIndex: 'category',
-		// 	sorter: true,
-		// 	render: (_, record) => (
-		// 		<AtomColorInfoGroup
-		// 			hexa={record.category.color.hexa_code}
-		// 			label={record.category.name}
-		// 		/>
-		// 	),
-		// csvRender: (item) => item.articleCaregoty.name
-		// },
+		{
+			title: 'Kategori Artikel',
+			dataIndex: `article_categories['id']`,
+			sorter: true,
+			render: (_, record) => {
+				return Array.isArray(record.article_categories) ? null : (
+					<AtomColorInfoGroup
+						hexa={record.article_categories.hexa_code}
+						label={`
+						${record.article_categories.name.id} / ${record.article_categories.name.en}
+					`}
+					/>
+				);
+			},
+			width: 250,
+		},
 		{
 			title: 'Dibuat Oleh',
 			dataIndex: 'created_by',
@@ -131,7 +133,7 @@ const ArticlePage = () => {
 						<EyeFilled className="f4 blue" />
 					</Link>
 
-					<Link to={`/article/${id}/edit`}>
+					<Link to={`/view/article/${id}/edit`}>
 						<EditFilled className="f4 orange" />
 					</Link>
 

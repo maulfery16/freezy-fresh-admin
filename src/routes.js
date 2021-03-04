@@ -453,6 +453,20 @@ const routes = [
 					},
 				],
 			},
+			{
+				path: '/promo',
+				children: [
+					{
+						component: React.lazy(() =>
+							import('./pages/view/promo')
+						),
+						exact: true,
+						guard: true,
+						name: 'Promo Page',
+						path: '/',
+					},
+				],
+			},
 		],
 	},
 ];

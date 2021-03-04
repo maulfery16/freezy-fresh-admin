@@ -42,12 +42,12 @@ const ColourPage = () => {
 					<Col
 						className="br2 ba bw1 b--black-10"
 						style={{
-							background: colour,
+							background: `#${colour}`,
 							height: '20px',
 							width: '20px',
 						}}
 					/>
-					<Col span={16}>{colour}</Col>
+					<Col span={16}>{`#${colour}`}</Col>
 				</Row>
 			),
 			csvRender: (item) => item.hexa_code,

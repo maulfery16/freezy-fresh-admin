@@ -3,7 +3,7 @@ import RequestAdapterService from './request-adapter';
 export default class AdditionalCategoryService extends RequestAdapterService {
 	async createAdditionalCategory(additionalCategory) {
 		try {
-			const { data } = await super.sendPostRequest(
+			const { data } = await super.sendPostMultipartRequest(
 				`${this.baseUrl}/v1/additional_categories`,
 				additionalCategory
 			);
@@ -21,8 +21,8 @@ export default class AdditionalCategoryService extends RequestAdapterService {
 
 	async editAdditionalCategory(id, additionalCategory) {
 		try {
-			const { data } = await super.sendPatchRequest(
-				`${this.baseUrl}/v1/additional_categories/${id}`,
+			const { data } = await super.sendPostMultipartRequest(
+				`${this.baseUrl}/v1/additional_categories/${id}?_method=PATCH`,
 				additionalCategory
 			);
 

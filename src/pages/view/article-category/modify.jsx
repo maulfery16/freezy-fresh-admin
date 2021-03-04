@@ -1,9 +1,10 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import React, { useEffect, useState } from 'react';
-import { Col, Form, message, Row, Skeleton, Space, Typography } from 'antd';
+import { Col, Form, message, Row, Skeleton, Typography } from 'antd';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
+import AtomColorInfoGroup from '../../../components/atoms/color-info-group';
 import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
 import MoleculeSelectInputGroup from '../../../components/molecules/input-group/select-input';
 import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
@@ -125,6 +126,7 @@ const CategoryModifyPage = () => {
 											name="id_name"
 											label="Nama Kategori Artikel (ID)"
 											placeholder="Nama Kategori Artikel (ID)"
+											required
 											type="text"
 										/>
 									</Col>
@@ -134,6 +136,7 @@ const CategoryModifyPage = () => {
 											name="en_name"
 											label="Nama Kategori Artikel (EN)"
 											placeholder="Nama Kategori Artikel (EN)"
+											required
 											type="text"
 										/>
 									</Col>
@@ -143,6 +146,7 @@ const CategoryModifyPage = () => {
 											label="Pilih Warna"
 											name="colour"
 											placeholder="Pilih Warna"
+											required
 											data={{
 												url: 'colors',
 												generateCustomOption: (
@@ -150,19 +154,13 @@ const CategoryModifyPage = () => {
 												) => ({
 													value: item.id,
 													label: (
-														<Space>
-															<div
-																className="br2"
-																style={{
-																	background:
-																		item.hexa_code,
-																	height: 20,
-																	width: 20,
-																}}
-															/>
-															{item.name.en} /
-															{item.name.id}
-														</Space>
+														<AtomColorInfoGroup
+															hexa={
+																item.hexa_code
+															}
+															label={`${item.name.id} / ${item.name.en}`}
+															size="15px"
+														/>
 													),
 												}),
 											}}
