@@ -274,6 +274,15 @@ const routes = [
 					},
 				],
 			},
+			{
+				component: React.lazy(() =>
+					import('./pages/products/wishlist')
+				),
+				exact: true,
+				guard: true,
+				name: 'Wishlist Page',
+				path: '/wishlist',
+			},
 		],
 	},
 	{
