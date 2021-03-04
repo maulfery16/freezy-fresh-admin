@@ -234,7 +234,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 	}));
 
 	return (
-		<AtomCard title="Produk">
+		<AtomCard title="Daftar Produk">
 			<Row gutter={[0, 12]}>
 				<Col span={24}>
 					<Col span={8}>

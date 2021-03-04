@@ -16,11 +16,16 @@ import OrganismLayout from '../../../components/organisms/layout';
 const PromotionsPage = () => {
 	const column = [
 		{
+			title: 'No',
+			dataIndex: 'id',
+			render: (id, _, index) => index + 1,
+		},
+		{
 			align: 'center',
 			title: 'Foto Promo Dekstop',
-			dataIndex: 'image_dekstop',
+			dataIndex: 'image_desktop',
 			render: (image) => <AtomImage src={image} />,
-			csvRender: (item) => item.image_dekstop,
+			csvRender: (item) => item.image_desktop,
 		},
 		{
 			align: 'center',
@@ -55,14 +60,9 @@ const PromotionsPage = () => {
 		},
 		{
 			title: 'Tipe Promo',
-			dataIndex: `promo_type`,
-		},
-		{
-			title: 'Cabang',
-			dataIndex: 'branches',
+			dataIndex: `is_information`,
 			sorter: true,
-			render: (branches) =>
-				branches.map((branch) => branch.name).join(', '),
+			render: (_, record) => (record.is_information ? 'Info' : 'Promo'),
 		},
 		{
 			align: 'center',
@@ -73,7 +73,7 @@ const PromotionsPage = () => {
 					active={active}
 					id={record.id}
 					tableRef={promotionsTableRef}
-					url="promotions"
+					url="promotion"
 				/>
 			),
 			csvRender: (item) => (item.is_active ? 'Aktif' : 'Tidak Aktif'),
@@ -84,18 +84,18 @@ const PromotionsPage = () => {
 			dataIndex: 'id',
 			render: (id, record) => (
 				<Space size="middle">
-					<Link to={`/promotions/${id}/detail`}>
+					<Link to={`/view/promotion/${id}/detail`}>
 						<EyeFilled className="f4 blue" />
 					</Link>
 
-					<Link to={`/promotions/${id}/edit`}>
+					<Link to={`/view/promotion/${id}/edit`}>
 						<EditFilled className="f4 orange" />
 					</Link>
 
 					{!record.is_active && (
 						<MoleculeDeleteConfirm
 							id={id}
-							label="Promotions"
+							label="Promo"
 							tableRef={promotionsTableRef}
 							url="promotions"
 						/>
@@ -111,9 +111,9 @@ const PromotionsPage = () => {
 		return (
 			<MoleculeDatatableAdditionalAction
 				column={column}
-				label="Promotions"
+				label="Promo"
 				getLimit={() => promotionsTableRef.current.totalData}
-				route="/promotions"
+				route="/view/promotion"
 				url="promotions"
 			/>
 		);
@@ -122,7 +122,7 @@ const PromotionsPage = () => {
 	const renderDatatableFilters = () => {
 		return [
 			<MoleculeDatatableFilter
-				name="status"
+				name="is_active"
 				operator=":"
 				identifier="status-filter"
 				label="Status"
@@ -131,10 +131,10 @@ const PromotionsPage = () => {
 				data={{
 					mock: [
 						{
-							value: 'active',
+							value: 'true',
 							label: 'Aktif',
 						},
-						{ value: 'inactive', label: 'Tidak Aktif' },
+						{ value: 'false', label: 'Tidak Aktif' },
 					],
 				}}
 			/>,
@@ -147,18 +147,21 @@ const PromotionsPage = () => {
 				placeholder="Filter tanggal register"
 			/>,
 			<MoleculeDatatableFilter
-				name="roles"
+				name="is_information"
 				operator=":"
-				identifier="roles-filter"
-				label="Peran"
-				key="roles-filter"
-				placeholder="Semua roles"
+				identifier="type-filter"
+				label="Tipe"
+				key="type-filter"
+				placeholder="Semua tipe"
 				data={{
-					url: 'promotion_types',
 					mock: [
 						{
-							value: 'Tipe 1',
-							label: 'Tipe 1',
+							value: 'true',
+							label: 'Info',
+						},
+						{
+							value: 'false',
+							label: 'Promo',
 						},
 					],
 				}}
@@ -168,8 +171,11 @@ const PromotionsPage = () => {
 
 	return (
 		<OrganismLayout
-			breadcumbs={[{ name: 'Promotions', link: '/promotions' }]}
-			title="Promotions Page"
+			breadcumbs={[
+				{ name: 'Tampilan', link: location.pathname },
+				{ name: 'Promo', link: '/view/promotion' },
+			]}
+			title="Promo Page"
 		>
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
@@ -179,7 +185,7 @@ const PromotionsPage = () => {
 				ref={promotionsTableRef}
 				scroll={1920}
 				searchInput={true}
-				title={`Promotions Menu`}
+				title={`Promo`}
 			/>
 		</OrganismLayout>
 	);
