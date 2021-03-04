@@ -172,7 +172,7 @@ const menus = [
 			},
 			{
 				name: 'Promo',
-				link: '/view/promo',
+				link: '/view/promotion',
 			},
 		],
 	},
