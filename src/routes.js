@@ -431,16 +431,34 @@ const routes = [
 				],
 			},
 			{
-				path: '/promo',
+				path: '/promotion',
 				children: [
 					{
 						component: React.lazy(() =>
-							import('./pages/view/promo')
+							import('./pages/view/promotion')
 						),
 						exact: true,
 						guard: true,
-						name: 'Promo Page',
+						name: 'Promotion Page',
 						path: '/',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/view/promotion/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Add Promotion Page',
+						path: '/add',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/view/promotion/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Edit Promotion Page',
+						path: '/:id/edit',
 					},
 				],
 			},

@@ -31,9 +31,12 @@ const MoleculeFileInputGroup = (props) => {
 
 									{fileInput.label && (
 										<Typography.Text>
-											<span className="f5 ">
+											<p
+												className="f5 tc"
+												style={{ maxWidth: 110 }}
+											>
 												{fileInput.label}
-											</span>
+											</p>
 										</Typography.Text>
 									)}
 								</Space>

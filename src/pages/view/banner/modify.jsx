@@ -146,7 +146,7 @@ const BannerModifyPage = () => {
 														? banner.image_mobile
 														: null,
 													isMobileImage: true,
-													label: 'Foro Banner Mobile',
+													label: 'Foto Banner Mobile',
 													ref: mobileImageRef,
 												},
 												{
@@ -154,7 +154,7 @@ const BannerModifyPage = () => {
 														? banner.image_desktop
 														: null,
 													label:
-														'Foro Banner Dekstop',
+														'Foto Banner Dekstop',
 													ref: dekstopImageRef,
 												},
 											]}
