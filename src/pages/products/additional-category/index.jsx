@@ -125,7 +125,7 @@ const AdditionalCategoryPage = () => {
 				dataSourceURL={`additional_categories`}
 				ref={additionalCategoryTableRef}
 				searchInput={true}
-				scroll={1360}
+				scroll={1920}
 				title={`Kategori Tambahan`}
 			/>
 		</OrganismLayout>

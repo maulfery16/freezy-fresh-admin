@@ -35,7 +35,7 @@ const ArticleCategoryPage = () => {
 				color ? (
 					<AtomColorInfoGroup
 						hexa={color.hexa_code}
-						label={color.name}
+						label={color.name.id || color.name}
 					/>
 				) : (
 					'-'
