@@ -21,7 +21,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
 	AiFillGift,
 	AiOutlineTransaction,
-	AiTwotoneCustomerService,
 	AiTwotoneBank,
 } from 'react-icons/ai';
 import { BsPersonFill } from 'react-icons/bs';
@@ -33,6 +32,7 @@ import {
 } from 'react-icons/fa';
 import {
 	BellOutlined,
+	CustomerServiceOutlined,
 	DropboxOutlined,
 	HomeFilled,
 	LayoutFilled,
@@ -79,13 +79,13 @@ const menus = [
 		],
 	},
 	{
-		name: 'Produk-Poduk',
+		name: 'Produk-Produk',
 		icon: <DropboxOutlined />,
-		subMenuKey: 'produts',
+		subMenuKey: 'products',
 		subMenus: [
 			{
 				name: 'Produk',
-				link: '/products',
+				link: '/products/',
 			},
 			{
 				name: 'Brand',
@@ -172,18 +172,18 @@ const menus = [
 			},
 			{
 				name: 'Promo',
-				link: '/view/promo',
+				link: '/view/promotion',
 			},
 		],
 	},
 	{
-		name: ' Pelanggan',
-		icon: <AiTwotoneCustomerService />,
+		name: 'Pelanggan',
+		icon: <CustomerServiceOutlined />,
 		subMenuKey: 'customer',
 		subMenus: [
 			{
 				name: 'Pelanggan',
-				link: '/customer',
+				link: '/customer/',
 			},
 			{
 				name: 'Daftar Teman',
@@ -304,7 +304,7 @@ const OrganismLayout = (props) => {
 				<title>Fresh Freeze Admin | {props.title || ''}</title>
 			</Helmet>
 
-			<Layout style={{ minHeight: '100vh' }}>
+			<Layout style={{ maxHeight: '100vh' }}>
 				<Layout.Sider
 					collapsible
 					collapsed={isSidebarCollapsed}
@@ -312,7 +312,7 @@ const OrganismLayout = (props) => {
 						setIsSidebarCollapsed((collapsed) => !collapsed)
 					}
 					width={300}
-					style={{ minHeight: '100vh' }}
+					style={{ maxHeight: '100vh', overflow: 'auto' }}
 				>
 					<div className="pa2 mv3 mh4">
 						<img src={FFLogo} alt="Logo" />
@@ -483,7 +483,7 @@ const OrganismLayout = (props) => {
 
 				<Layout
 					className="site-layout"
-					style={{ maxHeight: '100vh', overflow: 'scroll' }}
+					style={{ maxHeight: '100vh', overflow: 'auto' }}
 				>
 					<div className="ph5 pv4">
 						{props.breadcumbs && (

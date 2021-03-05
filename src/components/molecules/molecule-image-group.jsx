@@ -19,7 +19,9 @@ const MoleculeImageGroup = (props) => {
 					<Space align="center" direction="vertical">
 						<AtomImage src={image.source} />
 
-						<p>{image.label}</p>
+						<p style={{ maxWidth: 110, textAlign: 'center' }}>
+							{image.label}
+						</p>
 					</Space>
 				</Col>
 			))}

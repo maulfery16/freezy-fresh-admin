@@ -185,15 +185,15 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 
 			const data = new FormData();
 			if (holidayImageMobileRef)
-				data.append('imageMobile', holidayImageMobileRef);
+				data.append('mobile_image', holidayImageMobileRef);
 			if (holidayImageDekstopRef)
-				data.append('imageDekstop', holidayImageDekstopRef);
+				data.append('desktop_image', holidayImageDekstopRef);
 			if (holidayImageSmall1Ref)
-				data.append('imageSmall1', holidayImageSmall1Ref);
+				data.append('small_image_1', holidayImageSmall1Ref);
 			if (holidayImageSmall2Ref)
-				data.append('imageSmall2', holidayImageSmall2Ref);
+				data.append('small_image_2', holidayImageSmall2Ref);
 			if (holidayImageSmall3Ref)
-				data.append('imageSmall3', holidayImageSmall3Ref);
+				data.append('small_image_3', holidayImageSmall3Ref);
 			data.append('title[id]', values.id_title);
 			data.append('title[en]', values.en_title);
 			data.append('short_desc[id]', values.id_short_desc);
@@ -258,97 +258,64 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 				>
 					<Tabs defaultActiveKey="1">
 						<TabPane tab={`Info Holiday`.toUpperCase()} key="1">
-							<Row align="top" gutter={24}>
+							<Row align="top" className="mt4" gutter={24}>
 								<Col span={24}>
 									<AtomCard>
-										<Typography.Text>
-											<span className="gray fw7">
-												Foto Banner
-											</span>
-										</Typography.Text>
-										<Row
-											align="bottom"
-											justify="space-between"
-											className={`br3 ba bw1 b--black-10 pv2 ph3 mb3`}
-										>
-											<Col span={4}>
+										<Row gutter={[24, 24]}>
+											<Col span={24}>
 												<MoleculeFileInputGroup
-													label="Foto Banner Mobile"
+													label="Foto Banner"
+													description="
+												Format gambar .jpg .jpeg .png, Untuk foto banner mobile ukuran minimum 0 x 0px (Untuk
+												gambar optimal gunakan ukuran minimum 0 x 0 px) Untuk foto banner desktop ukuran
+												minimum 0 x 0px (Untuk gambar optimal gunakan ukuran minimum 0 x 0 px)
+											"
 													fileInputs={[
 														{
 															defaultValue: holiday
 																? holiday.banner_mobile_image
 																: null,
+															isMobileImage: true,
+															label:
+																'Foto Banner Mobile',
 															ref: holidayImageMobileRef,
 														},
-													]}
-												/>
-											</Col>
-											<Col span={4}>
-												<MoleculeFileInputGroup
-													label="Foto Banner Desktop"
-													fileInputs={[
 														{
 															defaultValue: holiday
 																? holiday.banner_desktop_image
 																: null,
+															label:
+																'Foto Banner Dekstop',
 															ref: holidayImageDekstopRef,
 														},
-													]}
-												/>
-											</Col>
-											<Col span={4}>
-												<MoleculeFileInputGroup
-													label="Foto Banner Kecil 1"
-													fileInputs={[
 														{
 															defaultValue: holiday
 																? holiday.banner_small1_image
 																: null,
+															label:
+																'Foto Banner Kecil 1',
 															ref: holidayImageSmall1Ref,
 														},
-													]}
-												/>
-											</Col>
-											<Col span={4}>
-												<MoleculeFileInputGroup
-													label="Foto Banner Kecil 2"
-													fileInputs={[
 														{
 															defaultValue: holiday
 																? holiday.banner_small2_image
 																: null,
+															label:
+																'Foto Banner Kecil 2',
 															ref: holidayImageSmall2Ref,
 														},
-													]}
-												/>
-											</Col>
-											<Col span={4}>
-												<MoleculeFileInputGroup
-													label="Foto Banner Kecil 3"
-													fileInputs={[
 														{
 															defaultValue: holiday
 																? holiday.banner_small3_image
 																: null,
+															label:
+																'Foto Banner Kecil 3',
 															ref: holidayImageSmall3Ref,
 														},
 													]}
 												/>
 											</Col>
 
-											<Row>
-												<Col span={24}>
-													<Typography.Text>
-														<span className="dark-gray fw5 f7">
-															{`Format gambar .jpg .jpeg .png. Untuk foto banner mobile ukuran minumum 0 x 0 px (Untuk gambar optimal gunakan ukuran ninimum 0 x 0 px). Untuk foto banner desktop ukuran minumum 0 x 0 px (Untuk gambar optimal gunakan ukuran ninimum 0 x 0 px)`}
-														</span>
-													</Typography.Text>
-												</Col>
-											</Row>
-										</Row>
-
-										<Row gutter={[24, 24]}>
 											<Col span={12}>
 												<MoleculeTextInputGroup
 													name="id_title"

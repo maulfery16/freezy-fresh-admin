@@ -6,12 +6,13 @@ import AtomCustomSelect from '../../atoms/input/select';
 
 const MoleculeDatatableFilter = (props) => {
 	const setFilterQuery = (selectedValue) => {
-		if (selectedValue.length > 0) {
-			props.addFilter(
-				props.name,
-				props.operator,
-				generateClauseValue(selectedValue)
-			);
+		if (selectedValue) {
+			if (selectedValue.length > 0)
+				props.addFilter(
+					props.name,
+					props.operator,
+					generateClauseValue(selectedValue)
+				);
 		} else {
 			props.removeFilter(props.name);
 		}
@@ -34,6 +35,7 @@ const MoleculeDatatableFilter = (props) => {
 				onChange={setFilterQuery}
 				placeholder={props.placeholder}
 				style={{ width: '100%' }}
+				allowClear
 			/>
 		</Space>
 	) : (
