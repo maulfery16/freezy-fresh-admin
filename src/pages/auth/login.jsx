@@ -41,7 +41,7 @@ const LoginPages = () => {
 	};
 
 	const showLoginErrorMessage = (errorInfo) => {
-		console.log('Failed:', errorInfo);
+		console.error('Failed:', errorInfo);
 	};
 
 	const login = async (values) => {

@@ -152,7 +152,7 @@ const menus = [
 			},
 			{
 				name: 'Produk Baru',
-				link: '/view/produk-baru',
+				link: '/view/new-product',
 			},
 			{
 				name: `Circle's Favorite`,
