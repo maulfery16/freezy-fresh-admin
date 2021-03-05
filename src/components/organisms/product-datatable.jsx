@@ -59,8 +59,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 		{
 			title: 'Cabang',
 			dataIndex: 'branches',
-			render: (branches) =>
-				branches.map((branch) => branch.name).join(', '),
+			render: (branches) => branches.join(', '),
 		},
 		{
 			title: 'SKUID',
@@ -68,7 +67,8 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 		},
 		{
 			title: 'Nama Produk',
-			dataIndex: 'name',
+			dataIndex: `name['id']`,
+			render: (_, record) => record.name.id,
 		},
 		{
 			title: 'Stock Tersedia',
@@ -145,6 +145,14 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 
 	const addProduct = (values) => {
 		console.log(values);
+		setData([
+			...data,
+			{ branches: values.branches, ...JSON.parse(values.product) },
+		]);
+		console.log([
+			...data,
+			{ branches: values.branches, ...JSON.parse(values.product) },
+		]);
 	};
 
 	const applyFilter = (values) => {
@@ -352,14 +360,14 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 														required
 														data={{
 															url: 'products',
-															mock: [
-																{
-																	value:
-																		'Udang',
-																	label:
-																		'Udang',
-																},
-															],
+															generateCustomOption: (
+																item
+															) => ({
+																value: `${JSON.stringify(
+																	item
+																)}`,
+																label: `${item.sku_id} ${item.name.id}`,
+															}),
 														}}
 													/>
 												</Col>
@@ -367,7 +375,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 												<Col span={24}>
 													<MoleculeSelectInputGroup
 														label="Cabang"
-														name="branch"
+														name="branches"
 														placeholder="Cabang"
 														mode="multiple"
 														required
