@@ -37,7 +37,7 @@ const NewProductPage = () => {
 	return (
 		<OrganismLayout
 			breadcumbs={[
-				{ name: 'Tampilan', link: '/view/new-product' },
+				{ name: 'Tampilan', link: '/view' },
 				{ name: 'Produk Baru', link: '/view/newProduct' },
 				{ name: 'Detail', link: location.pathname },
 			]}
@@ -110,7 +110,7 @@ const NewProductPage = () => {
 								<Col span={24} style={{ paddingTop: '2rem' }}>
 									<Typography.Text strong>
 										<span className="denim f5">
-											INFO UPDATE PRODUK
+											INFO UPDATE
 										</span>
 									</Typography.Text>
 								</Col>
