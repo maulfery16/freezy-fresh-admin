@@ -354,7 +354,7 @@ const PromotionModifyPage = () => {
 													name="id_short_desc"
 													placeholder="Deskripsi Singkat (ID)"
 													type="textarea"
-													required={true}
+													required
 												/>
 											</Col>
 
@@ -368,7 +368,7 @@ const PromotionModifyPage = () => {
 													name="en_short_desc"
 													placeholder="Deskripsi Singkat (EN)"
 													type="textarea"
-													required={true}
+													required
 												/>
 											</Col>
 

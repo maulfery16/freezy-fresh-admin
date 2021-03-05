@@ -107,7 +107,6 @@ const OrganismDatatable = forwardRef((props, ref) => {
 	};
 
 	const setDatatableMetadata = (pagination, _, sorter) => {
-		console.log(pagination);
 		const { current, pageSize } = pagination;
 		const { field, order } = sorter;
 
