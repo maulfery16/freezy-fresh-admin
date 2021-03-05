@@ -390,6 +390,29 @@ const routes = [
 				],
 			},
 			{
+				path: '/circle-favorite',
+				children: [
+					{
+						component: React.lazy(() =>
+							import('./pages/view/circle-favorite')
+						),
+						exact: true,
+						guard: true,
+						name: 'Circle Favorite Page',
+						path: '/',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/view/circle-favorite/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Edit Circle Favorite Page',
+						path: '/edit',
+					},
+				],
+			},
+			{
 				path: '/article',
 				children: [
 					{
