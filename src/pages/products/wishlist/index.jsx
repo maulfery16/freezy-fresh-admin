@@ -5,7 +5,6 @@ import ReactMoment from 'react-moment';
 import { Space } from 'antd';
 
 import AtomImage from '../../../components/atoms/image';
-import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
@@ -19,13 +18,13 @@ const WishlistPage = () => {
 		},
 		{
 			title: 'Nama Pelanggan',
-			dataIndex: `customer['name']`,
-			render: (_, record) => record.name.id,
+			dataIndex: `user_id`,
+			render: (_, record) => record.user_id,
 		},
 		{
 			title: 'ID Pelanggan',
-			dataIndex: `customer['id']`,
-			render: (_, record) => record.customer.id,
+			dataIndex: `user_id`,
+			render: (_, record) => record.user_id,
 		},
 		{
 			align: 'center',
@@ -46,7 +45,7 @@ const WishlistPage = () => {
 		},
 		{
 			title: 'Dibuat Oleh',
-			dataIndex: 'created_by',
+			dataIndex: 'created_at',
 		},
 		{
 			align: 'center',
@@ -69,18 +68,6 @@ const WishlistPage = () => {
 	];
 	const wishlistTableRef = useRef();
 
-	const renderAdditionalAction = () => {
-		return (
-			<MoleculeDatatableAdditionalAction
-				column={column}
-				label="Wishlist"
-				getLimit={() => wishlistTableRef.current.totalData}
-				route="/products/wishlist"
-				url="wishlists"
-			/>
-		);
-	};
-
 	return (
 		<OrganismLayout
 			breadcumbs={[
@@ -93,11 +80,10 @@ const WishlistPage = () => {
 			title="Product Page Wishlist"
 		>
 			<OrganismDatatable
-				additionalAction={renderAdditionalAction()}
 				columns={column}
 				dataSourceURL={`wishlists`}
 				ref={wishlistTableRef}
-				scroll={1920}
+				scroll={1360}
 				searchInput={true}
 				title={`Wishlist`}
 			/>
