@@ -354,7 +354,7 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 														maxRows: 6,
 													}}
 													name="en_short_desc"
-													label="Deskripsi Singkat (ED)"
+													label="Deskripsi Singkat (EN)"
 													placeholder="Deskripsi Singkat (EN)"
 													type="textarea"
 												/>

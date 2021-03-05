@@ -55,11 +55,10 @@ const ArticleModifyPage = () => {
 	};
 
 	const submit = async (values) => {
-		const dekstopImage = await dekstopImageRef.current.getImage();
-		const mobileImage = await mobileImageRef.current.getImage();
-
 		try {
 			setIsSubmitting(true);
+			const dekstopImage = await dekstopImageRef.current.getImage();
+			const mobileImage = await mobileImageRef.current.getImage();
 
 			const data = new FormData();
 			data.append('article_category_id', values.article_category);
