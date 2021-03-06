@@ -12,6 +12,7 @@ import {
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
+import AtomPrimaryButton from '../../components/atoms/button/primary-button';
 import AuthenticationLayout from '../../components/layouts/authentication';
 import {
 	setAuthToken,
@@ -20,7 +21,6 @@ import {
 	setRefreshToken,
 	setRememberMeStatus,
 } from '../../stores/auth/actions';
-import AtomPrimaryButton from '../../components/atoms/button/primary-button';
 
 import AuthService from '../../services/auth';
 const authService = new AuthService();

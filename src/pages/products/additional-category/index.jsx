@@ -6,12 +6,11 @@ import { Link } from 'react-router-dom';
 import { Space } from 'antd';
 import { EditFilled } from '@ant-design/icons';
 
-import OrganismDatatable from '../../../components/organisms/datatable';
-import OrganismLayout from '../../../components/organisms/layout';
-
 import AtomStatusSwitch from '../../../components/atoms/datatable/status-switch';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
+import OrganismDatatable from '../../../components/organisms/datatable';
+import OrganismLayout from '../../../components/organisms/layout';
 
 const AdditionalCategoryPage = () => {
 	const column = [
@@ -69,7 +68,7 @@ const AdditionalCategoryPage = () => {
 					url="additional_categories"
 				/>
 			),
-			csvRender: (item) => (item.active ? 'Aktif' : 'Tidak Aktif'),
+			csvRender: (item) => (item.is_active ? 'Aktif' : 'Tidak Aktif'),
 		},
 		{
 			title: 'Aksi',

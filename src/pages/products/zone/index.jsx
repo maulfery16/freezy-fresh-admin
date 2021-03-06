@@ -3,16 +3,17 @@ import moment from 'moment';
 import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
 import { Link } from 'react-router-dom';
-import { Col, Row, Space } from 'antd';
+import { Space } from 'antd';
 import { EditFilled } from '@ant-design/icons';
 
 import AtomStatusSwitch from '../../../components/atoms/datatable/status-switch';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
-import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
-const ColourPage = () => {
+import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
+
+const ZonePage = () => {
 	const column = [
 		{
 			title: 'No',
@@ -20,37 +21,18 @@ const ColourPage = () => {
 			render: (id, _, index) => index + 1,
 		},
 		{
-			title: 'Nama Warna (ID)',
+			title: 'Kode Zona',
+			dataIndex: 'code',
+		},
+		{
+			title: 'Nama Zona (ID)',
 			dataIndex: `name['id']`,
 			render: (_, record) => record.name.id,
 		},
 		{
-			title: 'Nama Warna (EN)',
+			title: 'Nama Zona (EN)',
 			dataIndex: `name['en']`,
 			render: (_, record) => record.name.en,
-		},
-		{
-			title: 'Kode Hexa',
-			dataIndex: 'hexa_code',
-			render: (colour) => (
-				<Row
-					gutter={[16, 0]}
-					style={{
-						width: '120px',
-					}}
-				>
-					<Col
-						className="br2 ba bw1 b--black-10"
-						style={{
-							background: `#${colour}`,
-							height: '20px',
-							width: '20px',
-						}}
-					/>
-					<Col span={16}>{`#${colour}`}</Col>
-				</Row>
-			),
-			csvRender: (item) => item.hexa_code,
 		},
 		{
 			title: 'Tanggal Dibuat',
@@ -83,8 +65,8 @@ const ColourPage = () => {
 				<AtomStatusSwitch
 					active={active}
 					id={record.id}
-					tableRef={colourTableRef}
-					url="colors"
+					tableRef={zoneTableRef}
+					url="zones"
 				/>
 			),
 			csvRender: (item) => (item.is_active ? 'Aktif' : 'Tidak Aktif'),
@@ -94,16 +76,16 @@ const ColourPage = () => {
 			dataIndex: 'id',
 			render: (id, record) => (
 				<Space size="middle">
-					<Link to={`/products/colour/${id}/edit`}>
+					<Link to={`/products/zone/${id}/edit`}>
 						<EditFilled className="f4 orange" />
 					</Link>
 
 					{!record.is_active && (
 						<MoleculeDeleteConfirm
 							id={id}
-							label="Warna"
-							tableRef={colourTableRef}
-							url="colors"
+							label="Zona"
+							tableRef={zoneTableRef}
+							url="zones"
 						/>
 					)}
 				</Space>
@@ -112,16 +94,16 @@ const ColourPage = () => {
 		},
 	];
 
-	const colourTableRef = useRef();
+	const zoneTableRef = useRef();
 
 	const renderAdditionalAction = () => {
 		return (
 			<MoleculeDatatableAdditionalAction
 				column={column}
-				label="Warna"
-				getLimit={() => colourTableRef.current.totalData}
-				route="/products/colour"
-				url="colors"
+				label="Zona"
+				getLimit={() => zoneTableRef.current.totalData}
+				route="/products/zone"
+				url="zones"
 			/>
 		);
 	};
@@ -131,23 +113,23 @@ const ColourPage = () => {
 			breadcumbs={[
 				{ name: 'Produk', link: location.pathname },
 				{
-					name: 'Warna',
+					name: 'Zona',
 					link: location.pathname,
 				},
 			]}
-			title="Product Page Colour"
+			title="Product Page Additional Category"
 		>
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`colors`}
-				ref={colourTableRef}
-				scroll={1360}
+				dataSourceURL={`zones`}
+				ref={zoneTableRef}
 				searchInput={true}
-				title={`Warna`}
+				scroll={1920}
+				title={`Zona`}
 			/>
 		</OrganismLayout>
 	);
 };
 
-export default ColourPage;
+export default ZonePage;

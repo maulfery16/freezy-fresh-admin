@@ -5,11 +5,11 @@ import { SketchPicker } from 'react-color';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
+import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
 import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../../components/organisms/layout';
 
 import ColorService from '../../../services/colour';
-import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
 const colourService = new ColorService();
 
 const ColourModifyPage = () => {
