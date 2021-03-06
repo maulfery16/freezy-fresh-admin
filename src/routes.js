@@ -283,6 +283,29 @@ const routes = [
 				name: 'Wishlist Page',
 				path: '/wishlist',
 			},
+			{
+				path: '/zone',
+				children: [
+					{
+						component: React.lazy(() =>
+							import('./pages/products/zone')
+						),
+						exact: true,
+						guard: true,
+						name: 'Zone Page',
+						path: '/',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/products/zone/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Edit Zone Page',
+						path: '/:id/edit',
+					},
+				],
+			},
 		],
 	},
 	{
