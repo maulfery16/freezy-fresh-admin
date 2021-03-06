@@ -1,6 +1,22 @@
 import RequestAdapterService from './request-adapter';
 
 export default class ZoneService extends RequestAdapterService {
+	async createZone(zone) {
+		try {
+			const { data } = await super.sendPostMultipartRequest(
+				`${this.baseUrl}/v1/zones`,
+				zone
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail creating zone: ${super.generateErrorMessage(error)}`
+			);
+		}
+	}
+
 	async editZone(id, zone) {
 		try {
 			const { data } = await super.sendPostMultipartRequest(
