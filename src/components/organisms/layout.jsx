@@ -156,7 +156,7 @@ const menus = [
 			},
 			{
 				name: `Circle's Favorite`,
-				link: '/view/circles-favorite',
+				link: '/view/circle-favorite',
 			},
 			{
 				name: 'Based on Search',

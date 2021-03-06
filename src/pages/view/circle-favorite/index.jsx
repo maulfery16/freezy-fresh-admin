@@ -9,19 +9,19 @@ import AtomPrimaryButton from '../../../components/atoms/button/primary-button';
 import MoleculeInfoGroup from '../../../components/molecules/info-group';
 import OrganismLayout from '../../../components/organisms/layout';
 
-import NewProductService from '../../../services/new-product';
-const newProductService = new NewProductService();
+import CircleFavoriteService from '../../../services/circle-favorite';
+const circleFavoriteService = new CircleFavoriteService();
 
-const NewProductPage = () => {
-	const [newProduct, setNewProduct] = useState(null);
+const CircleFavoritePage = () => {
+	const [circleFavorite, setCircleFavorite] = useState(null);
 
-	const getNewProductDetail = async () => {
+	const getCircleFavoriteDetail = async () => {
 		try {
 			const {
-				data: newProduct,
-			} = await newProductService.getNewProducts();
+				data: circleFavorite,
+			} = await circleFavoriteService.getCircleFavorites();
 
-			setNewProduct(newProduct.data && newProduct.data[0]);
+			setCircleFavorite(circleFavorite.data && circleFavorite.data[0]);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
@@ -30,7 +30,7 @@ const NewProductPage = () => {
 
 	useEffect(() => {
 		(async () => {
-			getNewProductDetail();
+			getCircleFavoriteDetail();
 		})();
 	}, []);
 
@@ -38,27 +38,27 @@ const NewProductPage = () => {
 		<OrganismLayout
 			breadcumbs={[
 				{ name: 'Tampilan', link: '/view' },
-				{ name: 'Produk Baru', link: '/view/newProduct' },
+				{ name: `Circle's Favorite`, link: '/view/circle-favorite' },
 				{ name: 'Detail', link: location.pathname },
 			]}
-			title="Detail Produk Baru"
+			title="Detail Circle's Favorite"
 		>
 			<Row align="middle" justify="space-between">
 				<Col>
 					<Typography.Title level={4}>
 						<span className="fw7">
-							{`Detail Produk Baru`.toUpperCase()}
+							{`Detail Circle's Favorite`.toUpperCase()}
 						</span>
 					</Typography.Title>
 				</Col>
 
 				<Col>
-					{newProduct && (
+					{circleFavorite && (
 						<Link
 							to={{
-								pathname: '/view/new-product/edit',
+								pathname: '/view/circle-favorite/edit',
 								state: {
-									newProduct: newProduct,
+									circleFavorite: circleFavorite,
 								},
 							}}
 						>
@@ -68,24 +68,24 @@ const NewProductPage = () => {
 				</Col>
 			</Row>
 
-			{!newProduct ? (
+			{!circleFavorite ? (
 				<Skeleton active />
 			) : (
 				<Row align="top" className="mt4" gutter={24}>
 					<Col span={15}>
-						<AtomCard title="Info Produk Baru">
+						<AtomCard title={`Info Circle's Favorite`}>
 							<Row gutter={[12, 24]}>
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Title Konten (ID)"
-										content={newProduct.title.id}
+										content={circleFavorite.title.id}
 									/>
 								</Col>
 
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Title Konten (EN)"
-										content={newProduct.title.en}
+										content={circleFavorite.title.en}
 									/>
 								</Col>
 
@@ -93,7 +93,7 @@ const NewProductPage = () => {
 									<MoleculeInfoGroup
 										title="Deskripsi Singkat (ID)"
 										content={
-											newProduct.short_description.id
+											circleFavorite.short_description.id
 										}
 									/>
 								</Col>
@@ -102,7 +102,7 @@ const NewProductPage = () => {
 									<MoleculeInfoGroup
 										title="Deskripsi Singkat (EN)"
 										content={
-											newProduct.short_description.en
+											circleFavorite.short_description.en
 										}
 									/>
 								</Col>
@@ -120,7 +120,7 @@ const NewProductPage = () => {
 										title="Tanggal di Daftarkan"
 										content={
 											<ReactMoment format="DD-MM-YYYY">
-												{newProduct.created_at}
+												{circleFavorite.created_at}
 											</ReactMoment>
 										}
 									/>
@@ -131,7 +131,7 @@ const NewProductPage = () => {
 										title="Tanggal di Update"
 										content={
 											<ReactMoment format="DD-MM-YYYY">
-												{newProduct.updated_at}
+												{circleFavorite.updated_at}
 											</ReactMoment>
 										}
 									/>
@@ -140,14 +140,14 @@ const NewProductPage = () => {
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Didaftarkan Oleh"
-										content={newProduct.created_by}
+										content={circleFavorite.created_by}
 									/>
 								</Col>
 
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Diupdate Oleh"
-										content={newProduct.updated_by}
+										content={circleFavorite.updated_by}
 									/>
 								</Col>
 							</Row>
@@ -159,4 +159,4 @@ const NewProductPage = () => {
 	);
 };
 
-export default NewProductPage;
+export default CircleFavoritePage;
