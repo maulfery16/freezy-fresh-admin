@@ -76,7 +76,8 @@ const AtomFileInput = forwardRef((props, ref) => {
 
 				return image;
 			} else {
-				if (props.required) throw new Error('Image is required');
+				if (props.required)
+					throw new Error(`${props.label || 'Image'} is required`);
 			}
 		},
 	}));

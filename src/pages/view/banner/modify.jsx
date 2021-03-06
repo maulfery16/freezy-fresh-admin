@@ -52,11 +52,10 @@ const BannerModifyPage = () => {
 	};
 
 	const submit = async (values) => {
-		const dekstopImage = await dekstopImageRef.current.getImage();
-		const mobileImage = await mobileImageRef.current.getImage();
-
 		try {
 			setIsSubmitting(true);
+			const dekstopImage = await dekstopImageRef.current.getImage();
+			const mobileImage = await mobileImageRef.current.getImage();
 
 			const data = new FormData();
 			data.append('image_mobile', mobileImage);

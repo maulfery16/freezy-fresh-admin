@@ -42,12 +42,11 @@ const AdminModifyPage = () => {
 
 	const submit = async (values) => {
 		try {
+			setIsSubmitting(true);
 			const profileImage = await profileImageRef.current.getImage();
 			const idCardImage = await idCardImageRef.current.getImage();
 
-			setIsSubmitting(true);
 			const data = new FormData();
-
 			data.append('bank_account_number', values.rek_number);
 			data.append('bank_id', values.bank);
 			data.append('email', values.email);

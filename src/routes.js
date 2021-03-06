@@ -485,6 +485,15 @@ const routes = [
 					},
 					{
 						component: React.lazy(() =>
+							import('./pages/view/promotion/detail')
+						),
+						exact: true,
+						guard: true,
+						name: 'Detail Promotion Page',
+						path: '/:id/detail',
+					},
+					{
+						component: React.lazy(() =>
 							import('./pages/view/promotion/modify')
 						),
 						exact: true,
