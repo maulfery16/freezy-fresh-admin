@@ -7,9 +7,11 @@ import { Space } from 'antd';
 import { EditFilled } from '@ant-design/icons';
 
 import AtomStatusSwitch from '../../../components/atoms/datatable/status-switch';
-import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
+import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
+
+import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
 
 const ZonePage = () => {
 	const column = [
@@ -67,7 +69,7 @@ const ZonePage = () => {
 					url="zones"
 				/>
 			),
-			csvRender: (item) => (item.active ? 'Aktif' : 'Tidak Aktif'),
+			csvRender: (item) => (item.is_active ? 'Aktif' : 'Tidak Aktif'),
 		},
 		{
 			title: 'Aksi',
@@ -94,6 +96,18 @@ const ZonePage = () => {
 
 	const zoneTableRef = useRef();
 
+	const renderAdditionalAction = () => {
+		return (
+			<MoleculeDatatableAdditionalAction
+				column={column}
+				label="Zona"
+				getLimit={() => zoneTableRef.current.totalData}
+				route="/products/zone"
+				url="zones"
+			/>
+		);
+	};
+
 	return (
 		<OrganismLayout
 			breadcumbs={[
@@ -106,6 +120,7 @@ const ZonePage = () => {
 			title="Product Page Additional Category"
 		>
 			<OrganismDatatable
+				additionalAction={renderAdditionalAction()}
 				columns={column}
 				dataSourceURL={`zones`}
 				ref={zoneTableRef}

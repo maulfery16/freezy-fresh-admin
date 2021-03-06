@@ -301,6 +301,15 @@ const routes = [
 						),
 						exact: true,
 						guard: true,
+						name: 'Add Zone Page',
+						path: '/add',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/products/zone/modify')
+						),
+						exact: true,
+						guard: true,
 						name: 'Edit Zone Page',
 						path: '/:id/edit',
 					},
