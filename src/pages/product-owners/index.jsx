@@ -71,7 +71,7 @@ const PerusahaanPage = () => {
 					url="product_owners"
 				/>
 			),
-			csvRender: (item) => (item.active ? 'Aktif' : 'Tidak Aktif'),
+			csvRender: (item) => (item.is_active ? 'Aktif' : 'Tidak Aktif'),
 		},
 		{
 			align: ' center',

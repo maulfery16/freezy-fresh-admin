@@ -87,7 +87,7 @@ const ColourPage = () => {
 					url="colors"
 				/>
 			),
-			csvRender: (item) => (item.active ? 'Aktif' : 'Tidak Aktif'),
+			csvRender: (item) => (item.is_active ? 'Aktif' : 'Tidak Aktif'),
 		},
 		{
 			title: 'Aksi',

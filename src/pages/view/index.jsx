@@ -95,7 +95,7 @@ const ViewPage = () => {
 					url="views"
 				/>
 			),
-			csvRender: (item) => (item.active ? 'Aktif' : 'Tidak Aktif'),
+			csvRender: (item) => (item.is_active ? 'Aktif' : 'Tidak Aktif'),
 		},
 		{
 			title: 'Aksi',
