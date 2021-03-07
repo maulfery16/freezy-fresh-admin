@@ -1,6 +1,12 @@
 /* eslint-disable react/display-name */
 import PropTypes from 'prop-types';
-import React, { forwardRef, useImperativeHandle, useState } from 'react';
+import React, {
+	forwardRef,
+	useEffect,
+	useRef,
+	useImperativeHandle,
+	useState,
+} from 'react';
 import {
 	Col,
 	Form,
@@ -20,6 +26,9 @@ import AtomNumberFormat from '../atoms/number-format';
 import AtomPrimaryButton from '../atoms/button/primary-button';
 import MoleculeSelectInputGroup from '../molecules/input-group/select-input';
 import AtomSecondaryButton from '../atoms/button/secondary-button';
+
+import ProductService from '../../services/product';
+const productService = new ProductService();
 
 const EditableCell = ({
 	editing,
@@ -56,50 +65,66 @@ const EditableCell = ({
 
 const OrganismProductDatatable = forwardRef((props, ref) => {
 	const columns = [
+		// {
+		// 	title: 'Cabang',
+		// 	dataIndex: 'branches',
+		// 	sorter: true,
+		// 	render: (branches) =>
+		// 		branches.map((branch) => branch.name).join(', '),
+		// },
 		{
 			title: 'Cabang',
-			dataIndex: 'branches',
-			render: (branches) => branches.join(', '),
+			dataIndex: 'branch',
+			sorter: true,
 		},
 		{
 			title: 'SKUID',
-			dataIndex: 'id',
+			dataIndex: 'sku_id',
+			sorter: true,
 		},
 		{
 			title: 'Nama Produk',
 			dataIndex: `name['id']`,
+			sorter: true,
 			render: (_, record) => record.name.id,
 		},
 		{
 			title: 'Stock Tersedia',
-			dataIndex: 'stock',
+			dataIndex: 'available_stock',
+			sorter: true,
 		},
 		{
-			title: 'Harga Norminal',
+			title: 'Harga Normal',
 			dataIndex: 'price',
+			sorter: true,
 			render: (price) => <AtomNumberFormat prefix="Rp. " value={price} />,
 		},
 		{
 			title: 'Stock Terjual',
-			dataIndex: 'unit_sold',
+			dataIndex: 'total_sold',
+			sorter: true,
 		},
 		{
 			title: 'Harga Setelah Diskon',
 			dataIndex: 'discounted_price',
+			sorter: true,
 			render: (_, record) => (
 				<AtomNumberFormat
 					prefix="Rp. "
 					value={
-						record.price - record.price * (record.discount / 100)
+						record.price -
+						record.price * (record.discount_percentage / 100)
 					}
 				/>
 			),
 		},
 		{
 			title: 'Diskon',
-			dataIndex: 'discount',
+			dataIndex: 'discount_percentage',
 			editable: true,
-			render: (discount) => (discount ? `${discount} %` : null),
+			sorter: true,
+			render: (discount_percentage) =>
+				discount_percentage ? `${discount_percentage} %` : null,
 		},
 	];
 
@@ -136,24 +161,27 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 	const [data, setData] = useState(props.defaultData || []);
 	const [editingKey, setEditingKey] = useState('');
 	const [form] = Form.useForm();
+	const [isGettingData, setIsGettingData] = useState(false);
 	const [isPickProductVisible, setIsPickProductVisible] = useState(false);
+	const [productID, setProductID] = useState(null);
+
 	const [keyword, setKeyword] = useState('');
 	const [filters, setFilters] = useState({
 		branch: '',
 		productCategory: '',
 	});
 
-	const addProduct = (values) => {
-		console.log(values);
-		setData([
-			...data,
-			{ branches: values.branches, ...JSON.parse(values.product) },
-		]);
-		console.log([
-			...data,
-			{ branches: values.branches, ...JSON.parse(values.product) },
-		]);
-	};
+	// const addProduct = (values) => {
+	// 		getDetailProduct(values.product, values.branches.join(';'));
+	// setData([
+	// 	...data,
+	// 	{ branches: values.branches, ...JSON.parse(values.product) },
+	// ]);
+	// console.log([
+	// 	...data,
+	// 	{ branches: values.branches, ...JSON.parse(values.product) },
+	// ]);
+	// };
 
 	const applyFilter = (values) => {
 		const filter = {};
@@ -175,6 +203,28 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 			...record,
 		});
 		setEditingKey(record.id);
+	};
+
+	const getDetailProduct = async (productID, branches) => {
+		setIsGettingData(true);
+
+		try {
+			const {
+				data: productDetail,
+				// meta,
+			} = await productService.getProductDetailByIdAndBranch(
+				productID,
+				branches
+			);
+			// console.log([...data, ...productDetail]);
+			setData([...data, ...productDetail]);
+			// setTotalData(meta.pagination.total);
+		} catch (error) {
+			message.error(error.message);
+			console.error(error);
+		} finally {
+			setIsGettingData(false);
+		}
 	};
 
 	const getDatatableData = () => {
@@ -240,6 +290,13 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 	useImperativeHandle(ref, () => ({
 		data,
 	}));
+
+	const branchOptionsRef = useRef();
+	const refetchBranch = (value) => setProductID(value);
+
+	useEffect(() => {
+		if (productID !== null) branchOptionsRef.current.refetchData();
+	}, [productID]);
 
 	return (
 		<AtomCard title="Daftar Produk">
@@ -339,7 +396,12 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 									>
 										<Form
 											name="add-product"
-											onFinish={addProduct}
+											onFinish={(values) => {
+												getDetailProduct(
+													values.product,
+													values.branches.join(';')
+												);
+											}}
 											onFinishFailed={(error) => {
 												message.error(
 													`Failed: ${error}`
@@ -359,14 +421,27 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 														placeholder="Nama Produk"
 														required
 														data={{
-															url: 'products',
+															onChange: refetchBranch,
+															url:
+																'products/not/discounted',
 															generateCustomOption: (
 																item
 															) => ({
-																value: `${JSON.stringify(
+																value: `${item.product_id}`,
+																label: `${
+																	item.sku_id
+																} ${
 																	item
-																)}`,
-																label: `${item.sku_id} ${item.name.id}`,
+																		.product_name
+																		.id
+																} ${
+																	item.variants
+																		? item
+																				.variants[0]
+																				.variant
+																				.id
+																		: ''
+																}`,
 															}),
 														}}
 													/>
@@ -378,17 +453,20 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 														name="branches"
 														placeholder="Cabang"
 														mode="multiple"
+														ref={branchOptionsRef}
 														required
 														data={{
-															url: 'branches',
+															url: productID
+																? `/products/${productID}/branches`
+																: 'branches',
 														}}
 													/>
 												</Col>
-
 												<Col>
 													<AtomPrimaryButton
 														htmlType="submit"
 														size="large"
+														loading={isGettingData}
 													>
 														Pilih Produk
 													</AtomPrimaryButton>

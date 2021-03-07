@@ -1,11 +1,17 @@
+/* eslint-disable react/display-name */
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, {
+	forwardRef,
+	useEffect,
+	useImperativeHandle,
+	useState,
+} from 'react';
 import { Select, Skeleton } from 'antd';
 
 import MasterService from '../../../services/master';
 const masterService = new MasterService();
 
-const AtomCustomSelect = (props) => {
+const AtomCustomSelect = forwardRef((props, ref) => {
 	const [options, setOptions] = useState(null);
 
 	const generateOption = (item) => {
@@ -37,9 +43,21 @@ const AtomCustomSelect = (props) => {
 		})();
 	}, []);
 
+	useImperativeHandle(ref, () => ({
+		async refetchData() {
+			await getOptions();
+			console.log('hit');
+		},
+	}));
+
+	const main = {};
+	if (props.data.onChange)
+		main.onChange = (value) => props.data.onChange(value);
 	return options ? (
 		<Select
+			onChange={props.onChange}
 			{...props}
+			{...main}
 			showSearch
 			optionFilterProp="children"
 			filterOption={(input, option) =>
@@ -64,7 +82,7 @@ const AtomCustomSelect = (props) => {
 	) : (
 		<Skeleton active title={{ width: '100%' }} paragraph={{ rows: 0 }} />
 	);
-};
+});
 
 AtomCustomSelect.propTypes = {
 	indentifier: PropTypes.string,

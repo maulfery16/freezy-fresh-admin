@@ -81,7 +81,6 @@ const PromotionModifyPage = () => {
 			const dataProduct = await viewTableRef.current.data;
 
 			console.log(dataProduct);
-			// console.log(promotionImageDekstopRef.current.getImage());
 
 			const data = new FormData();
 			data.append('image_mobile', promotionImageMobile);
@@ -158,6 +157,7 @@ const PromotionModifyPage = () => {
 					onFinishFailed={(error) => {
 						message.error(`Failed: ${error}`);
 						console.error(error);
+						console.log(viewTableRef.current.data);
 					}}
 				>
 					<Tabs defaultActiveKey="1">
