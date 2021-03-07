@@ -50,14 +50,14 @@ const AtomCustomSelect = forwardRef((props, ref) => {
 		},
 	}));
 
-	const main = {};
+	const optionalProps = { ...props };
 	if (props.data.onChange)
-		main.onChange = (value) => props.data.onChange(value);
+		optionalProps.onChange = (value) => props.data.onChange(value);
+	if (optionalProps.branchOptionsRef) delete optionalProps.branchOptionsRef;
+
 	return options ? (
 		<Select
-			onChange={props.onChange}
-			{...props}
-			{...main}
+			{...optionalProps}
 			showSearch
 			optionFilterProp="children"
 			filterOption={(input, option) =>

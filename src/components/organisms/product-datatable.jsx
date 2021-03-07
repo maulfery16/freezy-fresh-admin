@@ -2,10 +2,10 @@
 import PropTypes from 'prop-types';
 import React, {
 	forwardRef,
-	useEffect,
 	useRef,
 	useImperativeHandle,
 	useState,
+	useEffect,
 } from 'react';
 import {
 	Col,
@@ -164,12 +164,12 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 	const [isGettingData, setIsGettingData] = useState(false);
 	const [isPickProductVisible, setIsPickProductVisible] = useState(false);
 	const [productID, setProductID] = useState(null);
-
 	const [keyword, setKeyword] = useState('');
 	const [filters, setFilters] = useState({
 		branch: '',
 		productCategory: '',
 	});
+	const branchOptionsRef = useRef();
 
 	// const addProduct = (values) => {
 	// 		getDetailProduct(values.product, values.branches.join(';'));
@@ -252,6 +252,8 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 
 	const isEditing = (record) => record.id === editingKey;
 
+	const refetchBranch = (value) => setProductID(value);
+
 	const save = async (id) => {
 		try {
 			const row = await form.validateFields();
@@ -287,16 +289,13 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 		};
 	});
 
+	useEffect(() => {
+		if (productID) branchOptionsRef.current.refetchData();
+	}, [productID]);
+
 	useImperativeHandle(ref, () => ({
 		data,
 	}));
-
-	const branchOptionsRef = useRef();
-	const refetchBranch = (value) => setProductID(value);
-
-	useEffect(() => {
-		if (productID !== null) branchOptionsRef.current.refetchData();
-	}, [productID]);
 
 	return (
 		<AtomCard title="Daftar Produk">
@@ -453,7 +452,9 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 														name="branches"
 														placeholder="Cabang"
 														mode="multiple"
-														ref={branchOptionsRef}
+														branchOptionsRef={
+															branchOptionsRef
+														}
 														required
 														data={{
 															url: productID
