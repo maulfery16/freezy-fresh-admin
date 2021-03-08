@@ -292,7 +292,7 @@ const routes = [
 				component: React.lazy(() => import('./pages/view/')),
 				exact: true,
 				guard: true,
-				name: 'Tampilan Page Page',
+				name: 'Tampilan Page',
 				path: '/',
 			},
 			{
@@ -523,6 +523,50 @@ const routes = [
 						guard: true,
 						name: 'Edit Promotion Page',
 						path: '/:id/edit',
+					},
+				],
+			},
+		],
+	},
+	{
+		path: '/customers',
+		children: [
+			{
+				path: '/friend-list',
+				children: [
+					{
+						component: React.lazy(() =>
+							import('./pages/customers/friend-list')
+						),
+						exact: true,
+						guard: true,
+						name: 'Customer Page',
+						path: '/',
+					},
+					{
+						path: '/:id',
+						children: [
+							{
+								component: React.lazy(() =>
+									import('./pages/customers/friend-list/list')
+								),
+								exact: true,
+								guard: true,
+								name: 'Customer Friend List Page',
+								path: '/',
+							},
+							{
+								component: React.lazy(() =>
+									import(
+										'./pages/customers/friend-list/detail'
+									)
+								),
+								exact: true,
+								guard: true,
+								name: 'Customer Friend Detail Page',
+								path: '/detail/:friend_id',
+							},
+						],
 					},
 				],
 			},
