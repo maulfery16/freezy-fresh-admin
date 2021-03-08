@@ -64,13 +64,4 @@ export default class AdminService extends RequestAdapterService {
 			);
 		}
 	}
-
-	translateGenderEnum(gender) {
-		const GENDER_ENUM = {
-			FEMALE: 'Perempuan',
-			MALE: 'Laki-laki',
-		};
-
-		return GENDER_ENUM[gender];
-	}
 }

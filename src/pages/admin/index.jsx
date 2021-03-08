@@ -17,6 +17,7 @@ import MoleculeDeleteConfirm from '../../components/molecules/delete-confirm';
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
 
+import { translateGenderEnum } from '../../utils/helpers';
 import AdminService from '../../services/admin';
 const adminService = new AdminService();
 
@@ -81,7 +82,7 @@ const AdminPage = () => {
 		{
 			title: 'Jenis Kelamin',
 			dataIndex: 'gender',
-			render: (gender) => adminService.translateGenderEnum(gender),
+			render: (gender) => translateGenderEnum(gender),
 		},
 		{
 			title: 'Nomor Rek',

@@ -10,6 +10,7 @@ import AtomSecondaryButton from '../../components/atoms/button/secondary-button'
 import MoleculeInfoGroup from '../../components/molecules/info-group';
 import OrganismLayout from '../../components/organisms/layout';
 
+import { translateGenderEnum } from '../../utils/helpers';
 import AdminService from '../../services/admin';
 const adminService = new AdminService();
 
@@ -93,7 +94,7 @@ const AdminModifyPage = () => {
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Jenis Kelamin"
-										content={adminService.translateGenderEnum(
+										content={translateGenderEnum(
 											admin.gender
 										)}
 									/>
