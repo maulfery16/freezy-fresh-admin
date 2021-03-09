@@ -179,31 +179,31 @@ const menus = [
 	{
 		name: 'Pelanggan',
 		icon: <CustomerServiceOutlined />,
-		subMenuKey: 'customer',
+		subMenuKey: 'customers',
 		subMenus: [
 			{
 				name: 'Pelanggan',
-				link: '/customer/',
+				link: '/customers/',
 			},
 			{
 				name: 'Daftar Teman',
-				link: '/customer/friend-list',
+				link: '/customers/friend-list',
 			},
 			{
 				name: 'Daftar Keluarga',
-				link: '/customer/family-list',
+				link: '/customers/family-list',
 			},
 			{
 				name: 'Favorite',
-				link: '/customer/favorite',
+				link: '/customers/favorite',
 			},
 			{
 				name: 'My Catalog',
-				link: '/customer/catalog',
+				link: '/customers/catalog',
 			},
 			{
 				name: 'MGM',
-				link: '/customer/mgm',
+				link: '/customers/mgm',
 			},
 		],
 	},
