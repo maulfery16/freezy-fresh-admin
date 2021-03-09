@@ -458,7 +458,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 														required
 														data={{
 															url: productID
-																? `/products/${productID}/branches`
+																? `products/${productID}/branches`
 																: 'branches',
 														}}
 													/>

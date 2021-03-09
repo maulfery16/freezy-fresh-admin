@@ -50,10 +50,10 @@ export default class ProductService extends RequestAdapterService {
 		}
 	}
 
-	async getProductDetailByIdAndBranch(id, branches) {
+	async getProductDetailByIdAndBranch(id, branches, product_detail_id) {
 		try {
 			const { data } = await super.sendGetRequest(
-				`${this.baseUrl}/v1/products/${id}/details?branch_id=${branches}`
+				`${this.baseUrl}/v1/products/${id}/details?branch_id=${branches}&product_detail_id=${product_detail_id}`
 			);
 
 			return data;
