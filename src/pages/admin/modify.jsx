@@ -307,7 +307,7 @@ const AdminModifyPage = () => {
 											placeholder="Perusahaan"
 											required
 											data={{
-												url: 'product_owners',
+												url: 'product-owners',
 											}}
 										/>
 									</Col>

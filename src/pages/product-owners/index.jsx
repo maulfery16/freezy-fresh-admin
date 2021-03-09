@@ -68,7 +68,7 @@ const PerusahaanPage = () => {
 					active={active}
 					id={record.id}
 					tableRef={perusahaanTableRef}
-					url="product_owners"
+					url="product-owners"
 				/>
 			),
 			csvRender: (item) => (item.is_active ? 'Aktif' : 'Tidak Aktif'),
@@ -88,7 +88,7 @@ const PerusahaanPage = () => {
 							id={id}
 							label="Perusahaan"
 							tableRef={perusahaanTableRef}
-							url="product_owners"
+							url="product-owners"
 						/>
 					)}
 				</Space>
@@ -105,7 +105,7 @@ const PerusahaanPage = () => {
 				label="Perusahaan"
 				getLimit={() => perusahaanTableRef.current.totalData}
 				route="/perusahaan"
-				url="product_owners"
+				url="product-owners"
 			/>
 		);
 	};
@@ -123,7 +123,7 @@ const PerusahaanPage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`product_owners`}
+				dataSourceURL={`product-owners`}
 				ref={perusahaanTableRef}
 				scroll={1920}
 				searchInput={true}

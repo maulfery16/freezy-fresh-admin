@@ -4,7 +4,7 @@ export default class ProductOwnersService extends RequestAdapterService {
 	async createProductOwner(productOwners) {
 		try {
 			const { data } = await super.sendPostMultipartRequest(
-				`${this.baseUrl}/v1/product_owners`,
+				`${this.baseUrl}/v1/product-owners`,
 				productOwners
 			);
 
@@ -22,7 +22,7 @@ export default class ProductOwnersService extends RequestAdapterService {
 	async editProductOwner(id, productOwners) {
 		try {
 			const { data } = await super.sendPostMultipartRequest(
-				`${this.baseUrl}/v1/product_owners/${id}?_method=PATCH`,
+				`${this.baseUrl}/v1/product-owners/${id}?_method=PATCH`,
 				productOwners
 			);
 
@@ -39,7 +39,7 @@ export default class ProductOwnersService extends RequestAdapterService {
 	async getProductOwnerById(id) {
 		try {
 			const { data } = await super.sendGetRequest(
-				`${this.baseUrl}/v1/product_owners/${id}`
+				`${this.baseUrl}/v1/product-owners/${id}`
 			);
 			return data;
 		} catch (error) {

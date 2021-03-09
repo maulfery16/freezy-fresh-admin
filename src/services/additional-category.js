@@ -4,7 +4,7 @@ export default class AdditionalCategoryService extends RequestAdapterService {
 	async createAdditionalCategory(additionalCategory) {
 		try {
 			const { data } = await super.sendPostMultipartRequest(
-				`${this.baseUrl}/v1/additional_categories`,
+				`${this.baseUrl}/v1/additional-categories`,
 				additionalCategory
 			);
 
@@ -22,7 +22,7 @@ export default class AdditionalCategoryService extends RequestAdapterService {
 	async editAdditionalCategory(id, additionalCategory) {
 		try {
 			const { data } = await super.sendPostMultipartRequest(
-				`${this.baseUrl}/v1/additional_categories/${id}?_method=PATCH`,
+				`${this.baseUrl}/v1/additional-categories/${id}?_method=PATCH`,
 				additionalCategory
 			);
 
@@ -40,7 +40,7 @@ export default class AdditionalCategoryService extends RequestAdapterService {
 	async getAdditionalCategoryById(id) {
 		try {
 			const { data } = await super.sendGetRequest(
-				`${this.baseUrl}/v1/additional_categories/${id}`
+				`${this.baseUrl}/v1/additional-categories/${id}`
 			);
 
 			return data;

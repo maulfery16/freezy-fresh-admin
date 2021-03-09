@@ -65,7 +65,7 @@ const AdditionalCategoryPage = () => {
 					active={active}
 					id={record.id}
 					tableRef={additionalCategoryTableRef}
-					url="additional_categories"
+					url="additional-categories"
 				/>
 			),
 			csvRender: (item) => (item.is_active ? 'Aktif' : 'Tidak Aktif'),
@@ -84,7 +84,7 @@ const AdditionalCategoryPage = () => {
 							id={id}
 							label="Kategori Tambahan"
 							tableRef={additionalCategoryTableRef}
-							url="additional_categories"
+							url="additional-categories"
 						/>
 					)}
 				</Space>
@@ -102,7 +102,7 @@ const AdditionalCategoryPage = () => {
 				label="Kategori Tambahan"
 				getLimit={() => additionalCategoryTableRef.current.totalData}
 				route="/products/additional-category"
-				url="additional_categories"
+				url="additional-categories"
 			/>
 		);
 	};
@@ -121,7 +121,7 @@ const AdditionalCategoryPage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`additional_categories`}
+				dataSourceURL={`additional-categories`}
 				ref={additionalCategoryTableRef}
 				searchInput={true}
 				scroll={1920}
