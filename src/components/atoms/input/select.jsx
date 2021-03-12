@@ -25,6 +25,8 @@ const AtomCustomSelect = forwardRef((props, ref) => {
 	};
 
 	const getOptions = async () => {
+		setOptions(null);
+
 		if (props.data.mock) {
 			setOptions(props.data.mock);
 		} else {
@@ -46,7 +48,6 @@ const AtomCustomSelect = forwardRef((props, ref) => {
 	useImperativeHandle(ref, () => ({
 		async refetchData() {
 			await getOptions();
-			console.log('hit');
 		},
 	}));
 
