@@ -185,9 +185,9 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 
 						<MoleculeDatatableAdditionalAction
 							column={column}
+							getLimit={0}
 							isEdit={true}
 							label="Holiday"
-							getLimit={0}
 							route="/view/holiday"
 							url="holiday"
 						/>

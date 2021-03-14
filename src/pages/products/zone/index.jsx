@@ -117,7 +117,7 @@ const ZonePage = () => {
 					link: location.pathname,
 				},
 			]}
-			title="Product Page Additional Category"
+			title="Product Page Zone"
 		>
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}

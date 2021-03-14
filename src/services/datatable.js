@@ -54,6 +54,20 @@ export default class DatatableService extends RequestAdapterService {
 		}
 	}
 
+	async importCSV(file, url) {
+		try {
+			super.sendPostMultipartRequest(`${this.baseUrl}/v1/${url}`, file);
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Importing ${url.replaceAll(
+					'_',
+					' '
+				)} CSV: ${super.generateErrorMessage(error)}`
+			);
+		}
+	}
+
 	async updateActiveStatus(id, url) {
 		try {
 			const { data } = await super.sendPatchRequest(

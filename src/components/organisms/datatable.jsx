@@ -227,7 +227,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 								onClick={() => setIsFilterVisible(true)}
 								size="large"
 							>
-								Filter
+								Filter By
 							</AtomPrimaryButton>
 
 							<Modal
