@@ -149,13 +149,13 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 				data={{ url: 'branches' }}
 			/>,
 			<MoleculeDatatableFilter
-				name="base_categories"
+				name="base-categories"
 				operator=":"
-				identifier="base_categories-filter"
+				identifier="base-categories-filter"
 				label="Kategori Dasar"
-				key="base_categories-filter"
+				key="base-categories-filter"
 				placeholder="Semua Kategori Dasar"
-				data={{ url: 'base_categories' }}
+				data={{ url: 'base-categories' }}
 			/>,
 		];
 	};

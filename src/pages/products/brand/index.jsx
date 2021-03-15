@@ -84,7 +84,7 @@ const BrandPage = () => {
 					active={active}
 					id={record.id}
 					tableRef={brandTableRef}
-					url="base_categories"
+					url="base-categories"
 				/>
 			),
 			csvRender: (item) => (item.is_active ? 'Aktif' : 'Tidak Aktif'),

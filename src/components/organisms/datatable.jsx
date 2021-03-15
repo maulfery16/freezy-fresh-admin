@@ -1,13 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable react/display-name */
 /* eslint-disable react-hooks/exhaustive-deps */
-import PropTypes from 'prop-types';
-import React, {
-	forwardRef,
-	useEffect,
-	useImperativeHandle,
-	useState,
-} from 'react';
+import { useHistory } from 'react-router';
 import {
 	Col,
 	Input,
@@ -18,13 +12,21 @@ import {
 	Table,
 	Typography,
 } from 'antd';
+import PropTypes from 'prop-types';
+import React, {
+	forwardRef,
+	useEffect,
+	useImperativeHandle,
+	useState,
+} from 'react';
 
 import AtomPrimaryButton from '../atoms/button/primary-button';
 
 import DatatableService from '../../services/datatable';
-const datatableService = new DatatableService();
 
 const OrganismDatatable = forwardRef((props, ref) => {
+	const history = useHistory();
+	const datatableService = new DatatableService();
 	const [data, setData] = useState(null);
 	const [filters, setFilters] = useState([]);
 	const [isFilterVisible, setIsFilterVisible] = useState(false);
@@ -33,7 +35,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 	const [filterParams, setFilterParams] = useState({
 		filter: '',
 		search: '',
-		limit: 5,
+		limit: props.limit || 5,
 		orderBy: '',
 		page: 1,
 		sortedBy: '',
@@ -128,12 +130,13 @@ const OrganismDatatable = forwardRef((props, ref) => {
 
 		const filterParameter = {
 			...filterParams,
-			search: `${keyword}${filters
+			search: `${keyword}${keyword && ';'}${filters
 				.map((query) => `${query.name}${query.operator}${query.value}`)
 				.join(';')}`,
 			page: 1,
 		};
 
+		setUrlParams(keyword);
 		setIsFilterVisible(false);
 		setFilterParams(filterParameter);
 	};
@@ -147,6 +150,19 @@ const OrganismDatatable = forwardRef((props, ref) => {
 			keyword.unshift(search);
 			setFilterParams({ ...filterParams, search: keyword.join(';') });
 		}
+
+		setUrlParams(keyword);
+	};
+
+	const setUrlParams = (keyword) => {
+		history.push(
+			history.location.pathname +
+				'?' +
+				`q=${keyword}&` +
+				`${filters
+					.map((query) => `${query.name}=${query.value}`)
+					.join('&')}`
+		);
 	};
 
 	useEffect(() => {
@@ -238,7 +254,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 								onCancel={() => setIsFilterVisible(false)}
 							>
 								<Space className="w-100" direction="vertical">
-									<Row gutter={[0, 16]}>
+									<Row gutter={[12, 16]}>
 										{props.filters.map((filter, index) => {
 											const filterEl = React.cloneElement(
 												filter,
@@ -252,7 +268,11 @@ const OrganismDatatable = forwardRef((props, ref) => {
 											return (
 												<Col
 													key={`dattable-filter-${index}`}
-													span={24}
+													span={
+														props.filters.length > 4
+															? 12
+															: 24
+													}
 												>
 													{filterEl}
 												</Col>
@@ -318,11 +338,12 @@ OrganismDatatable.propTypes = {
 	additionalAction: PropTypes.node,
 	additionalInformation: PropTypes.node,
 	columns: PropTypes.array.isRequired,
+	dataSourceURL: PropTypes.string.isRequired,
 	filters: PropTypes.arrayOf(PropTypes.node),
+	limit: PropTypes.number,
 	scroll: PropTypes.number,
 	title: PropTypes.string,
 	titleSize: PropTypes.number,
-	dataSourceURL: PropTypes.string.isRequired,
 	searchInput: PropTypes.oneOfType([
 		PropTypes.bool,
 		PropTypes.shape({

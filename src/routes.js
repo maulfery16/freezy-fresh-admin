@@ -141,18 +141,20 @@ const routes = [
 		path: '/products',
 		children: [
 			{
+				component: React.lazy(() => import('./pages/products/product')),
+				exact: true,
+				guard: true,
+				name: 'Product Page',
 				path: '/',
-				children: [
-					{
-						component: React.lazy(() =>
-							import('./pages/products/product')
-						),
-						exact: true,
-						guard: true,
-						name: 'Product Page',
-						path: '/',
-					},
-				],
+			},
+			{
+				component: React.lazy(() =>
+					import('./pages/products/product/import')
+				),
+				exact: true,
+				guard: true,
+				name: 'Product Import Page',
+				path: '/import',
 			},
 			{
 				path: '/additional-category',
