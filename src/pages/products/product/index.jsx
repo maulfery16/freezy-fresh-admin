@@ -12,7 +12,6 @@ import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm'
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 import MoleculeDatatableFilter from '../../../components/molecules/datatable/filter-plugin';
-import MoleculeDatatableDateRange from '../../../components/molecules/datatable/date-range-plugin';
 
 const ProductPage = () => {
 	const column = [
@@ -50,7 +49,7 @@ const ProductPage = () => {
 			sorter: true,
 		},
 		{
-			title: 'Kategori Dasar',
+			title: 'Kategori Tambahan',
 			dataIndex: `additional_category['id']`,
 			render: (_, record) => record.additional_category.id,
 			sorter: true,
@@ -78,11 +77,7 @@ const ProductPage = () => {
 		// 		branches.map((branch) => branch.name).join(', '),
 		// 	sorter: true,
 		// },
-		{
-			title: 'Nama Perusahaan',
-			dataIndex: `product_owner`,
-			sorter: true,
-		},
+
 		{
 			title: 'Aktif',
 			dataIndex: 'is_active',
@@ -125,11 +120,12 @@ const ProductPage = () => {
 		return (
 			<MoleculeDatatableAdditionalAction
 				column={column}
-				label="Produk"
 				getLimit={() => productTableRef.current.totalData}
+				importRoute="/products/import"
+				label="Produk"
+				requiredParams="branches"
 				route="/products/"
 				url="products"
-				withImport
 			/>
 		);
 	};
@@ -137,26 +133,85 @@ const ProductPage = () => {
 	const renderDatatableFilters = () => {
 		return [
 			<MoleculeDatatableFilter
-				name="gender"
+				name="base-categories"
 				operator=":"
-				identifier="gender-filter"
-				label="Jenis Kelamin"
-				key="gender-filter"
-				placeholder="Semua jenis kelamin"
+				identifier="base-categories-filter"
+				label="Kategori Dasar"
+				key="base-categories-filter"
+				placeholder="Semua Kategori Dasar"
 				data={{
-					mock: [
-						{ id: 'MALE', label: 'Laki-laki' },
-						{ id: 'FEMALE', label: 'Perempuan' },
-					],
+					url: 'base-categories',
+					generateCustomOption: (item) => ({
+						value: item.id,
+						label: item.name.id,
+					}),
 				}}
 			/>,
-			<MoleculeDatatableDateRange
-				name="created_at"
+			<MoleculeDatatableFilter
+				name="additional-categories"
 				operator=":"
-				identifier="daterangefilter"
-				key="daterange"
-				label="Tanggal Lahir"
-				placeholder="Filter tanggal lahir"
+				identifier="additional-categories-filter"
+				label="Kategori Dasar"
+				key="additional-categories-filter"
+				placeholder="Semua Kategori Tambahan"
+				data={{
+					url: 'additional-categories',
+					generateCustomOption: (item) => ({
+						value: item.id,
+						label: item.name.id,
+					}),
+				}}
+			/>,
+			<MoleculeDatatableFilter
+				name="product-owner"
+				operator=":"
+				identifier="product-owner-filter"
+				label="Perusahaan"
+				key="product-owner-filter"
+				placeholder="Semua Perusahaan"
+				data={{
+					url: 'product-owners',
+				}}
+			/>,
+			<MoleculeDatatableFilter
+				name="branches"
+				operator=":"
+				identifier="branches-filter"
+				label="Cabang"
+				key="branches-filter"
+				placeholder="Semua cabang"
+				data={{
+					url: 'branches',
+				}}
+			/>,
+			<MoleculeDatatableFilter
+				name="brand"
+				operator=":"
+				identifier="brand-filter"
+				label="Brand"
+				key="brand-filter"
+				placeholder="Semua brand"
+				data={{
+					url: 'brands',
+					generateCustomOption: (item) => ({
+						value: item.id,
+						label: item.name.id,
+					}),
+				}}
+			/>,
+			<MoleculeDatatableFilter
+				name="freezy-pick"
+				operator=":"
+				identifier="freezy-pick-filter"
+				label="Freezy Pick"
+				key="freezy-pick-filter"
+				placeholder="Semua freezy pick"
+				data={{
+					mock: [
+						{ id: true, label: 'Ya' },
+						{ id: false, label: 'Tidak' },
+					],
+				}}
 			/>,
 		];
 	};
@@ -177,6 +232,7 @@ const ProductPage = () => {
 				columns={column}
 				dataSourceURL={`products`}
 				filters={renderDatatableFilters()}
+				limit={15}
 				ref={productTableRef}
 				scroll={1920}
 				searchInput={true}

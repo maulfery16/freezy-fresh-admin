@@ -68,7 +68,7 @@ const CategoryPage = () => {
 					active={active}
 					id={record.id}
 					tableRef={categoryTableRef}
-					url="base_categories"
+					url="base-categories"
 				/>
 			),
 			csvRender: (item) => (item.is_active ? 'Aktif' : 'Tidak Aktif'),
@@ -88,7 +88,7 @@ const CategoryPage = () => {
 							id={id}
 							label="Kategori Dasar"
 							tableRef={categoryTableRef}
-							url="base_categories"
+							url="base-categories"
 						/>
 					)}
 				</Space>
@@ -105,7 +105,7 @@ const CategoryPage = () => {
 				label="Kategori Dasar"
 				getLimit={() => categoryTableRef.current.totalData}
 				route="/products/category"
-				url="base_categories"
+				url="base-categories"
 			/>
 		);
 	};
