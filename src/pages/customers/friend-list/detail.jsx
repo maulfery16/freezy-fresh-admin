@@ -14,41 +14,22 @@ import {
 	convertFriendshipStatus,
 	translateGenderEnum,
 } from '../../../utils/helpers';
-// import FriendProfileService from '../../../services/friend-list';
-// const friendProfileService = new FriendProfileService();
-
-const _friendProfile = {
-	data: {
-		friend_id: '4zr8mb07lykowjaq',
-		status_name: 'Requested',
-		user: {
-			first_name: 'Musa',
-			last_name: 'Example',
-			phone_number: '+6281910094095',
-			email: 'musa.example2@gmail.com',
-			gender: 'MALE',
-			birth: '1997-11-07',
-			profile_image:
-				'http://s3.amazonaws.com/37assets/svn/765-default-avatar.png',
-		},
-		marital_status: 'Menikah',
-		created_at: '2021-03-04T16:18:34.000000Z',
-		created_by: 'Ali',
-		updated_at: '2021-03-04T16:18:34.000000Z',
-		updated_by: 'Umar',
-	},
-};
+import FriendListService from '../../../services/friend-list';
+const friendListService = new FriendListService();
 
 const FriendProfileDetailPage = () => {
 	const { id, friend_id } = useParams();
 	const [friendProfile, setFriendProfile] = useState(null);
 
-	// eslint-disable-next-line no-unused-vars
 	const getFriendProfileDetail = async (id, friend_id) => {
 		try {
-			// const friendProfile = await friendProfileService.getFriendProfileById(id,
-			// 	friend_id
-			// );
+			const _friendProfile = await friendListService.getFriendProfileById(
+				id,
+				{
+					detail_type: 'friend',
+					user_id: friend_id,
+				}
+			);
 			setFriendProfile(_friendProfile.data);
 		} catch (error) {
 			message.error(error.message);
@@ -96,8 +77,7 @@ const FriendProfileDetailPage = () => {
 												images={[
 													{
 														source:
-															friendProfile.user
-																.profile_image,
+															friendProfile.social_avatar,
 														label: '',
 													},
 												]}
@@ -130,28 +110,30 @@ const FriendProfileDetailPage = () => {
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="ID Teman"
-										content={friendProfile.friend_id}
+										content={friendProfile.id}
 									/>
 								</Col>
 
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Nama Depan"
-										content={friendProfile.user.first_name}
+										content={
+											friendProfile.first_name || '-'
+										}
 									/>
 								</Col>
 
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Nama Belakang"
-										content={friendProfile.user.last_name}
+										content={friendProfile.last_name || '-'}
 									/>
 								</Col>
 
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Email"
-										content={friendProfile.user.email}
+										content={friendProfile.email || '-'}
 									/>
 								</Col>
 
@@ -159,7 +141,7 @@ const FriendProfileDetailPage = () => {
 									<MoleculeInfoGroup
 										title="Nomor Handphone"
 										content={
-											friendProfile.user.phone_number
+											friendProfile.phone_number || '-'
 										}
 									/>
 								</Col>
@@ -168,7 +150,7 @@ const FriendProfileDetailPage = () => {
 									<MoleculeInfoGroup
 										title="Jenis Kelamin"
 										content={translateGenderEnum(
-											friendProfile.user.gender
+											friendProfile.gender
 										)}
 									/>
 								</Col>
@@ -176,7 +158,9 @@ const FriendProfileDetailPage = () => {
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Status Pernikahan"
-										content={friendProfile.marital_status}
+										content={
+											friendProfile.marital_status || '-'
+										}
 									/>
 								</Col>
 							</Row>
@@ -211,14 +195,18 @@ const FriendProfileDetailPage = () => {
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Didaftarkan oleh"
-										content={friendProfile.created_by}
+										content={
+											friendProfile.created_by || '-'
+										}
 									/>
 								</Col>
 
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Diperbarui oleh"
-										content={friendProfile.updated_by}
+										content={
+											friendProfile.updated_by || '-'
+										}
 									/>
 								</Col>
 							</Row>

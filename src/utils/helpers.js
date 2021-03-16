@@ -20,5 +20,5 @@ export function translateGenderEnum(gender) {
 		MALE: 'Laki-laki',
 	};
 
-	return GENDER_ENUM[gender];
+	return gender ? GENDER_ENUM[gender] : '-';
 }
