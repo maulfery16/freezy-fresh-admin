@@ -1,5 +1,4 @@
 /* eslint-disable react/display-name */
-import moment from 'moment';
 import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
 import { Link, useParams } from 'react-router-dom';
@@ -16,44 +15,6 @@ import {
 	translateGenderEnum,
 } from '../../../utils/helpers';
 
-const mock = {
-	data: [
-		{
-			friend_id: '4zr8mb07lykowjaq',
-			status_name: 'Requested',
-			user: {
-				first_name: 'Musa',
-				last_name: 'Example',
-				phone_number: '+6281910094095',
-				email: 'musa.example2@gmail.com',
-				gender: 'MALE',
-				birth: '1997-11-07',
-				profile_image:
-					'http://s3.amazonaws.com/37assets/svn/765-default-avatar.png',
-			},
-			marital_status: 'Menikah',
-		},
-		{
-			friend_id: '4zr8mb07lykowjww',
-			status_name: 'Approved',
-			user: {
-				first_name: 'Hana',
-				last_name: 'Example',
-				phone_number: '+6281910094094',
-				email: 'hana.example2@gmail.com',
-				gender: 'FEMALE',
-				birth: '1997-11-04',
-				profile_image:
-					'https://afmnoco.com/wp-content/uploads/2019/07/74046195_s.jpg',
-			},
-			marital_status: 'Belum Menikah',
-		},
-	],
-	meta: {
-		pagination: { totalData: 2 },
-	},
-};
-
 const FriendListPage = () => {
 	const { id } = useParams();
 
@@ -66,14 +27,15 @@ const FriendListPage = () => {
 		},
 		{
 			title: 'Nama Teman',
-			dataIndex: `user[first_name]`,
+			dataIndex: `first_name`,
 			render: (_, record) =>
-				`${record.user.first_name} ${record.user.last_name}`,
+				`${record.first_name || '-'} ${record.last_name || ''}`,
 			sorter: true,
 		},
 		{
 			title: 'ID Teman',
-			dataIndex: 'friend_id',
+			dataIndex: 'code',
+			render: (_, record) => record.code || '-',
 			sorter: true,
 		},
 		{
@@ -85,48 +47,48 @@ const FriendListPage = () => {
 		{
 			align: 'center',
 			title: 'Foto Profile',
-			dataIndex: `user[profile_image]`,
-			render: (_, record) => (
-				<AtomImage src={record.user.profile_image} />
-			),
-			csvRender: (item) => item.user.profile_image,
+			dataIndex: `social_avatar`,
+			render: (_, record) => <AtomImage src={record.social_avatar} />,
 		},
 		{
 			title: 'Tgl. Lahir',
-			dataIndex: `user[birth]`,
-			render: (date) => (
-				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
-			),
-			csvRender: (item) => moment(item.user.birth).format('DD/MM/YYYY'),
+			dataIndex: `birth`,
+			render: (date) =>
+				date ? (
+					<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
+				) : (
+					'-'
+				),
 			sorter: true,
 		},
 		{
 			title: 'Jenis Kelamin',
-			dataIndex: `user[gender]`,
-			render: (_, record) => translateGenderEnum(record.user.gender),
+			dataIndex: `gender`,
+			render: (_, record) => translateGenderEnum(record.gender || ''),
 			sorter: true,
 		},
 		{
 			title: 'Status Perkawinan',
 			dataIndex: 'marital_status',
+			render: (_, record) => record.marital_status || '-',
 			sorter: true,
 		},
 		{
 			title: 'Email',
-			dataIndex: `user[email]`,
-			render: (_, record) => record.user.email,
+			dataIndex: `email`,
+			render: (_, record) => record.email || '-',
 			sorter: true,
 		},
 		{
 			title: 'No. Hp',
-			dataIndex: `user[phone_number]`,
-			render: (_, record) => record.user.phone_number,
+			dataIndex: `phone_number`,
+			render: (_, record) => record.phone_number || '-',
 			sorter: true,
 		},
 		{
 			align: 'center',
 			title: 'Aksi',
-			dataIndex: 'friend_id',
+			dataIndex: 'id',
 			render: (friend_id) => (
 				<Space size="middle">
 					<Link
@@ -136,7 +98,6 @@ const FriendListPage = () => {
 					</Link>
 				</Space>
 			),
-			skipExport: true,
 		},
 	];
 	const friendListTableRef = useRef();
@@ -201,8 +162,7 @@ const FriendListPage = () => {
 			<OrganismDatatable
 				additionalAction={null}
 				columns={column}
-				mock={mock}
-				// dataSourceURL={`friendLists`}
+				dataSourceURL={`admin/customers/${id}/friends`}
 				filters={renderDatatableFilters()}
 				ref={friendListTableRef}
 				scroll={1920}
