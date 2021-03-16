@@ -37,16 +37,16 @@ const BannerPage = () => {
 		{
 			align: 'center',
 			title: 'Foto Banner Mobile',
-			dataIndex: 'image',
+			dataIndex: 'image_mobile',
 			render: (image) => <AtomImage src={image} size={75} />,
 			csvRender: (item) => item.image_mobile,
 		},
 		{
 			align: 'center',
 			title: 'Foto Banner Desktop',
-			dataIndex: 'image',
+			dataIndex: 'image_desktop',
 			render: (image) => <AtomImage src={image} size={75} />,
-			csvRender: (item) => item.image_dekstop,
+			csvRender: (item) => item.image_desktop,
 		},
 		{
 			title: 'Nama Promo',

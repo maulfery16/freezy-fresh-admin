@@ -92,7 +92,7 @@ const AdminPage = () => {
 		{
 			title: 'Bank',
 			dataIndex: 'bank_info',
-			render: (bank) => bank.bank,
+			render: (bank) => bank.bank && bank.bank.name,
 		},
 		{
 			align: 'center',
