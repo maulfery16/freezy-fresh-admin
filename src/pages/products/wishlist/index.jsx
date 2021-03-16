@@ -18,8 +18,9 @@ const WishlistPage = () => {
 		},
 		{
 			title: 'Nama Pelanggan',
-			dataIndex: `user_id`,
-			render: (_, record) => record.user_id,
+			dataIndex: `user[full_name]`,
+			sorter: true,
+			render: (_, record) => `${record.user.full_name}`,
 		},
 		{
 			title: 'ID Pelanggan',
@@ -38,6 +39,7 @@ const WishlistPage = () => {
 		{
 			title: 'Tanggal Dibuat',
 			dataIndex: 'created_at',
+			sorter: true,
 			render: (date) => (
 				<ReactMoment format="DD/MM/YYYY">{date}</ReactMoment>
 			),
@@ -45,7 +47,8 @@ const WishlistPage = () => {
 		},
 		{
 			title: 'Dibuat Oleh',
-			dataIndex: 'created_at',
+			dataIndex: 'created_by',
+			sorter: true,
 		},
 		{
 			align: 'center',
