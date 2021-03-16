@@ -149,7 +149,7 @@ const ArticleModifyPage = () => {
 														: null,
 													isMobileImage: true,
 													label:
-														'Foro Artikel Mobile',
+														'Foto Artikel Mobile',
 													ref: mobileImageRef,
 												},
 												{
@@ -157,7 +157,7 @@ const ArticleModifyPage = () => {
 														? article.mobile_image
 														: null,
 													label:
-														'Foro Artikel Dekstop',
+														'Foto Artikel Dekstop',
 													ref: dekstopImageRef,
 												},
 											]}
