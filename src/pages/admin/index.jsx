@@ -17,11 +17,13 @@ import MoleculeDeleteConfirm from '../../components/molecules/delete-confirm';
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
 
-import { translateGenderEnum } from '../../utils/helpers';
 import AdminService from '../../services/admin';
-const adminService = new AdminService();
+import { translateGenderEnum } from '../../utils/helpers';
 
 const AdminPage = () => {
+	const [totalAdmin, setTotalAdmin] = useState(null);
+	const adminService = new AdminService();
+	const adminTableRef = useRef();
 	const column = [
 		{
 			align: 'center',
@@ -135,9 +137,6 @@ const AdminPage = () => {
 			skipExport: true,
 		},
 	];
-	const adminTableRef = useRef();
-
-	const [totalAdmin, setTotalAdmin] = useState(null);
 
 	const getTotalAdmin = async () => {
 		try {

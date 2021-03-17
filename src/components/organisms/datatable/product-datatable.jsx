@@ -15,11 +15,11 @@ import {
 } from 'antd';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 
-import AtomCard from '../atoms/card';
-import AtomNumberFormat from '../atoms/number-format';
-import AtomPrimaryButton from '../atoms/button/primary-button';
-import MoleculeSelectInputGroup from '../molecules/input-group/select-input';
-import AtomSecondaryButton from '../atoms/button/secondary-button';
+import AtomCard from '../../atoms/card';
+import AtomNumberFormat from '../../atoms/number-format';
+import AtomPrimaryButton from '../../atoms/button/primary-button';
+import MoleculeSelectInputGroup from '../../molecules/input-group/select-input';
+import AtomSecondaryButton from '../../atoms/button/secondary-button';
 
 const EditableCell = ({
 	editing,

@@ -1,17 +1,16 @@
 /* eslint-disable react/display-name */
-import { EditFilled } from '@ant-design/icons';
+import React, { useRef } from 'react';
+import { EditFilled, EyeFilled } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { Space } from 'antd';
-
-import React, { useRef } from 'react';
 
 import AtomImage from '../../../components/atoms/image';
 import AtomStatusSwitch from '../../../components/atoms/datatable/status-switch';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
+import MoleculeDatatableFilter from '../../../components/molecules/datatable/filter-plugin';
 import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
-import MoleculeDatatableFilter from '../../../components/molecules/datatable/filter-plugin';
 
 const ProductPage = () => {
 	const column = [
@@ -56,7 +55,7 @@ const ProductPage = () => {
 		},
 		{
 			title: 'Batas Umur Pelanggan',
-			dataIndex: 'customer_age_limit',
+			dataIndex: 'age_limit',
 			sorter: true,
 		},
 		{
@@ -70,13 +69,11 @@ const ProductPage = () => {
 			dataIndex: `product_owner`,
 			sorter: true,
 		},
-		// {
-		// 	title: 'Cabang',
-		// 	dataIndex: 'branches',
-		// 	render: (branches) =>
-		// 		branches.map((branch) => branch.name).join(', '),
-		// 	sorter: true,
-		// },
+		{
+			title: 'Cabang',
+			dataIndex: 'branch',
+			sorter: true,
+		},
 
 		{
 			title: 'Aktif',
@@ -96,6 +93,10 @@ const ProductPage = () => {
 			dataIndex: 'id',
 			render: (id, record) => (
 				<Space size="middle">
+					<Link to={`/products/${id}/detail`}>
+						<EyeFilled className="f4 blue" />
+					</Link>
+
 					<Link to={`/products/${id}/edit`}>
 						<EditFilled className="f4 orange" />
 					</Link>
@@ -230,7 +231,7 @@ const ProductPage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`products`}
+				dataSourceURL={`product-in-details`}
 				filters={renderDatatableFilters()}
 				limit={15}
 				ref={productTableRef}
