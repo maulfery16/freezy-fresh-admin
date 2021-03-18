@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-unused-vars */
 
 import React, { useEffect, useState } from 'react';
@@ -15,10 +16,10 @@ import {
 import { useLocation, useParams } from 'react-router';
 
 import AtomCard from '../../../components/atoms/card';
-import AtomImage from '../../../components/atoms/image';
 import MoleculeImageGroup from '../../../components/molecules/molecule-image-group';
 import MoleculeInfoGroup from '../../../components/molecules/info-group';
 import MoleculeMarkdownRenderer from '../../../components/molecules/markdown-renderer';
+import MoleculeProductVariants from '../../../components/molecules/product-variants';
 import OrganismLayout from '../../../components/organisms/layout';
 import OrganismProductBranchDatatable from '../../../components/organisms/datatable/product-branch-datatable';
 
@@ -35,8 +36,6 @@ const OrganismProductDetail = () => {
 		setIsFetchingDetail(true);
 		try {
 			const response = await productService.getProductById(id);
-			console.log(response.data);
-
 			setProduct(response.data);
 		} catch (error) {
 			message.error(error.message);
@@ -62,7 +61,7 @@ const OrganismProductDetail = () => {
 				<span className="fw7">{`Detail Produk`.toUpperCase()}</span>
 			</Typography.Title>
 
-			{!product ? (
+			{isFetchingDetail ? (
 				<Skeleton active />
 			) : (
 				<Space
@@ -223,23 +222,31 @@ const OrganismProductDetail = () => {
 								/>
 							</Col>
 
-							{/* <Col span={12}>
+							<Col span={12}>
 								<MoleculeInfoGroup
 									title="Produk Serupa"
-									content={product.similar_products
-										.map((product) => product)
-										.join(', ')}
+									content={
+										product.similar_products
+											? product.similar_products
+													.map((product) => product)
+													.join(', ')
+											: '-'
+									}
 								/>
 							</Col>
 
 							<Col span={12}>
 								<MoleculeInfoGroup
 									title="Produk Terkait"
-									content={product.related_products
-										.map((product) => product)
-										.join(', ')}
+									content={
+										product.related_products
+											? product.related_products
+													.map((product) => product)
+													.join(', ')
+											: '-'
+									}
 								/>
-							</Col> */}
+							</Col>
 
 							<Col span={12}>
 								<MoleculeInfoGroup
@@ -314,116 +321,74 @@ const OrganismProductDetail = () => {
 					<AtomCard title="">
 						<Tabs>
 							<Tabs.TabPane key="1" tab="Attribut">
-								<Collapse ghost defaultActiveKey={['1']}>
-									<Collapse.Panel header="Warna" key="1">
-										{' '}
-										<Row gutter={[24, 24]}>
-											<Col span={12}>
-												<MoleculeInfoGroup
-													title="Nama"
-													content="Warna | Color"
-												/>
-											</Col>
+								<Collapse bordered={false} className="bg-white">
+									{product.attributes
+										? product.attributes.map(
+												(attribute, index) => (
+													<Collapse.Panel
+														header={
+															attribute.name.id
+														}
+														key={`vrnts_${index}`}
+													>
+														<Row gutter={[24, 24]}>
+															<Col span={12}>
+																<MoleculeInfoGroup
+																	title=""
+																	content={`${attribute.name.id} | ${attribute.name.en}`}
+																/>
+															</Col>
 
-											<Col span={12}>
-												<MoleculeInfoGroup
-													title="Kode UPC"
-													content={
-														<Space
-															direction="vertical"
-															size={0}
-														>
-															<span>
-																Red | Merah
-															</span>
-															<span>
-																Yellow | Kuning
-															</span>
-															<span>
-																Black | Hitam
-															</span>
-														</Space>
-													}
-												/>
-											</Col>
-										</Row>
-									</Collapse.Panel>
-
-									<Collapse.Panel header="Ukuran" key="2">
-										Ukuran
-									</Collapse.Panel>
+															<Col span={12}>
+																<MoleculeInfoGroup
+																	title=""
+																	content={
+																		<Space
+																			direction="vertical"
+																			size={
+																				0
+																			}
+																		>
+																			{attribute.values.map(
+																				(
+																					item,
+																					itemIdx
+																				) => (
+																					<span
+																						key={`vrtns_${index}_itms_${itemIdx}`}
+																					>
+																						{`${item.id} | ${item.en}`}
+																					</span>
+																				)
+																			)}
+																		</Space>
+																	}
+																/>
+															</Col>
+														</Row>
+													</Collapse.Panel>
+												)
+										  )
+										: null}
 								</Collapse>
 							</Tabs.TabPane>
 
 							<Tabs.TabPane key="2" tab="Varian">
-								<Collapse ghost defaultActiveKey={['1']}>
-									<Collapse.Panel header="Warna" key="1">
-										<Row gutter={[24, 24]}>
-											<Col span={12}>
-												<MoleculeInfoGroup
-													title="SKU ID"
-													content={product.sku_id}
-												/>
-											</Col>
-
-											<Col span={12}>
-												<MoleculeInfoGroup
-													title="Kode UPC"
-													content={product.upc_code}
-												/>
-											</Col>
-
-											<Col span={12}>
-												<MoleculeInfoGroup
-													title="Foto Produk"
-													content={
-														<AtomImage
-															src=""
-															size={30}
+								<Collapse bordered={false} className="bg-white">
+									{product.variants
+										? product.variants.map(
+												(varian, index) => (
+													<Collapse.Panel
+														header={varian.name.id}
+														key={`attrbts_${index}`}
+													>
+														<MoleculeProductVariants
+															{...varian}
 														/>
-													}
-												/>
-											</Col>
-
-											<Col span={12}>
-												<MoleculeInfoGroup
-													title="Supplier"
-													content={product.supplier}
-												/>
-											</Col>
-
-											<Col span={12}>
-												<MoleculeInfoGroup
-													title="Ukuran Produk"
-													content={
-														<span>
-															P:{' '}
-															{product.wide_cm ||
-																'-'}{' '}
-															x L:{' '}
-															{product.long_cm ||
-																'-'}{' '}
-															x T:{' '}
-															{product.height_cm ||
-																'-'}
-														</span>
-													}
-												/>
-											</Col>
-
-											<Col span={12}>
-												<MoleculeInfoGroup
-													title="Berat Produk"
-													content={`${
-														product.weight_gr || '-'
-													} gr`}
-												/>
-											</Col>
-										</Row>
-									</Collapse.Panel>
-									<Collapse.Panel header="Ukuran" key="2">
-										Ukuran
-									</Collapse.Panel>
+													</Collapse.Panel>
+												)
+										  )
+										: null}
 								</Collapse>
 							</Tabs.TabPane>
 						</Tabs>

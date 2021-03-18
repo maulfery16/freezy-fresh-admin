@@ -12,7 +12,7 @@ import {
 	Space,
 	Table,
 } from 'antd';
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, SyncOutlined } from '@ant-design/icons';
 
 import AtomCard from '../../atoms/card';
 import AtomNumberFormat from '../../atoms/number-format';
@@ -164,15 +164,24 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 				);
 			},
 		});
+	} else {
+		columns.push({
+			align: 'center',
+			title: '',
+			dataIndex: 'is_synced',
+			render: (synced) => (
+				<SyncOutlined
+					className={`f4 fw8 ${synced ? 'dark-green' : 'dark-red'}`}
+				/>
+			),
+		});
 	}
 
 	const [data, setData] = useState(props.defaultData || []);
 	const [editingKey, setEditingKey] = useState('');
 	const [form] = Form.useForm();
 	const [keyword, setKeyword] = useState('');
-	const [filters] = useState({
-		branch: '',
-	});
+	const [branch, setBranch] = useState(null);
 
 	const cancel = () => setEditingKey('');
 
@@ -194,12 +203,11 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 				column.name.includes(keyword)
 			);
 
-		if (filters.branch || filters.branch !== '')
-			filteredData = filteredData.filter((column) =>
-				column.branches
-					.map((branch) => branch.id)
-					.includes(filters.branch)
+		if (branch) {
+			filteredData = filteredData.filter(
+				(column) => column.branch_id === branch
 			);
+		}
 
 		return filteredData;
 	};
@@ -252,7 +260,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 					<Col span={8}>
 						<Input.Search
 							placeholder="Cari Nama Produk"
-							onSearch={(value) => setKeyword(value)}
+							onSearch={setKeyword}
 							size="large"
 						/>
 					</Col>
@@ -261,42 +269,38 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 						<Row align="middle" gutter={24} justify="end">
 							<Col span={16}>
 								<MoleculeSelectInputGroup
+									allowClear
 									label="Pilih Cabang Freezy"
 									name="branches"
 									placeholder="Cabang Freezy"
-									required
+									onChange={setBranch}
 									data={{
+										generateCustomOption: (item) => ({
+											value: item.real_id,
+											label: item.name,
+										}),
 										url: 'branches',
 									}}
 								/>
-							</Col>
-
-							<Col span={8}>
-								<AtomPrimaryButton
-									htmlType="submit"
-									size="large"
-								>
-									Terapkan
-								</AtomPrimaryButton>
 							</Col>
 						</Row>
 					</Col>
 				</Row>
 
 				<Table
+					bordered
+					dataSource={getDatatableData()}
+					columns={mergeColumn}
+					rowKey="id"
+					scroll={{ x: 2440 }}
 					components={{
 						body: {
 							cell: EditableCell,
 						},
 					}}
-					bordered
-					dataSource={getDatatableData()}
-					columns={mergeColumn}
 					pagination={{
 						onChange: cancel,
 					}}
-					rowKey="id"
-					scroll={{ x: 2440 }}
 				/>
 			</Form>
 		</AtomCard>
@@ -325,7 +329,6 @@ const EditableCell = ({
 					}}
 					rules={[
 						{
-							required: true,
 							message: `Please Input ${title}!`,
 						},
 					]}
