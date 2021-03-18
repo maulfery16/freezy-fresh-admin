@@ -200,7 +200,20 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 
 		if (keyword !== '')
 			filteredData = filteredData.filter((column) =>
-				column.name.includes(keyword)
+				[...Object.values(column)]
+					.map((attr) => {
+						switch (typeof attr) {
+							case 'object':
+								return JSON.stringify(attr);
+							case 'number':
+								return `${attr}`;
+							default:
+								return attr;
+						}
+					})
+					.join(' ')
+					.toLowerCase()
+					.includes(keyword.toLowerCase())
 			);
 
 		if (branch) {
