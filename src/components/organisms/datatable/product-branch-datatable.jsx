@@ -29,12 +29,21 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		{
 			title: 'Cabang',
 			dataIndex: 'branches',
-			render: (branches) => branches.join(', '),
+			render: (_, record) => record.branch || record.branch_id,
 			sorter: true,
 		},
 		{
 			title: 'Varian',
-			dataIndex: 'varian',
+			dataIndex: 'variants',
+			render: (variant) =>
+				variant
+					? variant
+							.map(
+								(varia) =>
+									`${varia.attribute.id} ${varia.variant.id}`
+							)
+							.join('')
+					: '-',
 			sorter: true,
 		},
 		{
@@ -43,20 +52,20 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 			sorter: true,
 		},
 		{
-			title: 'Junlah Favorite',
-			dataIndex: `favorite_count`,
+			title: 'Jumlah Favorite',
+			dataIndex: `total_favorite`,
 			render: (count) => <AtomNumberFormat value={count} />,
 			sorter: true,
 		},
 		{
 			title: 'Jumlah My Catalog',
-			dataIndex: 'catalog_count',
+			dataIndex: 'total_my_catalog',
 			render: (count) => <AtomNumberFormat value={count} />,
 			sorter: true,
 		},
 		{
 			title: 'Jumlah Terjual',
-			dataIndex: 'unit_sold',
+			dataIndex: 'total_sold',
 			render: (count) => <AtomNumberFormat value={count} />,
 			sorter: true,
 		},
@@ -68,7 +77,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		},
 		{
 			title: 'Kelola Stock',
-			dataIndex: 'is_stock_manageable',
+			dataIndex: 'is_manage_stock',
 			render: (manageable) => (manageable ? 'Ya' : 'Tidak'),
 			sorter: true,
 		},
@@ -92,7 +101,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		},
 		{
 			title: 'Date Exp Tercepat',
-			dataIndex: 'early_expire_date',
+			dataIndex: 'shortest_expiration',
 			render: (date) => (
 				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
 			),
@@ -100,7 +109,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		},
 		{
 			title: 'Date Exp Terlama',
-			dataIndex: 'later_expire_date',
+			dataIndex: 'longest_expiration',
 			render: (date) => (
 				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
 			),
@@ -109,25 +118,18 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		{
 			title: 'Harga Normal',
 			dataIndex: 'price',
-			render: (price) => <AtomNumberFormat prefix="Rp. " value={price} />,
+			render: (price) => `Rp. ${price}`,
 			sorter: true,
 		},
 		{
 			title: 'Harga Setelah Diskon',
-			dataIndex: 'discounted_price',
-			render: (_, record) => (
-				<AtomNumberFormat
-					prefix="Rp. "
-					value={
-						record.price - record.price * (record.discount / 100)
-					}
-				/>
-			),
+			dataIndex: 'fixed_price',
+			render: (price) => <AtomNumberFormat prefix="Rp. " value={price} />,
 			sorter: true,
 		},
 		{
 			title: 'Diskon',
-			dataIndex: 'discount',
+			dataIndex: 'discount_percentage',
 			editable: true,
 			render: (discount) => (discount ? `${discount} %` : null),
 			sorter: true,
@@ -245,39 +247,42 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 
 	return (
 		<AtomCard title="Pengaturan Cabang">
-			<Row align="middle" gutter={[0, 12]} justify="space-between">
-				<Col span={8}>
-					<Input.Search
-						placeholder="Cari Nama Produk"
-						onSearch={(value) => setKeyword(value)}
-						size="large"
-					/>
-				</Col>
-
-				<Col span={9}>
-					<Row align="middle" gutter={24} justify="end">
-						<Col span={16}>
-							<MoleculeSelectInputGroup
-								label="Pilih Cabang Freezy"
-								name="branches"
-								placeholder="Cabang Freezy"
-								required
-								data={{
-									url: 'branches',
-								}}
-							/>
-						</Col>
-
-						<Col span={8}>
-							<AtomPrimaryButton htmlType="submit" size="large">
-								Terapkan
-							</AtomPrimaryButton>
-						</Col>
-					</Row>
-				</Col>
-			</Row>
-
 			<Form name="table-form" form={form} component={false}>
+				<Row align="middle" gutter={[0, 12]} justify="space-between">
+					<Col span={8}>
+						<Input.Search
+							placeholder="Cari Nama Produk"
+							onSearch={(value) => setKeyword(value)}
+							size="large"
+						/>
+					</Col>
+
+					<Col span={9}>
+						<Row align="middle" gutter={24} justify="end">
+							<Col span={16}>
+								<MoleculeSelectInputGroup
+									label="Pilih Cabang Freezy"
+									name="branches"
+									placeholder="Cabang Freezy"
+									required
+									data={{
+										url: 'branches',
+									}}
+								/>
+							</Col>
+
+							<Col span={8}>
+								<AtomPrimaryButton
+									htmlType="submit"
+									size="large"
+								>
+									Terapkan
+								</AtomPrimaryButton>
+							</Col>
+						</Row>
+					</Col>
+				</Row>
+
 				<Table
 					components={{
 						body: {

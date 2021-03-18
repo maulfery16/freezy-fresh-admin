@@ -90,7 +90,7 @@ const ProductPage = () => {
 		},
 		{
 			title: 'Aksi',
-			dataIndex: 'id',
+			dataIndex: 'product_id',
 			render: (id, record) => (
 				<Space size="middle">
 					<Link to={`/products/${id}/detail`}>

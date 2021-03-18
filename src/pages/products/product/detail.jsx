@@ -34,68 +34,10 @@ const OrganismProductDetail = () => {
 	const getProductDetail = async () => {
 		setIsFetchingDetail(true);
 		try {
-			// const response = await productService.getProductById();
-			const response = {
-				age_limit: 99,
-				branch: 'Jakarta Selatan',
-				created_at: new Date(),
-				created_by: 'Lee Seong Gi',
-				height_cm: '10',
-				long_cm: '10',
-				product_owner: 'Sampingan Mitra Indonesia',
-				sku_id: 'SKU-001',
-				supplier: 'Tani Hub',
-				txt1: 'Txt1',
-				txt2: 'Txt2',
-				txt3: 'Txt3',
-				txt4: 'Txt4',
-				updated_by: 'Lee Seong Gi',
-				upc_code: 'UPC-001',
-				updated_at: new Date(),
-				weight_gr: '1000',
-				wide_cm: '10',
-				additional_category: {
-					id: 'Additional Category Indonesia',
-					en: 'Additional Category Inggris',
-				},
-				base_category: {
-					id: 'Base Category Indonesia',
-					en: 'Base Category Inggris',
-				},
-				brand: {
-					id: 'Brand Indonesia',
-					en: 'Brand Inggris',
-				},
-				cantik_image:
-					'https://api.freezyfresh.abcwork.id/storage/uploads/profile_image/product/q967a4yd35m8kl3x/jIWGyM33OIFcvAQ7K4I5.jpg',
-				full_description: {
-					id: 'long_description indonesia',
-					en: 'long_description english',
-				},
-				inspirasi_image:
-					'https://api.freezyfresh.abcwork.id/storage/uploads/profile_image/product/q967a4yd35m8kl3x/jIWGyM33OIFcvAQ7K4I5.jpg',
-				name: {
-					id: 'Nama Produk Indonesia',
-					en: 'Nama Produk Inggris',
-				},
-				packaging_image:
-					'https://api.freezyfresh.abcwork.id/storage/uploads/profile_image/product/q967a4yd35m8kl3x/jIWGyM33OIFcvAQ7K4I5.jpg',
-				putih_terbang_image:
-					'https://api.freezyfresh.abcwork.id/storage/uploads/profile_image/product/q967a4yd35m8kl3x/jIWGyM33OIFcvAQ7K4I5.jpg',
-				related_products: ['Produk 1', 'Produk 2', 'Produk 3'],
-				short_description: {
-					id: 'short_description indonesia',
-					en: 'short_description english',
-				},
-				similar_products: ['Produk 1', 'Produk 2', 'Produk 3'],
+			const response = await productService.getProductById(id);
+			console.log(response.data);
 
-				zone: {
-					id: 'zone indonesia',
-					en: 'zone english',
-				},
-			};
-
-			setProduct(response);
+			setProduct(response.data);
 		} catch (error) {
 			message.error(error.message);
 		} finally {
@@ -138,22 +80,26 @@ const OrganismProductDetail = () => {
 											images={[
 												{
 													source:
-														product.cantik_image,
+														product.image &&
+														product.image[0],
 													label: `Foto "Cantik"`,
 												},
 												{
 													source:
-														product.putih_terbang_image,
+														product.image &&
+														product.image[1],
 													label: `Foto "Putih Terbang"`,
 												},
 												{
 													source:
-														product.inspirasi_image,
+														product.image &&
+														product.image[2],
 													label: `Foto "Inspirasi"`,
 												},
 												{
 													source:
-														product.packaging_image,
+														product.imag &&
+														product.image[3],
 													label: `Foto "Packaging"`,
 												},
 											]}
@@ -162,7 +108,7 @@ const OrganismProductDetail = () => {
 								/>
 							</Col>
 
-							<Col span={12}>
+							<Col span={24}>
 								<MoleculeInfoGroup
 									title="SKU ID"
 									content={product.sku_id}
@@ -180,13 +126,6 @@ const OrganismProductDetail = () => {
 								<MoleculeInfoGroup
 									title="Nama Produk (EN)"
 									content={product.name.en}
-								/>
-							</Col>
-
-							<Col span={12}>
-								<MoleculeInfoGroup
-									title="Kode UPC"
-									content={product.upc_code}
 								/>
 							</Col>
 
@@ -238,7 +177,7 @@ const OrganismProductDetail = () => {
 							<Col span={12}>
 								<MoleculeInfoGroup
 									title="Cabang"
-									content={product.branch}
+									content={product.branch || '-'}
 								/>
 							</Col>
 
@@ -272,28 +211,8 @@ const OrganismProductDetail = () => {
 
 							<Col span={12}>
 								<MoleculeInfoGroup
-									title="Ukuran Produk"
-									content={
-										<span>
-											P: {product.wide_cm} x L:{' '}
-											{product.long_cm} x T:{' '}
-											{product.height_cm}
-										</span>
-									}
-								/>
-							</Col>
-
-							<Col span={12}>
-								<MoleculeInfoGroup
-									title="Berat Produk"
-									content={`${product.weight_gr} gr`}
-								/>
-							</Col>
-
-							<Col span={12}>
-								<MoleculeInfoGroup
 									title="Batas Umur"
-									content={product.age_limit}
+									content={product.age_limit || '-'}
 								/>
 							</Col>
 
@@ -304,7 +223,7 @@ const OrganismProductDetail = () => {
 								/>
 							</Col>
 
-							<Col span={12}>
+							{/* <Col span={12}>
 								<MoleculeInfoGroup
 									title="Produk Serupa"
 									content={product.similar_products
@@ -320,33 +239,33 @@ const OrganismProductDetail = () => {
 										.map((product) => product)
 										.join(', ')}
 								/>
-							</Col>
+							</Col> */}
 
 							<Col span={12}>
 								<MoleculeInfoGroup
 									title="Txt 1"
-									content={product.txt1}
+									content={product.txt1 || '-'}
 								/>
 							</Col>
 
 							<Col span={12}>
 								<MoleculeInfoGroup
 									title="Txt 2"
-									content={product.txt2}
+									content={product.txt2 || '-'}
 								/>
 							</Col>
 
 							<Col span={12}>
 								<MoleculeInfoGroup
 									title="Txt 3"
-									content={product.txt3}
+									content={product.txt3 || '-'}
 								/>
 							</Col>
 
 							<Col span={12}>
 								<MoleculeInfoGroup
 									title="Txt 4"
-									content={product.txt4}
+									content={product.txt4 || '-'}
 								/>
 							</Col>
 						</Row>
@@ -358,7 +277,7 @@ const OrganismProductDetail = () => {
 								<MoleculeInfoGroup
 									title="Tanggal Pendaftaran"
 									content={
-										<ReactMoment format="DD-MM-YY">
+										<ReactMoment format="DD-MM-YYYY">
 											{product.created_at}
 										</ReactMoment>
 									}
@@ -369,7 +288,7 @@ const OrganismProductDetail = () => {
 								<MoleculeInfoGroup
 									title="Tanggal Diperbaharui"
 									content={
-										<ReactMoment format="DD-MM-YY">
+										<ReactMoment format="DD-MM-YYYY">
 											{product.updated_at}
 										</ReactMoment>
 									}
@@ -478,11 +397,15 @@ const OrganismProductDetail = () => {
 													title="Ukuran Produk"
 													content={
 														<span>
-															P: {product.wide_cm}{' '}
+															P:{' '}
+															{product.wide_cm ||
+																'-'}{' '}
 															x L:{' '}
-															{product.long_cm} x
-															T:{' '}
-															{product.height_cm}
+															{product.long_cm ||
+																'-'}{' '}
+															x T:{' '}
+															{product.height_cm ||
+																'-'}
 														</span>
 													}
 												/>
@@ -491,7 +414,9 @@ const OrganismProductDetail = () => {
 											<Col span={12}>
 												<MoleculeInfoGroup
 													title="Berat Produk"
-													content={`${product.weight_gr} gr`}
+													content={`${
+														product.weight_gr || '-'
+													} gr`}
 												/>
 											</Col>
 										</Row>
@@ -505,7 +430,7 @@ const OrganismProductDetail = () => {
 					</AtomCard>
 
 					<OrganismProductBranchDatatable
-						defaultData={[]}
+						defaultData={product.details}
 						isReadOnly
 					/>
 				</Space>
