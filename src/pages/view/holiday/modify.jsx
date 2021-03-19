@@ -7,7 +7,6 @@ import AtomBaseCategoriesDatatableFilter from '../../../components/atoms/selecti
 import AtomBranchDatatableFilter from '../../../components/atoms/selection/branch-datatable';
 import AtomCard from '../../../components/atoms/card';
 import AtomNumberFormat from '../../../components/atoms/number-format';
-import MoleculeDatatableFilter from '../../../components/molecules/datatable/filter-plugin';
 import MoleculeFileInputGroup from '../../../components/molecules/input-group/file-input';
 import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
 import MoleculeTextEditorGroup from '../../../components/molecules/input-group/text-editor';
