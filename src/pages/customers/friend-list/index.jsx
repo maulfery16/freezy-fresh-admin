@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { Space } from 'antd';
 import { EyeFilled } from '@ant-design/icons';
 
+import AtomGenderDatatableFilter from '../../../components/atoms/selection/gender-datatable';
 import AtomImage from '../../../components/atoms/image';
 import MoleculeDatatableDateRange from '../../../components/molecules/datatable/date-range-plugin';
 import MoleculeDatatableFilter from '../../../components/molecules/datatable/filter-plugin';
@@ -131,26 +132,7 @@ const FriendListPage = () => {
 
 	const renderDatatableFilters = () => {
 		return [
-			<MoleculeDatatableFilter
-				name="gender"
-				operator=":"
-				identifier="gender-filter"
-				label="Jenis Kelamin"
-				key="gender-filter"
-				placeholder="Semua"
-				data={{
-					mock: [
-						{
-							value: 'FEMALE',
-							label: 'Perempuan',
-						},
-						{
-							value: 'MALE',
-							label: 'Laki-laki',
-						},
-					],
-				}}
-			/>,
+			<AtomGenderDatatableFilter key="gender-filter" />,
 			<MoleculeDatatableDateRange
 				name="birth"
 				operator=":"

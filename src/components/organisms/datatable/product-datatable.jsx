@@ -15,11 +15,12 @@ import {
 } from 'antd';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 
+import AtomBranchSelection from '../../atoms/selection/branch';
 import AtomCard from '../../atoms/card';
 import AtomNumberFormat from '../../atoms/number-format';
 import AtomPrimaryButton from '../../atoms/button/primary-button';
-import MoleculeSelectInputGroup from '../../molecules/input-group/select-input';
 import AtomSecondaryButton from '../../atoms/button/secondary-button';
+import MoleculeSelectInputGroup from '../../molecules/input-group/select-input';
 
 const EditableCell = ({
 	editing,
@@ -269,15 +270,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 								>
 									<Row align="middle" gutter={12}>
 										<Col span={9}>
-											<MoleculeSelectInputGroup
-												label="Cabang"
-												name="branch"
-												placeholder="Cabang"
-												required
-												data={{
-													url: 'branches',
-												}}
-											/>
+											<AtomBranchSelection required />
 										</Col>
 
 										<Col span={9}>
@@ -373,15 +366,9 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 												</Col>
 
 												<Col span={24}>
-													<MoleculeSelectInputGroup
-														label="Cabang"
-														name="branches"
-														placeholder="Cabang"
+													<AtomBranchSelection
 														mode="multiple"
 														required
-														data={{
-															url: 'branches',
-														}}
 													/>
 												</Col>
 

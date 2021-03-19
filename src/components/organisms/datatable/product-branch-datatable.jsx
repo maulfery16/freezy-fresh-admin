@@ -14,10 +14,10 @@ import {
 } from 'antd';
 import { CheckOutlined, CloseOutlined, SyncOutlined } from '@ant-design/icons';
 
+import AtomBranchSelection from '../../atoms/selection/branch';
 import AtomCard from '../../atoms/card';
 import AtomNumberFormat from '../../atoms/number-format';
 import AtomPrimaryButton from '../../atoms/button/primary-button';
-import MoleculeSelectInputGroup from '../../molecules/input-group/select-input';
 
 const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 	const columns = [
@@ -281,19 +281,9 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 					<Col span={9}>
 						<Row align="middle" gutter={24} justify="end">
 							<Col span={16}>
-								<MoleculeSelectInputGroup
-									allowClear
-									label="Pilih Cabang Freezy"
-									name="branches"
-									placeholder="Cabang Freezy"
+								<AtomBranchSelection
 									onChange={setBranch}
-									data={{
-										generateCustomOption: (item) => ({
-											value: item.real_id,
-											label: item.name,
-										}),
-										url: 'branches',
-									}}
+									optionValue="real_id"
 								/>
 							</Col>
 						</Row>

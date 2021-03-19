@@ -4,6 +4,8 @@ import { EditFilled, EyeFilled } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { Space } from 'antd';
 
+import AtomBaseCategoriesDatatableFilter from '../../../components/atoms/selection/base-categories-datatable';
+import AtomBranchDatatableFilter from '../../../components/atoms/selection/branch-datatable';
 import AtomImage from '../../../components/atoms/image';
 import AtomStatusSwitch from '../../../components/atoms/datatable/status-switch';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
@@ -133,21 +135,7 @@ const ProductPage = () => {
 
 	const renderDatatableFilters = () => {
 		return [
-			<MoleculeDatatableFilter
-				name="base-categories"
-				operator=":"
-				identifier="base-categories-filter"
-				label="Kategori Dasar"
-				key="base-categories-filter"
-				placeholder="Semua Kategori Dasar"
-				data={{
-					url: 'base-categories',
-					generateCustomOption: (item) => ({
-						value: item.id,
-						label: item.name.id,
-					}),
-				}}
-			/>,
+			<AtomBaseCategoriesDatatableFilter key="base-categories-filter" />,
 			<MoleculeDatatableFilter
 				name="additional-categories"
 				operator=":"
@@ -174,17 +162,7 @@ const ProductPage = () => {
 					url: 'product-owners',
 				}}
 			/>,
-			<MoleculeDatatableFilter
-				name="branches"
-				operator=":"
-				identifier="branches-filter"
-				label="Cabang"
-				key="branches-filter"
-				placeholder="Semua cabang"
-				data={{
-					url: 'branches',
-				}}
-			/>,
+			<AtomBranchDatatableFilter key="branch-filter" />,
 			<MoleculeDatatableFilter
 				name="brand"
 				operator=":"
