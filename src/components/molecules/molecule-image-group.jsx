@@ -1,6 +1,7 @@
-import { Col, Row, Space } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Col, Row, Space } from 'antd';
+
 import AtomImage from '../atoms/image';
 
 const MoleculeImageGroup = (props) => {
@@ -19,7 +20,7 @@ const MoleculeImageGroup = (props) => {
 					<Space align="center" direction="vertical">
 						<AtomImage src={image.source} />
 
-						<p style={{ maxWidth: 110, textAlign: 'center' }}>
+						<p style={{ maxWidth: 150, textAlign: 'center' }}>
 							{image.label}
 						</p>
 					</Space>

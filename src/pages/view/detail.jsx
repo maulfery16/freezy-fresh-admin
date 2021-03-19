@@ -5,10 +5,11 @@ import ReactMoment from 'react-moment';
 import { Col, Image, message, Row, Skeleton, Space, Typography } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 
+import AtomBaseCategoriesDatatableFilter from '../../components/atoms/selection/base-categories-datatable';
+import AtomBranchDatatableFilter from '../../components/atoms/selection/branch-datatable';
 import AtomCard from '../../components/atoms/card';
 import AtomNumberFormat from '../../components/atoms/number-format';
 import AtomSecondaryButton from '../../components/atoms/button/secondary-button';
-import MoleculeDatatableFilter from '../../components/molecules/datatable/filter-plugin';
 import MoleculeInfoGroup from '../../components/molecules/info-group';
 import MoleculeMarkdownRenderer from '../../components/molecules/markdown-renderer';
 import OrganismDatatable from '../../components/organisms/datatable';
@@ -129,24 +130,8 @@ const ViewModifyPage = () => {
 
 	const renderDatatableFilters = () => {
 		return [
-			<MoleculeDatatableFilter
-				name="branches"
-				operator=":"
-				identifier="branches-filter"
-				label="Cabang"
-				key="branches-filter"
-				placeholder="Semua Cabang"
-				data={{ url: 'branches' }}
-			/>,
-			<MoleculeDatatableFilter
-				name="base-categories"
-				operator=":"
-				identifier="base-categories-filter"
-				label="Kategori Dasar"
-				key="base-categories-filter"
-				placeholder="Semua Kategori Dasar"
-				data={{ url: 'base-categories' }}
-			/>,
+			<AtomBranchDatatableFilter key="branch-filter" />,
+			<AtomBaseCategoriesDatatableFilter key="base-categories-filter" />,
 		];
 	};
 

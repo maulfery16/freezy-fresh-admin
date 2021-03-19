@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Col, Form, message, Row, Skeleton, Space, Typography } from 'antd';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
+import AtomBranchSelection from '../../../components/atoms/selection/branch';
 import AtomCard from '../../../components/atoms/card';
 import MoleculeFileInputGroup from '../../../components/molecules/input-group/file-input';
 import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
@@ -210,16 +211,7 @@ const BannerModifyPage = () => {
 									</Col>
 
 									<Col span={24}>
-										<MoleculeSelectInputGroup
-											label="Cabang"
-											name="branches"
-											placeholder="Cabang"
-											mode="multiple"
-											required
-											data={{
-												url: 'branches',
-											}}
-										/>
+										<AtomBranchSelection mode="multiple" />
 									</Col>
 								</Row>
 							</AtomCard>

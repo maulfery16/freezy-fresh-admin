@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { message, Skeleton, Space } from 'antd';
 import { EditFilled, EyeFilled } from '@ant-design/icons';
 
+import AtomBranchDatatableFilter from '../../components/atoms/selection/branch-datatable';
 import AtomImage from '../../components/atoms/image';
 import AtomNumberFormat from '../../components/atoms/number-format';
 import AtomStatusSwitch from '../../components/atoms/datatable/status-switch';
@@ -17,11 +18,13 @@ import MoleculeDeleteConfirm from '../../components/molecules/delete-confirm';
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
 
-import { translateGenderEnum } from '../../utils/helpers';
 import AdminService from '../../services/admin';
-const adminService = new AdminService();
+import { translateGenderEnum } from '../../utils/helpers';
 
 const AdminPage = () => {
+	const [totalAdmin, setTotalAdmin] = useState(null);
+	const adminService = new AdminService();
+	const adminTableRef = useRef();
 	const column = [
 		{
 			align: 'center',
@@ -135,9 +138,6 @@ const AdminPage = () => {
 			skipExport: true,
 		},
 	];
-	const adminTableRef = useRef();
-
-	const [totalAdmin, setTotalAdmin] = useState(null);
 
 	const getTotalAdmin = async () => {
 		try {
@@ -200,15 +200,8 @@ const AdminPage = () => {
 
 	const renderDatatableFilters = () => {
 		return [
-			<MoleculeDatatableFilter
-				name="branches"
-				operator=":"
-				identifier="branches-filter"
-				label="Cabang"
-				key="branches-filter"
-				placeholder="Semua cabang"
-				data={{ url: 'branches' }}
-			/>,
+			<AtomBranchDatatableFilter key="branch-filter" />,
+
 			<MoleculeDatatableFilter
 				name="roles"
 				operator=":"

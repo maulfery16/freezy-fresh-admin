@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import React, { useRef } from 'react';
 
+import AtomBranchDatatableFilter from '../../components/atoms/selection/branch-datatable';
 import AtomStatusSwitch from '../../components/atoms/datatable/status-switch';
 import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
 import MoleculeDatatableDateRange from '../../components/molecules/datatable/date-range-plugin';
@@ -167,15 +168,7 @@ const ViewPage = () => {
 				label="Tanggal"
 				placeholder="Filter tanggal"
 			/>,
-			<MoleculeDatatableFilter
-				name="branches"
-				operator=":"
-				identifier="branches-filter"
-				label="Cabang"
-				key="branches-filter"
-				placeholder="Semua cabang"
-				data={{ url: 'branches' }}
-			/>,
+			<AtomBranchDatatableFilter key="branch-filter" />,
 		];
 	};
 

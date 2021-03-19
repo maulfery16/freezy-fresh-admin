@@ -10,7 +10,7 @@ import MoleculeSelectInputGroup from '../../../components/molecules/input-group/
 import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
 import MoleculeTextEditorGroup from '../../../components/molecules/input-group/text-editor';
 import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
-import OrganismProductDatatable from '../../../components/organisms/product-datatable';
+import OrganismProductDatatable from '../../../components/organisms/datatable/product-datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
 const { TabPane } = Tabs;
