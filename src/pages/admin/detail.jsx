@@ -145,7 +145,7 @@ const AdminModifyPage = () => {
 								<Col span={24}>
 									<MoleculeInfoGroup
 										title="Otorisasi Pendaftaran oleh"
-										content={admin.created_by.first_name}
+										content={admin.created_by || '-'}
 									/>
 								</Col>
 
@@ -163,7 +163,7 @@ const AdminModifyPage = () => {
 								<Col span={24}>
 									<MoleculeInfoGroup
 										title="Pembaharuan Data Terakhir oleh"
-										content={admin.updated_by}
+										content={admin.updated_by || '-'}
 									/>
 								</Col>
 							</Row>
@@ -193,7 +193,7 @@ const AdminModifyPage = () => {
 									<MoleculeInfoGroup
 										title="Cabang"
 										content={admin.branches
-											.map((branch) => branch.name)
+											.map((branch) => branch.name.id)
 											.join(', ')}
 									/>
 								</Col>

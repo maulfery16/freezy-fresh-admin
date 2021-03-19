@@ -79,7 +79,7 @@ const AdminPage = () => {
 			title: 'Cabang',
 			dataIndex: 'branches',
 			render: (branches) =>
-				branches.map((branch) => branch.name).join(', '),
+				branches.map((branch) => branch.name.id).join(', '),
 			sorter: true,
 		},
 		{
@@ -90,12 +90,13 @@ const AdminPage = () => {
 		{
 			title: 'Nomor Rek',
 			dataIndex: 'bank_info',
-			render: (bank) => bank.account_number,
+			render: (bank) => bank.account_number || '-',
+			width: 150,
 		},
 		{
 			title: 'Bank',
 			dataIndex: 'bank_info',
-			render: (bank) => bank.bank && bank.bank.name,
+			render: (bank) => (bank.bank && bank.bank.name) || '-',
 		},
 		{
 			align: 'center',

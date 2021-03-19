@@ -95,7 +95,7 @@ const BannerModifyPage = () => {
 									<MoleculeInfoGroup
 										title="Cabang"
 										content={banner.branches
-											.map((branch) => branch.name)
+											.map((branch) => branch.name.id)
 											.join(', ')}
 									/>
 								</Col>
