@@ -1,17 +1,18 @@
 /* eslint-disable react/display-name */
-import { EditFilled } from '@ant-design/icons';
+import React, { useRef } from 'react';
+import { EditFilled, EyeFilled } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { Space } from 'antd';
 
-import React, { useRef } from 'react';
-
+import AtomBaseCategoriesDatatableFilter from '../../../components/atoms/selection/base-categories-datatable';
+import AtomBranchDatatableFilter from '../../../components/atoms/selection/branch-datatable';
 import AtomImage from '../../../components/atoms/image';
 import AtomStatusSwitch from '../../../components/atoms/datatable/status-switch';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
+import MoleculeDatatableFilter from '../../../components/molecules/datatable/filter-plugin';
 import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
-import MoleculeDatatableFilter from '../../../components/molecules/datatable/filter-plugin';
 
 const ProductPage = () => {
 	const column = [
@@ -56,7 +57,7 @@ const ProductPage = () => {
 		},
 		{
 			title: 'Batas Umur Pelanggan',
-			dataIndex: 'customer_age_limit',
+			dataIndex: 'age_limit',
 			sorter: true,
 		},
 		{
@@ -70,13 +71,11 @@ const ProductPage = () => {
 			dataIndex: `product_owner`,
 			sorter: true,
 		},
-		// {
-		// 	title: 'Cabang',
-		// 	dataIndex: 'branches',
-		// 	render: (branches) =>
-		// 		branches.map((branch) => branch.name).join(', '),
-		// 	sorter: true,
-		// },
+		{
+			title: 'Cabang',
+			dataIndex: 'branch',
+			sorter: true,
+		},
 
 		{
 			title: 'Aktif',
@@ -93,9 +92,13 @@ const ProductPage = () => {
 		},
 		{
 			title: 'Aksi',
-			dataIndex: 'id',
+			dataIndex: 'product_id',
 			render: (id, record) => (
 				<Space size="middle">
+					<Link to={`/products/${id}/detail`}>
+						<EyeFilled className="f4 blue" />
+					</Link>
+
 					<Link to={`/products/${id}/edit`}>
 						<EditFilled className="f4 orange" />
 					</Link>
@@ -132,21 +135,7 @@ const ProductPage = () => {
 
 	const renderDatatableFilters = () => {
 		return [
-			<MoleculeDatatableFilter
-				name="base-categories"
-				operator=":"
-				identifier="base-categories-filter"
-				label="Kategori Dasar"
-				key="base-categories-filter"
-				placeholder="Semua Kategori Dasar"
-				data={{
-					url: 'base-categories',
-					generateCustomOption: (item) => ({
-						value: item.id,
-						label: item.name.id,
-					}),
-				}}
-			/>,
+			<AtomBaseCategoriesDatatableFilter key="base-categories-filter" />,
 			<MoleculeDatatableFilter
 				name="additional-categories"
 				operator=":"
@@ -173,17 +162,7 @@ const ProductPage = () => {
 					url: 'product-owners',
 				}}
 			/>,
-			<MoleculeDatatableFilter
-				name="branches"
-				operator=":"
-				identifier="branches-filter"
-				label="Cabang"
-				key="branches-filter"
-				placeholder="Semua cabang"
-				data={{
-					url: 'branches',
-				}}
-			/>,
+			<AtomBranchDatatableFilter key="branch-filter" />,
 			<MoleculeDatatableFilter
 				name="brand"
 				operator=":"
@@ -230,7 +209,7 @@ const ProductPage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`products`}
+				dataSourceURL={`product-in-details`}
 				filters={renderDatatableFilters()}
 				limit={15}
 				ref={productTableRef}

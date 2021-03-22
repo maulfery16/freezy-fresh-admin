@@ -5,9 +5,9 @@ import ReactMoment from 'react-moment';
 import { Col, Row, Skeleton, Typography, message, Tabs } from 'antd';
 import { useLocation, useParams } from 'react-router-dom';
 
+import AtomBranchDatatableFilter from '../../../components/atoms/selection/branch-datatable';
 import AtomCard from '../../../components/atoms/card';
 import AtomNumberFormat from '../../../components/atoms/number-format';
-import MoleculeDatatableFilter from '../../../components/molecules/datatable/filter-plugin';
 import MoleculeImageGroup from '../../../components/molecules/molecule-image-group';
 import MoleculeInfoGroup from '../../../components/molecules/info-group';
 import MoleculeMarkdownRenderer from '../../../components/molecules/markdown-renderer';
@@ -17,7 +17,7 @@ import OrganismLayout from '../../../components/organisms/layout';
 const { TabPane } = Tabs;
 
 import PromotionService from '../../../services/promotion';
-const promotionService = new PromotionService();
+import AtomBaseCategoriesDatatableFilter from '../../../components/atoms/selection/base-categories-datatable';
 
 const mock = {
 	data: [
@@ -77,11 +77,11 @@ const column = [
 ];
 
 const PromotionModifyPage = () => {
+	const location = useLocation();
+	const promotionService = new PromotionService();
 	const viewTableRef = useRef();
 
 	const { id } = useParams();
-	const location = useLocation();
-
 	const [promotion, setPromotion] = useState();
 
 	const getPromotionDetail = async (id) => {
@@ -99,24 +99,8 @@ const PromotionModifyPage = () => {
 
 	const renderDatatableFilters = () => {
 		return [
-			<MoleculeDatatableFilter
-				name="branches"
-				operator=":"
-				identifier="branches-filter"
-				label="Cabang"
-				key="branches-filter"
-				placeholder="Semua Cabang"
-				data={{ url: 'branches' }}
-			/>,
-			<MoleculeDatatableFilter
-				name="base-categories"
-				operator=":"
-				identifier="base-categories-filter"
-				label="Kategori Dasar"
-				key="base-categories-filter"
-				placeholder="Semua Kategori Dasar"
-				data={{ url: 'base-categories' }}
-			/>,
+			<AtomBranchDatatableFilter key="branch-filter" />,
+			<AtomBaseCategoriesDatatableFilter key="base-categories-filter" />,
 		];
 	};
 

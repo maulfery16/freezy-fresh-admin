@@ -157,6 +157,15 @@ const routes = [
 				path: '/import',
 			},
 			{
+				component: React.lazy(() =>
+					import('./pages/products/product/detail')
+				),
+				exact: true,
+				guard: true,
+				name: 'Product Detail Page',
+				path: '/:id/detail',
+			},
+			{
 				path: '/additional-category',
 				children: [
 					{

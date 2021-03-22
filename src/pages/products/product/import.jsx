@@ -5,6 +5,9 @@ import AtomCard from '../../../components/atoms/card';
 import MoleculeImportExportWrapper from '../../../components/molecules/import-export-wrapper';
 import OrganismLayout from '../../../components/organisms/layout';
 
+import DownloadImage from '../../../assets/images/download.svg';
+import UploadImage from '../../../assets/images/upload.svg';
+
 const ProductImportPage = () => {
 	return (
 		<OrganismLayout
@@ -31,6 +34,7 @@ const ProductImportPage = () => {
 						<MoleculeImportExportWrapper
 							buttonLabel="DOWNLOAD TEMPLATE"
 							info="Gunakan template ini untuk tambah produk di beragam kategori"
+							image={DownloadImage}
 						/>
 					</AtomCard>
 				</Col>
@@ -40,6 +44,7 @@ const ProductImportPage = () => {
 						<MoleculeImportExportWrapper
 							buttonLabel="UPLOAD FILE"
 							info="Pilih atau letakkan file Excel(.xlsx atau .csv) kamu disini, Maks. 300 produk dalam satu file."
+							image={UploadImage}
 						/>{' '}
 					</AtomCard>
 				</Col>

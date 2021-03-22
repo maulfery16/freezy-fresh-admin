@@ -4,12 +4,15 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import AtomSecondaryButton from '../atoms/button/secondary-button';
+import AtomImage from '../atoms/image';
 
 const MoleculeImportExportWrapper = (props) => {
 	return (
-		<Row>
+		<Row style={{ height: '300px' }}>
 			<Col span={24}>
-				<Row justify="center"></Row>
+				<Row justify="center">
+					<AtomImage src={props.image} />
+				</Row>
 			</Col>
 
 			<Col className="mt4" span={24}>
@@ -44,8 +47,9 @@ const MoleculeImportExportWrapper = (props) => {
 
 MoleculeImportExportWrapper.propTypes = {
 	buttonLabel: PropTypes.string,
-	onClick: PropTypes.func,
+	image: PropTypes.any,
 	info: PropTypes.string,
+	onClick: PropTypes.func,
 };
 
 export default MoleculeImportExportWrapper;

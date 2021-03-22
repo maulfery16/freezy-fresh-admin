@@ -3,9 +3,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Col, Row, Skeleton, Typography, message, Form, Tabs } from 'antd';
 import { useHistory } from 'react-router-dom';
 
+import AtomBaseCategoriesDatatableFilter from '../../../components/atoms/selection/base-categories-datatable';
+import AtomBranchDatatableFilter from '../../../components/atoms/selection/branch-datatable';
 import AtomCard from '../../../components/atoms/card';
 import AtomNumberFormat from '../../../components/atoms/number-format';
-import MoleculeDatatableFilter from '../../../components/molecules/datatable/filter-plugin';
 import MoleculeFileInputGroup from '../../../components/molecules/input-group/file-input';
 import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
 import MoleculeTextEditorGroup from '../../../components/molecules/input-group/text-editor';
@@ -146,24 +147,8 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 
 	const renderDatatableFilters = () => {
 		return [
-			<MoleculeDatatableFilter
-				name="branches"
-				operator=":"
-				identifier="branches-filter"
-				label="Cabang"
-				key="branches-filter"
-				placeholder="Semua Cabang"
-				data={{ url: 'branches' }}
-			/>,
-			<MoleculeDatatableFilter
-				name="base-categories"
-				operator=":"
-				identifier="base-categories-filter"
-				label="Kategori Dasar"
-				key="base-categories-filter"
-				placeholder="Semua Kategori Dasar"
-				data={{ url: 'base-categories' }}
-			/>,
+			<AtomBranchDatatableFilter key="branch-filter" />,
+			<AtomBaseCategoriesDatatableFilter key="base-categories-filter" />,
 		];
 	};
 
