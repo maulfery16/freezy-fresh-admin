@@ -4,23 +4,22 @@ import ReactMoment from 'react-moment';
 import { Col, message, Row, Skeleton, Space, Typography } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 
-import AtomCard from '../../../components/atoms/card';
-import AtomSecondaryButton from '../../../components/atoms/button/secondary-button';
-import MoleculeImageGroup from '../../../components/molecules/molecule-image-group';
-import MoleculeInfoGroup from '../../../components/molecules/info-group';
-import OrganismLayout from '../../../components/organisms/layout';
+import AtomCard from '../../components/atoms/card';
+import AtomSecondaryButton from '../../components/atoms/button/secondary-button';
+import MoleculeInfoGroup from '../../components/molecules/info-group';
+import OrganismLayout from '../../components/organisms/layout';
 
-import BannerService from '../../../services/banner';
-const bannerService = new BannerService();
+import BranchService from '../../services/branch';
+const branchService = new BranchService();
 
-const BannerModifyPage = () => {
+const BranchModifyPage = () => {
 	const { id } = useParams();
-	const [banner, setBanner] = useState(null);
+	const [branch, setBranch] = useState(null);
 
-	const getBannerDetail = async () => {
+	const getBranchDetail = async () => {
 		try {
-			const { data: banner } = await bannerService.getBannerById(id);
-			setBanner(banner);
+			const { data: branch } = await branchService.getBranchById(id);
+			setBranch(branch);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
@@ -29,84 +28,123 @@ const BannerModifyPage = () => {
 
 	useEffect(() => {
 		(async () => {
-			getBannerDetail(id);
+			getBranchDetail(id);
 		})();
 	}, []);
 
 	return (
 		<OrganismLayout
 			breadcumbs={[
-				{ name: 'Tampilan', link: '/view/banner' },
-				{ name: 'Banner', link: '/view/banner' },
+				{ name: 'Branch', link: '/branch' },
 				{ name: 'Detail', link: location.pathname },
 			]}
-			title="Detail Banner"
+			title="Detail Branch"
 		>
 			<Typography.Title level={4}>
-				<span className="fw7">{`Detail Banner`.toUpperCase()}</span>
+				<span className="fw7">{`Detail Branch`.toUpperCase()}</span>
 			</Typography.Title>
 
-			{!banner ? (
+			{!branch ? (
 				<Skeleton active />
 			) : (
 				<Row align="top" className="mt4" gutter={24}>
-					<Col span={15}>
-						<AtomCard title="Info Banner">
+					<Col span={18}>
+						<AtomCard title="Info Cabang Freezy">
 							<Row gutter={[12, 24]}>
-								<Col span={24}>
+								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Foto Banner"
+										title="Kode Cabang"
+										content={branch.code}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
+										title="Status"
 										content={
-											<MoleculeImageGroup
-												images={[
-													{
-														source:
-															banner.image_mobile,
-														label:
-															' Foto Banner Mobile',
-													},
-													{
-														source:
-															banner.image_dekstop,
-														label:
-															' Foto Banner Dekstop',
-													},
-												]}
-											/>
+											branch.is_active
+												? 'Aktif'
+												: 'Tidak Aktif'
 										}
 									/>
 								</Col>
 
 								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Title Banner (ID)"
-										content={banner.title.id}
+										title="Nama Cabang (ID)"
+										content={branch.name.id}
 									/>
 								</Col>
 
 								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Title Banner (EN)"
-										content={banner.title.en}
+										title="Nama Cabang (EN)"
+										content={branch.name.en}
 									/>
 								</Col>
 
 								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Cabang"
-										content={banner.branches
-											.map((branch) => branch.name)
-											.join(', ')}
+										title="Provinsi"
+										content={branch.address.province_name}
 									/>
 								</Col>
 
 								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Nama Promo (ID)"
+										title="Kota/Kabupaten"
+										content={branch.address.city_name}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
+										title="Kode Kecamatan"
+										content={branch.address.region_code}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
+										title="Kecamatan"
+										content={branch.address.district_name}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
+										title="Kelurahan"
 										content={
-											banner.promotion &&
-											banner.promotion.name
+											branch.address.subdistrict_name
 										}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
+										title="Kode Pos"
+										content={branch.address.postal_code}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
+										title="Alamat"
+										content={branch.address.address}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
+										title="Latitude"
+										content={branch.address.latitude}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
+										title="Longitude"
+										content={branch.address.longitude}
 									/>
 								</Col>
 
@@ -123,7 +161,7 @@ const BannerModifyPage = () => {
 										title="Tanggal di Daftarkan"
 										content={
 											<ReactMoment format="DD-MM-YYYY">
-												{banner.created_at}
+												{branch.created_at}
 											</ReactMoment>
 										}
 									/>
@@ -134,7 +172,7 @@ const BannerModifyPage = () => {
 										title="Tanggal di Update"
 										content={
 											<ReactMoment format="DD-MM-YYYY">
-												{banner.updated_at}
+												{branch.updated_at}
 											</ReactMoment>
 										}
 									/>
@@ -143,14 +181,14 @@ const BannerModifyPage = () => {
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Didaftarkan Oleh"
-										content={banner.created_by}
+										content={branch.created_by}
 									/>
 								</Col>
 
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Diupdate Oleh"
-										content={banner.updated_by}
+										content={branch.updated_by}
 									/>
 								</Col>
 							</Row>
@@ -159,7 +197,7 @@ const BannerModifyPage = () => {
 
 					<Col className="mt4" span={24}>
 						<Space>
-							<Link to="/view/banner">
+							<Link to="/branch">
 								<AtomSecondaryButton size="large">
 									Kembali
 								</AtomSecondaryButton>
@@ -172,4 +210,4 @@ const BannerModifyPage = () => {
 	);
 };
 
-export default BannerModifyPage;
+export default BranchModifyPage;

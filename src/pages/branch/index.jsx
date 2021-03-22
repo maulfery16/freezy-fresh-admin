@@ -50,6 +50,12 @@ const BranchPage = () => {
 			sorter: true,
 		},
 		{
+			title: 'Kode Kecamatan',
+			dataIndex: 'address[region_code]',
+			render: (_, record) => record.address.region_code,
+			sorter: true,
+		},
+		{
 			title: 'Kecamatan',
 			dataIndex: 'address[district_name]',
 			render: (_, record) => record.address.district_name,
@@ -160,7 +166,7 @@ const BranchPage = () => {
 
 	return (
 		<OrganismLayout
-			breadcumbs={[{ name: 'Branch', link: '/branch' }]}
+			breadcumbs={[{ name: 'Cabang Freezy', link: '/branch' }]}
 			title="Branch Page"
 		>
 			<OrganismDatatable
@@ -171,7 +177,7 @@ const BranchPage = () => {
 				ref={branchTableRef}
 				scroll={1920}
 				searchInput={true}
-				title={`Branch Menu`}
+				title={`Cabang Freezy`}
 			/>
 		</OrganismLayout>
 	);
