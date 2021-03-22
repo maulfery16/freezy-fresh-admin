@@ -166,6 +166,24 @@ const routes = [
 				path: '/:id/detail',
 			},
 			{
+				component: React.lazy(() =>
+					import('./pages/products/product/modify')
+				),
+				exact: true,
+				guard: true,
+				name: 'Add Product Page',
+				path: '/add',
+			},
+			{
+				component: React.lazy(() =>
+					import('./pages/products/product/modify')
+				),
+				exact: true,
+				guard: true,
+				name: 'Edit Product Page',
+				path: '/:id/edit',
+			},
+			{
 				path: '/additional-category',
 				children: [
 					{

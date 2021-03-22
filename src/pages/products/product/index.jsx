@@ -52,7 +52,8 @@ const ProductPage = () => {
 		{
 			title: 'Kategori Tambahan',
 			dataIndex: `additional_category['id']`,
-			render: (_, record) => record.additional_category.id,
+			render: (_, record) =>
+				record.additional_category && record.additional_category.id,
 			sorter: true,
 		},
 		{
@@ -74,6 +75,8 @@ const ProductPage = () => {
 		{
 			title: 'Cabang',
 			dataIndex: 'branch',
+			render: (_, record) =>
+				record.branch.map((branch) => branch.id).join(', '),
 			sorter: true,
 		},
 
@@ -92,7 +95,7 @@ const ProductPage = () => {
 		},
 		{
 			title: 'Aksi',
-			dataIndex: 'product_id',
+			dataIndex: 'id',
 			render: (id, record) => (
 				<Space size="middle">
 					<Link to={`/products/${id}/detail`}>
@@ -127,7 +130,7 @@ const ProductPage = () => {
 				importRoute="/products/import"
 				label="Produk"
 				requiredParams="branches"
-				route="/products/"
+				route="/products"
 				url="products"
 			/>
 		);
@@ -209,7 +212,7 @@ const ProductPage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`product-in-details`}
+				dataSourceURL={`products`}
 				filters={renderDatatableFilters()}
 				limit={15}
 				ref={productTableRef}

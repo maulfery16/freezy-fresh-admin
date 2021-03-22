@@ -23,7 +23,7 @@ const MoleculeTextInputGroup = (props) => {
 		return null;
 	};
 
-	const rules = [
+	let rules = [
 		{
 			message:
 				props.validationMessage ||
@@ -44,6 +44,10 @@ const MoleculeTextInputGroup = (props) => {
 				props.requiredMessage || `${props.label} tidak boleh kosong`,
 			required: true,
 		});
+
+	if (props.rules) {
+		rules = [...rules, ...props.rules];
+	}
 
 	return (
 		<Form.Item>
