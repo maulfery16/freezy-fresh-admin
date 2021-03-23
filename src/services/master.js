@@ -19,4 +19,20 @@ export default class MasterService extends RequestAdapterService {
 			);
 		}
 	}
+
+	async uploadImage(params) {
+		try {
+			const { data } = await super.sendPostMultipartRequest(
+				`${this.baseUrl}/v1/medias`,
+				params
+			);
+
+			return data.data.url;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Uploading file: ${super.generateErrorMessage(error)}`
+			);
+		}
+	}
 }

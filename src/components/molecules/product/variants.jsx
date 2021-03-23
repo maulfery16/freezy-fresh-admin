@@ -19,7 +19,7 @@ const MoleculeProductVariants = (props) => {
 			<Col span={12}>
 				<MoleculeInfoGroup
 					title="Foto Produk"
-					content={<AtomImage src={props.image} size={30} />}
+					content={<AtomImage src={props.image} size={100} />}
 				/>
 			</Col>
 
@@ -32,8 +32,8 @@ const MoleculeProductVariants = (props) => {
 					title="Ukuran Produk"
 					content={
 						<span>
-							P: {props.wide_cm || '-'} x L:{' '}
-							{props.long_cm || '-'} x T: {props.height_cm || '-'}
+							P: {props.long_cm || '-'} x L:{' '}
+							{props.wide_cm || '-'} x T: {props.height_cm || '-'}
 						</span>
 					}
 				/>
