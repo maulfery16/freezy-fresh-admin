@@ -56,6 +56,7 @@ const BranchModifyPage = () => {
 			data.append('name[en]', values.en_name);
 			data.append('address', values.address);
 			data.append('region_id', values.region_id);
+			data.append('is_active', values.is_active);
 			data.append('province_name', values.province_name);
 			data.append('city_name', values.city_name);
 			data.append('district_name', values.district_name);
@@ -161,7 +162,7 @@ const BranchModifyPage = () => {
 
 									<Col span={12}>
 										<MoleculeSelectInputGroup
-											name="status"
+											name="is_active"
 											label="Status"
 											placeholder="Status"
 											required
@@ -279,7 +280,7 @@ const BranchModifyPage = () => {
 
 									<Col span={12}>
 										<MoleculeTextInputGroup
-											name="adddress"
+											name="address"
 											label="Alamat"
 											placeholder="Masukkan Alamat"
 											type="text"
