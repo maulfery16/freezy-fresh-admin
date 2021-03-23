@@ -2,16 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import ReactMoment from 'react-moment';
-import {
-	Col,
-	Collapse,
-	message,
-	Row,
-	Skeleton,
-	Space,
-	Tabs,
-	Typography,
-} from 'antd';
+import { Col, message, Row, Skeleton, Space, Tabs, Typography } from 'antd';
 import { useLocation, useParams } from 'react-router';
 
 import AtomCard from '../../../components/atoms/card';
@@ -23,6 +14,7 @@ import OrganismLayout from '../../../components/organisms/layout';
 import OrganismProductBranchDatatable from '../../../components/organisms/datatable/product-branch-datatable';
 
 import ProductService from '../../../services/product';
+import MoleculeProductAttributes from '../../../components/molecules/product/attributes';
 
 const OrganismProductDetail = () => {
 	const [isFetchingDetail, setIsFetchingDetail] = useState(true);
@@ -325,75 +317,15 @@ const OrganismProductDetail = () => {
 					<AtomCard title="">
 						<Tabs>
 							<Tabs.TabPane key="1" tab="Attribut">
-								<Collapse bordered={false} className="bg-white">
-									{product.attributes
-										? product.attributes.map(
-												(attribute, index) => (
-													<Collapse.Panel
-														header={
-															attribute.name.id
-														}
-														key={`vrnts_${index}`}
-													>
-														<Row gutter={[24, 24]}>
-															<Col span={12}>
-																<MoleculeInfoGroup
-																	title=""
-																	content={`${attribute.name.id} | ${attribute.name.en}`}
-																/>
-															</Col>
-
-															<Col span={12}>
-																<MoleculeInfoGroup
-																	title=""
-																	content={
-																		<Space
-																			direction="vertical"
-																			size={
-																				0
-																			}
-																		>
-																			{attribute.values.map(
-																				(
-																					item,
-																					itemIdx
-																				) => (
-																					<span
-																						key={`vrtns_${index}_itms_${itemIdx}`}
-																					>
-																						{`${item.id} | ${item.en}`}
-																					</span>
-																				)
-																			)}
-																		</Space>
-																	}
-																/>
-															</Col>
-														</Row>
-													</Collapse.Panel>
-												)
-										  )
-										: null}
-								</Collapse>
+								<MoleculeProductAttributes
+									attributes={product.attributes}
+								/>
 							</Tabs.TabPane>
 
 							<Tabs.TabPane key="2" tab="Varian">
-								<Collapse bordered={false} className="bg-white">
-									{product.variants
-										? product.variants.map(
-												(varian, index) => (
-													<Collapse.Panel
-														header={varian.name.id}
-														key={`attrbts_${index}`}
-													>
-														<MoleculeProductVariants
-															{...varian}
-														/>
-													</Collapse.Panel>
-												)
-										  )
-										: null}
-								</Collapse>
+								<MoleculeProductVariants
+									variants={product.variants}
+								/>
 							</Tabs.TabPane>
 						</Tabs>
 					</AtomCard>

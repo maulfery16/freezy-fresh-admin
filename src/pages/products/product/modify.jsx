@@ -1,10 +1,9 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-unused-vars */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
 	Col,
-	Collapse,
 	Form,
 	message,
 	Row,
@@ -24,36 +23,33 @@ import MoleculeTextInputGroup from '../../../components/molecules/input-group/te
 import OrganismLayout from '../../../components/organisms/layout';
 import OrganismProductBranchDatatable from '../../../components/organisms/datatable/product-branch-datatable';
 
-import ProductService from '../../../services/product';
 import MoleculeNumberInputGroup from '../../../components/molecules/input-group/number-input';
-import AtomSecondaryButton from '../../../components/atoms/button/secondary-button';
 import MoleculeProductAttributesInput from '../../../components/molecules/product/attributes-input';
+import MoleculeFileInputGroup from '../../../components/molecules/input-group/file-input';
+import MoleculeProductVariantsInput from '../../../components/molecules/product/variants-input';
+
+import MasterService from '../../../services/master';
+import ProductService from '../../../services/product';
 
 const ProductModifyPage = () => {
-	const location = useLocation();
+	const beautyImageRef = useRef();
+	const inspirationImageRef = useRef();
+	const packagingImageRef = useRef();
+	const whiteImageRef = useRef();
+
+	const masterService = new MasterService();
 	const productService = new ProductService();
+
+	const location = useLocation();
 	const isCreating = location.pathname.includes('add') ? true : false;
 
+	const { id } = useParams();
 	const [attributes, setAttributes] = useState([]);
 	const [fullDescEn, setFullDescEn] = useState('');
 	const [fullDescId, setFullDescId] = useState('');
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [product, setProduct] = useState(null);
-	const { id } = useParams();
-
-	const addAttribute = () => {
-		let currentAttributes = [...attributes];
-		currentAttributes.push({
-			name: { id: 'Nama atribut', en: 'Attribute name' },
-			values: [{ id: 'Nilai atribut', en: 'attributes value' }],
-		});
-		setAttributes(currentAttributes);
-	};
-
-	const deleteAttribute = (index) => {
-		let currentAttributes = [...attributes];
-		currentAttributes.splice(index, 1);
-		setAttributes(currentAttributes);
-	};
+	const [variants, setVariants] = useState([]);
 
 	const getProductDetail = async () => {
 		try {
@@ -64,31 +60,43 @@ const ProductModifyPage = () => {
 		}
 	};
 
-	const modifyAttributeValue = (attrIdx, type, itemIdx) => {
-		let currentAttributes = [...attributes];
+	const submit = async (values) => {
+		setIsSubmitting(true);
 
-		if (type === 'DELETE') {
-			currentAttributes[attrIdx].values.splice(itemIdx, 1);
-		} else {
-			currentAttributes[attrIdx].values.push({
-				id: 'Nilai atribut',
-				en: 'attributes value',
-			});
+		try {
+			await uploadProductImages();
+		} catch (error) {
+			message.error(error.message);
+		} finally {
+			setIsSubmitting(false);
 		}
-
-		setAttributes(currentAttributes);
 	};
 
-	const setAttributeValue = ({ itemIdx, lang, attrKey, index, value }) => {
-		let currentAttributes = [...attributes];
+	const uploadProductImages = async () => {
+		try {
+			const images = {
+				beauty_image: await beautyImageRef.current.getImage(),
+				white_image: await whiteImageRef.current.getImage(),
+				inspiration_image: await inspirationImageRef.current.getImage(),
+				packaging_image: await packagingImageRef.current.getImage(),
+			};
 
-		if (typeof itemIdx !== 'undefined') {
-			currentAttributes[index][attrKey][itemIdx][lang] = value;
-		} else {
-			currentAttributes[index][attrKey][lang] = value;
+			for (const key in images) {
+				if (images[key]) {
+					const data = new FormData();
+					data.append('file', images[key]);
+					data.append('type', 'image');
+
+					images[key] = await masterService.uploadImage(data);
+				} else {
+					images[key] = product[key];
+				}
+			}
+
+			return images;
+		} catch (error) {
+			message.error(error.message);
 		}
-
-		setAttributes(currentAttributes);
 	};
 
 	useEffect(() => {
@@ -125,8 +133,8 @@ const ProductModifyPage = () => {
 				>
 					<Form
 						className="w-100 mt4"
-						name="modify_promotion"
-						// initialValues={setPromotionInitialValues()}
+						name="modify_product"
+						// initialValues={setproductInitialValues()}
 						// onFinish={submit}
 						onFinishFailed={(error) => {
 							message.error(`Failed: ${error}`);
@@ -136,6 +144,44 @@ const ProductModifyPage = () => {
 						{' '}
 						<AtomCard title="Info Produk">
 							<Row gutter={[24, 24]}>
+								<Col span={24}>
+									<MoleculeFileInputGroup
+										description="Format gambar .jpg .jpeg .png, Untuk foto ukuran minimum 450 x 450px"
+										label="Foto Banner"
+										fileInputs={[
+											{
+												label: `Foto Produk "Cantik"`,
+												required: true,
+												ref: beautyImageRef,
+												defaultValue: product
+													? product.beauty_image
+													: null,
+											},
+											{
+												label: `Foto Produk "Putih Terbang"`,
+												ref: whiteImageRef,
+												defaultValue: product
+													? product.white_image
+													: null,
+											},
+											{
+												label: `Foto Produk "Inspirasi"`,
+												ref: inspirationImageRef,
+												defaultValue: product
+													? product.inspiration_image
+													: null,
+											},
+											{
+												label: `Foto Produk "Packaging"`,
+												ref: packagingImageRef,
+												defaultValue: product
+													? product.packaging_image
+													: null,
+											},
+										]}
+									/>
+								</Col>
+
 								<Col span={24}>
 									<MoleculeTextInputGroup
 										name="sku_id"
@@ -394,60 +440,18 @@ const ProductModifyPage = () => {
 					<AtomCard title="">
 						<Tabs>
 							<Tabs.TabPane key="1" tab="Attribut">
-								<AtomSecondaryButton
-									onClick={() => addAttribute()}
-									className="br2 mv2"
-									size="large"
-								>
-									Tambah Attribut
-								</AtomSecondaryButton>
-
-								<Collapse
-									bordered={false}
-									className="bg-white"
-									defaultActiveKey={[0]}
-								>
-									{attributes.map((attribute, index) => (
-										<Collapse.Panel
-											header={attribute.name.id}
-											key={index}
-										>
-											<MoleculeProductAttributesInput
-												attrIdx={index}
-												attribute={attribute}
-												deleteAttribute={
-													deleteAttribute
-												}
-												modifyAttributeValue={
-													modifyAttributeValue
-												}
-												setAttributesValue={
-													setAttributeValue
-												}
-											/>
-										</Collapse.Panel>
-									))}
-								</Collapse>
+								<MoleculeProductAttributesInput
+									attributes={attributes}
+									setAttributes={setAttributes}
+								/>
 							</Tabs.TabPane>
 
-							{/* <Tabs.TabPane key="2" tab="Varian">
-								<Collapse bordered={false} className="bg-white">
-									{product.variants
-										? product.variants.map(
-												(varian, index) => (
-													<Collapse.Panel
-														header={varian.name.id}
-														key={`attrbts_${index}`}
-													>
-														<MoleculeProductVariants
-															{...varian}
-														/>
-													</Collapse.Panel>
-												)
-										  )
-										: null}
-								</Collapse>
-							</Tabs.TabPane> */}
+							<Tabs.TabPane key="2" tab="Varian">
+								<MoleculeProductVariantsInput
+									setVariants={setVariants}
+									variants={variants}
+								/>
+							</Tabs.TabPane>
 						</Tabs>
 					</AtomCard>
 

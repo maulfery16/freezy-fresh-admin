@@ -48,6 +48,7 @@ const LoginPages = () => {
 		try {
 			const { access_token, refresh_token } = await authService.login({
 				...values,
+				username: values.email,
 				grant_type: 'password',
 			});
 
