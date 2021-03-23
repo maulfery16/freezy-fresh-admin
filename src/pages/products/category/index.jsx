@@ -124,7 +124,7 @@ const CategoryPage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`base_categories`}
+				dataSourceURL={`base-categories`}
 				ref={categoryTableRef}
 				searchInput={true}
 				title={`Kategori Dasar`}
