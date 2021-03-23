@@ -158,17 +158,6 @@ const BrandModifyPage = () => {
 											label="Jumlah Followers Sosmed"
 											name="followers"
 											placeholder="Followers"
-											formatter={(value) =>
-												value
-													.toString()
-													.replace(
-														/\B(?=(\d{3})+(?!\d))/g,
-														'.'
-													)
-											}
-											parser={(value) =>
-												value.replaceAll('.', '')
-											}
 										/>
 									</Col>
 								</Row>

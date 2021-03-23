@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Col, Row } from 'antd';
 
-import AtomImage from '../atoms/image';
-import MoleculeInfoGroup from './info-group';
+import AtomImage from '../../atoms/image';
+import MoleculeInfoGroup from '../info-group';
 
 const MoleculeProductVariants = (props) => {
 	return (

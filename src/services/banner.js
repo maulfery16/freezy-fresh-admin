@@ -33,8 +33,8 @@ export default class BannerService extends RequestAdapterService {
 
 	async editBanner(id, banner) {
 		try {
-			const { data } = await super.sendPutMultipartRequest(
-				`${this.baseUrl}/v1/banners/${id}`,
+			const { data } = await super.sendPostMultipartRequest(
+				`${this.baseUrl}/v1/banners/${id}?_method=PATCH`,
 				banner
 			);
 

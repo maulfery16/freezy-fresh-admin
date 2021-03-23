@@ -12,9 +12,14 @@ const MoleculeNumberInputGroup = (props) => {
 
 				<Form.Item name={props.name} noStyle>
 					<InputNumber
-						{...props}
 						className={`br3 ba bw1 b--black-10 pv2 ph3 w-100 ${props.className}`}
 						size="small"
+						formatter={(value) =>
+							value
+								.toString()
+								.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+						}
+						parser={(value) => value.replaceAll('.', '')}
 					/>
 				</Form.Item>
 			</Space>

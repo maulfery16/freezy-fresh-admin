@@ -5,6 +5,7 @@ import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import AtomBranchSelection from '../../components/atoms/selection/branch';
 import AtomCard from '../../components/atoms/card';
+import AtomProductOwnerSelect from '../../components/atoms/selection/product-owner';
 import MoleculeFileInputGroup from '../../components/molecules/input-group/file-input';
 import MoleculeModifyActionButtons from '../../components/molecules/modify-action-buttons';
 import MoleculePasswordInputGroup from '../../components/molecules/input-group/password-input';
@@ -296,15 +297,7 @@ const AdminModifyPage = () => {
 									</Col>
 
 									<Col span={12}>
-										<MoleculeSelectInputGroup
-											label="Perusahaan"
-											name="company"
-											placeholder="Perusahaan"
-											required
-											data={{
-												url: 'product-owners',
-											}}
-										/>
+										<AtomProductOwnerSelect required />
 									</Col>
 								</Row>
 							</AtomCard>

@@ -1,5 +1,4 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-/* eslint-disable no-unused-vars */
 
 import React, { useEffect, useState } from 'react';
 import ReactMoment from 'react-moment';
@@ -19,7 +18,7 @@ import AtomCard from '../../../components/atoms/card';
 import MoleculeImageGroup from '../../../components/molecules/molecule-image-group';
 import MoleculeInfoGroup from '../../../components/molecules/info-group';
 import MoleculeMarkdownRenderer from '../../../components/molecules/markdown-renderer';
-import MoleculeProductVariants from '../../../components/molecules/product-variants';
+import MoleculeProductVariants from '../../../components/molecules/product/variants';
 import OrganismLayout from '../../../components/organisms/layout';
 import OrganismProductBranchDatatable from '../../../components/organisms/datatable/product-branch-datatable';
 
@@ -169,7 +168,10 @@ const OrganismProductDetail = () => {
 							<Col span={12}>
 								<MoleculeInfoGroup
 									title="Kategori Tambahan"
-									content={product.additional_category.id}
+									content={
+										product.additional_category &&
+										product.additional_category.id
+									}
 								/>
 							</Col>
 
@@ -226,7 +228,8 @@ const OrganismProductDetail = () => {
 								<MoleculeInfoGroup
 									title="Produk Serupa"
 									content={
-										product.similar_products
+										product.similar_products &&
+										product.similar_products.length > 0
 											? product.similar_products
 													.map((product) => product)
 													.join(', ')
@@ -239,7 +242,8 @@ const OrganismProductDetail = () => {
 								<MoleculeInfoGroup
 									title="Produk Terkait"
 									content={
-										product.related_products
+										product.related_products &&
+										product.related_products.length > 0
 											? product.related_products
 													.map((product) => product)
 													.join(', ')
