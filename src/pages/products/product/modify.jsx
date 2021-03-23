@@ -3,7 +3,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import {
-	Button,
 	Col,
 	Form,
 	message,
@@ -47,26 +46,10 @@ const ProductModifyPage = () => {
 	const { id } = useParams();
 	const [attributes, setAttributes] = useState([]);
 	const [fullDescEn, setFullDescEn] = useState('');
-	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [fullDescId, setFullDescId] = useState('');
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [product, setProduct] = useState(null);
-	const [variants, setVariants] = useState([
-		{
-			name: {
-				en: 'BLUE|SMALL',
-				id: 'BIRU|KECIL',
-			},
-			height_cm: '10',
-			long_cm: '10',
-			sku_id: 'SKU0071',
-			supplier: 'Unilever',
-			upc_code: '1234567890',
-			weight_gr: '1000',
-			wide_cm: '10',
-			image:
-				'https://api.ms-freezy-fresh.local/storage/uploads/medias/generals/P5e6sOeOXvi6r61Njk91.jpg',
-		},
-	]);
+	const [variants, setVariants] = useState([]);
 
 	const getProductDetail = async () => {
 		try {
@@ -139,8 +122,6 @@ const ProductModifyPage = () => {
 					{`${isCreating ? 'Tambah' : 'Ubah'} Produk`.toUpperCase()}
 				</span>
 			</Typography.Title>
-
-			<Button onClick={() => uploadProductImages()}>Cek upload</Button>
 
 			{!isCreating && !product ? (
 				<Skeleton active />
