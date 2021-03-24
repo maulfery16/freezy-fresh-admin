@@ -30,7 +30,6 @@ import MoleculeProductVariantsInput from '../../../components/molecules/product/
 
 import MasterService from '../../../services/master';
 import ProductService from '../../../services/product';
-import { rest } from 'underscore';
 
 const ProductModifyPage = () => {
 	const beautyImageRef = useRef();
