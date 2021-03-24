@@ -38,7 +38,7 @@ const CategoryPage = () => {
 			title: 'Foto Icon',
 			dataIndex: 'image',
 			render: (image) => <AtomImage preview src={image} size={70} />,
-			csvRender: (item) => item.iamge,
+			csvRender: (item) => item.image,
 		},
 		{
 			align: 'center',
@@ -57,7 +57,12 @@ const CategoryPage = () => {
 				) : (
 					'-'
 				),
-			csvRender: (item) => (item.color ? item.color.name : '-'),
+			csvRender: (item) =>
+				item.color
+					? typeof item.color.name === 'string'
+						? item.color.name
+						: `${item.color.name.id} / ${item.color.name.en}`
+					: '',
 		},
 		{
 			align: 'center',
@@ -124,7 +129,7 @@ const CategoryPage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`base_categories`}
+				dataSourceURL={`base-categories`}
 				ref={categoryTableRef}
 				searchInput={true}
 				title={`Kategori Dasar`}
