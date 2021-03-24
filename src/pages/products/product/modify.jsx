@@ -247,19 +247,11 @@ const ProductModifyPage = () => {
 
 								<Col span={24}>
 									<MoleculeTextInputGroup
-										name="sku_id"
 										label="SKU ID"
+										name="sku_id"
 										placeholder="SKU ID"
 										required
-										type="text"
-										rules={[
-											{
-												message: `Tidak boleh mengandung special character kecuali '-' dan '/'`,
-												pattern: new RegExp(
-													/[~`!@#$%^&()_={}[\]:;,.<>+?]/
-												),
-											},
-										]}
+										type="code"
 									/>
 								</Col>
 
