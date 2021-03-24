@@ -40,7 +40,7 @@ const MoleculeProductVariantsInput = (props) => {
 		<Collapse bordered={false} className="bg-white">
 			{props.variants.map((varian, index) => (
 				<Collapse.Panel
-					header={varian.name.id.replace('|', ' ')}
+					header={varian.name.id.replaceAll('|', ' ')}
 					key={index}
 				>
 					<Row gutter={[24, 24]}>

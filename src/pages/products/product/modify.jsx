@@ -30,6 +30,7 @@ import MoleculeProductVariantsInput from '../../../components/molecules/product/
 
 import MasterService from '../../../services/master';
 import ProductService from '../../../services/product';
+import { rest } from 'underscore';
 
 const ProductModifyPage = () => {
 	const beautyImageRef = useRef();
@@ -50,6 +51,69 @@ const ProductModifyPage = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [product, setProduct] = useState(null);
 	const [variants, setVariants] = useState([]);
+
+	const generateVariants = () => {
+		const combineVariantWithExisting = (
+			existingVariants,
+			incomingVariants
+		) => {
+			let combinedVariants = [...existingVariants];
+			const isVariantExist = (item) => {
+				return existingVariants.some(
+					(newVariants) => newVariants.name.id === item
+				);
+			};
+
+			incomingVariants.forEach((variant) => {
+				if (!isVariantExist(variant.id)) {
+					combinedVariants.push({ name: { ...variant } });
+				}
+			});
+
+			return combinedVariants;
+		};
+
+		try {
+			let newVariants = [...variants];
+			let values = attributes.map((attr) => attr.values);
+
+			if (values.length === 1) {
+				newVariants = combineVariantWithExisting(
+					newVariants,
+					values[0]
+				);
+			} else {
+				let combiningAvailable = true;
+
+				while (combiningAvailable) {
+					const [firstValues, secondValues, ...other] = values;
+					combiningAvailable = other.length > 0;
+
+					let combinedValues = [];
+					firstValues.forEach((firstValue) => {
+						secondValues.forEach((secondValue) => {
+							combinedValues.push({
+								id: [firstValue.id, secondValue.id].join('|'),
+								en: [firstValue.en, secondValue.en].join('|'),
+							});
+						});
+					});
+
+					values = [combinedValues, ...other];
+				}
+
+				newVariants = combineVariantWithExisting(
+					newVariants,
+					values[0]
+				);
+			}
+
+			setVariants(newVariants);
+		} catch (error) {
+			console.error(error);
+			message.error('Terjadi kesalah saat menghasilkan data varians');
+		}
+	};
 
 	const getProductDetail = async () => {
 		try {
@@ -438,15 +502,24 @@ const ProductModifyPage = () => {
 					</Form>
 
 					<AtomCard title="">
-						<Tabs>
+						<Tabs
+							onTabClick={(key) => {
+								if (key === '2') generateVariants();
+							}}
+						>
 							<Tabs.TabPane key="1" tab="Attribut">
 								<MoleculeProductAttributesInput
 									attributes={attributes}
 									setAttributes={setAttributes}
+									setVariants={setVariants}
 								/>
 							</Tabs.TabPane>
 
-							<Tabs.TabPane key="2" tab="Varian">
+							<Tabs.TabPane
+								key="2"
+								onClick={() => generateVariants()}
+								tab="Varian"
+							>
 								<MoleculeProductVariantsInput
 									setVariants={setVariants}
 									variants={variants}

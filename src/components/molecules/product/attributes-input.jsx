@@ -13,12 +13,15 @@ function MoleculeProductAttributesInput(props) {
 		});
 
 		props.setAttributes(currentAttributes);
+		props.setVariants([]);
 	};
 
 	const deleteAttribute = (index) => {
 		let currentAttributes = [...props.attributes];
 		currentAttributes.splice(index, 1);
+
 		props.setAttributes(currentAttributes);
+		props.setVariants([]);
 	};
 
 	const modifyAttributeValue = (attrIdx, type, itemIdx) => {
@@ -181,19 +184,19 @@ function MoleculeProductAttributesInput(props) {
 }
 
 MoleculeProductAttributesInput.propTypes = {
-	attrIdx: PropTypes.number,
-	deleteAttribute: PropTypes.func,
-	modifyAttributeValue: PropTypes.func,
-	setAttributeValue: PropTypes.func,
-	attribute: PropTypes.shape({
-		name: PropTypes.shape({
-			id: PropTypes.string,
-			en: PropTypes.string,
-		}),
-		values: PropTypes.arrayOf(
-			PropTypes.shape({ id: PropTypes.string, en: PropTypes.string })
-		),
-	}),
+	setAttributes: PropTypes.func,
+	setVariants: PropTypes.func,
+	attributes: PropTypes.arrayOf(
+		PropTypes.shape({
+			name: PropTypes.shape({
+				id: PropTypes.string,
+				en: PropTypes.string,
+			}),
+			values: PropTypes.arrayOf(
+				PropTypes.shape({ id: PropTypes.string, en: PropTypes.string })
+			),
+		})
+	),
 };
 
 export default MoleculeProductAttributesInput;
