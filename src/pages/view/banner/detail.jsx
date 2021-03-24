@@ -105,7 +105,7 @@ const BannerModifyPage = () => {
 										title="Nama Promo (ID)"
 										content={
 											banner.promotion &&
-											banner.promotion.name
+											banner.promotion.title.id
 										}
 									/>
 								</Col>

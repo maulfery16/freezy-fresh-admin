@@ -23,7 +23,7 @@ const MoleculeTextInputGroup = (props) => {
 		return null;
 	};
 
-	const rules = [
+	let rules = [
 		{
 			message:
 				props.validationMessage ||
@@ -45,6 +45,10 @@ const MoleculeTextInputGroup = (props) => {
 			required: true,
 		});
 
+	if (props.rules) {
+		rules = [...rules, ...props.rules];
+	}
+
 	return (
 		<Form.Item>
 			<Typography.Text>
@@ -64,7 +68,7 @@ const MoleculeTextInputGroup = (props) => {
 
 MoleculeTextInputGroup.propTypes = {
 	label: PropTypes.string,
-	name: PropTypes.string.isRequired,
+	name: PropTypes.string,
 	placeholder: PropTypes.string,
 	type: PropTypes.string,
 };

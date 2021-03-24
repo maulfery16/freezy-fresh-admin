@@ -42,7 +42,10 @@ const AtomFileInput = forwardRef((props, ref) => {
 		);
 	};
 
-	const setImage = ({ fileList: files }) => setfileList(files);
+	const setImage = ({ fileList: files, file }) => {
+		setfileList(files);
+		if (props.onChange) props.onChange(file);
+	};
 
 	const setUploadIcon = () => {
 		if (props.isMobileImage) return UploadMobileIcon;
