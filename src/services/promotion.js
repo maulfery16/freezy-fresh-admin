@@ -1,6 +1,6 @@
 import RequestAdapterService from './request-adapter';
 
-export default class promotionservice extends RequestAdapterService {
+export default class PromotionService extends RequestAdapterService {
 	async createPromotion(promotion) {
 		try {
 			const { data } = await super.sendPostMultipartRequest(
@@ -61,7 +61,7 @@ export default class promotionservice extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Add products to promotion: ${super.generateErrorMessage(
+				`Fail adding products to promotion: ${super.generateErrorMessage(
 					error
 				)}`
 			);

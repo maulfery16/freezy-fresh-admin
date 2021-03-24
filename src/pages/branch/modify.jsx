@@ -30,9 +30,15 @@ const BranchModifyPage = () => {
 
 	useEffect(() => {
 		if (provinceCode) cityOptionsRef.current.refetchData();
+	}, [provinceCode]);
+
+	useEffect(() => {
 		if (cityCode) districthOptionsRef.current.refetchData();
+	}, [cityCode]);
+
+	useEffect(() => {
 		if (districtCode) subDistrictOptionsRef.current.refetchData();
-	}, [provinceCode, cityCode, districtCode]);
+	}, [districtCode]);
 
 	const getBranchDetail = async (id) => {
 		try {
@@ -226,7 +232,7 @@ const BranchModifyPage = () => {
 											label="Kota/Kabupaten"
 											name="city_name"
 											placeholder="Pilih Kota/Kabupaten"
-											branchOptionsRef={cityOptionsRef}
+											optionsRef={cityOptionsRef}
 											data={{
 												onChange: (value) =>
 													setCityCode(value),
@@ -247,7 +253,7 @@ const BranchModifyPage = () => {
 											label="Kecamatan"
 											name="district_name"
 											placeholder="Pilih Kecamatan"
-											branchOptionsRef={cityOptionsRef}
+											optionsRef={districthOptionsRef}
 											data={{
 												onChange: (value) =>
 													setDistrictCode(value),
@@ -268,9 +274,7 @@ const BranchModifyPage = () => {
 											label="Kelurahan"
 											name="subdistrict_name"
 											placeholder="Pilih Kelurahan"
-											branchOptionsRef={
-												subDistrictOptionsRef
-											}
+											optionsRef={subDistrictOptionsRef}
 											data={{
 												url: `regions/fetch/sub-districts/${districtCode}`,
 											}}

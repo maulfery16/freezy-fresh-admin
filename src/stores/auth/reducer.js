@@ -3,8 +3,8 @@ import AuthTypes from './types';
 const INITIAL_STATE = {
 	isLoggedIn: false,
 	isRememberMe: false,
-	token: '',
-	refreshToken: '',
+	token: null,
+	refreshToken: null,
 	user: {
 		id: null,
 		first_name: 'John',
