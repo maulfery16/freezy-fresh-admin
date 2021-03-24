@@ -83,7 +83,7 @@ const LoginPages = () => {
 					<Space className="w-100" direction="vertical" size={20}>
 						<Form.Item
 							className="mb0"
-							name="email"
+							name="username"
 							rules={[
 								{
 									type: 'email',
