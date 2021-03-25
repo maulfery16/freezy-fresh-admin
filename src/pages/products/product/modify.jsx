@@ -45,32 +45,96 @@ const ProductModifyPage = () => {
 
 	const { id } = useParams();
 	const [attributes, setAttributes] = useState([]);
+	const [branches, setBranches] = useState([]);
 	const [fullDescEn, setFullDescEn] = useState('');
 	const [fullDescId, setFullDescId] = useState('');
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [product, setProduct] = useState(null);
+	const [productVariants, setProductVariants] = useState([]);
 	const [variants, setVariants] = useState([]);
 
-	const generateVariants = () => {
-		const combineVariantWithExisting = (
-			existingVariants,
-			incomingVariants
-		) => {
-			let combinedVariants = [...existingVariants];
-			const isVariantExist = (item) => {
-				return existingVariants.some(
-					(newVariants) => newVariants.name.id === item
-				);
-			};
+	const combineProductVariantWithExisting = (
+		existingProductVariants,
+		incomingVProductVariants
+	) => {
+		if (existingProductVariants) return incomingVProductVariants;
 
-			incomingVariants.forEach((variant) => {
-				if (!isVariantExist(variant.id)) {
-					combinedVariants.push({ name: { ...variant } });
-				}
+		let combinedProductVariants = [...existingProductVariants];
+		const isProductVariantExist = (item) => {
+			return existingProductVariants.some((productVariant) => {
+				return (
+					productVariant.branch.id === item.branch.id &&
+					productVariant.sku_id === item.sku_id
+				);
+			});
+		};
+
+		incomingVProductVariants.forEach((variant) => {
+			if (!isProductVariantExist(variant.id)) {
+				combinedProductVariants.push({ ...variant });
+			}
+		});
+
+		return combinedProductVariants;
+	};
+
+	const combineVariantWithExisting = (existingVariants, incomingVariants) => {
+		let combinedVariants = [...existingVariants];
+		const isVariantExist = (item) => {
+			return existingVariants.some((variant) => variant.name.id === item);
+		};
+
+		incomingVariants.forEach((variant) => {
+			if (!isVariantExist(variant.id)) {
+				combinedVariants.push({ name: { ...variant } });
+			}
+		});
+
+		return combinedVariants;
+	};
+
+	const generateProductsVariants = () => {
+		try {
+			let newProductVariants = [...productVariants];
+			let generatedProductsVariants = [];
+
+			branches.map((branch) => {
+				variants.map((variant) => {
+					generatedProductsVariants.push({
+						branch_id: branch.branch_id,
+						branch_sku_id: branch.branch_id + variant.sku_id,
+						discount_percentage: '',
+						fixed_price: 0,
+						is_freezy_pick: true,
+						is_manage_stock: true,
+						price: '',
+						published_stock: 0,
+						sku_id: variant.sku_id,
+						variant: variant.name.id,
+						branch: {
+							id: branch.branch,
+						},
+					});
+				});
 			});
 
-			return combinedVariants;
-		};
+			newProductVariants = combineProductVariantWithExisting(
+				newProductVariants,
+				generatedProductsVariants
+			);
+
+			setProductVariants(newProductVariants);
+		} catch (error) {
+			console.error(error);
+			message.error('Terjadi kesalah saat membuat data product variants');
+		}
+	};
+
+	const generateVariants = () => {
+		if (attributes.length === 0) {
+			message.warning('Belum ada attrbutes yang ditambahkan');
+			return;
+		}
 
 		try {
 			let newVariants = [...variants];
@@ -109,8 +173,7 @@ const ProductModifyPage = () => {
 
 			setVariants(newVariants);
 		} catch (error) {
-			console.error(error);
-			message.error('Terjadi kesalah saat menghasilkan data varians');
+			message.error('Terjadi kesalah saat membuat data varians');
 		}
 	};
 
@@ -167,6 +230,12 @@ const ProductModifyPage = () => {
 			if (!isCreating) await getProductDetail();
 		})();
 	}, []);
+
+	useEffect(() => {
+		if (branches.length > 0) {
+			generateProductsVariants();
+		}
+	}, [branches, variants]);
 
 	return (
 		<OrganismLayout
@@ -244,7 +313,6 @@ const ProductModifyPage = () => {
 										]}
 									/>
 								</Col>
-
 								<Col span={24}>
 									<MoleculeTextInputGroup
 										label="SKU ID"
@@ -254,7 +322,6 @@ const ProductModifyPage = () => {
 										type="code"
 									/>
 								</Col>
-
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										name="name_id"
@@ -264,7 +331,6 @@ const ProductModifyPage = () => {
 										type="text"
 									/>
 								</Col>
-
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										name="name_en"
@@ -274,7 +340,6 @@ const ProductModifyPage = () => {
 										type="text"
 									/>
 								</Col>
-
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										label="Deskripsi Singkat (ID)"
@@ -288,7 +353,6 @@ const ProductModifyPage = () => {
 										}}
 									/>
 								</Col>
-
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										label="Deskripsi Singkat (EN)"
@@ -302,7 +366,6 @@ const ProductModifyPage = () => {
 										}}
 									/>
 								</Col>
-
 								<Col span={12}>
 									<MoleculeTextEditorGroup
 										label="Deskripsi Lengkap (ID)"
@@ -311,7 +374,6 @@ const ProductModifyPage = () => {
 										required={true}
 									/>
 								</Col>
-
 								<Col span={12}>
 									<MoleculeTextEditorGroup
 										label="Deskripsi Lengkap (EN)"
@@ -320,7 +382,6 @@ const ProductModifyPage = () => {
 										required={true}
 									/>
 								</Col>
-
 								<Col span={12}>
 									<MoleculeSelectInputGroup
 										label="Kategori Tambahan"
@@ -336,9 +397,19 @@ const ProductModifyPage = () => {
 										}}
 									/>
 								</Col>
-
 								<Col span={12}>
 									<AtomBranchSelection
+										onChange={(_, options) => {
+											if (branches.length !== options) {
+												setBranches(
+													options.map((option) => ({
+														branch_id: option.value,
+														branch: option.children,
+													}))
+												);
+											}
+											generateProductsVariants();
+										}}
 										mode="multiple"
 										required
 									/>
@@ -359,11 +430,9 @@ const ProductModifyPage = () => {
 										}}
 									/>
 								</Col>
-
 								<Col span={12}>
 									<AtomProductOwnerSelect required />
 								</Col>
-
 								<Col span={12}>
 									<MoleculeSelectInputGroup
 										label="Zona"
@@ -379,7 +448,6 @@ const ProductModifyPage = () => {
 										}}
 									/>
 								</Col>
-
 								<Col span={12}>
 									<MoleculeSelectInputGroup
 										label="Brand"
@@ -395,7 +463,6 @@ const ProductModifyPage = () => {
 										}}
 									/>
 								</Col>
-
 								<Col span={12}>
 									<MoleculeNumberInputGroup
 										id="age_limit"
@@ -404,7 +471,6 @@ const ProductModifyPage = () => {
 										placeholder="Batas Umur"
 									/>
 								</Col>
-
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										name="supplier"
@@ -414,7 +480,6 @@ const ProductModifyPage = () => {
 										type="text"
 									/>
 								</Col>
-
 								<Col span={12}>
 									<MoleculeSelectInputGroup
 										label="Produk Serupa"
@@ -431,7 +496,6 @@ const ProductModifyPage = () => {
 										}}
 									/>
 								</Col>
-
 								<Col span={12}>
 									<MoleculeSelectInputGroup
 										label="Produk Terkait"
@@ -448,7 +512,6 @@ const ProductModifyPage = () => {
 										}}
 									/>
 								</Col>
-
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										name="txt1"
@@ -458,7 +521,6 @@ const ProductModifyPage = () => {
 										type="text"
 									/>
 								</Col>
-
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										name="txt2"
@@ -468,7 +530,6 @@ const ProductModifyPage = () => {
 										type="text"
 									/>
 								</Col>
-
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										name="txt3"
@@ -478,7 +539,6 @@ const ProductModifyPage = () => {
 										type="text"
 									/>
 								</Col>
-
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										name="txt4"
@@ -502,7 +562,9 @@ const ProductModifyPage = () => {
 								<MoleculeProductAttributesInput
 									attributes={attributes}
 									setAttributes={setAttributes}
-									setVariants={setVariants}
+									setVariants={(newVariants) => {
+										setVariants(newVariants);
+									}}
 								/>
 							</Tabs.TabPane>
 
@@ -519,10 +581,9 @@ const ProductModifyPage = () => {
 						</Tabs>
 					</AtomCard>
 
-					{/*	<OrganismProductBranchDatatable
-						defaultData={product.details}
-						isReadOnly
-					/> */}
+					<OrganismProductBranchDatatable
+						defaultData={productVariants}
+					/>
 				</Space>
 			)}
 		</OrganismLayout>

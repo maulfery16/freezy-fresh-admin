@@ -1,14 +1,21 @@
 /* eslint-disable react/display-name */
 import PropTypes from 'prop-types';
-import React, { forwardRef, useImperativeHandle, useState } from 'react';
+import React, {
+	forwardRef,
+	useEffect,
+	useImperativeHandle,
+	useState,
+} from 'react';
 import ReactMoment from 'react-moment';
 import {
 	Col,
 	Form,
 	Input,
 	InputNumber,
+	message,
 	Popconfirm,
 	Row,
+	Select,
 	Space,
 	Table,
 } from 'antd';
@@ -29,22 +36,14 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		{
 			title: 'Cabang',
 			dataIndex: 'branches',
-			render: (_, record) => record.branch || record.branch_id,
+			render: (_, record) => record.branch.id,
 			sorter: true,
 		},
 		{
 			title: 'Varian',
-			dataIndex: 'variants',
-			render: (variant) =>
-				variant
-					? variant
-							.map(
-								(varia) =>
-									`${varia.attribute.id} ${varia.variant.id}`
-							)
-							.join('')
-					: '-',
+			dataIndex: 'variant',
 			sorter: true,
+			render: (variant) => variant.replaceAll('|', ' '),
 		},
 		{
 			title: 'Rating',
@@ -72,12 +71,14 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		{
 			title: 'Freezy Pick',
 			dataIndex: 'is_freezy_pick',
+			editable: true,
 			render: (pick) => (pick ? 'Ya' : 'Tidak'),
 			sorter: true,
 		},
 		{
 			title: 'Kelola Stock',
 			dataIndex: 'is_manage_stock',
+			editable: true,
 			render: (manageable) => (manageable ? 'Ya' : 'Tidak'),
 			sorter: true,
 		},
@@ -119,12 +120,19 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 			title: 'Harga Normal',
 			dataIndex: 'price',
 			render: (price) => `Rp. ${price}`,
+			editable: true,
 			sorter: true,
 		},
 		{
 			title: 'Harga Setelah Diskon',
 			dataIndex: 'fixed_price',
-			render: (price) => <AtomNumberFormat prefix="Rp. " value={price} />,
+			render: (price) =>
+				typeof price === 'string' ? (
+					`Rp. ${price}`
+				) : (
+					<AtomNumberFormat prefix="Rp. " value={price} />
+				),
+			editable: true,
 			sorter: true,
 		},
 		{
@@ -147,7 +155,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 					<Space>
 						<CheckOutlined
 							className="green f4 fw8"
-							onClick={() => save(record.id)}
+							onClick={() => save(record.branch_sku_id)}
 						/>
 
 						<Popconfirm title="Sure to cancel?" onConfirm={cancel}>
@@ -159,7 +167,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 						disabled={editingKey !== ''}
 						onClick={() => edit(record)}
 					>
-						Atur Diskon
+						Atur
 					</AtomPrimaryButton>
 				);
 			},
@@ -177,7 +185,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		});
 	}
 
-	const [data, setData] = useState(props.defaultData || []);
+	const [data, setData] = useState(props.defaultData);
 	const [editingKey, setEditingKey] = useState('');
 	const [form] = Form.useForm();
 	const [keyword, setKeyword] = useState('');
@@ -185,14 +193,45 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 
 	const cancel = () => setEditingKey('');
 
+	const countPriceWithDiscount = (row, index) => {
+		let discountChanged = false;
+		let fixedPriceChanged = false;
+
+		if (data[index].fixed_price !== row.fixed_price) {
+			fixedPriceChanged = true;
+		}
+
+		if (data[index].discount_percentage !== row.discount_percentage) {
+			discountChanged = true;
+		}
+
+		if (row.price === '') {
+			message.warning(
+				'Tidak dapat mengatur diskon tanpa memasukkan harga terlebih dahulu'
+			);
+			row.discount_percentage = 0;
+			return row;
+		}
+
+		if (fixedPriceChanged) {
+			row.discount_percentage = (100 * row.fixed_price) / row.price;
+			return row;
+		}
+
+		if (discountChanged) {
+			row.fixed_price = (row.discount_percentage / 100) * row.price;
+			return row;
+		}
+
+		return row;
+	};
+
 	const edit = (record) => {
 		form.setFieldsValue({
-			name: '',
-			age: '',
-			address: '',
 			...record,
 		});
-		setEditingKey(record.id);
+
+		setEditingKey(record.branch_sku_id);
 	};
 
 	const getDatatableData = () => {
@@ -225,16 +264,19 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		return filteredData;
 	};
 
-	const isEditing = (record) => record.id === editingKey;
+	const isEditing = (record) => record.branch_sku_id === editingKey;
 
 	const save = async (id) => {
 		try {
-			const row = await form.validateFields();
+			let row = await form.validateFields();
 			const newData = [...data];
-			const index = newData.findIndex((item) => id === item.id);
+			const index = newData.findIndex(
+				(item) => id === item.branch_sku_id
+			);
 
 			if (index > -1) {
 				const item = newData[index];
+				row = countPriceWithDiscount(row, index);
 				newData.splice(index, 1, { ...item, ...row });
 				setData(newData);
 				setEditingKey('');
@@ -262,6 +304,10 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		};
 	});
 
+	useEffect(() => {
+		setData(props.defaultData);
+	}, [props]);
+
 	useImperativeHandle(ref, () => ({
 		data,
 	}));
@@ -281,10 +327,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 					<Col span={9}>
 						<Row align="middle" gutter={24} justify="end">
 							<Col span={16}>
-								<AtomBranchSelection
-									onChange={setBranch}
-									optionValue="real_id"
-								/>
+								<AtomBranchSelection onChange={setBranch} />
 							</Col>
 						</Row>
 					</Col>
@@ -294,8 +337,8 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 					bordered
 					dataSource={getDatatableData()}
 					columns={mergeColumn}
-					rowKey="id"
-					scroll={{ x: 2440 }}
+					rowKey="branch_sku_id"
+					scroll={{ x: 2880 }}
 					components={{
 						body: {
 							cell: EditableCell,
@@ -318,8 +361,8 @@ OrganismProductBranchDatatable.propTypes = {
 const EditableCell = ({
 	editing,
 	dataIndex,
-	title,
 	children,
+	record,
 	...restProps
 }) => {
 	return (
@@ -330,15 +373,22 @@ const EditableCell = ({
 					style={{
 						margin: 0,
 					}}
-					rules={[
-						{
-							message: `Please Input ${title}!`,
-						},
-					]}
 				>
-					<Space size={5}>
-						<InputNumber /> <span>%</span>
-					</Space>
+					{['is_freezy_pick', 'is_manage_stock'].includes(
+						dataIndex
+					) ? (
+						<Select>
+							<Select.Option value={true}>Ya</Select.Option>
+							<Select.Option value={false}>Tidak</Select.Option>
+						</Select>
+					) : (
+						<Space size={5} style={{ width: '100%' }}>
+							<InputNumber defaultValue={record[dataIndex]} />{' '}
+							{dataIndex === 'discount_percentage' && (
+								<span>%</span>
+							)}
+						</Space>
+					)}
 				</Form.Item>
 			) : (
 				children
