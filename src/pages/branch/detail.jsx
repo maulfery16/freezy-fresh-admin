@@ -100,7 +100,7 @@ const BranchModifyPage = () => {
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Kode Kecamatan"
-										content={branch.address.region_code}
+										content={branch.address.district_code}
 									/>
 								</Col>
 

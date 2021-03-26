@@ -52,7 +52,7 @@ const BranchPage = () => {
 		{
 			title: 'Kode Kecamatan',
 			dataIndex: 'address[region_code]',
-			render: (_, record) => record.address.region_code,
+			render: (_, record) => record.address.district_code,
 			sorter: true,
 		},
 		{
@@ -144,7 +144,7 @@ const BranchPage = () => {
 				operator=":"
 				placeholder="Semua status"
 				data={{
-					mock: [
+					options: [
 						{
 							value: 'true',
 							label: 'Aktif',
