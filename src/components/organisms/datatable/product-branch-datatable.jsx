@@ -1,4 +1,5 @@
 /* eslint-disable react/display-name */
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, {
 	forwardRef,
@@ -9,6 +10,7 @@ import React, {
 import ReactMoment from 'react-moment';
 import {
 	Col,
+	DatePicker,
 	Form,
 	Input,
 	InputNumber,
@@ -86,6 +88,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 			title: 'Stok Dikelola',
 			dataIndex: `managed_stock`,
 			render: (count) => <AtomNumberFormat value={count} />,
+			editable: true,
 			sorter: true,
 		},
 		{
@@ -103,6 +106,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		{
 			title: 'Date Exp Tercepat',
 			dataIndex: 'shortest_expiration',
+			editable: true,
 			render: (date) => (
 				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
 			),
@@ -111,6 +115,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		{
 			title: 'Date Exp Terlama',
 			dataIndex: 'longest_expiration',
+			editable: true,
 			render: (date) => (
 				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
 			),
@@ -365,6 +370,35 @@ const EditableCell = ({
 	record,
 	...restProps
 }) => {
+	const renderEditableForm = (dataIndex, defaultValue) => {
+		if (['is_freezy_pick', 'is_manage_stock'].includes(dataIndex)) {
+			return (
+				<Select>
+					<Select.Option value={true}>Ya</Select.Option>
+					<Select.Option value={false}>Tidak</Select.Option>
+				</Select>
+			);
+		}
+
+		if (['shortest_expiration', 'longest_expiration'].includes(dataIndex)) {
+			return (
+				<DatePicker
+					defaultValue={defaultValue}
+					disabledDate={(current) =>
+						current && current < moment().endOf('day')
+					}
+				/>
+			);
+		}
+
+		return (
+			<Space size={5} style={{ width: '100%' }}>
+				<InputNumber defaultValue={defaultValue} />{' '}
+				{dataIndex === 'discount_percentage' && <span>%</span>}
+			</Space>
+		);
+	};
+
 	return (
 		<td {...restProps}>
 			{editing ? (
@@ -374,21 +408,7 @@ const EditableCell = ({
 						margin: 0,
 					}}
 				>
-					{['is_freezy_pick', 'is_manage_stock'].includes(
-						dataIndex
-					) ? (
-						<Select>
-							<Select.Option value={true}>Ya</Select.Option>
-							<Select.Option value={false}>Tidak</Select.Option>
-						</Select>
-					) : (
-						<Space size={5} style={{ width: '100%' }}>
-							<InputNumber defaultValue={record[dataIndex]} />{' '}
-							{dataIndex === 'discount_percentage' && (
-								<span>%</span>
-							)}
-						</Space>
-					)}
+					{renderEditableForm(dataIndex, record[dataIndex])}
 				</Form.Item>
 			) : (
 				children

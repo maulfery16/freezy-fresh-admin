@@ -51,7 +51,23 @@ const ProductModifyPage = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [product, setProduct] = useState(null);
 	const [productVariants, setProductVariants] = useState([]);
-	const [variants, setVariants] = useState([]);
+	const [variants, setVariants] = useState([
+		{
+			name: {
+				en: 'BLUE|SMALL',
+				id: 'BIRU|KECIL',
+			},
+			sku_id: 'SKU0071',
+			image:
+				'https://api.ms-freezy-fresh.local/storage/uploads/medias/generals/P5e6sOeOXvi6r61Njk91.jpg',
+			upc_code: '1234567890',
+			supplier: 'Unilever',
+			long_cm: '10',
+			wide_cm: '10',
+			height_cm: '10',
+			weight_gr: '1000',
+		},
+	]);
 
 	const combineProductVariantWithExisting = (
 		existingProductVariants,
