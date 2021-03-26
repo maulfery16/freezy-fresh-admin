@@ -647,6 +647,45 @@ const routes = [
 			},
 		],
 	},
+	{
+		path: '/transaction',
+		children: [
+			{
+				component: React.lazy(() => import('./pages/transaction')),
+				exact: true,
+				guard: true,
+				name: 'Transaction Page',
+				path: '/',
+			},
+			{
+				component: React.lazy(() =>
+					import('./pages/transaction/modify')
+				),
+				exact: true,
+				guard: true,
+				name: 'Add Transaction Page',
+				path: '/add',
+			},
+			{
+				component: React.lazy(() =>
+					import('./pages/transaction/modify')
+				),
+				exact: true,
+				guard: true,
+				name: 'Edit Transaction Page',
+				path: '/:id/edit',
+			},
+			{
+				component: React.lazy(() =>
+					import('./pages/transaction/detail')
+				),
+				exact: true,
+				guard: true,
+				name: 'Detail Transaction Page',
+				path: '/:id/detail',
+			},
+		],
+	},
 ];
 
 export default routes;

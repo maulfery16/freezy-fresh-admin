@@ -210,7 +210,7 @@ const menus = [
 	{
 		name: 'Transaksi',
 		icon: <AiOutlineTransaction />,
-		link: '/membership',
+		link: '/transaction',
 	},
 	{
 		name: 'Cabang',
