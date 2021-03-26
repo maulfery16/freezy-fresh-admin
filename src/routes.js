@@ -686,6 +686,39 @@ const routes = [
 			},
 		],
 	},
+	{
+		path: '/branch',
+		children: [
+			{
+				component: React.lazy(() => import('./pages/branch/')),
+				exact: true,
+				guard: true,
+				name: 'Cabang Page',
+				path: '/',
+			},
+			{
+				component: React.lazy(() => import('./pages/branch/detail')),
+				exact: true,
+				guard: true,
+				name: 'Detail Cabang Page',
+				path: '/:id/detail',
+			},
+			{
+				component: React.lazy(() => import('./pages/branch/modify')),
+				exact: true,
+				guard: true,
+				name: 'Edit Cabang Page',
+				path: '/:id/edit',
+			},
+			{
+				component: React.lazy(() => import('./pages/branch/modify')),
+				exact: true,
+				guard: true,
+				name: 'Add Cabang Page',
+				path: '/add',
+			},
+		],
+	},
 ];
 
 export default routes;

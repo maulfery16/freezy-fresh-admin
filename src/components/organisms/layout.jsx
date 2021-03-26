@@ -213,7 +213,7 @@ const menus = [
 		link: '/transaction',
 	},
 	{
-		name: 'Cabang',
+		name: 'Cabang Freezy',
 		icon: <FaStoreAlt />,
 		link: '/branch',
 	},

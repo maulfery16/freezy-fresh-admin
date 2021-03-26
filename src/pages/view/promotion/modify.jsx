@@ -31,11 +31,10 @@ const PromotionModifyPage = () => {
 	const location = useLocation();
 	const isCreating = location.pathname.includes('add') ? true : false;
 
-	const [promotion, setPromotion] = useState();
+	const [form] = Form.useForm();
 	const [fullDescEn, setFullDescEn] = useState('');
 	const [fullDescId, setFullDescId] = useState('');
-	// eslint-disable-next-line no-unused-vars
-	const [productList, setProductList] = useState([]);
+	const [promotion, setPromotion] = useState();
 	const [termEn, setTermEn] = useState('');
 	const [termId, setTermId] = useState('');
 
@@ -81,7 +80,6 @@ const PromotionModifyPage = () => {
 			const dataProduct = await viewTableRef.current.data;
 
 			console.log(dataProduct);
-			// console.log(promotionImageDekstopRef.current.getImage());
 
 			const data = new FormData();
 			data.append('image_mobile', promotionImageMobile);
@@ -150,218 +148,227 @@ const PromotionModifyPage = () => {
 			{!isCreating && !promotion ? (
 				<Skeleton active />
 			) : (
-				<Form
-					className="w-100 mt4"
-					name="modify_promotion"
-					initialValues={setPromotionInitialValues()}
-					onFinish={submit}
-					onFinishFailed={(error) => {
-						message.error(`Failed: ${error}`);
-						console.error(error);
-					}}
-				>
-					<Tabs defaultActiveKey="1">
-						<TabPane tab={`Info Promotion`.toUpperCase()} key="1">
-							<Row align="top" gutter={24}>
-								<Col span={24}>
-									<AtomCard title="">
-										<Row gutter={[24, 24]}>
-											<Col span={24}>
-												<MoleculeFileInputGroup
-													label="Foto Banner"
-													description="Format gambar .jpg .jpeg .png, Untuk foto banner mobile ukuran minimum 0 x 0px (Untuk
+				<>
+					<Form
+						className="w-100 mt4"
+						form={form}
+						name="modify_promotion"
+						initialValues={setPromotionInitialValues()}
+						onFinish={submit}
+						onFinishFailed={(error) => {
+							message.error(`Failed: ${error}`);
+							console.error(error);
+						}}
+					>
+						<Tabs defaultActiveKey="1">
+							<TabPane
+								tab={`Info Promotion`.toUpperCase()}
+								key="1"
+							>
+								<Row align="top" gutter={24}>
+									<Col span={24}>
+										<AtomCard title="">
+											<Row gutter={[24, 24]}>
+												<Col span={24}>
+													<MoleculeFileInputGroup
+														label="Foto Banner"
+														description="Format gambar .jpg .jpeg .png, Untuk foto banner mobile ukuran minimum 0 x 0px (Untuk
 														gambar optimal gunakan ukuran minimum 0 x 0 px) Untuk foto banner desktop ukuran
 														minimum 0 x 0px (Untuk gambar optimal gunakan ukuran minimum 0 x 0 px)"
-													fileInputs={[
-														{
-															defaultValue: promotion
-																? promotion.image_mobile
-																: null,
-															isMobileImage: true,
-															label:
-																'Foto Banner Mobile',
-															ref: promotionImageMobileRef,
-															required: true,
-														},
-														{
-															defaultValue: promotion
-																? promotion.image_desktop
-																: null,
-															label:
-																'Foto Banner Dekstop',
-															ref: promotionImageDekstopRef,
-															required: true,
-														},
-														{
-															defaultValue: promotion
-																? promotion.addition_image_1
-																: null,
-															label:
-																'Foto Banner Kecil 1',
-															ref: promotionImageSmall1Ref,
-														},
-														{
-															defaultValue: promotion
-																? promotion.addition_image_2
-																: null,
-															label:
-																'Foto Banner Kecil 2',
-															ref: promotionImageSmall2Ref,
-														},
-														{
-															defaultValue: promotion
-																? promotion.addition_image_3
-																: null,
-															label:
-																'Foto Banner Kecil 3',
-															ref: promotionImageSmall3Ref,
-														},
-													]}
-												/>
-											</Col>
-
-											<Col span={12}>
-												<MoleculeTextInputGroup
-													name="id_title"
-													label="Nama Promo (ID)"
-													placeholder="Nama Promo (ID)"
-													type="text"
-													required={true}
-												/>
-											</Col>
-
-											<Col span={12}>
-												<MoleculeTextInputGroup
-													name="en_title"
-													label="Nama Promo (EN)"
-													placeholder="Nama Promo (EN)"
-													type="text"
-													required={true}
-												/>
-											</Col>
-
-											<Col span={12}>
-												<MoleculeSelectInputGroup
-													label="Tipe Promo"
-													name="promotion_type"
-													placeholder="Tipe Promo"
-													required={true}
-													data={{
-														mock: [
+														fileInputs={[
 															{
-																value: true,
-																label: 'Info',
+																defaultValue: promotion
+																	? promotion.image_mobile
+																	: null,
+																isMobileImage: true,
+																label:
+																	'Foto Banner Mobile',
+																ref: promotionImageMobileRef,
+																required: true,
 															},
 															{
-																value: false,
-																label: 'Promo',
+																defaultValue: promotion
+																	? promotion.image_desktop
+																	: null,
+																label:
+																	'Foto Banner Dekstop',
+																ref: promotionImageDekstopRef,
+																required: true,
 															},
-														],
-													}}
-												/>
-											</Col>
+															{
+																defaultValue: promotion
+																	? promotion.addition_image_1
+																	: null,
+																label:
+																	'Foto Banner Kecil 1',
+																ref: promotionImageSmall1Ref,
+															},
+															{
+																defaultValue: promotion
+																	? promotion.addition_image_2
+																	: null,
+																label:
+																	'Foto Banner Kecil 2',
+																ref: promotionImageSmall2Ref,
+															},
+															{
+																defaultValue: promotion
+																	? promotion.addition_image_3
+																	: null,
+																label:
+																	'Foto Banner Kecil 3',
+																ref: promotionImageSmall3Ref,
+															},
+														]}
+													/>
+												</Col>
 
-											<Col span={12}></Col>
+												<Col span={12}>
+													<MoleculeTextInputGroup
+														name="id_title"
+														label="Nama Promo (ID)"
+														placeholder="Nama Promo (ID)"
+														type="text"
+														required={true}
+													/>
+												</Col>
 
-											<Col span={12}>
-												<MoleculeTextInputGroup
-													autoSize={{
-														minRows: 2,
-														maxRows: 6,
-													}}
-													label="Deskripsi Singkat (ID)"
-													name="id_short_desc"
-													placeholder="Deskripsi Singkat (ID)"
-													type="textarea"
-													required
-												/>
-											</Col>
+												<Col span={12}>
+													<MoleculeTextInputGroup
+														name="en_title"
+														label="Nama Promo (EN)"
+														placeholder="Nama Promo (EN)"
+														type="text"
+														required={true}
+													/>
+												</Col>
 
-											<Col span={12}>
-												<MoleculeTextInputGroup
-													autoSize={{
-														minRows: 2,
-														maxRows: 6,
-													}}
-													label="Deskripsi Singkat (EN)"
-													name="en_short_desc"
-													placeholder="Deskripsi Singkat (EN)"
-													type="textarea"
-													required
-												/>
-											</Col>
+												<Col span={12}>
+													<MoleculeSelectInputGroup
+														label="Tipe Promo"
+														name="promotion_type"
+														placeholder="Tipe Promo"
+														required={true}
+														data={{
+															options: [
+																{
+																	value: true,
+																	label:
+																		'Info',
+																},
+																{
+																	value: false,
+																	label:
+																		'Promo',
+																},
+															],
+														}}
+													/>
+												</Col>
 
-											<Col span={12}>
-												<MoleculeTextEditorGroup
-													label="Deskripsi Lengkap (ID)"
-													onChange={setFullDescId}
-													value={fullDescId}
-													required={true}
-												/>
-											</Col>
+												<Col span={12}></Col>
 
-											<Col span={12}>
-												<MoleculeTextEditorGroup
-													label="Deskripsi Lengkap (EN)"
-													onChange={setFullDescEn}
-													value={fullDescEn}
-													required={true}
-												/>
-											</Col>
-										</Row>
-									</AtomCard>
-								</Col>
+												<Col span={12}>
+													<MoleculeTextInputGroup
+														autoSize={{
+															minRows: 2,
+															maxRows: 6,
+														}}
+														label="Deskripsi Singkat (ID)"
+														name="id_short_desc"
+														placeholder="Deskripsi Singkat (ID)"
+														type="textarea"
+														required
+													/>
+												</Col>
 
-								<Col className="mt4" span={24}>
-									<OrganismProductDatatable
-										ref={viewTableRef}
-										defaultData={[]}
-									/>
-								</Col>
-							</Row>
-						</TabPane>
-						<TabPane
-							tab={`Syarat & ketentuan`.toUpperCase()}
-							key="2"
-						>
-							<Row align="top" gutter={24}>
-								<Col span={24}>
-									<AtomCard title="">
-										<Row gutter={[12, 24]}>
-											<Col span={24}>
-												<MoleculeTextEditorGroup
-													label={`Syarat & Ketentuan (ID)`}
-													onChange={setTermId}
-													value={termId}
-													required
-												/>
-											</Col>
+												<Col span={12}>
+													<MoleculeTextInputGroup
+														autoSize={{
+															minRows: 2,
+															maxRows: 6,
+														}}
+														label="Deskripsi Singkat (EN)"
+														name="en_short_desc"
+														placeholder="Deskripsi Singkat (EN)"
+														type="textarea"
+														required
+													/>
+												</Col>
 
-											<Col span={24}>
-												<MoleculeTextEditorGroup
-													label={`Syarat & Ketentuan (EN)`}
-													onChange={setTermEn}
-													value={termEn}
-													required
-												/>
-											</Col>
-										</Row>
-									</AtomCard>
-								</Col>
-							</Row>
-						</TabPane>
-					</Tabs>
-					<Row>
-						<Col className="mt4" span={24}>
-							<MoleculeModifyActionButtons
-								backUrl="/view/promotion"
-								isCreating={isCreating}
-								isSubmitting={isSubmitting}
-								label="Promo"
-							/>
-						</Col>
-					</Row>
-				</Form>
+												<Col span={12}>
+													<MoleculeTextEditorGroup
+														label="Deskripsi Lengkap (ID)"
+														onChange={setFullDescId}
+														value={fullDescId}
+														required={true}
+													/>
+												</Col>
+
+												<Col span={12}>
+													<MoleculeTextEditorGroup
+														label="Deskripsi Lengkap (EN)"
+														onChange={setFullDescEn}
+														value={fullDescEn}
+														required={true}
+													/>
+												</Col>
+											</Row>
+										</AtomCard>
+									</Col>
+								</Row>
+							</TabPane>
+
+							<TabPane
+								tab={`Syarat & ketentuan`.toUpperCase()}
+								key="2"
+							>
+								<Row align="top" gutter={24}>
+									<Col span={24}>
+										<AtomCard title="">
+											<Row gutter={[12, 24]}>
+												<Col span={24}>
+													<MoleculeTextEditorGroup
+														label={`Syarat & Ketentuan (ID)`}
+														onChange={setTermId}
+														value={termId}
+														required
+													/>
+												</Col>
+
+												<Col span={24}>
+													<MoleculeTextEditorGroup
+														label={`Syarat & Ketentuan (EN)`}
+														onChange={setTermEn}
+														value={termEn}
+														required
+													/>
+												</Col>
+											</Row>
+										</AtomCard>
+									</Col>
+								</Row>
+							</TabPane>
+						</Tabs>
+					</Form>
+
+					<Col className="mt4" span={24}>
+						<OrganismProductDatatable
+							ref={viewTableRef}
+							defaultData={[]}
+						/>
+					</Col>
+
+					<Col className="mt4" span={24}>
+						<MoleculeModifyActionButtons
+							backUrl="/view/promotion"
+							isCreating={isCreating}
+							isSubmitting={isSubmitting}
+							label="Promo"
+							onClick={() => form.submit()}
+						/>
+					</Col>
+				</>
 			)}
 		</OrganismLayout>
 	);

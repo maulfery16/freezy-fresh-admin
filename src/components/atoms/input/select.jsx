@@ -1,11 +1,17 @@
+/* eslint-disable react/display-name */
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, {
+	forwardRef,
+	useEffect,
+	useImperativeHandle,
+	useState,
+} from 'react';
 import { Select, Skeleton } from 'antd';
 
 import MasterService from '../../../services/master';
 const masterService = new MasterService();
 
-const AtomCustomSelect = (props) => {
+const AtomCustomSelect = forwardRef((props, ref) => {
 	const [options, setOptions] = useState(null);
 
 	const generateOption = (item) => {
@@ -19,8 +25,10 @@ const AtomCustomSelect = (props) => {
 	};
 
 	const getOptions = async () => {
-		if (props.data.mock) {
-			setOptions(props.data.mock);
+		setOptions(null);
+
+		if (props.data.options) {
+			setOptions(props.data.options);
 		} else {
 			const { data } = await masterService.getOptions(props.data.url);
 
@@ -37,9 +45,20 @@ const AtomCustomSelect = (props) => {
 		})();
 	}, []);
 
+	useImperativeHandle(ref, () => ({
+		async refetchData() {
+			await getOptions();
+		},
+	}));
+
+	const optionalProps = { ...props };
+	if (props.data.onChange)
+		optionalProps.onChange = (value) => props.data.onChange(value);
+	if (optionalProps.optionsRef) delete optionalProps.optionsRef;
+
 	return options ? (
 		<Select
-			{...props}
+			{...optionalProps}
 			showSearch
 			optionFilterProp="children"
 			filterOption={(input, option) =>
@@ -64,13 +83,13 @@ const AtomCustomSelect = (props) => {
 	) : (
 		<Skeleton active title={{ width: '100%' }} paragraph={{ rows: 0 }} />
 	);
-};
+});
 
 AtomCustomSelect.propTypes = {
 	indentifier: PropTypes.string,
 	data: PropTypes.shape({
 		generateCustomOption: PropTypes.func,
-		mock: PropTypes.array,
+		options: PropTypes.array,
 		url: PropTypes.string,
 	}),
 };
