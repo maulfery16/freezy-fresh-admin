@@ -51,23 +51,7 @@ const ProductModifyPage = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [product, setProduct] = useState(null);
 	const [productVariants, setProductVariants] = useState([]);
-	const [variants, setVariants] = useState([
-		{
-			name: {
-				en: 'BLUE|SMALL',
-				id: 'BIRU|KECIL',
-			},
-			sku_id: 'SKU0071',
-			image:
-				'https://api.ms-freezy-fresh.local/storage/uploads/medias/generals/P5e6sOeOXvi6r61Njk91.jpg',
-			upc_code: '1234567890',
-			supplier: 'Unilever',
-			long_cm: '10',
-			wide_cm: '10',
-			height_cm: '10',
-			weight_gr: '1000',
-		},
-	]);
+	const [variants, setVariants] = useState([]);
 
 	const combineProductVariantWithExisting = (
 		existingProductVariants,
@@ -329,11 +313,20 @@ const ProductModifyPage = () => {
 										]}
 									/>
 								</Col>
-								<Col span={24}>
+								<Col span={12}>
 									<MoleculeTextInputGroup
 										label="SKU ID"
 										name="sku_id"
 										placeholder="SKU ID"
+										required
+										type="code"
+									/>
+								</Col>
+								<Col span={12}>
+									<MoleculeTextInputGroup
+										label="Kode UPC"
+										name="upc_code"
+										placeholder="Kode UPC"
 										required
 										type="code"
 									/>
