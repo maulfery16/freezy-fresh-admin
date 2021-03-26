@@ -20,31 +20,56 @@ const BranchModifyPage = () => {
 
 	const [branch, setBranch] = useState(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [provinceCode, setProvinceCode] = useState(0);
-	const [cityCode, setCityCode] = useState(0);
-	const [districtCode, setDistrictCode] = useState(0);
+	const [provinceId, setProvinceId] = useState(null);
+	const [cityId, setCityId] = useState(null);
+	const [districtId, setDistrictId] = useState(null);
+	const [subdistrictId, setSubdistrictId] = useState(null);
 
 	const cityOptionsRef = useRef();
-	const districthOptionsRef = useRef();
+	const districtOptionsRef = useRef();
 	const subDistrictOptionsRef = useRef();
 
 	useEffect(() => {
-		if (provinceCode) cityOptionsRef.current.refetchData();
-	}, [provinceCode]);
+		if (provinceId && cityOptionsRef.current) {
+			setCityId(null);
+
+			cityOptionsRef.current.refetchData();
+			districtOptionsRef.current.refetchData();
+			subDistrictOptionsRef.current.refetchData();
+		}
+	}, [provinceId]);
 
 	useEffect(() => {
-		if (cityCode) districthOptionsRef.current.refetchData();
-	}, [cityCode]);
+		if (cityId && districtOptionsRef.current) {
+			setDistrictId(null);
+
+			districtOptionsRef.current.refetchData();
+			subDistrictOptionsRef.current.refetchData();
+		}
+	}, [cityId]);
 
 	useEffect(() => {
-		if (districtCode) subDistrictOptionsRef.current.refetchData();
-	}, [districtCode]);
+		if (districtId && subDistrictOptionsRef.current) {
+			setSubdistrictId(null);
+			subDistrictOptionsRef.current.refetchData();
+		}
+	}, [districtId]);
 
 	const getBranchDetail = async (id) => {
 		try {
 			let branch = await branchService.getBranchById(id);
 			branch = branch.data;
 
+			setProvinceId(
+				branch && branch.address && branch.address.province_id
+			);
+			setCityId(branch && branch.address && branch.address.city_id);
+			setDistrictId(
+				branch && branch.address && branch.address.district_id
+			);
+			setSubdistrictId(
+				branch && branch.address && branch.address.subdistrict_id
+			);
 			setBranch(branch);
 		} catch (error) {
 			message.error(error.message);
@@ -53,6 +78,13 @@ const BranchModifyPage = () => {
 	};
 
 	const submit = async (values) => {
+		if (!provinceId || !cityId || !districtId || !subdistrictId) {
+			message.error(
+				'Provinsi / Kota/Kabupaten / Kecamatan / Kelurahan tidak boleh kosong'
+			);
+			return false;
+		}
+
 		try {
 			setIsSubmitting(true);
 
@@ -63,13 +95,13 @@ const BranchModifyPage = () => {
 			data.append('address', values.address);
 			data.append('region_id', values.region_id);
 			data.append('is_active', values.is_active);
-			data.append('province_name', values.province_name);
-			data.append('city_name', values.city_name);
-			data.append('district_name', values.district_name);
-			data.append('subdistrict_name', values.subdistrict_name);
+			data.append('province_id', provinceId);
+			data.append('city_id', cityId);
+			data.append('district_id', districtId);
+			data.append('subdistrict_id', subdistrictId);
 			data.append('postal_code', values.postal_code);
 			data.append('latitude', values.latitude);
-			data.append('longitude', values.postal_code);
+			data.append('longitude', values.longitude);
 
 			if (isCreating) {
 				await branchService.createBranch(data);
@@ -102,14 +134,43 @@ const BranchModifyPage = () => {
 					code: branch.code,
 					is_active: branch.is_active,
 					address: branch.address.address,
-					province_name: branch.address.province_name,
-					city_name: branch.address.city_name,
-					district_name: branch.address.district_name,
-					subdistrict_name: branch.address.subdistrict_name,
 					postal_code: branch.address.postal_code,
 					latitude: branch.address.latitude,
 					longitude: branch.address.longitude,
 			  };
+	};
+
+	const handleOptionChange = (setRegionChildId, regionChildName, value) => {
+		setRegionChildId(value);
+
+		switch (regionChildName) {
+			case 'province':
+				setCityId(null);
+				setDistrictId(null);
+				setSubdistrictId(null);
+				break;
+			case 'city':
+				setDistrictId(null);
+				setSubdistrictId(null);
+				break;
+			case 'district':
+				setSubdistrictId(null);
+				break;
+		}
+
+		/* reset region children value */
+		if (branch && branch.address && branch.address.province_id) {
+			setBranch({
+				...branch,
+				address: {
+					...branch.address,
+					province_id: null,
+					city_id: null,
+					district_id: null,
+					subdistrict_id: null,
+				},
+			});
+		}
 	};
 
 	useEffect(() => {
@@ -148,7 +209,7 @@ const BranchModifyPage = () => {
 					initialValues={setBranchInitialValues()}
 					onFinish={submit}
 					onFinishFailed={(error) => {
-						message.error(`Failed: ${error}`);
+						message.error(`Failed: ${error.errorFields}`);
 						console.error(error);
 					}}
 				>
@@ -162,6 +223,8 @@ const BranchModifyPage = () => {
 											label="Kode Cabang"
 											placeholder="Masukkan Kode Cabang"
 											type="text"
+											maxLength={3}
+											minLength={3}
 											required
 										/>
 									</Col>
@@ -171,9 +234,9 @@ const BranchModifyPage = () => {
 											name="is_active"
 											label="Status"
 											placeholder="Status"
-											required
+											required={true}
 											data={{
-												mock: [
+												options: [
 													{
 														label: 'Aktif',
 														value: true,
@@ -209,76 +272,140 @@ const BranchModifyPage = () => {
 
 									<Col span={12}>
 										<MoleculeSelectInputGroup
-											label="Provinsi"
-											name="province_name"
+											label="Provinsi*"
+											name="province_id"
 											placeholder="Pilih Provinsi"
+											defaultValue={
+												branch &&
+												branch.address.province_id
+											}
 											data={{
 												onChange: (value) =>
-													setProvinceCode(value),
+													handleOptionChange(
+														setProvinceId,
+														'province',
+														value
+													),
 												url: 'regions/fetch/provinces',
 												generateCustomOption: (
 													item
 												) => ({
-													value: item.code,
+													value: item.id,
 													label: `${item.name.id} / ${item.name.en} `,
 												}),
 											}}
-											required={true}
 										/>
 									</Col>
 
 									<Col span={12}>
 										<MoleculeSelectInputGroup
-											label="Kota/Kabupaten"
-											name="city_name"
+											label="Kota/Kabupaten*"
+											name="city_id"
 											placeholder="Pilih Kota/Kabupaten"
 											optionsRef={cityOptionsRef}
+											defaultValue={
+												branch && branch.address.city_id
+											}
 											data={{
 												onChange: (value) =>
-													setCityCode(value),
-												url: `regions/fetch/cities/${provinceCode}`,
+													handleOptionChange(
+														setCityId,
+														'city',
+														value
+													),
+												url:
+													provinceId ||
+													(branch &&
+														branch.address
+															.province_id)
+														? `regions/fetch/child/${
+																provinceId ||
+																branch.address
+																	.province_id
+														  }`
+														: `regions/fetch/cities/0`,
 												generateCustomOption: (
 													item
 												) => ({
-													value: item.code,
+													value: item.id,
 													label: `${item.name.id} / ${item.name.en} `,
 												}),
 											}}
-											required={true}
 										/>
 									</Col>
 
 									<Col span={12}>
 										<MoleculeSelectInputGroup
-											label="Kecamatan"
-											name="district_name"
+											label="Kecamatan*"
+											name="district_id"
 											placeholder="Pilih Kecamatan"
-											optionsRef={districthOptionsRef}
+											optionsRef={districtOptionsRef}
+											defaultValue={
+												branch &&
+												branch.address.district_id
+											}
 											data={{
 												onChange: (value) =>
-													setDistrictCode(value),
-												url: `regions/fetch/districts/${cityCode}`,
+													handleOptionChange(
+														setDistrictId,
+														'district',
+														value
+													),
+												url:
+													cityId ||
+													(branch &&
+														branch.address.city_id)
+														? `regions/fetch/child/${
+																cityId ||
+																branch.address
+																	.city_id
+														  }`
+														: `regions/fetch/cities/0`,
 												generateCustomOption: (
 													item
 												) => ({
-													value: item.code,
+													value: item.id,
 													label: `${item.name.id} / ${item.name.en} `,
 												}),
 											}}
-											required={true}
 										/>
 									</Col>
 
 									<Col span={12}>
 										<MoleculeSelectInputGroup
-											label="Kelurahan"
-											name="subdistrict_name"
+											label="Kelurahan*"
+											name="subdistrict_id"
 											placeholder="Pilih Kelurahan"
 											optionsRef={subDistrictOptionsRef}
+											defaultValue={
+												branch &&
+												branch.address.subdistrict_id
+											}
 											data={{
-												url: `regions/fetch/sub-districts/${districtCode}`,
+												onChange: (value) =>
+													handleOptionChange(
+														setSubdistrictId,
+														'',
+														value
+													),
+												url:
+													districtId ||
+													(branch &&
+														branch.address
+															.district_id)
+														? `regions/fetch/child/${
+																districtId ||
+																branch.address
+																	.district_id
+														  }`
+														: `regions/fetch/districts/0`,
+												generateCustomOption: (
+													item
+												) => ({
+													value: item.id,
+													label: `${item.name.id} / ${item.name.en} `,
+												}),
 											}}
-											required={true}
 										/>
 									</Col>
 
@@ -298,6 +425,8 @@ const BranchModifyPage = () => {
 											label="Kode Pos"
 											placeholder="Masukkan Kode Pos"
 											type="number"
+											maxLength={5}
+											minLength={5}
 											required
 										/>
 									</Col>
@@ -307,7 +436,8 @@ const BranchModifyPage = () => {
 											name="latitude"
 											label="Latitude"
 											placeholder="Masukkan Latitude"
-											type="text"
+											type="number"
+											maxLength={180}
 											required
 										/>
 									</Col>
@@ -317,7 +447,8 @@ const BranchModifyPage = () => {
 											name="longitude"
 											label="Longitude"
 											placeholder="Masukkan Longitude"
-											type="text"
+											type="number"
+											maxLength={360}
 											required
 										/>
 									</Col>
