@@ -189,7 +189,7 @@ const ProductPage = () => {
 				key="freezy-pick-filter"
 				placeholder="Semua freezy pick"
 				data={{
-					mock: [
+					options: [
 						{ id: true, label: 'Ya' },
 						{ id: false, label: 'Tidak' },
 					],

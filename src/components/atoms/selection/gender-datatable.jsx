@@ -13,7 +13,7 @@ const AtomGenderDatatableFilter = (props) => {
 			key="gender-filter"
 			placeholder="Semua"
 			data={{
-				mock: [
+				options: [
 					{
 						value: 'FEMALE',
 						label: 'Perempuan',

@@ -21,7 +21,7 @@ const { TabPane } = Tabs;
 // import HolidayService from '../../../services/holiday';
 // const holidayService = new HolidayService();
 
-const mock = {
+const dataSource = {
 	data: [
 		{
 			id: 'FF-8387423',
@@ -340,7 +340,7 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 										columns={column}
 										dataSourceURL={`products`}
 										filters={renderDatatableFilters()}
-										mock={mock}
+										dataSource={dataSource}
 										ref={viewTableRef}
 										searchInput={true}
 									/>

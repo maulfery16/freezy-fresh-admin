@@ -21,6 +21,7 @@ export default class RequestAdapterService {
 		};
 
 		if (token !== null) headers['Authorization'] = `Bearer ${token}`;
+		if (refreshToken !== null) headers['Cookie'] = `refreshToken=${refreshToken}`;
 
 		this.reqClient = axios.create({ headers });
 		this.reqClient.interceptors.response.use(

@@ -35,6 +35,20 @@ const App = () => {
 		});
 	};
 
+	const requestRefreshToken = async () => {
+		try {
+			const { access_token } = await authService.reqRefreshToken({
+				refreshToken,
+			});
+
+			dispatch(setAuthToken(access_token));
+			dispatch(setLoginStatus(true));
+			window.location = '/';
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
 	const generateRoute = (route, pathPrefix) => (
 		<Route
 			key={route.name}
@@ -46,21 +60,7 @@ const App = () => {
 					return isLoggedIn ? (
 						<route.component key={route.name} {...props} />
 					) : isRememberMe ? (
-						async () => {
-							try {
-								const {
-									access_token,
-								} = await authService.reqRefreshToken({
-									refreshToken,
-								});
-
-								dispatch(setAuthToken(access_token));
-								dispatch(setLoginStatus(true));
-								window.location = '/';
-							} catch (error) {
-								console.error(error);
-							}
-						}
+						requestRefreshToken()
 					) : (
 						<Redirect key={`login-redirect`} to="/login" />
 					);

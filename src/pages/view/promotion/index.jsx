@@ -129,7 +129,7 @@ const PromotionsPage = () => {
 				key="status-filter"
 				placeholder="Semua status"
 				data={{
-					mock: [
+					options: [
 						{
 							value: 'true',
 							label: 'Aktif',
@@ -154,7 +154,7 @@ const PromotionsPage = () => {
 				key="type-filter"
 				placeholder="Semua tipe"
 				data={{
-					mock: [
+					options: [
 						{
 							value: 'true',
 							label: 'Info',
