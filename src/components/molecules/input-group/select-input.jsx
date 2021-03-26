@@ -30,6 +30,7 @@ const MoleculeSelectInputGroup = (props) => {
 					{...props}
 					name={props.name}
 					placeholder={props.placeholder}
+					ref={props.branchOptionsRef}
 					size="large"
 				/>
 			</Form.Item>
