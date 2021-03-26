@@ -38,12 +38,20 @@ const MoleculeTextInputGroup = (props) => {
 		size: 'middle',
 	};
 
-	if (props.required)
+	if (props.required) {
 		rules.push({
 			message:
 				props.requiredMessage || `${props.label} tidak boleh kosong`,
 			required: true,
 		});
+	}
+
+	if (props.type === 'code') {
+		rules.push({
+			message: `Tidak boleh mengandung special character kecuali '-' dan '/'`,
+			pattern: new RegExp(/[~`!@#$%^&()_={}[\]:;,.<>+?]/),
+		});
+	}
 
 	if (props.rules) {
 		rules = [...rules, ...props.rules];

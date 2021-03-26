@@ -129,7 +129,7 @@ const ProductPage = () => {
 				getLimit={() => productTableRef.current.totalData}
 				importRoute="/products/import"
 				label="Produk"
-				requiredParams="branches"
+				requiredParams="branch"
 				route="/products"
 				url="products"
 			/>

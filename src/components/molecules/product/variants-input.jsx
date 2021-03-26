@@ -40,7 +40,7 @@ const MoleculeProductVariantsInput = (props) => {
 		<Collapse bordered={false} className="bg-white">
 			{props.variants.map((varian, index) => (
 				<Collapse.Panel
-					header={varian.name.id.replace('|', ' ')}
+					header={varian.name.id.replaceAll('|', ' ')}
 					key={index}
 				>
 					<Row gutter={[24, 24]}>
@@ -49,6 +49,7 @@ const MoleculeProductVariantsInput = (props) => {
 								label="SKU ID"
 								placeholder="SKU ID"
 								value={varian.sku_id}
+								type="code"
 								onChange={(e) =>
 									setVariantValue(
 										e.target.value,
@@ -63,6 +64,7 @@ const MoleculeProductVariantsInput = (props) => {
 							<MoleculeTextInputGroup
 								label="Kode UPC"
 								placeholder="Kode UPC"
+								type="code"
 								value={varian.upc_code}
 								onChange={(e) =>
 									setVariantValue(
