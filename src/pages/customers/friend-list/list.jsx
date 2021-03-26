@@ -114,7 +114,7 @@ const FriendListPage = () => {
 				key="status-name-filter"
 				placeholder="Semua"
 				data={{
-					mock: [
+					options: [
 						{
 							value: 'Requested',
 							label: 'Menunggu Persetujuan',

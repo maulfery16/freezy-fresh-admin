@@ -250,7 +250,7 @@ const PromotionModifyPage = () => {
 														placeholder="Tipe Promo"
 														required={true}
 														data={{
-															mock: [
+															options: [
 																{
 																	value: true,
 																	label:

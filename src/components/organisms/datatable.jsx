@@ -45,9 +45,9 @@ const OrganismDatatable = forwardRef((props, ref) => {
 		setIsGettingData(true);
 
 		try {
-			if (props.mock) {
-				setData(props.mock.data);
-				setTotalData(props.mock.meta.pagination.total);
+			if (props.dataSource) {
+				setData(props.dataSource.data);
+				setTotalData(props.dataSource.meta.pagination.total);
 			} else {
 				const { data, meta } = await datatableService.getData(
 					props.dataSourceURL,

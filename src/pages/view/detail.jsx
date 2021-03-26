@@ -18,7 +18,7 @@ import OrganismLayout from '../../components/organisms/layout';
 // import ViewService from '../../services/view';
 // const viewService = new ViewService();
 
-const mock = {
+const dataSource = {
 	data: [
 		{
 			id: 'FF-8387423',
@@ -300,7 +300,7 @@ const ViewModifyPage = () => {
 								columns={column}
 								dataSourceURL={`prodcuts`}
 								filters={renderDatatableFilters()}
-								mock={mock}
+								dataSource={dataSource}
 								ref={viewTableRef}
 								searchInput={true}
 								title={`Tampilan`}

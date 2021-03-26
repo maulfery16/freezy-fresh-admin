@@ -110,7 +110,7 @@ const FriendListPage = () => {
 				key="marital-status-filter"
 				placeholder="Semua"
 				data={{
-					mock: [
+					options: [
 						{
 							value: 'Belum Menikah',
 							label: 'Belum Menikah',

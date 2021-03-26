@@ -44,7 +44,7 @@ MoleculeSelectInputGroup.propTypes = {
 	placeholder: PropTypes.string,
 	data: PropTypes.shape({
 		generateCustomOption: PropTypes.func,
-		mock: PropTypes.array,
+		options: PropTypes.array,
 		url: PropTypes.url,
 	}),
 };

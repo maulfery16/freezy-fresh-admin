@@ -19,7 +19,7 @@ const { TabPane } = Tabs;
 import PromotionService from '../../../services/promotion';
 import AtomBaseCategoriesDatatableFilter from '../../../components/atoms/selection/base-categories-datatable';
 
-const mock = {
+const dataSource = {
 	data: [
 		{
 			id: 'FF-8387423',
@@ -327,7 +327,7 @@ const PromotionModifyPage = () => {
 											columns={column}
 											dataSourceURL={`products`}
 											filters={renderDatatableFilters()}
-											mock={mock}
+											dataSource={dataSource}
 											ref={viewTableRef}
 											searchInput={true}
 										/>

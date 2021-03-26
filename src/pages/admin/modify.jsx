@@ -174,7 +174,7 @@ const AdminModifyPage = () => {
 											placeholder="Jenis Kelamin"
 											required
 											data={{
-												mock: [
+												options: [
 													{
 														label: 'Pria',
 														value: 'MALE',
