@@ -3,7 +3,7 @@ import RequestAdapterService from './request-adapter';
 export default class ProductService extends RequestAdapterService {
 	async createProduct(product) {
 		try {
-			const { data } = await super.sendPostMultipartRequest(
+			const { data } = await super.sendPostRequest(
 				`${this.baseUrl}/v1/products`,
 				product
 			);
@@ -12,14 +12,14 @@ export default class ProductService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail creating product:${super.generateErrorMessage(error)}`
+				`Fail creating product: ${super.generateErrorMessage(error)}`
 			);
 		}
 	}
 
 	async editProduct(id, product) {
 		try {
-			const { data } = await super.sendPostMultipartRequest(
+			const { data } = await super.sendPutRequest(
 				`${this.baseUrl}/v1/products/${id}?_method=PATCH`,
 				product
 			);

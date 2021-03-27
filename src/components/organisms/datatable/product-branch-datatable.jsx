@@ -45,7 +45,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 			title: 'Varian',
 			dataIndex: 'variant',
 			sorter: true,
-			render: (variant) => variant.replaceAll('|', ' '),
+			render: (variant) => (variant ? variant.replaceAll('|', ' ') : '-'),
 		},
 		{
 			title: 'Rating',
@@ -177,7 +177,9 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 				);
 			},
 		});
-	} else {
+	}
+
+	if (props.isReadOnly || props.isEditing) {
 		columns.push({
 			align: 'center',
 			title: '',
@@ -358,11 +360,6 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 	);
 });
 
-OrganismProductBranchDatatable.propTypes = {
-	defaultData: PropTypes.array,
-	isReadOnly: PropTypes.bool,
-};
-
 const EditableCell = ({
 	editing,
 	dataIndex,
@@ -415,6 +412,12 @@ const EditableCell = ({
 			)}
 		</td>
 	);
+};
+
+OrganismProductBranchDatatable.propTypes = {
+	defaultData: PropTypes.array,
+	isEditing: PropTypes.bool,
+	isReadOnly: PropTypes.bool,
 };
 
 export default OrganismProductBranchDatatable;

@@ -1,5 +1,4 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-/* eslint-disable no-unused-vars */
 
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -30,6 +29,7 @@ import MoleculeProductVariantsInput from '../../../components/molecules/product/
 
 import MasterService from '../../../services/master';
 import ProductService from '../../../services/product';
+import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
 
 const ProductModifyPage = () => {
 	const beautyImageRef = useRef();
@@ -44,6 +44,7 @@ const ProductModifyPage = () => {
 	const isCreating = location.pathname.includes('add') ? true : false;
 
 	const { id } = useParams();
+	const [form] = Form.useForm();
 	const [attributes, setAttributes] = useState([]);
 	const [branches, setBranches] = useState([]);
 	const [fullDescEn, setFullDescEn] = useState('');
@@ -180,17 +181,92 @@ const ProductModifyPage = () => {
 	const getProductDetail = async () => {
 		try {
 			const response = await productService.getProductById(id);
+
+			setAttributes(response.data.attributes);
+			setFullDescEn(response.data.full_description.en);
+			setFullDescId(response.data.full_description.id);
 			setProduct(response.data);
+			setProductVariants(
+				response.data.details.map((variant) => ({
+					...variant,
+					branch_sku_id: variant.branch.id + variant.sku_id,
+				}))
+			);
+			setVariants(response.data.variants);
 		} catch (error) {
 			message.error(error.message);
 		}
 	};
 
-	const submit = async (values) => {
+	const setProductInitialValues = () => {
+		return isCreating
+			? {}
+			: {
+					additional_category_id: product.additional_category_id,
+					age_limit: product.age_limit,
+					base_category_id: product.base_category_id,
+					brand_id: product.brand_id,
+					company: product.product_owner_id,
+					en_short_desc: product.short_description.en,
+					id_short_desc: product.short_description.id,
+					name_en: product.name.en,
+					name_id: product.name.id,
+					related_product: product.related_product,
+					similar_product: product.similar_product,
+					sku_id: product.sku_id,
+					supplier: product.supplier,
+					txt1: product.txt1,
+					txt2: product.txt2,
+					txt3: product.txt3,
+					txt4: product.txt4,
+					upc_code: product.upc_code,
+					zone_id: product.zone_id,
+			  };
+	};
+
+	const submitProduct = async (values) => {
 		setIsSubmitting(true);
 
 		try {
-			await uploadProductImages();
+			const images = await uploadProductImages();
+
+			const newProduct = {
+				...values,
+				...images,
+				attributes,
+				details: productVariants,
+				variants,
+				product_owner_id: values.company,
+				name: {
+					id: values.name_id,
+					en: values.name_en,
+				},
+				short_description: {
+					id: values.id_short_desc,
+					en: values.en_short_desc,
+				},
+				full_description: {
+					id: fullDescId,
+					en: fullDescEn,
+				},
+			};
+
+			console.log(newProduct);
+
+			if (isCreating) {
+				await productService.createProduct(newProduct);
+				message.success('Berhasil membuat produk baru');
+			} else {
+				await productService.editProduct(id, newProduct);
+				message.success('Berhasil mengubah data produk');
+			}
+
+			message.info(
+				'Akan dikembalikan ke halaman daftar produk dalam 2 detik'
+			);
+			setTimeout(() => {
+				history.push('/products');
+			}, 2000);
 		} catch (error) {
 			message.error(error.message);
 		} finally {
@@ -265,13 +341,15 @@ const ProductModifyPage = () => {
 				>
 					<Form
 						className="w-100 mt4"
+						form={form}
 						name="modify_product"
-						// initialValues={setproductInitialValues()}
-						// onFinish={submit}
-						onFinishFailed={(error) => {
-							message.error(`Failed: ${error}`);
-							console.error(error);
-						}}
+						initialValues={setProductInitialValues()}
+						onFinish={submitProduct}
+						onFinishFailed={() =>
+							message.error(
+								'Kesalahan saat mengambil nilai pada form. Silahkan periksa kembali'
+							)
+						}
 					>
 						{' '}
 						<AtomCard title="Info Produk">
@@ -394,7 +472,7 @@ const ProductModifyPage = () => {
 								<Col span={12}>
 									<MoleculeSelectInputGroup
 										label="Kategori Tambahan"
-										name="additional-categories"
+										name="additional_category_id"
 										placeholder="Kategori Tambahan"
 										required
 										data={{
@@ -427,7 +505,7 @@ const ProductModifyPage = () => {
 								<Col span={12}>
 									<MoleculeSelectInputGroup
 										label="Kategori Dasar"
-										name="base-categories"
+										name="base_category_id"
 										placeholder="Kategori Dasar"
 										required
 										data={{
@@ -445,7 +523,7 @@ const ProductModifyPage = () => {
 								<Col span={12}>
 									<MoleculeSelectInputGroup
 										label="Zona"
-										name="zone"
+										name="zone_id"
 										placeholder="Zona"
 										required
 										data={{
@@ -460,7 +538,7 @@ const ProductModifyPage = () => {
 								<Col span={12}>
 									<MoleculeSelectInputGroup
 										label="Brand"
-										name="brand"
+										name="brand_id"
 										placeholder="Brand"
 										required
 										data={{
@@ -592,7 +670,18 @@ const ProductModifyPage = () => {
 
 					<OrganismProductBranchDatatable
 						defaultData={productVariants}
+						isEditing={!isCreating}
 					/>
+
+					<Col className="mt4" span={24}>
+						<MoleculeModifyActionButtons
+							backUrl="/products"
+							isCreating={isCreating}
+							isSubmitting={isSubmitting}
+							label="Produk"
+							onClick={() => form.submit()}
+						/>
+					</Col>
 				</Space>
 			)}
 		</OrganismLayout>
