@@ -27,8 +27,8 @@ const AtomCustomSelect = forwardRef((props, ref) => {
 	const getOptions = async () => {
 		setOptions(null);
 
-		if (props.data.mock) {
-			setOptions(props.data.mock);
+		if (props.data.options) {
+			setOptions(props.data.options);
 		} else {
 			const { data } = await masterService.getOptions(props.data.url);
 
@@ -54,7 +54,7 @@ const AtomCustomSelect = forwardRef((props, ref) => {
 	const optionalProps = { ...props };
 	if (props.data.onChange)
 		optionalProps.onChange = (value) => props.data.onChange(value);
-	if (optionalProps.branchOptionsRef) delete optionalProps.branchOptionsRef;
+	if (optionalProps.optionsRef) delete optionalProps.optionsRef;
 
 	return options ? (
 		<Select
@@ -89,7 +89,7 @@ AtomCustomSelect.propTypes = {
 	indentifier: PropTypes.string,
 	data: PropTypes.shape({
 		generateCustomOption: PropTypes.func,
-		mock: PropTypes.array,
+		options: PropTypes.array,
 		url: PropTypes.string,
 	}),
 };

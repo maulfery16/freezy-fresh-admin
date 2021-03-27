@@ -15,7 +15,7 @@ import MoleculeMarkdownRenderer from '../../components/molecules/markdown-render
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
 
-const mock = {
+const dataSource = {
 	data: [
 		{
 			created_at: new Date(),
@@ -148,7 +148,7 @@ const ViewPage = () => {
 				key="status-filter"
 				placeholder="Semua status"
 				data={{
-					mock: [
+					options: [
 						{
 							label: 'Aktif',
 							value: 'active',
@@ -183,7 +183,7 @@ const ViewPage = () => {
 				dataSourceURL={`views`}
 				filters={renderDatatableFilters()}
 				ref={viewTableRef}
-				mock={mock}
+				dataSource={dataSource}
 				scroll={1360}
 				searchInput={true}
 				title={`Tampilan`}

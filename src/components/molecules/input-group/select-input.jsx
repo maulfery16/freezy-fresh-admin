@@ -30,7 +30,7 @@ const MoleculeSelectInputGroup = (props) => {
 					{...props}
 					name={props.name}
 					placeholder={props.placeholder}
-					ref={props.branchOptionsRef}
+					ref={props.optionsRef}
 					size="large"
 				/>
 			</Form.Item>
@@ -44,7 +44,7 @@ MoleculeSelectInputGroup.propTypes = {
 	placeholder: PropTypes.string,
 	data: PropTypes.shape({
 		generateCustomOption: PropTypes.func,
-		mock: PropTypes.array,
+		options: PropTypes.array,
 		url: PropTypes.url,
 	}),
 };

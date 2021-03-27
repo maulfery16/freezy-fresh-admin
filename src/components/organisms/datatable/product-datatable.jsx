@@ -449,7 +449,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 												<Col span={24}>
 													<AtomBranchSelection
 														mode="multiple"
-														branchOptionsRef={
+														optionsRef={
 															branchOptionsRef
 														}
 														required
