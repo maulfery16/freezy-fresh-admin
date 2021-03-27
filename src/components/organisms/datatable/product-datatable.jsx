@@ -29,7 +29,6 @@ import AtomSecondaryButton from '../../atoms/button/secondary-button';
 import MoleculeSelectInputGroup from '../../molecules/input-group/select-input';
 
 import ProductService from '../../../services/product';
-const productService = new ProductService();
 
 const EditableCell = ({
 	editing,
@@ -65,14 +64,9 @@ const EditableCell = ({
 };
 
 const OrganismProductDatatable = forwardRef((props, ref) => {
+	const productService = new ProductService();
+
 	const columns = [
-		// {
-		// 	title: 'Cabang',
-		// 	dataIndex: 'branches',
-		// 	sorter: true,
-		// 	render: (branches) =>
-		// 		branches.map((branch) => branch.name).join(', '),
-		// },
 		{
 			title: 'Cabang',
 			dataIndex: 'branch',
