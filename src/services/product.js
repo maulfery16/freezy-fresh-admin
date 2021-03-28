@@ -84,4 +84,20 @@ export default class ProductService extends RequestAdapterService {
 			);
 		}
 	}
+
+	async uploadProduct(file) {
+		try {
+			const { data } = await super.sendPostMultipartRequest(
+				`${this.baseUrl}/v1/products/import/excel`,
+				file
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail uploading product: ${super.generateErrorMessage(error)}`
+			);
+		}
+	}
 }

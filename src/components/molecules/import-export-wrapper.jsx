@@ -11,13 +11,18 @@ const MoleculeImportExportWrapper = (props) => {
 		<Row style={{ height: '300px' }}>
 			<Col span={24}>
 				<Row justify="center">
-					<AtomImage src={props.image} />
+					<AtomImage src={props.image} preview={false} />
 				</Row>
 			</Col>
 
 			<Col className="mt4" span={24}>
 				<Row justify="center">
-					<AtomSecondaryButton size="large">
+					<AtomSecondaryButton
+						onClick={
+							props.onClick ? () => props.onClick() : () => {}
+						}
+						size="large"
+					>
 						{props.buttonLabel}
 					</AtomSecondaryButton>
 				</Row>
