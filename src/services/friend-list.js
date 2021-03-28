@@ -18,3 +18,11 @@ export default class FriendListService extends RequestAdapterService {
 		}
 	}
 }
+
+export function translateFriendshipStatus(status) {
+	return status
+		? status === 'Requested'
+			? 'Menunggu Konfirmasi'
+			: 'Disetujui'
+		: '';
+}

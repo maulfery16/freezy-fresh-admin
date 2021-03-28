@@ -10,11 +10,10 @@ import MoleculeImageGroup from '../../../components/molecules/molecule-image-gro
 import MoleculeInfoGroup from '../../../components/molecules/info-group';
 import OrganismLayout from '../../../components/organisms/layout';
 
-import {
+import { translateGenderEnum } from '../../../utils/helpers';
+import FriendListService, {
 	translateFriendshipStatus,
-	translateGenderEnum,
-} from '../../../utils/helpers';
-import FriendListService from '../../../services/friend-list';
+} from '../../../services/friend-list';
 const friendListService = new FriendListService();
 
 const FriendProfileDetailPage = () => {

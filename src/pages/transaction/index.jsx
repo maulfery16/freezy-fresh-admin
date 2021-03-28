@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { Space } from 'antd';
 import { EyeFilled } from '@ant-design/icons';
 
+import AtomNumberFormat from '../../components/atoms/number-format';
 import AtomStatusSelect from '../../components/atoms/datatable/status-select';
 import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
 import MoleculeDatatableDateRange from '../../components/molecules/datatable/date-range-plugin';
@@ -13,7 +14,7 @@ import MoleculeDatatableFilter from '../../components/molecules/datatable/filter
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
 
-import { translateTransactionKind, convertToRupiah } from '../../utils/helpers';
+import { translateTransactionKind } from '../../services/transaction';
 
 const dataSource = {
 	data: [
@@ -114,7 +115,7 @@ const TransactionPage = () => {
 		{
 			title: 'Nominal Transaksi (Rp)',
 			dataIndex: 'total',
-			render: (_, record) => convertToRupiah(record.total),
+			render: (_, record) => <AtomNumberFormat value={record.total} />,
 			sorter: true,
 		},
 		{
