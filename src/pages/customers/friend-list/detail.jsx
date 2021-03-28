@@ -11,7 +11,7 @@ import MoleculeInfoGroup from '../../../components/molecules/info-group';
 import OrganismLayout from '../../../components/organisms/layout';
 
 import {
-	convertFriendshipStatus,
+	translateFriendshipStatus,
 	translateGenderEnum,
 } from '../../../utils/helpers';
 import FriendListService from '../../../services/friend-list';
@@ -91,7 +91,7 @@ const FriendProfileDetailPage = () => {
 										title="Status Pertemanan"
 										content={
 											<Badge
-												count={convertFriendshipStatus(
+												count={translateFriendshipStatus(
 													friendProfile.status_name
 												)}
 												style={{

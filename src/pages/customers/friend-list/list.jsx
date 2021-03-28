@@ -12,7 +12,7 @@ import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
 import {
-	convertFriendshipStatus,
+	translateFriendshipStatus,
 	translateGenderEnum,
 } from '../../../utils/helpers';
 
@@ -42,7 +42,8 @@ const FriendListPage = () => {
 		{
 			title: 'Status Pertemanan',
 			dataIndex: 'status_name',
-			render: (_, record) => convertFriendshipStatus(record.status_name),
+			render: (_, record) =>
+				translateFriendshipStatus(record.status_name),
 			sorter: true,
 		},
 		{

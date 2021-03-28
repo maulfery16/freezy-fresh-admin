@@ -110,7 +110,7 @@ const BranchPage = () => {
 					{!record.is_active && (
 						<MoleculeDeleteConfirm
 							id={id}
-							label="Branch"
+							label="Cabang Freezy"
 							tableRef={branchTableRef}
 							url="branches"
 						/>
@@ -126,7 +126,7 @@ const BranchPage = () => {
 		return (
 			<MoleculeDatatableAdditionalAction
 				column={column}
-				label="Branch"
+				label="Cabang Freezy"
 				getLimit={() => branchTableRef.current.totalData}
 				route="/branch"
 				url="branches"
