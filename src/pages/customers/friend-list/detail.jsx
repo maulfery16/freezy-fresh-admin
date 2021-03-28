@@ -10,11 +10,10 @@ import MoleculeImageGroup from '../../../components/molecules/molecule-image-gro
 import MoleculeInfoGroup from '../../../components/molecules/info-group';
 import OrganismLayout from '../../../components/organisms/layout';
 
-import {
-	convertFriendshipStatus,
-	translateGenderEnum,
-} from '../../../utils/helpers';
-import FriendListService from '../../../services/friend-list';
+import { translateGenderEnum } from '../../../utils/helpers';
+import FriendListService, {
+	translateFriendshipStatus,
+} from '../../../services/friend-list';
 const friendListService = new FriendListService();
 
 const FriendProfileDetailPage = () => {
@@ -91,7 +90,7 @@ const FriendProfileDetailPage = () => {
 										title="Status Pertemanan"
 										content={
 											<Badge
-												count={convertFriendshipStatus(
+												count={translateFriendshipStatus(
 													friendProfile.status_name
 												)}
 												style={{

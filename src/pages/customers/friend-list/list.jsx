@@ -11,10 +11,8 @@ import MoleculeDatatableFilter from '../../../components/molecules/datatable/fil
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
-import {
-	convertFriendshipStatus,
-	translateGenderEnum,
-} from '../../../utils/helpers';
+import { translateGenderEnum } from '../../../utils/helpers';
+import { translateFriendshipStatus } from '../../../services/friend-list';
 
 const FriendListPage = () => {
 	const { id } = useParams();
@@ -42,7 +40,8 @@ const FriendListPage = () => {
 		{
 			title: 'Status Pertemanan',
 			dataIndex: 'status_name',
-			render: (_, record) => convertFriendshipStatus(record.status_name),
+			render: (_, record) =>
+				translateFriendshipStatus(record.status_name),
 			sorter: true,
 		},
 		{

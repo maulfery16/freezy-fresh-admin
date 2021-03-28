@@ -1,11 +1,3 @@
-export function convertFriendshipStatus(status) {
-	return status
-		? status === 'Requested'
-			? 'Menunggu Konfirmasi'
-			: 'Disetujui'
-		: '';
-}
-
 export const getURLParams = (url) => {
 	const searchParams = new URLSearchParams(url);
 	const params = {};
