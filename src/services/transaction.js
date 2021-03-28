@@ -16,3 +16,16 @@ export const translateTransactionKind = (kind) => {
 			'';
 	}
 };
+
+export const translateTransactionStatus = (status) => {
+	switch (status) {
+		case 'success':
+			return 'Berhasil';
+		case 'pending':
+			return 'Pending';
+		case 'failed':
+			return 'Gagal';
+		default:
+			'';
+	}
+};

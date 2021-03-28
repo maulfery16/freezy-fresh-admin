@@ -14,7 +14,10 @@ import MoleculeDatatableFilter from '../../components/molecules/datatable/filter
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
 
-import { translateTransactionKind } from '../../services/transaction';
+import {
+	translateTransactionKind,
+	translateTransactionStatus,
+} from '../../services/transaction';
 
 const dataSource = {
 	data: [
@@ -139,7 +142,7 @@ const TransactionPage = () => {
 		{
 			title: 'Status',
 			dataIndex: 'status',
-			render: (_, record) => record.status,
+			render: (_, record) => translateTransactionStatus(record.status),
 			sorter: true,
 		},
 		{

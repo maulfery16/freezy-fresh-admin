@@ -41,7 +41,9 @@ const BranchModifyPage = () => {
 			title="Detail Branch"
 		>
 			<Typography.Title level={4}>
-				<span className="fw7">{`Detail Branch`.toUpperCase()}</span>
+				<span className="fw7">
+					{`Detail Cabang Freezy`.toUpperCase()}
+				</span>
 			</Typography.Title>
 
 			{!branch ? (
@@ -151,7 +153,7 @@ const BranchModifyPage = () => {
 								<Col span={24} style={{ paddingTop: '2rem' }}>
 									<Typography.Text strong>
 										<span className="denim f5">
-											INFO UPDATE PRODUK
+											INFO UPDATE CABANG
 										</span>
 									</Typography.Text>
 								</Col>
