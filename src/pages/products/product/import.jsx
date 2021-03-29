@@ -19,7 +19,7 @@ const ProductImportPage = () => {
 	const downloadTemplate = () => {
 		try {
 			window.open(
-				`${config.API_URL}/v1/storage/templates/products/import_produk.xlsx`,
+				`${config.API_URL}/storage/templates/products/import_produk.xlsx`,
 				'_blank'
 			);
 		} catch (error) {
