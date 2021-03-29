@@ -391,6 +391,7 @@ const ProductModifyPage = () => {
 										]}
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										label="SKU ID"
@@ -400,6 +401,7 @@ const ProductModifyPage = () => {
 										type="code"
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										label="Kode UPC"
@@ -409,6 +411,7 @@ const ProductModifyPage = () => {
 										type="code"
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										name="name_id"
@@ -418,6 +421,7 @@ const ProductModifyPage = () => {
 										type="text"
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										name="name_en"
@@ -427,6 +431,7 @@ const ProductModifyPage = () => {
 										type="text"
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										label="Deskripsi Singkat (ID)"
@@ -440,6 +445,7 @@ const ProductModifyPage = () => {
 										}}
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										label="Deskripsi Singkat (EN)"
@@ -453,6 +459,7 @@ const ProductModifyPage = () => {
 										}}
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeTextEditorGroup
 										label="Deskripsi Lengkap (ID)"
@@ -461,6 +468,7 @@ const ProductModifyPage = () => {
 										required={true}
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeTextEditorGroup
 										label="Deskripsi Lengkap (EN)"
@@ -469,6 +477,7 @@ const ProductModifyPage = () => {
 										required={true}
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeSelectInputGroup
 										label="Kategori Tambahan"
@@ -484,6 +493,7 @@ const ProductModifyPage = () => {
 										}}
 									/>
 								</Col>
+
 								<Col span={12}>
 									<AtomBranchSelection
 										onChange={(_, options) => {
@@ -517,9 +527,11 @@ const ProductModifyPage = () => {
 										}}
 									/>
 								</Col>
+
 								<Col span={12}>
 									<AtomProductOwnerSelect required />
 								</Col>
+
 								<Col span={12}>
 									<MoleculeSelectInputGroup
 										label="Zona"
@@ -535,6 +547,7 @@ const ProductModifyPage = () => {
 										}}
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeSelectInputGroup
 										label="Brand"
@@ -550,6 +563,7 @@ const ProductModifyPage = () => {
 										}}
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeNumberInputGroup
 										id="age_limit"
@@ -558,6 +572,7 @@ const ProductModifyPage = () => {
 										placeholder="Batas Umur"
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										name="supplier"
@@ -567,6 +582,7 @@ const ProductModifyPage = () => {
 										type="text"
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeSelectInputGroup
 										label="Produk Serupa"
@@ -583,6 +599,7 @@ const ProductModifyPage = () => {
 										}}
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeSelectInputGroup
 										label="Produk Terkait"
@@ -599,6 +616,55 @@ const ProductModifyPage = () => {
 										}}
 									/>
 								</Col>
+
+								<Col span={12}>
+									<Row gutter={12}>
+										<Col span={6}>
+											<MoleculeTextInputGroup
+												name="long_cm"
+												label="P"
+												placeholder="Panjang"
+												required
+												suffix="cm"
+												type="text"
+											/>
+										</Col>
+
+										<Col span={6}>
+											<MoleculeTextInputGroup
+												name="width_cm"
+												label="L"
+												placeholder="Lebar"
+												required
+												suffix="cm"
+												type="text"
+											/>
+										</Col>
+
+										<Col span={6}>
+											<MoleculeTextInputGroup
+												name="height_cm"
+												label="T"
+												placeholder="Tinggi"
+												required
+												suffix="cm"
+												type="text"
+											/>
+										</Col>
+									</Row>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeTextInputGroup
+										name="weight_gr"
+										label="Berat"
+										placeholder="Berat"
+										required
+										suffix="gr"
+										type="text"
+									/>
+								</Col>
+
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										name="txt1"
@@ -608,6 +674,7 @@ const ProductModifyPage = () => {
 										type="text"
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										name="txt2"
@@ -617,6 +684,7 @@ const ProductModifyPage = () => {
 										type="text"
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										name="txt3"
@@ -626,6 +694,7 @@ const ProductModifyPage = () => {
 										type="text"
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										name="txt4"
