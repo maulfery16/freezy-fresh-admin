@@ -4,7 +4,7 @@ import ReactMoment from 'react-moment';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { Space } from 'antd';
-import { EyeFilled } from '@ant-design/icons';
+import { EditFilled, EyeFilled } from '@ant-design/icons';
 
 import AtomNumberFormat from '../../components/atoms/number-format';
 import AtomStatusSelect from '../../components/atoms/datatable/status-select';
@@ -164,6 +164,10 @@ const TransactionPage = () => {
 					/>
 					<Link to={`/transaction/${record.id}/detail`}>
 						<EyeFilled className="f4 blue" />
+					</Link>
+
+					<Link to={`/transaction/${record.id}/edit`}>
+						<EditFilled className="f4 orange" />
 					</Link>
 				</Space>
 			),
