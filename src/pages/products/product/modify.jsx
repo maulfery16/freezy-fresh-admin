@@ -54,24 +54,24 @@ const ProductModifyPage = () => {
 	const [productVariants, setProductVariants] = useState([]);
 	const [variants, setVariants] = useState([]);
 
-	const combineProductVariantWithExisting = (
-		existingProductVariants,
-		incomingVProductVariants
-	) => {
-		if (existingProductVariants) return incomingVProductVariants;
+	const combineProductVariantWithExisting = (newProductVariants) => {
+		let combinedProductVariants = [];
 
-		let combinedProductVariants = [...existingProductVariants];
-		const isProductVariantExist = (item) => {
-			return existingProductVariants.some((productVariant) => {
-				return (
-					productVariant.branch.id === item.branch.id &&
-					productVariant.sku_id === item.sku_id
+		newProductVariants.forEach((variant) => {
+			const existingProductVariantId = productVariants.findIndex(
+				(productVariant) => {
+					return (
+						productVariant.branch.id === variant.branch.id &&
+						productVariant.sku_id === variant.sku_id
+					);
+				}
+			);
+
+			if (existingProductVariantId > -1) {
+				combinedProductVariants.push(
+					productVariants[existingProductVariantId]
 				);
-			});
-		};
-
-		incomingVProductVariants.forEach((variant) => {
-			if (!isProductVariantExist(variant.id)) {
+			} else {
 				combinedProductVariants.push({ ...variant });
 			}
 		});
@@ -79,14 +79,17 @@ const ProductModifyPage = () => {
 		return combinedProductVariants;
 	};
 
-	const combineVariantWithExisting = (existingVariants, incomingVariants) => {
-		let combinedVariants = [...existingVariants];
-		const isVariantExist = (item) => {
-			return existingVariants.some((variant) => variant.name.id === item);
-		};
+	const combineVariantWithExisting = (newVariants) => {
+		let combinedVariants = [];
 
-		incomingVariants.forEach((variant) => {
-			if (!isVariantExist(variant.id)) {
+		newVariants.forEach((variant) => {
+			const existingVariantIndex = variants.findIndex(
+				(extVariant) => extVariant.name.id === variant.id
+			);
+
+			if (existingVariantIndex > -1) {
+				combinedVariants.push(variants[existingVariantIndex]);
+			} else {
 				combinedVariants.push({ name: { ...variant } });
 			}
 		});
@@ -94,9 +97,23 @@ const ProductModifyPage = () => {
 		return combinedVariants;
 	};
 
-	const generateProductsVariants = () => {
+	const generateProductVariants = () => {
+		if (branches.length === 0) {
+			message.warning(
+				'Gagal untuk menghasilkan produk variant: belum ada cabang terpilih'
+			);
+			return;
+		}
+
+		if (variants.length === 0) {
+			message.warning(
+				'Gagal untuk menghasilkan produk variant: belum ada variants yang diatur'
+			);
+			return;
+		}
+
 		try {
-			let newProductVariants = [...productVariants];
+			let newProductVariants = [];
 			let generatedProductsVariants = [];
 
 			branches.map((branch) => {
@@ -120,7 +137,6 @@ const ProductModifyPage = () => {
 			});
 
 			newProductVariants = combineProductVariantWithExisting(
-				newProductVariants,
 				generatedProductsVariants
 			);
 
@@ -138,14 +154,11 @@ const ProductModifyPage = () => {
 		}
 
 		try {
-			let newVariants = [...variants];
+			let newVariants = [];
 			let values = attributes.map((attr) => attr.values);
 
 			if (values.length === 1) {
-				newVariants = combineVariantWithExisting(
-					newVariants,
-					values[0]
-				);
+				newVariants = combineVariantWithExisting(values[0]);
 			} else {
 				let combiningAvailable = true;
 
@@ -166,10 +179,7 @@ const ProductModifyPage = () => {
 					values = [combinedValues, ...other];
 				}
 
-				newVariants = combineVariantWithExisting(
-					newVariants,
-					values[0]
-				);
+				newVariants = combineVariantWithExisting(values[0]);
 			}
 
 			setVariants(newVariants);
@@ -306,12 +316,6 @@ const ProductModifyPage = () => {
 			if (!isCreating) await getProductDetail();
 		})();
 	}, []);
-
-	useEffect(() => {
-		if (branches.length > 0) {
-			generateProductsVariants();
-		}
-	}, [branches, variants]);
 
 	return (
 		<OrganismLayout
@@ -505,7 +509,6 @@ const ProductModifyPage = () => {
 													}))
 												);
 											}
-											generateProductsVariants();
 										}}
 										mode="multiple"
 										required
@@ -740,6 +743,8 @@ const ProductModifyPage = () => {
 					<OrganismProductBranchDatatable
 						defaultData={productVariants}
 						isEditing={!isCreating}
+						generateProductVariants={generateProductVariants}
+						setProductVariants={setProductVariants}
 					/>
 
 					<Col className="mt4" span={24}>

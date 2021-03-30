@@ -8,8 +8,8 @@ function MoleculeProductAttributesInput(props) {
 	const addAttribute = () => {
 		let currentAttributes = [...props.attributes];
 		currentAttributes.push({
-			name: { id: 'Nama atribut', en: 'Attribute name' },
-			values: [{ id: 'Nilai atribut', en: 'attributes value' }],
+			name: { id: 'Attribut', en: '' },
+			values: [{ id: '', en: '' }],
 		});
 
 		props.setAttributes(currentAttributes);
@@ -31,8 +31,8 @@ function MoleculeProductAttributesInput(props) {
 			currentAttributes[attrIdx].values.splice(itemIdx, 1);
 		} else {
 			currentAttributes[attrIdx].values.push({
-				id: 'Nilai atribut',
-				en: 'attributes value',
+				id: '',
+				en: '',
 			});
 		}
 
@@ -75,6 +75,8 @@ function MoleculeProductAttributesInput(props) {
 
 									<Space>
 										<Input
+											placeholder="ex: Warna"
+											value={attribute.name.id}
 											onChange={(e) =>
 												setAttributesValue({
 													attrKey: 'name',
@@ -83,9 +85,10 @@ function MoleculeProductAttributesInput(props) {
 													value: e.target.value,
 												})
 											}
-											value={attribute.name.id}
 										/>
 										<Input
+											placeholder="ex: Color"
+											value={attribute.name.en}
 											onChange={(e) =>
 												setAttributesValue({
 													attrKey: 'name',
@@ -94,7 +97,6 @@ function MoleculeProductAttributesInput(props) {
 													value: e.target.value,
 												})
 											}
-											value={attribute.name.en}
 										/>
 									</Space>
 								</Space>
@@ -114,6 +116,8 @@ function MoleculeProductAttributesInput(props) {
 											size="small"
 										>
 											<Input
+												placeholder="ex: Merah"
+												value={value.id}
 												onChange={(e) =>
 													setAttributesValue({
 														attrKey: 'values',
@@ -123,9 +127,10 @@ function MoleculeProductAttributesInput(props) {
 														value: e.target.value,
 													})
 												}
-												value={value.id}
 											/>
 											<Input
+												placeholder="ex: Red"
+												value={value.en}
 												onChange={(e) =>
 													setAttributesValue({
 														attrKey: 'values',
@@ -135,7 +140,6 @@ function MoleculeProductAttributesInput(props) {
 														value: e.target.value,
 													})
 												}
-												value={value.en}
 											/>
 
 											<PlusOutlined

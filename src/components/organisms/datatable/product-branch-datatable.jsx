@@ -21,7 +21,12 @@ import {
 	Space,
 	Table,
 } from 'antd';
-import { CheckOutlined, CloseOutlined, SyncOutlined } from '@ant-design/icons';
+import {
+	CheckOutlined,
+	CloseOutlined,
+	RedoOutlined,
+	SyncOutlined,
+} from '@ant-design/icons';
 
 import AtomBranchSelection from '../../atoms/selection/branch';
 import AtomCard from '../../atoms/card';
@@ -292,6 +297,8 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 				setData(newData);
 				setEditingKey('');
 			}
+
+			props.setProductVariants(newData);
 		} catch (errInfo) {
 			console.error('Validate Failed:', errInfo);
 		}
@@ -323,12 +330,26 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		<AtomCard title="Pengaturan Cabang">
 			<Form name="table-form" form={form} component={false}>
 				<Row align="middle" gutter={[0, 12]} justify="space-between">
-					<Col span={8}>
-						<Input.Search
-							placeholder="Cari Nama Produk"
-							onSearch={setKeyword}
-							size="large"
-						/>
+					<Col span={15}>
+						<Space>
+							<Input.Search
+								placeholder="Cari Nama Produk"
+								onSearch={setKeyword}
+								size="large"
+							/>
+
+							{!props.isReadOnly && (
+								<AtomPrimaryButton
+									icon={<RedoOutlined />}
+									size="large"
+									onClick={() =>
+										props.generateProductVariants()
+									}
+								>
+									Refresh table
+								</AtomPrimaryButton>
+							)}
+						</Space>
 					</Col>
 
 					<Col span={9}>
@@ -416,8 +437,10 @@ const EditableCell = ({
 
 OrganismProductBranchDatatable.propTypes = {
 	defaultData: PropTypes.array,
+	generateProductVariants: PropTypes.func,
 	isEditing: PropTypes.bool,
 	isReadOnly: PropTypes.bool,
+	setProductVariants: PropTypes.func,
 };
 
 export default OrganismProductBranchDatatable;
