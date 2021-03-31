@@ -190,10 +190,11 @@ const TransactionModifyPage = () => {
 										content={transaction.rezeki_branch}
 									/>
 								</Col>
+
 								<Col span={24}>
 									<fieldset>
 										<legend>Sumber/Tujuan Dana</legend>
-										<Row>
+										<Row gutter={[12, 24]}>
 											<Col span={12}>
 												<MoleculeInfoGroup
 													title="Freezy Cash (Rp)"
@@ -222,7 +223,13 @@ const TransactionModifyPage = () => {
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Nama Pelanggan"
-										content={`${transaction.customer.name.first_name} ${transaction.customer.name.last_name}`}
+										content={`${
+											transaction.customer.name
+												.first_name || ''
+										} ${
+											transaction.customer.name
+												.last_name || ''
+										}`}
 									/>
 								</Col>
 

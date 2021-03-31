@@ -10,9 +10,9 @@ const AtomBranchSelect = (props) => {
 		<MoleculeSelectInputGroup
 			{...restProps}
 			allowClear
-			label="Pilih Cabang Freezy"
+			label="Cabang Freezy"
 			name="branches"
-			placeholder="Cabang Freezy"
+			placeholder="Pilih Cabang Freezy"
 			data={{
 				url: 'branches',
 				generateCustomOption: (item) => ({

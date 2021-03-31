@@ -88,18 +88,12 @@ const ColourModifyPage = () => {
 		});
 	}, [hexaCode]);
 
-	const handleChangeColorComplete = (color) => {
-		setHexaCode(color.hex);
-	};
-
-	const handleChangeHexaCode = (e) => {
-		setHexaCode(e.target.value);
-	};
-
 	const colorPicker = (
 		<SketchPicker
 			color={hexaCode}
-			onChangeComplete={handleChangeColorComplete}
+			onChangeComplete={(color) => {
+				setHexaCode(color.hex);
+			}}
 		/>
 	);
 
@@ -166,7 +160,9 @@ const ColourModifyPage = () => {
 										<MoleculeTextInputGroup
 											label="Kode Hexa"
 											name="hexa_code"
-											onChange={handleChangeHexaCode}
+											onChange={(e) => {
+												setHexaCode(e.target.value);
+											}}
 											placeholder="Kode Hexa"
 											type="hex_color"
 											value={hexaCode || ''}
