@@ -223,8 +223,8 @@ const ProductModifyPage = () => {
 					long_cm: product.height_cm,
 					name_en: product.name.en,
 					name_id: product.name.id,
-					related_product: product.related_product,
-					similar_product: product.similar_product,
+					related_products: product.related_products,
+					similar_products: product.similar_products,
 					sku_id: product.sku_id,
 					supplier: product.supplier,
 					txt1: product.txt1,
@@ -591,7 +591,7 @@ const ProductModifyPage = () => {
 								<Col span={12}>
 									<MoleculeSelectInputGroup
 										label="Produk Serupa"
-										name="similar_product"
+										name="similar_products"
 										mode="multiple"
 										placeholder="Produk Serupa"
 										required
@@ -608,7 +608,7 @@ const ProductModifyPage = () => {
 								<Col span={12}>
 									<MoleculeSelectInputGroup
 										label="Produk Terkait"
-										name="related_product"
+										name="related_products"
 										mode="multiple"
 										placeholder="Produk Terkait"
 										required
