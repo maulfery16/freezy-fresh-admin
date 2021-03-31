@@ -28,8 +28,6 @@ const ProductImportPage = () => {
 	};
 
 	const uploadProduct = async ({ file }) => {
-		console.log(file);
-
 		setIsUploadingProduct(true);
 
 		try {

@@ -218,7 +218,9 @@ const ProductModifyPage = () => {
 					brand_id: product.brand_id,
 					company: product.product_owner_id,
 					en_short_desc: product.short_description.en,
+					height_cm: product.height_cm,
 					id_short_desc: product.short_description.id,
+					long_cm: product.height_cm,
 					name_en: product.name.en,
 					name_id: product.name.id,
 					related_product: product.related_product,
@@ -230,6 +232,8 @@ const ProductModifyPage = () => {
 					txt3: product.txt3,
 					txt4: product.txt4,
 					upc_code: product.upc_code,
+					weight_gr: product.weight_gr,
+					width_cm: product.width_cm,
 					zone_id: product.zone_id,
 			  };
 	};
@@ -260,8 +264,6 @@ const ProductModifyPage = () => {
 					en: fullDescEn,
 				},
 			};
-
-			console.log(newProduct);
 
 			if (isCreating) {
 				await productService.createProduct(newProduct);
