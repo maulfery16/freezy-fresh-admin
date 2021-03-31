@@ -126,11 +126,11 @@ const OrganismDatatable = forwardRef((props, ref) => {
 			filterParams.search.split(';')[0].includes(':') ||
 			filterParams.search.split(';')[0].length === 0
 				? ''
-				: `${filterParams.search.split(';')[0]};`;
+				: `${filterParams.search.split(';')[0]}`;
 
 		const filterParameter = {
 			...filterParams,
-			search: `${keyword}${keyword && ';'}${filters
+			search: `${keyword}${filters
 				.map((query) => `${query.name}${query.operator}${query.value}`)
 				.join(';')}`,
 			page: 1,
@@ -151,18 +151,19 @@ const OrganismDatatable = forwardRef((props, ref) => {
 			setFilterParams({ ...filterParams, search: keyword.join(';') });
 		}
 
-		setUrlParams(keyword);
+		setUrlParams(search);
 	};
 
 	const setUrlParams = (keyword) => {
-		history.push(
-			history.location.pathname +
-				'?' +
-				`q=${keyword}&` +
-				`${filters
-					.map((query) => `${query.name}=${query.value}`)
-					.join('&')}`
-		);
+		let url = history.location.pathname;
+
+		if (keyword !== '') url += `?q=${keyword}&`;
+		if (filters.length > 0)
+			url += `${filters
+				.map((query) => `${query.name}=${query.value}`)
+				.join('&')}`;
+
+		history.push(url);
 	};
 
 	useEffect(() => {

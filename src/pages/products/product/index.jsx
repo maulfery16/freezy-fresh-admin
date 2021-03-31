@@ -130,6 +130,7 @@ const ProductPage = () => {
 				importRoute="/products/import"
 				label="Produk"
 				requiredParams="branch"
+				requiredParamsLabel="cabang"
 				route="/products"
 				url="products"
 			/>

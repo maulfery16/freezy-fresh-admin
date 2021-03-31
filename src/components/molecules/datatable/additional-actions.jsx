@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import { message, Space } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -25,17 +26,24 @@ const MoleculeDatatableAdditionalAction = (props) => {
 
 			if (props.requiredParams) {
 				if (!history.location.search.includes(props.requiredParams)) {
-					message.warning('Pilih filter cabang terlebih dahulu');
+					message.warning(
+						`Pilih filter ${props.requiredParamsLabel} terlebih dahulu`
+					);
 					return;
 				}
 			}
 
-			const { q, ...queryParams } = getURLParams(history.location.search);
-			params.search =
-				q +
-				`${Object.keys(queryParams)
-					.map((key) => `${key}:${queryParams[key]}`)
-					.join(';')}`;
+			if (history.location.search !== '') {
+				const { q, ...queryParams } = getURLParams(
+					history.location.search
+				);
+
+				params.search =
+					`${q};` +
+					`${Object.keys(queryParams)
+						.map((key) => `${key}:${queryParams[key]}`)
+						.join(';')}`;
+			}
 
 			await datatableService.exportAsCSV(params, props.column, props.url);
 		} catch (error) {
@@ -82,6 +90,7 @@ MoleculeDatatableAdditionalAction.propTypes = {
 	isEdit: PropTypes.bool,
 	label: PropTypes.string.isRequired,
 	requiredParams: PropTypes.string,
+	requiredParamsLabel: PropTypes.string,
 	route: PropTypes.string.isRequired,
 	withoutAddButton: PropTypes.bool,
 };
