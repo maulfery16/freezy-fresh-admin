@@ -604,8 +604,92 @@ const routes = [
 		],
 	},
 	{
-		path: '/customers',
+		path: '/customer',
 		children: [
+			{
+				component: React.lazy(() =>
+					import('./pages/customers/customer')
+				),
+				exact: true,
+				guard: true,
+				name: 'Customer Page',
+				path: '/',
+			},
+			{
+				component: React.lazy(() =>
+					import('./pages/customers/customer/modify')
+				),
+				exact: true,
+				guard: true,
+				name: 'Customer Page Add',
+				path: '/add',
+			},
+			{
+				path: '/:id',
+				children: [
+					{
+						component: React.lazy(() =>
+							import('./pages/customers/customer/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Customer Page Edit',
+						path: '/edit',
+					},
+					{
+						path: '/detail',
+						children: [
+							{
+								component: React.lazy(() =>
+									import('./pages/customers/customer/detail')
+								),
+								exact: true,
+								guard: true,
+								name: 'Customer Page Detail',
+								path: '/',
+							},
+							{
+								component: React.lazy(() =>
+									import(
+										'./pages/customers/customer/address/modify'
+									)
+								),
+								exact: true,
+								guard: true,
+								name: 'Customer Address Page Add',
+								path: '/address-add',
+							},
+							{
+								path: '/:address_id',
+								children: [
+									{
+										component: React.lazy(() =>
+											import(
+												'./pages/customers/customer/address/detail'
+											)
+										),
+										exact: true,
+										guard: true,
+										name: 'Customer Address Page Detail',
+										path: '/address-detail',
+									},
+									{
+										component: React.lazy(() =>
+											import(
+												'./pages/customers/customer/address/modify'
+											)
+										),
+										exact: true,
+										guard: true,
+										name: 'Customer Address Page Edit',
+										path: '/address-edit',
+									},
+								],
+							},
+						],
+					},
+				],
+			},
 			{
 				path: '/friend-list',
 				children: [
