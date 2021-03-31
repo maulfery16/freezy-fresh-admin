@@ -30,10 +30,11 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
+    "build": "react-scripts build",
+    "deploy-stg": "git pull origin develop && npm install && react-scripts build",
+    "eject": "react-scripts eject",
     "start": "react-scripts start",
-    "build": "react-scripts build && cp .htaccess build/",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": [
