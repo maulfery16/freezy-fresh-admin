@@ -20,12 +20,12 @@ const AtomStatusSwitch = (props) => {
 		try {
 			await datatableService.updateActiveStatus(props.id, props.url);
 			message.success('Berhasil memperbaharui status aktif kategori');
-			props.tableRef.current.refetchData();
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
 		} finally {
 			setIsVisible(false);
+			props.tableRef.current.refetchData();
 		}
 	};
 
