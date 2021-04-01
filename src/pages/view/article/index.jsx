@@ -86,7 +86,7 @@ const ArticlePage = () => {
 				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
 			),
 			csvRender: (item) =>
-				moment(new Date(item.date)).format('DD-MM-YYYY'),
+				moment(new Date(item.created_at)).format('DD-MM-YYYY'),
 		},
 		{
 			align: 'center',

@@ -21,7 +21,8 @@ export default class RequestAdapterService {
 		};
 
 		if (token !== null) headers['Authorization'] = `Bearer ${token}`;
-		if (refreshToken !== null) headers['Cookie'] = `refreshToken=${refreshToken}`;
+		if (refreshToken !== null)
+			headers['Cookie'] = `refreshToken=${refreshToken}`;
 
 		this.reqClient = axios.create({ headers });
 		this.reqClient.interceptors.response.use(
@@ -43,9 +44,10 @@ export default class RequestAdapterService {
 	dowloadDataAsCSV(data, properties, filename) {
 		let csv = '';
 
-		const headers = properties.map((property) =>
-			property.skipExport ? '' : property.title
-		);
+		const headers = [];
+		properties.map((property) => {
+			if (!property.skipExport) headers.push(property.title);
+		});
 		csv = `"${headers.join(`","`)}"`;
 		csv += `\r\n`;
 
@@ -53,20 +55,20 @@ export default class RequestAdapterService {
 			const row = [];
 
 			properties.forEach((property) => {
-				if (property.skipExport) {
-					row.push('');
-				} else if (property.render) {
-					const value = property.csvRender
-						? property.csvRender(item)
-						: property.render(
-								item[property.dataIndex],
-								item,
-								dataIdx
-						  );
+				if (!property.skipExport) {
+					if (property.render) {
+						const value = property.csvRender
+							? property.csvRender(item)
+							: property.render(
+									item[property.dataIndex],
+									item,
+									dataIdx
+							  );
 
-					row.push(value);
-				} else {
-					row.push(item[property.dataIndex]);
+						row.push(value);
+					} else {
+						row.push(item[property.dataIndex]);
+					}
 				}
 			});
 
