@@ -3,6 +3,7 @@ import React from 'react';
 import { Form, Input, Typography } from 'antd';
 
 const TYPE_ENUM = {
+	alphanumeric: 'angka dan huruf',
 	email: 'email',
 	number: 'angka',
 	phone: 'angka',
