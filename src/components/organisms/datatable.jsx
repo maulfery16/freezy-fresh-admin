@@ -155,9 +155,9 @@ const OrganismDatatable = forwardRef((props, ref) => {
 	};
 
 	const setUrlParams = (keyword) => {
-		let url = history.location.pathname;
+		let url = history.location.pathname + '?';
 
-		if (keyword !== '') url += `?q=${keyword}&`;
+		if (keyword !== '') url += `q=${keyword}&`;
 		if (filters.length > 0)
 			url += `${filters
 				.map((query) => `${query.name}=${query.value}`)
