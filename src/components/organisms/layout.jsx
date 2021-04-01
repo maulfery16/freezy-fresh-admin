@@ -415,13 +415,19 @@ const OrganismLayout = (props) => {
 														style={{ fontSize: 10 }}
 													>
 														{user.branches.length >
-															0 &&
-															user.branches
-																.map(
-																	(res) =>
-																		res.name
-																)
-																.join(', ')}
+														0
+															? user.branches
+																	.map(
+																		(res) =>
+																			res
+																				.name
+																				.id ||
+																			res
+																				.name
+																				.en
+																	)
+																	.join(', ')
+															: '-'}
 													</span>
 												</Typography.Text>
 											</Space>
