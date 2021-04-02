@@ -4,6 +4,8 @@ import React from 'react';
 
 const MoleculeDatatableDateRange = (props) => {
 	const setDateRangeFilter = (selectedValue) => {
+		if (!selectedValue) return;
+
 		if (selectedValue.length > 0) {
 			props.addMultipleFilter([
 				{
