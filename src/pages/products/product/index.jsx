@@ -34,8 +34,9 @@ const ProductPage = () => {
 		},
 		{
 			title: 'Nama Produk (ID)',
-			dataIndex: `name['id']`,
+			dataIndex: 'name',
 			render: (_, record) => record.name.id,
+			csvRender: (item) => item.name.id,
 			sorter: true,
 		},
 		{
@@ -45,15 +46,16 @@ const ProductPage = () => {
 		},
 		{
 			title: 'Kategori Dasar',
-			dataIndex: `base_category['id']`,
+			dataIndex: 'base_category',
 			render: (_, record) => record.base_category.id,
+			csvRender: (item) => item.base_category.id,
 			sorter: true,
 		},
 		{
 			title: 'Kategori Tambahan',
-			dataIndex: `additional_category['id']`,
-			render: (_, record) =>
-				record.additional_category && record.additional_category.id,
+			dataIndex: 'additional_category',
+			render: (_, record) => record.additional_category?.id,
+			csvRender: (item) => item.additional_category.id,
 			sorter: true,
 		},
 		{
@@ -63,8 +65,9 @@ const ProductPage = () => {
 		},
 		{
 			title: 'Nama brand',
-			dataIndex: `brand['id']`,
+			dataIndex: 'brand',
 			render: (_, record) => record.brand.id,
+			csvRender: (item) => item.brand.id,
 			sorter: true,
 		},
 		{
