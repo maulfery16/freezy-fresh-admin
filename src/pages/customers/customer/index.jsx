@@ -115,7 +115,7 @@ const CustomerPage = () => {
 			dataIndex: 'id',
 			render: (id, record) => (
 				<Space size="middle">
-					<Link to={`/customer/${id}`}>
+					<Link to={`/customer/${id}/detail`}>
 						<EyeFilled className="f4 blue" />
 					</Link>
 

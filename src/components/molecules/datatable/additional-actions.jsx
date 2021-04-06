@@ -65,13 +65,15 @@ const MoleculeDatatableAdditionalAction = (props) => {
 				</AtomSecondaryButton>
 			)}
 
-			<AtomSecondaryButton
-				loading={isExporting}
-				onClick={() => exportAsCSV()}
-				size="large"
-			>
-				Export Excel
-			</AtomSecondaryButton>
+			{!props.withoutExportButton && (
+				<AtomSecondaryButton
+					loading={isExporting}
+					onClick={() => exportAsCSV()}
+					size="large"
+				>
+					Export Excel
+				</AtomSecondaryButton>
+			)}
 
 			{!props.withoutAddButton && (
 				<Link to={`${props.route}/${props.isEdit ? 'edit' : 'add'}`}>
@@ -93,6 +95,7 @@ MoleculeDatatableAdditionalAction.propTypes = {
 	requiredParamsLabel: PropTypes.string,
 	route: PropTypes.string.isRequired,
 	withoutAddButton: PropTypes.bool,
+	withoutExportButton: PropTypes.bool,
 };
 
 export default MoleculeDatatableAdditionalAction;

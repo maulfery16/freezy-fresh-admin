@@ -82,7 +82,7 @@ const FriendListPage = () => {
 			dataIndex: 'id',
 			render: (id) => (
 				<Space size="middle">
-					<Link to={`/customers/friend-list/${id}`}>
+					<Link to={`/customer/friend-list/${id}`}>
 						<EyeFilled className="f4 blue" />
 					</Link>
 				</Space>
@@ -128,7 +128,7 @@ const FriendListPage = () => {
 	return (
 		<OrganismLayout
 			breadcumbs={[
-				{ name: 'Pelanggan', link: '/customers' },
+				{ name: 'Pelanggan', link: '/customer' },
 				{ name: 'Daftar Teman', link: location.pathname },
 			]}
 			title="Daftar Teman Page"

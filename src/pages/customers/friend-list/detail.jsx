@@ -45,11 +45,11 @@ const FriendProfileDetailPage = () => {
 	return (
 		<OrganismLayout
 			breadcumbs={[
-				{ name: 'Pelanggan', link: '/customers' },
-				{ name: 'Daftar Teman', link: '/customers/friend-list' },
+				{ name: 'Pelanggan', link: '/customer' },
+				{ name: 'Daftar Teman', link: '/customer/friend-list' },
 				{
 					name: 'Detail Daftar Teman',
-					link: `/customers/friend-list/${id}`,
+					link: `/customer/friend-list/${id}`,
 				},
 				{ name: 'Profile Teman', link: location.pathname },
 			]}
@@ -214,7 +214,7 @@ const FriendProfileDetailPage = () => {
 
 					<Col className="mt4" span={24}>
 						<Space>
-							<Link to={`/customers/friend-list/${id}`}>
+							<Link to={`/customer/friend-list/${id}`}>
 								<AtomSecondaryButton size="large">
 									Kembali
 								</AtomSecondaryButton>
