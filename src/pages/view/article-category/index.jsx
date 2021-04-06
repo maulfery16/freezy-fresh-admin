@@ -22,11 +22,13 @@ const ArticleCategoryPage = () => {
 			title: 'Nama Kategori (ID)',
 			dataIndex: 'name',
 			render: (_, record) => record.name.id,
+			csvRender: (item) => item.name.id,
 		},
 		{
 			title: 'Nama Kategori (EN)',
-			dataIndex: `name['en']`,
+			dataIndex: 'name',
 			render: (_, record) => record.name.en,
+			csvRender: (item) => item.name.id,
 		},
 		{
 			title: 'Warna',
@@ -40,7 +42,7 @@ const ArticleCategoryPage = () => {
 				) : (
 					'-'
 				),
-			csvRender: (item) => (item.color ? item.color.name.id : '-'),
+			csvRender: (item) => item?.color?.name.id,
 		},
 		{
 			title: 'Aktif',

@@ -18,9 +18,10 @@ const WishlistPage = () => {
 		},
 		{
 			title: 'Nama Pelanggan',
-			dataIndex: `user[full_name]`,
+			dataIndex: 'user',
 			sorter: true,
-			render: (_, record) => `${record.user.full_name}`,
+			render: (_, record) => record.user?.full_name,
+			csvRender: (item) => item.user?.full_name,
 		},
 		{
 			title: 'ID Pelanggan',

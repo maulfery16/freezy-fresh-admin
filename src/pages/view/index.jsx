@@ -63,27 +63,31 @@ const ViewPage = () => {
 		},
 		{
 			title: 'Nama Section (ID)',
-			dataIndex: `section`,
+			dataIndex: 'section',
 			render: (_, record) => record.section.id,
+			csvRender: (item) => item.section.id,
 		},
 		{
 			title: 'Nama Section (EN)',
-			dataIndex: `section['en']`,
+			dataIndex: 'section',
 			render: (_, record) => record.section.en,
+			csvRender: (item) => item.section.en,
 		},
 		{
 			title: 'Deskripsi Singkat (ID)',
-			dataIndex: `short_desc`,
+			dataIndex: 'short_desc',
 			render: (_, record) => (
 				<MoleculeMarkdownRenderer text={record.short_desc.id} />
 			),
+			csvRender: (item) => item.short_desc.id,
 		},
 		{
 			title: 'Deskripsi Singkat (EN)',
-			dataIndex: `short_desc['en']`,
+			dataIndex: 'short_desc',
 			render: (_, record) => (
 				<MoleculeMarkdownRenderer text={record.short_desc.en} />
 			),
+			csvRender: (item) => item.shord_desc.en,
 		},
 		{
 			title: 'Aktif',

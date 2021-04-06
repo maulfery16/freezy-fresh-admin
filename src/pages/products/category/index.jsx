@@ -27,11 +27,13 @@ const CategoryPage = () => {
 			title: 'Nama Kategori (ID)',
 			dataIndex: 'name',
 			render: (_, record) => record.name.id,
+			csvRender: (item) => item.name.id,
 		},
 		{
 			title: 'Nama Kategori (EN)',
-			dataIndex: `name['en']`,
+			dataIndex: 'name',
 			render: (_, record) => record.name.en,
+			csvRender: (item) => item.name.en,
 		},
 		{
 			align: 'center',

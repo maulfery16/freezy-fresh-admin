@@ -28,11 +28,13 @@ const ZonePage = () => {
 			title: 'Nama Zona (ID)',
 			dataIndex: 'name',
 			render: (_, record) => record.name.id,
+			csvRender: (item) => item.name.id,
 		},
 		{
 			title: 'Nama Zona (EN)',
-			dataIndex: `name['en']`,
+			dataIndex: 'name',
 			render: (_, record) => record.name.en,
+			csvRender: (item) => item.name.en,
 		},
 		{
 			title: 'Tanggal Dibuat',

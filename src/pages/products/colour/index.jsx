@@ -23,11 +23,13 @@ const ColourPage = () => {
 			title: 'Nama Warna (ID)',
 			dataIndex: 'name',
 			render: (_, record) => record.name.id,
+			csvRender: (item) => item.name.id,
 		},
 		{
 			title: 'Nama Warna (EN)',
-			dataIndex: `name['en']`,
+			dataIndex: 'name',
 			render: (_, record) => record.name.en,
+			csvRender: (item) => item.name.en,
 		},
 		{
 			title: 'Kode Hexa',

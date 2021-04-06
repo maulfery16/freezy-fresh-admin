@@ -104,15 +104,18 @@ const TransactionPage = () => {
 		},
 		{
 			title: 'ID Pelanggan',
-			dataIndex: 'customer[id]',
+			dataIndex: 'customer',
 			render: (_, record) => record.customer.id,
+			csvRender: (item) => item.name.id,
 			sorter: true,
 		},
 		{
 			title: 'Nama Pelanggan',
-			dataIndex: 'customer[name]',
+			dataIndex: 'customer',
 			render: (_, record) =>
 				`${record.customer.name.first_name} ${record.customer.name.last_name}`,
+			csvRender: (item) =>
+				`${item.customer.name.first_name} ${item.customer.name.last_name}`,
 			sorter: true,
 		},
 		{
