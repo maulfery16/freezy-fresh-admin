@@ -31,13 +31,15 @@ const ArticlePage = () => {
 
 		{
 			title: 'Judul Artikel (ID)',
-			dataIndex: `title['id']`,
+			dataIndex: 'title',
 			render: (_, record) => record.title.id,
+			csvRender: (item) => item.title.id,
 		},
 		{
 			title: 'Judul Artikel (EN)',
-			dataIndex: `title['en']`,
+			dataIndex: 'title',
 			render: (_, record) => record.title.en,
+			csvRender: (item) => item.section.en,
 		},
 		{
 			align: 'center',
@@ -59,7 +61,7 @@ const ArticlePage = () => {
 		},
 		{
 			title: 'Kategori Artikel',
-			dataIndex: `article_categories['id']`,
+			dataIndex: 'article_categories',
 			sorter: true,
 			render: (_, record) => {
 				return Array.isArray(record.article_categories) ? null : (
@@ -71,6 +73,8 @@ const ArticlePage = () => {
 					/>
 				);
 			},
+			csvRender: (item) =>
+				`${item.article_categories.name.id} / ${item.article_categories.name.en}`,
 			width: 250,
 		},
 		{

@@ -24,14 +24,16 @@ const BannerPage = () => {
 		},
 		{
 			title: 'Title Banner (ID)',
-			dataIndex: `title['id']`,
+			dataIndex: 'title',
 			render: (_, record) => record.title.id,
+			csvRender: (item) => item.title.id,
 			sorter: true,
 		},
 		{
 			title: 'Title Banner (EN)',
-			dataIndex: `title['en']`,
+			dataIndex: 'title',
 			render: (_, record) => record.title.en,
+			csvRender: (item) => item.title.id,
 			sorter: true,
 		},
 		{
@@ -50,11 +52,11 @@ const BannerPage = () => {
 		},
 		{
 			title: 'Nama Promo',
-			dataIndex: 'promotion[`title`][`id`]',
+			dataIndex: 'promotion',
 			render: (_, record) =>
-				record.promotion
-					? `${record.promotion.title.id} / ${record.promotion.title.en}`
-					: '-',
+				`${record.promotion?.title?.id} / ${record?.promotion?.title?.en}`,
+			csvRender: (item) =>
+				`${item?.promotion?.title?.id} / ${item?.promotion?.title?.en}`,
 			sorter: true,
 		},
 		{

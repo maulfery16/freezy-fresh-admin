@@ -1,20 +1,22 @@
 /* eslint-disable react/display-name */
+import moment from 'moment';
 import React, { useRef } from 'react';
+import ReactMoment from 'react-moment';
 import { EditFilled, EyeFilled } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { Space } from 'antd';
 
-import AtomBaseCategoriesDatatableFilter from '../../../components/atoms/selection/base-categories-datatable';
-import AtomBranchDatatableFilter from '../../../components/atoms/selection/branch-datatable';
-import AtomImage from '../../../components/atoms/image';
-import AtomStatusSwitch from '../../../components/atoms/datatable/status-switch';
-import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
-import MoleculeDatatableFilter from '../../../components/molecules/datatable/filter-plugin';
-import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
-import OrganismDatatable from '../../../components/organisms/datatable';
-import OrganismLayout from '../../../components/organisms/layout';
+import AtomBaseCategoriesDatatableFilter from '../../components/atoms/selection/base-categories-datatable';
+import AtomBranchDatatableFilter from '../../components/atoms/selection/branch-datatable';
+import AtomStatusSwitch from '../../components/atoms/datatable/status-switch';
+import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
+import MoleculeDatatableFilter from '../../components/molecules/datatable/filter-plugin';
+import MoleculeDeleteConfirm from '../../components/molecules/delete-confirm';
+import OrganismDatatable from '../../components/organisms/datatable';
+import OrganismLayout from '../../components/organisms/layout';
+import AtomNumberFormat from '../../components/atoms/number-format';
 
-const ProductPage = () => {
+const OrderPage = () => {
 	const column = [
 		{
 			title: 'No',
@@ -22,58 +24,8 @@ const ProductPage = () => {
 			render: (id, _, index) => index + 1,
 		},
 		{
-			title: 'Foto Produk',
-			dataIndex: 'image',
-			render: (image) => <AtomImage src={image} />,
-			csvRender: (item) => item.image,
-		},
-		{
-			title: 'SKUID',
-			dataIndex: 'sku_id',
-			sorter: true,
-		},
-		{
-			title: 'Nama Produk (ID)',
-			dataIndex: 'name',
-			render: (_, record) => record.name.id,
-			csvRender: (item) => item.name.id,
-			sorter: true,
-		},
-		{
-			title: 'Kode UPC',
-			dataIndex: 'upc_code',
-			sorter: true,
-		},
-		{
-			title: 'Kategori Dasar',
-			dataIndex: 'base_category',
-			render: (_, record) => record.base_category.id,
-			csvRender: (item) => item.base_category.id,
-			sorter: true,
-		},
-		{
-			title: 'Kategori Tambahan',
-			dataIndex: 'additional_category',
-			render: (_, record) => record.additional_category?.id,
-			csvRender: (item) => item.additional_category.id,
-			sorter: true,
-		},
-		{
-			title: 'Batas Umur Pelanggan',
-			dataIndex: 'age_limit',
-			sorter: true,
-		},
-		{
-			title: 'Nama brand',
-			dataIndex: 'brand',
-			render: (_, record) => record.brand.id,
-			csvRender: (item) => item.brand.id,
-			sorter: true,
-		},
-		{
-			title: 'Nama Perusahaan',
-			dataIndex: `product_owner`,
-			sorter: true,
+			title: 'ID Pesanan',
+			dataIndex: 'order_id',
 		},
 		{
 			title: 'Cabang',
@@ -81,6 +33,50 @@ const ProductPage = () => {
 			render: (_, record) =>
 				record.branch.map((branch) => branch.id).join(', '),
 			sorter: true,
+		},
+		{
+			title: 'Tanggal Pemesanan',
+			dataIndex: 'created_at',
+			render: (date) => (
+				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
+			),
+			csvRender: (item) => moment(item.created_at).format('DD/MM/YYYY'),
+			sorter: true,
+		},
+		{
+			title: 'Total Bayar',
+			dataIndex: `total`,
+			render: (count) => <AtomNumberFormat prefix="Rp. " value={count} />,
+			sorter: true,
+		},
+		{
+			title: 'Nomor Resi Pengiriman',
+			dataIndex: 'receipt_number',
+			sorter: true,
+		},
+		{
+			title: 'Tipe Pengiriman',
+			dataIndex: 'delivery_type',
+			sorter: true,
+		},
+		{
+			title: 'Click 2 Receiver (Hour)',
+			dataIndex: 'click_2_receiver',
+			sorter: true,
+		},
+		{
+			title: 'Tipe Pembayaran',
+			dataIndex: 'payment_type',
+			sorter: true,
+		},
+		{
+			title: 'Nama Bank',
+			dataIndex: 'bank_info',
+			render: (bank) => bank?.bank.name || '-',
+		},
+		{
+			title: 'Frekuensi Pesanan',
+			dataIndex: 'order_frequency',
 		},
 
 		{
@@ -207,7 +203,7 @@ const ProductPage = () => {
 			breadcumbs={[
 				{ name: 'Produk', link: location.pathname },
 				{
-					name: 'Produk-Produk',
+					name: 'Pesanan',
 					link: location.pathname,
 				},
 			]}
@@ -222,10 +218,10 @@ const ProductPage = () => {
 				ref={productTableRef}
 				scroll={1920}
 				searchInput={true}
-				title={`Produk-Produk`}
+				title={`Pesanan`}
 			/>
 		</OrganismLayout>
 	);
 };
 
-export default ProductPage;
+export default OrderPage;

@@ -84,17 +84,18 @@ const OrganismDatatable = forwardRef((props, ref) => {
 		const existingFilter = [...filters];
 
 		appliedFilters.forEach((applFilter) => {
-			const newFilter = { ...applFilter };
-			const existingFilterIndex = filters.findIndex(
-				(filter) =>
-					newFilter.name === filter.name &&
-					applFilter.name === filter.operator
-			);
+			const existingFilterIndex = filters.findIndex((filter) => {
+				return (
+					applFilter.name === filter.name &&
+					applFilter.operator === filter.operator
+				);
+			});
 
-			if (existingFilterIndex > -1)
+			if (existingFilterIndex > -1) {
 				existingFilter.splice(existingFilterIndex, 1);
+			}
 
-			multipleFilters.push(newFilter);
+			multipleFilters.push(applFilter);
 		});
 
 		setFilters([...existingFilter, ...multipleFilters]);
