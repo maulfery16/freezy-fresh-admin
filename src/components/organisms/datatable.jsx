@@ -91,17 +91,12 @@ const OrganismDatatable = forwardRef((props, ref) => {
 				);
 			});
 
-			console.log(existingFilterIndex);
-
 			if (existingFilterIndex > -1) {
 				existingFilter.splice(existingFilterIndex, 1);
 			}
 
 			multipleFilters.push(applFilter);
 		});
-
-		console.log(existingFilter);
-		console.log(multipleFilters);
 
 		setFilters([...existingFilter, ...multipleFilters]);
 	};

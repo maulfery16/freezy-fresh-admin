@@ -305,7 +305,6 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 		data,
 	}));
 
-	console.log(data);
 	return (
 		<AtomCard title="Daftar Produk">
 			<Row gutter={[0, 12]}>
