@@ -63,7 +63,7 @@ const ViewPage = () => {
 		},
 		{
 			title: 'Nama Section (ID)',
-			dataIndex: `section['id']`,
+			dataIndex: `section`,
 			render: (_, record) => record.section.id,
 		},
 		{
@@ -73,7 +73,7 @@ const ViewPage = () => {
 		},
 		{
 			title: 'Deskripsi Singkat (ID)',
-			dataIndex: `short_desc['id']`,
+			dataIndex: `short_desc`,
 			render: (_, record) => (
 				<MoleculeMarkdownRenderer text={record.short_desc.id} />
 			),

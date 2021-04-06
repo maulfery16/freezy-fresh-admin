@@ -21,7 +21,7 @@ const ColourPage = () => {
 		},
 		{
 			title: 'Nama Warna (ID)',
-			dataIndex: `name['id']`,
+			dataIndex: 'name',
 			render: (_, record) => record.name.id,
 		},
 		{

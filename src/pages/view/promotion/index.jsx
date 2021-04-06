@@ -36,7 +36,7 @@ const PromotionsPage = () => {
 		},
 		{
 			title: 'Nama Promo (ID)',
-			dataIndex: `title['id']`,
+			dataIndex: `title`,
 			sorter: true,
 			render: (_, record) => record.title.id,
 		},
@@ -48,7 +48,7 @@ const PromotionsPage = () => {
 		},
 		{
 			title: 'Deskripsi Singkat (ID)',
-			dataIndex: `short_description['id']`,
+			dataIndex: `short_description`,
 			sorter: true,
 			render: (_, record) => record.short_description.id,
 		},

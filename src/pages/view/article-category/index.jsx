@@ -20,7 +20,7 @@ const ArticleCategoryPage = () => {
 		},
 		{
 			title: 'Nama Kategori (ID)',
-			dataIndex: `name['id']`,
+			dataIndex: 'name',
 			render: (_, record) => record.name.id,
 		},
 		{

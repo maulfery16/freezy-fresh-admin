@@ -26,7 +26,7 @@ const ZonePage = () => {
 		},
 		{
 			title: 'Nama Zona (ID)',
-			dataIndex: `name['id']`,
+			dataIndex: 'name',
 			render: (_, record) => record.name.id,
 		},
 		{

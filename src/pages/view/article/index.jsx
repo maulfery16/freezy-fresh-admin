@@ -31,7 +31,7 @@ const ArticlePage = () => {
 
 		{
 			title: 'Judul Artikel (ID)',
-			dataIndex: `title['id']`,
+			dataIndex: `title`,
 			render: (_, record) => record.title.id,
 		},
 		{
@@ -59,7 +59,7 @@ const ArticlePage = () => {
 		},
 		{
 			title: 'Kategori Artikel',
-			dataIndex: `article_categories['id']`,
+			dataIndex: `article_categories`,
 			sorter: true,
 			render: (_, record) => {
 				return Array.isArray(record.article_categories) ? null : (

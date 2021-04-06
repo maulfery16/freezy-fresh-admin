@@ -24,7 +24,7 @@ const BannerPage = () => {
 		},
 		{
 			title: 'Title Banner (ID)',
-			dataIndex: `title['id']`,
+			dataIndex: `title`,
 			render: (_, record) => record.title.id,
 			sorter: true,
 		},
