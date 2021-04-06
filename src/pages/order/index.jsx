@@ -1,18 +1,30 @@
 /* eslint-disable react/display-name */
 import moment from 'moment';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactMoment from 'react-moment';
+import { message, Space } from 'antd';
+import { EyeFilled } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 
 import AtomBaseCategoriesDatatableFilter from '../../components/atoms/selection/base-categories-datatable';
 import AtomBranchDatatableFilter from '../../components/atoms/selection/branch-datatable';
+import AtomNumberFormat from '../../components/atoms/number-format';
+import AtomSecondaryButton from '../../components/atoms/button/secondary-button';
 import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
 import MoleculeDatatableFilter from '../../components/molecules/datatable/filter-plugin';
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
-import AtomNumberFormat from '../../components/atoms/number-format';
+
+import MasterService from '../../services/master';
+import OrderService from '../../services/order';
+import AtomPrimaryButton from '../../components/atoms/button/primary-button';
 
 const OrderPage = () => {
-	const column = [
+	const [productOwners, setProductOwners] = useState([]);
+	const masterService = new MasterService();
+	const orderService = new OrderService();
+	const orderTableRef = useRef();
+	const baseColumn = [
 		{
 			title: 'No',
 			dataIndex: 'id',
@@ -90,9 +102,21 @@ const OrderPage = () => {
 			dataIndex: 'order_frequency',
 			sorter: true,
 		},
+		{
+			title: 'Status Pesanan Pelanggan',
+			dataIndex: 'customer_order_status',
+			sorter: true,
+		},
 	];
 
-	const orderTableRef = useRef();
+	const getProductOwners = async () => {
+		try {
+			const { data } = await masterService.getOptions('product-owners');
+			setProductOwners(data);
+		} catch (error) {
+			message.error(error.message);
+		}
+	};
 
 	const renderAdditionalAction = () => {
 		return (
@@ -168,6 +192,46 @@ const OrderPage = () => {
 		];
 	};
 
+	useEffect(() => {
+		(async () => {
+			await getProductOwners();
+		})();
+	}, []);
+
+	const column = [
+		...baseColumn,
+		...productOwners.map((owner) => ({
+			title: `Status Pesanan ${owner.name}`,
+			dataIndex: `${owner.name?.toLowerCase()}_order_status`,
+			sorter: true,
+		})),
+		...productOwners.map((owner) => ({
+			align: 'center',
+			title: `Pesanan ${owner.name}`,
+			dataIndex: `${owner.name?.toLowerCase()}_order_status`,
+			render: (status) => (
+				<AtomSecondaryButton>
+					{orderService.translateOrderEnum(status)}
+				</AtomSecondaryButton>
+			),
+		})),
+		{
+			align: 'center',
+			title: 'Aksi',
+			dataIndex: 'id',
+			render: (id) => (
+				<Space size="middle">
+					<Link to={`/order/${id}/detail`}>
+						<EyeFilled className="f4 blue" />
+					</Link>
+
+					<AtomPrimaryButton>Ubah Status</AtomPrimaryButton>
+				</Space>
+			),
+			skipExport: true,
+		},
+	];
+
 	return (
 		<OrganismLayout
 			breadcumbs={[{ name: 'Pesanan', link: location.pathname }]}
@@ -180,7 +244,7 @@ const OrderPage = () => {
 				filters={renderDatatableFilters()}
 				limit={15}
 				ref={orderTableRef}
-				scroll={2880}
+				scroll={2880 + productOwners.length * 500}
 				searchInput={true}
 				title={`Pesanan`}
 			/>
