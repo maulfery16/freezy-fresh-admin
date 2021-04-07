@@ -6,18 +6,18 @@ import { message, Space } from 'antd';
 import { EyeFilled } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
-import AtomBaseCategoriesDatatableFilter from '../../components/atoms/selection/base-categories-datatable';
 import AtomBranchDatatableFilter from '../../components/atoms/selection/branch-datatable';
 import AtomNumberFormat from '../../components/atoms/number-format';
+import AtomPrimaryButton from '../../components/atoms/button/primary-button';
 import AtomSecondaryButton from '../../components/atoms/button/secondary-button';
 import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
+import MoleculeDatatableDateRange from '../../components/molecules/datatable/date-range-plugin';
 import MoleculeDatatableFilter from '../../components/molecules/datatable/filter-plugin';
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
 
 import MasterService from '../../services/master';
 import OrderService from '../../services/order';
-import AtomPrimaryButton from '../../components/atoms/button/primary-button';
 
 const OrderPage = () => {
 	const [productOwners, setProductOwners] = useState([]);
@@ -131,64 +131,101 @@ const OrderPage = () => {
 	};
 
 	const renderDatatableFilters = () => {
-		return [
-			<AtomBaseCategoriesDatatableFilter key="base-categories-filter" />,
-			<MoleculeDatatableFilter
-				name="additional-categories"
+		const filters = [
+			<MoleculeDatatableDateRange
+				name="created_at"
 				operator=":"
-				identifier="additional-categories-filter"
-				label="Kategori Dasar"
-				key="additional-categories-filter"
-				placeholder="Semua Kategori Tambahan"
-				data={{
-					url: 'additional-categories',
-					generateCustomOption: (item) => ({
-						value: item.id,
-						label: item.name.id,
-					}),
-				}}
-			/>,
-			<MoleculeDatatableFilter
-				name="product-owner"
-				operator=":"
-				identifier="product-owner-filter"
-				label="Perusahaan"
-				key="product-owner-filter"
-				placeholder="Semua Perusahaan"
-				data={{
-					url: 'product-owners',
-				}}
+				identifier="daterangefilter"
+				key="daterange"
+				label="Tanggal Pemesanan"
+				placeholder="Filter tanggal pemesanan"
 			/>,
 			<AtomBranchDatatableFilter key="branch-filter" />,
 			<MoleculeDatatableFilter
-				name="brand"
+				name="delivery-type"
 				operator=":"
-				identifier="brand-filter"
-				label="Brand"
-				key="brand-filter"
-				placeholder="Semua brand"
+				identifier="delivery-type-filter"
+				label="Tipe Pengiriman"
+				key="delivery-type-filter"
+				placeholder="Semua Tipe Pengiriman"
 				data={{
-					url: 'brands',
-					generateCustomOption: (item) => ({
-						value: item.id,
-						label: item.name.id,
-					}),
-				}}
-			/>,
-			<MoleculeDatatableFilter
-				name="freezy-pick"
-				operator=":"
-				identifier="freezy-pick-filter"
-				label="Freezy Pick"
-				key="freezy-pick-filter"
-				placeholder="Semua freezy pick"
-				data={{
+					// url: 'delivery-types',
 					options: [
-						{ id: true, label: 'Ya' },
-						{ id: false, label: 'Tidak' },
+						{
+							label: 'Marukana.. Udon?',
+							value: 'Marukana.. Udon?',
+						},
 					],
 				}}
 			/>,
+			<MoleculeDatatableFilter
+				name="payment-type"
+				operator=":"
+				identifier="payment-type-filter"
+				label="Tipe Pembayaran"
+				key="payment-type-filter"
+				placeholder="Semua Tipe Pembayaran"
+				data={{
+					// url: 'delivery-types',
+					options: [
+						{
+							label: 'Marukana.. Udon?',
+							value: 'Marukana.. Udon?',
+						},
+					],
+				}}
+			/>,
+			<MoleculeDatatableFilter
+				name="bank"
+				operator=":"
+				identifier="bank-filter"
+				label="Bank"
+				key="bank-filter"
+				placeholder="Semua Bank"
+				data={{
+					url: 'banks',
+				}}
+			/>,
+			<MoleculeDatatableFilter
+				name="customer"
+				operator=":"
+				identifier="customer-filter"
+				label="Nama Pelanggan"
+				key="customer"
+				placeholder="Semua nama pelanggan"
+				data={{
+					// url: 'customers',
+					options: [
+						{
+							label: 'Marukana.. Udon?',
+							value: 'Marukana.. Udon?',
+						},
+					],
+				}}
+			/>,
+		];
+
+		return [
+			...filters,
+			...productOwners.map((owner) => (
+				<MoleculeDatatableFilter
+					name={`${owner.name.toLowerCase()}-order-status`}
+					operator=":"
+					identifier={`${owner.name.toLowerCase()}-order-status-fiter`}
+					label={`Status Pesanan ${owner.name}`}
+					key={owner.name}
+					placeholder="Semua status pesanan"
+					data={{
+						// url: 'customers',
+						options: [
+							{
+								label: 'Marukana.. Udon?',
+								value: 'Marukana.. Udon?',
+							},
+						],
+					}}
+				/>
+			)),
 		];
 	};
 
@@ -240,8 +277,9 @@ const OrderPage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`products`}
+				dataSourceURL={`orders`}
 				filters={renderDatatableFilters()}
+				filterModalWidth={720}
 				limit={15}
 				ref={orderTableRef}
 				scroll={2880 + productOwners.length * 500}

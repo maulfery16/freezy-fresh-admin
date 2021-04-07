@@ -252,7 +252,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 								footer={null}
 								title="Filter  by"
 								visible={isFilterVisible}
-								width={350}
+								width={props.filterModalWidth || 350}
 								onCancel={() => setIsFilterVisible(false)}
 							>
 								<Space className="w-100" direction="vertical">
@@ -342,6 +342,7 @@ OrganismDatatable.propTypes = {
 	columns: PropTypes.array.isRequired,
 	dataSourceURL: PropTypes.string.isRequired,
 	filters: PropTypes.arrayOf(PropTypes.node),
+	filterModalWidth: PropTypes.number,
 	limit: PropTypes.number,
 	scroll: PropTypes.number,
 	title: PropTypes.string,
