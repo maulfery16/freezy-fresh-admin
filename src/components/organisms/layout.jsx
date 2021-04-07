@@ -69,6 +69,10 @@ const menus = [
 		subMenuKey: 'order',
 		subMenus: [
 			{
+				name: 'Pesanan',
+				link: '/order/',
+			},
+			{
 				name: 'Pesanan Dikomplain',
 				link: '/order/complain',
 			},

@@ -138,6 +138,18 @@ const routes = [
 		],
 	},
 	{
+		path: '/order',
+		children: [
+			{
+				component: React.lazy(() => import('./pages/order/index')),
+				exact: true,
+				guard: true,
+				name: 'Order Page',
+				path: '/',
+			},
+		],
+	},
+	{
 		path: '/products',
 		children: [
 			{

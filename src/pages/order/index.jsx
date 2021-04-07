@@ -1,23 +1,30 @@
 /* eslint-disable react/display-name */
 import moment from 'moment';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactMoment from 'react-moment';
-import { EditFilled, EyeFilled } from '@ant-design/icons';
+import { message, Space } from 'antd';
+import { EyeFilled } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import { Space } from 'antd';
 
-import AtomBaseCategoriesDatatableFilter from '../../components/atoms/selection/base-categories-datatable';
 import AtomBranchDatatableFilter from '../../components/atoms/selection/branch-datatable';
-import AtomStatusSwitch from '../../components/atoms/datatable/status-switch';
+import AtomNumberFormat from '../../components/atoms/number-format';
+import AtomPrimaryButton from '../../components/atoms/button/primary-button';
+import AtomSecondaryButton from '../../components/atoms/button/secondary-button';
 import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
+import MoleculeDatatableDateRange from '../../components/molecules/datatable/date-range-plugin';
 import MoleculeDatatableFilter from '../../components/molecules/datatable/filter-plugin';
-import MoleculeDeleteConfirm from '../../components/molecules/delete-confirm';
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
-import AtomNumberFormat from '../../components/atoms/number-format';
+
+import MasterService from '../../services/master';
+import OrderService from '../../services/order';
 
 const OrderPage = () => {
-	const column = [
+	const [productOwners, setProductOwners] = useState([]);
+	const masterService = new MasterService();
+	const orderService = new OrderService();
+	const orderTableRef = useRef();
+	const baseColumn = [
 		{
 			title: 'No',
 			dataIndex: 'id',
@@ -26,9 +33,10 @@ const OrderPage = () => {
 		{
 			title: 'ID Pesanan',
 			dataIndex: 'order_id',
+			sorter: true,
 		},
 		{
-			title: 'Cabang',
+			title: 'Cabang Freezy (ID)',
 			dataIndex: 'branch',
 			render: (_, record) =>
 				record.branch.map((branch) => branch.id).join(', '),
@@ -37,20 +45,35 @@ const OrderPage = () => {
 		{
 			title: 'Tanggal Pemesanan',
 			dataIndex: 'created_at',
+			sorter: true,
+			csvRender: (item) => moment(item.created_at).format('DD/MM/YYYY'),
 			render: (date) => (
 				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
 			),
-			csvRender: (item) => moment(item.created_at).format('DD/MM/YYYY'),
+		},
+		{
+			title: 'Nama Pelanggan',
+			dataIndex: `customer_name`,
+			sorter: true,
+		},
+		{
+			title: 'Nama Penerima',
+			dataIndex: `receiver_name`,
+			sorter: true,
+		},
+		{
+			title: 'Jumlah Produk',
+			dataIndex: 'product_count',
 			sorter: true,
 		},
 		{
 			title: 'Total Bayar',
-			dataIndex: `total`,
-			render: (count) => <AtomNumberFormat prefix="Rp. " value={count} />,
+			dataIndex: 'total_fee',
 			sorter: true,
+			render: (total) => <AtomNumberFormat prefix="Rp. " value={total} />,
 		},
 		{
-			title: 'Nomor Resi Pengiriman',
+			title: 'No Resi Pengiriman',
 			dataIndex: 'receipt_number',
 			sorter: true,
 		},
@@ -60,8 +83,8 @@ const OrderPage = () => {
 			sorter: true,
 		},
 		{
-			title: 'Click 2 Receiver (Hour)',
-			dataIndex: 'click_2_receiver',
+			title: 'Click 2 Receive (Hour)',
+			dataIndex: 'click_2_receive',
 			sorter: true,
 		},
 		{
@@ -71,152 +94,195 @@ const OrderPage = () => {
 		},
 		{
 			title: 'Nama Bank',
-			dataIndex: 'bank_info',
-			render: (bank) => bank?.bank.name || '-',
+			dataIndex: 'bank',
+			sorter: true,
 		},
 		{
 			title: 'Frekuensi Pesanan',
 			dataIndex: 'order_frequency',
+			sorter: true,
 		},
+		{
+			title: 'Status Pesanan Pelanggan',
+			dataIndex: 'customer_order_status',
+			sorter: true,
+		},
+	];
 
-		{
-			title: 'Aktif',
-			dataIndex: 'is_active',
-			render: (active, record) => (
-				<AtomStatusSwitch
-					active={active}
-					id={record.id}
-					tableRef={productTableRef}
-					url="products"
+	const getProductOwners = async () => {
+		try {
+			const { data } = await masterService.getOptions('product-owners');
+			setProductOwners(data);
+		} catch (error) {
+			message.error(error.message);
+		}
+	};
+
+	const renderAdditionalAction = () => {
+		return (
+			<MoleculeDatatableAdditionalAction
+				column={column}
+				getLimit={() => orderTableRef.current.totalData}
+				label="Pesanan"
+				route="/order"
+				url="orders"
+			/>
+		);
+	};
+
+	const renderDatatableFilters = () => {
+		const filters = [
+			<MoleculeDatatableDateRange
+				name="created_at"
+				operator=":"
+				identifier="daterangefilter"
+				key="daterange"
+				label="Tanggal Pemesanan"
+				placeholder="Filter tanggal pemesanan"
+			/>,
+			<AtomBranchDatatableFilter key="branch-filter" />,
+			<MoleculeDatatableFilter
+				name="delivery-type"
+				operator=":"
+				identifier="delivery-type-filter"
+				label="Tipe Pengiriman"
+				key="delivery-type-filter"
+				placeholder="Semua Tipe Pengiriman"
+				data={{
+					// url: 'delivery-types',
+					options: [
+						{
+							label: 'Marukana.. Udon?',
+							value: 'Marukana.. Udon?',
+						},
+					],
+				}}
+			/>,
+			<MoleculeDatatableFilter
+				name="payment-type"
+				operator=":"
+				identifier="payment-type-filter"
+				label="Tipe Pembayaran"
+				key="payment-type-filter"
+				placeholder="Semua Tipe Pembayaran"
+				data={{
+					// url: 'delivery-types',
+					options: [
+						{
+							label: 'Marukana.. Udon?',
+							value: 'Marukana.. Udon?',
+						},
+					],
+				}}
+			/>,
+			<MoleculeDatatableFilter
+				name="bank"
+				operator=":"
+				identifier="bank-filter"
+				label="Bank"
+				key="bank-filter"
+				placeholder="Semua Bank"
+				data={{
+					url: 'banks',
+				}}
+			/>,
+			<MoleculeDatatableFilter
+				name="customer"
+				operator=":"
+				identifier="customer-filter"
+				label="Nama Pelanggan"
+				key="customer"
+				placeholder="Semua nama pelanggan"
+				data={{
+					// url: 'customers',
+					options: [
+						{
+							label: 'Marukana.. Udon?',
+							value: 'Marukana.. Udon?',
+						},
+					],
+				}}
+			/>,
+		];
+
+		return [
+			...filters,
+			...productOwners.map((owner) => (
+				<MoleculeDatatableFilter
+					name={`${owner.name.toLowerCase()}-order-status`}
+					operator=":"
+					identifier={`${owner.name.toLowerCase()}-order-status-fiter`}
+					label={`Status Pesanan ${owner.name}`}
+					key={owner.name}
+					placeholder="Semua status pesanan"
+					data={{
+						// url: 'customers',
+						options: [
+							{
+								label: 'Marukana.. Udon?',
+								value: 'Marukana.. Udon?',
+							},
+						],
+					}}
 				/>
+			)),
+		];
+	};
+
+	useEffect(() => {
+		(async () => {
+			await getProductOwners();
+		})();
+	}, []);
+
+	const column = [
+		...baseColumn,
+		...productOwners.map((owner) => ({
+			title: `Status Pesanan ${owner.name}`,
+			dataIndex: `${owner.name?.toLowerCase()}_order_status`,
+			sorter: true,
+		})),
+		...productOwners.map((owner) => ({
+			align: 'center',
+			title: `Pesanan ${owner.name}`,
+			dataIndex: `${owner.name?.toLowerCase()}_order_status`,
+			render: (status) => (
+				<AtomSecondaryButton>
+					{orderService.translateOrderEnum(status)}
+				</AtomSecondaryButton>
 			),
-			csvRender: (item) => (item.is_active ? 'Aktif' : 'Tidak Aktif'),
-		},
+		})),
 		{
+			align: 'center',
 			title: 'Aksi',
 			dataIndex: 'id',
-			render: (id, record) => (
+			render: (id) => (
 				<Space size="middle">
-					<Link to={`/products/${id}/detail`}>
+					<Link to={`/order/${id}/detail`}>
 						<EyeFilled className="f4 blue" />
 					</Link>
 
-					<Link to={`/products/${id}/edit`}>
-						<EditFilled className="f4 orange" />
-					</Link>
-
-					{!record.is_active && (
-						<MoleculeDeleteConfirm
-							id={id}
-							label="Produk"
-							tableRef={productTableRef}
-							url="products"
-						/>
-					)}
+					<AtomPrimaryButton>Ubah Status</AtomPrimaryButton>
 				</Space>
 			),
 			skipExport: true,
 		},
 	];
 
-	const productTableRef = useRef();
-
-	const renderAdditionalAction = () => {
-		return (
-			<MoleculeDatatableAdditionalAction
-				column={column}
-				getLimit={() => productTableRef.current.totalData}
-				importRoute="/products/import"
-				label="Produk"
-				requiredParams="branch"
-				requiredParamsLabel="cabang"
-				route="/products"
-				url="products"
-			/>
-		);
-	};
-
-	const renderDatatableFilters = () => {
-		return [
-			<AtomBaseCategoriesDatatableFilter key="base-categories-filter" />,
-			<MoleculeDatatableFilter
-				name="additional-categories"
-				operator=":"
-				identifier="additional-categories-filter"
-				label="Kategori Dasar"
-				key="additional-categories-filter"
-				placeholder="Semua Kategori Tambahan"
-				data={{
-					url: 'additional-categories',
-					generateCustomOption: (item) => ({
-						value: item.id,
-						label: item.name.id,
-					}),
-				}}
-			/>,
-			<MoleculeDatatableFilter
-				name="product-owner"
-				operator=":"
-				identifier="product-owner-filter"
-				label="Perusahaan"
-				key="product-owner-filter"
-				placeholder="Semua Perusahaan"
-				data={{
-					url: 'product-owners',
-				}}
-			/>,
-			<AtomBranchDatatableFilter key="branch-filter" />,
-			<MoleculeDatatableFilter
-				name="brand"
-				operator=":"
-				identifier="brand-filter"
-				label="Brand"
-				key="brand-filter"
-				placeholder="Semua brand"
-				data={{
-					url: 'brands',
-					generateCustomOption: (item) => ({
-						value: item.id,
-						label: item.name.id,
-					}),
-				}}
-			/>,
-			<MoleculeDatatableFilter
-				name="freezy-pick"
-				operator=":"
-				identifier="freezy-pick-filter"
-				label="Freezy Pick"
-				key="freezy-pick-filter"
-				placeholder="Semua freezy pick"
-				data={{
-					options: [
-						{ id: true, label: 'Ya' },
-						{ id: false, label: 'Tidak' },
-					],
-				}}
-			/>,
-		];
-	};
-
 	return (
 		<OrganismLayout
-			breadcumbs={[
-				{ name: 'Produk', link: location.pathname },
-				{
-					name: 'Pesanan',
-					link: location.pathname,
-				},
-			]}
-			title="Product Page"
+			breadcumbs={[{ name: 'Pesanan', link: location.pathname }]}
+			title="Order Page"
 		>
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`products`}
+				dataSourceURL={`orders`}
 				filters={renderDatatableFilters()}
+				filterModalWidth={720}
 				limit={15}
-				ref={productTableRef}
-				scroll={1920}
+				ref={orderTableRef}
+				scroll={2880 + productOwners.length * 500}
 				searchInput={true}
 				title={`Pesanan`}
 			/>
