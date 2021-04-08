@@ -2,7 +2,7 @@
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactMoment from 'react-moment';
-import { message, Space } from 'antd';
+import { Col, Form, message, Modal, Row, Space } from 'antd';
 import { EyeFilled } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
@@ -18,8 +18,10 @@ import OrganismLayout from '../../components/organisms/layout';
 
 import MasterService from '../../services/master';
 import OrderService from '../../services/order';
+import MoleculeSelectInputGroup from '../../components/molecules/input-group/select-input';
 
 const OrderPage = () => {
+	const [pickedProductOwner, setPickedProductOwner] = useState(null);
 	const [productOwners, setProductOwners] = useState([]);
 	const masterService = new MasterService();
 	const orderService = new OrderService();
@@ -108,6 +110,12 @@ const OrderPage = () => {
 			sorter: true,
 		},
 	];
+	const [
+		isChangeStatusModalVisible,
+		setIsChangeStatusModalVisible,
+	] = useState(false);
+
+	const changeStatus = () => {};
 
 	const getProductOwners = async () => {
 		try {
@@ -116,6 +124,11 @@ const OrderPage = () => {
 		} catch (error) {
 			message.error(error.message);
 		}
+	};
+
+	const openChangeStatusModal = (index) => {
+		setPickedProductOwner({ ...orderTableRef.current.data[index] });
+		setIsChangeStatusModalVisible(true);
 	};
 
 	const renderAdditionalAction = () => {
@@ -229,6 +242,17 @@ const OrderPage = () => {
 		];
 	};
 
+	const setChangeStatusInitialValues = () => {
+		let initialValues = {};
+
+		productOwners.forEach((owner) => {
+			initialValues[`${owner.name?.toLowerCase()}_order_status`] =
+				pickedProductOwner[`${owner.name?.toLowerCase()}_order_status`];
+		});
+
+		return initialValues;
+	};
+
 	useEffect(() => {
 		(async () => {
 			await getProductOwners();
@@ -256,13 +280,17 @@ const OrderPage = () => {
 			align: 'center',
 			title: 'Aksi',
 			dataIndex: 'id',
-			render: (id) => (
+			render: (id, _, index) => (
 				<Space size="middle">
 					<Link to={`/order/${id}/detail`}>
 						<EyeFilled className="f4 blue" />
 					</Link>
 
-					<AtomPrimaryButton>Ubah Status</AtomPrimaryButton>
+					<AtomPrimaryButton
+						onClick={() => openChangeStatusModal(index)}
+					>
+						Ubah Status
+					</AtomPrimaryButton>
 				</Space>
 			),
 			skipExport: true,
@@ -286,6 +314,66 @@ const OrderPage = () => {
 				searchInput={true}
 				title={`Pesanan`}
 			/>
+
+			{isChangeStatusModalVisible && (
+				<Modal
+					footer={null}
+					title="Ubah Status"
+					visible={true}
+					width={720}
+					onCancel={() => setIsChangeStatusModalVisible(false)}
+				>
+					<Form
+						className="w-100 mt4"
+						name="modify_admin"
+						onFinish={changeStatus}
+						initialValues={setChangeStatusInitialValues()}
+						onFinishFailed={(error) => {
+							message.error(`Failed: ${error}`);
+							console.error(error);
+						}}
+					>
+						<Space className="w-100" direction="vertical">
+							<Row gutter={[12, 16]}>
+								{productOwners.map((owner, index) => {
+									return (
+										<Col
+											key={`chge-stts-owner-${index}`}
+											span={12}
+										>
+											<MoleculeSelectInputGroup
+												label={`${owner.name} status`}
+												name={`${owner.name?.toLowerCase()}_order_status`}
+												placeholder={`${owner.name} status`}
+												required
+												data={{
+													options: [
+														{
+															label:
+																'Marukana.. Udon?',
+															value:
+																'Marukana.. Udon?',
+														},
+													],
+												}}
+											/>
+										</Col>
+									);
+								})}
+							</Row>
+						</Space>
+
+						<Row className="mt4" justify="center">
+							<AtomPrimaryButton
+								className="br3 w-50"
+								size="large"
+							>
+								Ubah
+							</AtomPrimaryButton>
+						</Row>
+					</Form>
+				</Modal>
+			)}
 		</OrganismLayout>
 	);
 };
