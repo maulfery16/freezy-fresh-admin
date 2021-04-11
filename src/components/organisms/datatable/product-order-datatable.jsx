@@ -373,7 +373,7 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 						onChange: cancel,
 					}}
 					rowKey="product_id"
-					scroll={{ x: 1360 }}
+					scroll={{ x: 2820 }}
 					style={{ width: '100%' }}
 				/>
 			</Form>

@@ -154,6 +154,13 @@ const routes = [
 				name: 'Add Order Page',
 				path: '/add',
 			},
+			{
+				component: React.lazy(() => import('./pages/order/detail')),
+				exact: true,
+				// guard: true,
+				name: 'Add Order Page',
+				path: '/:id/detail',
+			},
 		],
 	},
 	{
