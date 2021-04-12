@@ -2,7 +2,7 @@
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactMoment from 'react-moment';
-import { message, Space } from 'antd';
+import { Col, Form, message, Modal, Row, Space } from 'antd';
 import { EyeFilled } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
@@ -18,8 +18,10 @@ import OrganismLayout from '../../components/organisms/layout';
 
 import MasterService from '../../services/master';
 import OrderService from '../../services/order';
+import MoleculeSelectInputGroup from '../../components/molecules/input-group/select-input';
 
 const OrderPage = () => {
+	const [pickedProductOwner, setPickedProductOwner] = useState(null);
 	const [productOwners, setProductOwners] = useState([]);
 	const masterService = new MasterService();
 	const orderService = new OrderService();
@@ -32,14 +34,13 @@ const OrderPage = () => {
 		},
 		{
 			title: 'ID Pesanan',
-			dataIndex: 'order_id',
+			dataIndex: 'id',
 			sorter: true,
 		},
 		{
 			title: 'Cabang Freezy (ID)',
 			dataIndex: 'branch',
-			render: (_, record) =>
-				record.branch.map((branch) => branch.id).join(', '),
+			render: (branch) => branch.id,
 			sorter: true,
 		},
 		{
@@ -53,43 +54,49 @@ const OrderPage = () => {
 		},
 		{
 			title: 'Nama Pelanggan',
-			dataIndex: `customer_name`,
+			dataIndex: `customer_info`,
 			sorter: true,
 		},
 		{
 			title: 'Nama Penerima',
-			dataIndex: `receiver_name`,
+			dataIndex: `delivery_info`,
 			sorter: true,
 		},
 		{
 			title: 'Jumlah Produk',
-			dataIndex: 'product_count',
+			dataIndex: 'total_product',
 			sorter: true,
 		},
 		{
 			title: 'Total Bayar',
-			dataIndex: 'total_fee',
+			dataIndex: 'sub_total',
 			sorter: true,
 			render: (total) => <AtomNumberFormat prefix="Rp. " value={total} />,
 		},
 		{
 			title: 'No Resi Pengiriman',
-			dataIndex: 'receipt_number',
+			dataIndex: 'code',
 			sorter: true,
 		},
 		{
 			title: 'Tipe Pengiriman',
-			dataIndex: 'delivery_type',
+			dataIndex: 'delivery_info',
 			sorter: true,
 		},
 		{
 			title: 'Click 2 Receive (Hour)',
-			dataIndex: 'click_2_receive',
+			dataIndex: 'click_2_receive_hours',
 			sorter: true,
+			render: (date) => (
+				<>
+					<ReactMoment format="HH">{date}</ReactMoment> jam{' '}
+					<ReactMoment format="mm">{date}</ReactMoment> menit
+				</>
+			),
 		},
 		{
 			title: 'Tipe Pembayaran',
-			dataIndex: 'payment_type',
+			dataIndex: 'payment_method',
 			sorter: true,
 		},
 		{
@@ -104,10 +111,17 @@ const OrderPage = () => {
 		},
 		{
 			title: 'Status Pesanan Pelanggan',
-			dataIndex: 'customer_order_status',
-			sorter: true,
+			dataIndex: 'admin_status',
+			sorter: status,
+			render: (status) => orderService.translateOrderEnum(status),
 		},
 	];
+	const [
+		isChangeStatusModalVisible,
+		setIsChangeStatusModalVisible,
+	] = useState(false);
+
+	const changeStatus = () => {};
 
 	const getProductOwners = async () => {
 		try {
@@ -118,6 +132,11 @@ const OrderPage = () => {
 		}
 	};
 
+	const openChangeStatusModal = (index) => {
+		setPickedProductOwner({ ...orderTableRef.current.data[index] });
+		setIsChangeStatusModalVisible(true);
+	};
+
 	const renderAdditionalAction = () => {
 		return (
 			<MoleculeDatatableAdditionalAction
@@ -126,6 +145,11 @@ const OrderPage = () => {
 				label="Pesanan"
 				route="/order"
 				url="orders"
+				child={
+					<AtomPrimaryButton size="large">
+						Pickup Pesanan
+					</AtomPrimaryButton>
+				}
 			/>
 		);
 	};
@@ -229,6 +253,17 @@ const OrderPage = () => {
 		];
 	};
 
+	const setChangeStatusInitialValues = () => {
+		let initialValues = {};
+
+		productOwners.forEach((owner) => {
+			initialValues[`${owner.name?.toLowerCase()}_order_status`] =
+				pickedProductOwner[`${owner.name?.toLowerCase()}_order_status`];
+		});
+
+		return initialValues;
+	};
+
 	useEffect(() => {
 		(async () => {
 			await getProductOwners();
@@ -239,16 +274,18 @@ const OrderPage = () => {
 		...baseColumn,
 		...productOwners.map((owner) => ({
 			title: `Status Pesanan ${owner.name}`,
-			dataIndex: `${owner.name?.toLowerCase()}_order_status`,
+			dataIndex: `status`,
 			sorter: true,
+			render: (_, record) =>
+				orderService.translateOrderEnum(record.status[owner.name]),
 		})),
 		...productOwners.map((owner) => ({
 			align: 'center',
 			title: `Pesanan ${owner.name}`,
-			dataIndex: `${owner.name?.toLowerCase()}_order_status`,
-			render: (status) => (
+			dataIndex: `status`,
+			render: (_, record) => (
 				<AtomSecondaryButton>
-					{orderService.translateOrderEnum(status)}
+					{orderService.translateOrderEnum(record.status[owner.name])}
 				</AtomSecondaryButton>
 			),
 		})),
@@ -256,13 +293,17 @@ const OrderPage = () => {
 			align: 'center',
 			title: 'Aksi',
 			dataIndex: 'id',
-			render: (id) => (
+			render: (id, _, index) => (
 				<Space size="middle">
 					<Link to={`/order/${id}/detail`}>
 						<EyeFilled className="f4 blue" />
 					</Link>
 
-					<AtomPrimaryButton>Ubah Status</AtomPrimaryButton>
+					<AtomPrimaryButton
+						onClick={() => openChangeStatusModal(index)}
+					>
+						Ubah Status
+					</AtomPrimaryButton>
 				</Space>
 			),
 			skipExport: true,
@@ -286,6 +327,66 @@ const OrderPage = () => {
 				searchInput={true}
 				title={`Pesanan`}
 			/>
+
+			{isChangeStatusModalVisible && (
+				<Modal
+					footer={null}
+					title="Ubah Status"
+					visible={true}
+					width={720}
+					onCancel={() => setIsChangeStatusModalVisible(false)}
+				>
+					<Form
+						className="w-100 mt4"
+						name="modify_admin"
+						onFinish={changeStatus}
+						initialValues={setChangeStatusInitialValues()}
+						onFinishFailed={(error) => {
+							message.error(`Failed: ${error}`);
+							console.error(error);
+						}}
+					>
+						<Space className="w-100" direction="vertical">
+							<Row gutter={[12, 16]}>
+								{productOwners.map((owner, index) => {
+									return (
+										<Col
+											key={`chge-stts-owner-${index}`}
+											span={12}
+										>
+											<MoleculeSelectInputGroup
+												label={`${owner.name} status`}
+												name={`${owner.name?.toLowerCase()}_order_status`}
+												placeholder={`${owner.name} status`}
+												required
+												data={{
+													options: [
+														{
+															label:
+																'Marukana.. Udon?',
+															value:
+																'Marukana.. Udon?',
+														},
+													],
+												}}
+											/>
+										</Col>
+									);
+								})}
+							</Row>
+						</Space>
+
+						<Row className="mt4" justify="center">
+							<AtomPrimaryButton
+								className="br3 w-50"
+								size="large"
+							>
+								Ubah
+							</AtomPrimaryButton>
+						</Row>
+					</Form>
+				</Modal>
+			)}
 		</OrganismLayout>
 	);
 };

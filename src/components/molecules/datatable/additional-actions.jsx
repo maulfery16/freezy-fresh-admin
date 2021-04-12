@@ -75,6 +75,8 @@ const MoleculeDatatableAdditionalAction = (props) => {
 				</AtomSecondaryButton>
 			)}
 
+			{props.child && props.child}
+
 			{!props.withoutAddButton && (
 				<Link to={`${props.route}/${props.isEdit ? 'edit' : 'add'}`}>
 					<AtomPrimaryButton size="large">
@@ -87,6 +89,7 @@ const MoleculeDatatableAdditionalAction = (props) => {
 };
 
 MoleculeDatatableAdditionalAction.propTypes = {
+	child: PropTypes.node,
 	getLimit: PropTypes.func.isRequired,
 	importRoute: PropTypes.string,
 	isEdit: PropTypes.bool,

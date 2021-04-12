@@ -180,10 +180,11 @@ const OrganismDatatable = forwardRef((props, ref) => {
 	}, [filterParams]);
 
 	useImperativeHandle(ref, () => ({
+		data,
+		totalData,
 		async refetchData() {
 			await getData();
 		},
-		totalData,
 	}));
 
 	return (
