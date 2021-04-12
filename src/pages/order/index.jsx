@@ -34,14 +34,13 @@ const OrderPage = () => {
 		},
 		{
 			title: 'ID Pesanan',
-			dataIndex: 'order_id',
+			dataIndex: 'id',
 			sorter: true,
 		},
 		{
 			title: 'Cabang Freezy (ID)',
 			dataIndex: 'branch',
-			render: (_, record) =>
-				record.branch.map((branch) => branch.id).join(', '),
+			render: (branch) => branch.id,
 			sorter: true,
 		},
 		{
@@ -55,43 +54,49 @@ const OrderPage = () => {
 		},
 		{
 			title: 'Nama Pelanggan',
-			dataIndex: `customer_name`,
+			dataIndex: `customer_info`,
 			sorter: true,
 		},
 		{
 			title: 'Nama Penerima',
-			dataIndex: `receiver_name`,
+			dataIndex: `delivery_info`,
 			sorter: true,
 		},
 		{
 			title: 'Jumlah Produk',
-			dataIndex: 'product_count',
+			dataIndex: 'total_product',
 			sorter: true,
 		},
 		{
 			title: 'Total Bayar',
-			dataIndex: 'total_fee',
+			dataIndex: 'sub_total',
 			sorter: true,
 			render: (total) => <AtomNumberFormat prefix="Rp. " value={total} />,
 		},
 		{
 			title: 'No Resi Pengiriman',
-			dataIndex: 'receipt_number',
+			dataIndex: 'code',
 			sorter: true,
 		},
 		{
 			title: 'Tipe Pengiriman',
-			dataIndex: 'delivery_type',
+			dataIndex: 'delivery_info',
 			sorter: true,
 		},
 		{
 			title: 'Click 2 Receive (Hour)',
-			dataIndex: 'click_2_receive',
+			dataIndex: 'click_2_receive_hours',
 			sorter: true,
+			render: (date) => (
+				<>
+					<ReactMoment format="HH">{date}</ReactMoment> jam{' '}
+					<ReactMoment format="mm">{date}</ReactMoment> menit
+				</>
+			),
 		},
 		{
 			title: 'Tipe Pembayaran',
-			dataIndex: 'payment_type',
+			dataIndex: 'payment_method',
 			sorter: true,
 		},
 		{
@@ -106,8 +111,9 @@ const OrderPage = () => {
 		},
 		{
 			title: 'Status Pesanan Pelanggan',
-			dataIndex: 'customer_order_status',
-			sorter: true,
+			dataIndex: 'admin_status',
+			sorter: status,
+			render: (status) => orderService.translateOrderEnum(status),
 		},
 	];
 	const [
@@ -139,6 +145,11 @@ const OrderPage = () => {
 				label="Pesanan"
 				route="/order"
 				url="orders"
+				child={
+					<AtomPrimaryButton size="large">
+						Pickup Pesanan
+					</AtomPrimaryButton>
+				}
 			/>
 		);
 	};
@@ -263,16 +274,18 @@ const OrderPage = () => {
 		...baseColumn,
 		...productOwners.map((owner) => ({
 			title: `Status Pesanan ${owner.name}`,
-			dataIndex: `${owner.name?.toLowerCase()}_order_status`,
+			dataIndex: `status`,
 			sorter: true,
+			render: (_, record) =>
+				orderService.translateOrderEnum(record.status[owner.name]),
 		})),
 		...productOwners.map((owner) => ({
 			align: 'center',
 			title: `Pesanan ${owner.name}`,
-			dataIndex: `${owner.name?.toLowerCase()}_order_status`,
-			render: (status) => (
+			dataIndex: `status`,
+			render: (_, record) => (
 				<AtomSecondaryButton>
-					{orderService.translateOrderEnum(status)}
+					{orderService.translateOrderEnum(record.status[owner.name])}
 				</AtomSecondaryButton>
 			),
 		})),
