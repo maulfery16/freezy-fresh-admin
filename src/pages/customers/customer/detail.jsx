@@ -338,7 +338,7 @@ const CustomerDetailPage = () => {
 	return (
 		<OrganismLayout
 			breadcumbs={[
-				{ name: 'Pelanggan', link: '/customers' },
+				{ name: 'Pelanggan', link: '/customer' },
 				{
 					name: 'Detail Pelanggan',
 					link: `/customer/${id}/detail`,
