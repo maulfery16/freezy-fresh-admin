@@ -13,12 +13,13 @@ import AtomSecondaryButton from '../../components/atoms/button/secondary-button'
 import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
 import MoleculeDatatableDateRange from '../../components/molecules/datatable/date-range-plugin';
 import MoleculeDatatableFilter from '../../components/molecules/datatable/filter-plugin';
+import MoleculeOrderPickupModal from '../../components/molecules/order/pickup-modal';
+import MoleculeSelectInputGroup from '../../components/molecules/input-group/select-input';
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
 
 import MasterService from '../../services/master';
 import OrderService from '../../services/order';
-import MoleculeSelectInputGroup from '../../components/molecules/input-group/select-input';
 
 const OrderPage = () => {
 	const [pickedProductOwner, setPickedProductOwner] = useState(null);
@@ -145,11 +146,7 @@ const OrderPage = () => {
 				label="Pesanan"
 				route="/order"
 				url="orders"
-				child={
-					<AtomPrimaryButton size="large">
-						Pickup Pesanan
-					</AtomPrimaryButton>
-				}
+				child={<MoleculeOrderPickupModal />}
 			/>
 		);
 	};
@@ -283,11 +280,14 @@ const OrderPage = () => {
 			align: 'center',
 			title: `Pesanan ${owner.name}`,
 			dataIndex: `status`,
-			render: (_, record) => (
-				<AtomSecondaryButton>
-					{orderService.translateOrderEnum(record.status[owner.name])}
-				</AtomSecondaryButton>
-			),
+			render: (_, record) =>
+				record.status[owner.name] && (
+					<AtomSecondaryButton>
+						{orderService.translateOrderEnum(
+							record.status[owner.name]
+						)}
+					</AtomSecondaryButton>
+				),
 		})),
 		{
 			align: 'center',

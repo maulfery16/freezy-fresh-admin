@@ -148,7 +148,7 @@ const routes = [
 				path: '/',
 			},
 			{
-				component: React.lazy(() => import('./pages/order/modify')),
+				component: React.lazy(() => import('./pages/order/add')),
 				exact: true,
 				// guard: true,
 				name: 'Add Order Page',
@@ -158,7 +158,7 @@ const routes = [
 				component: React.lazy(() => import('./pages/order/detail')),
 				exact: true,
 				// guard: true,
-				name: 'Add Order Page',
+				name: 'Order Page Detail',
 				path: '/:id/detail',
 			},
 		],

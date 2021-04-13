@@ -20,7 +20,6 @@ const ModifyOrderPage = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [customer, setCustomer] = useState(null);
 	const history = useHistory();
-	const isCreating = history.location.pathname.includes('add') ? true : false;
 
 	return (
 		<OrganismLayout
@@ -31,12 +30,10 @@ const ModifyOrderPage = () => {
 					link: location.pathname,
 				},
 			]}
-			title={`${isCreating ? 'Tambah' : 'Ubah'} Admin`}
+			title={`Tambah Pesanan`}
 		>
 			<Typography.Title level={4}>
-				<span className="fw7">
-					{`${isCreating ? 'Tambah' : 'Ubah'} Pesanan`.toUpperCase()}
-				</span>
+				<span className="fw7">{`Tambah Pesanan`.toUpperCase()}</span>
 			</Typography.Title>
 
 			<Row className="mt4">
@@ -477,7 +474,7 @@ const ModifyOrderPage = () => {
 					<Col className="mt4" span={24}>
 						<MoleculeModifyActionButtons
 							backUrl="/order/"
-							isCreating={isCreating}
+							isCreating={true}
 							isSubmitting={isSubmitting}
 							label="Pesanan"
 						/>
