@@ -138,6 +138,32 @@ const routes = [
 		],
 	},
 	{
+		path: '/order',
+		children: [
+			{
+				component: React.lazy(() => import('./pages/order/index')),
+				exact: true,
+				guard: true,
+				name: 'Order Page',
+				path: '/',
+			},
+			{
+				component: React.lazy(() => import('./pages/order/add')),
+				exact: true,
+				// guard: true,
+				name: 'Add Order Page',
+				path: '/add',
+			},
+			{
+				component: React.lazy(() => import('./pages/order/detail')),
+				exact: true,
+				// guard: true,
+				name: 'Order Page Detail',
+				path: '/:id/detail',
+			},
+		],
+	},
+	{
 		path: '/products',
 		children: [
 			{

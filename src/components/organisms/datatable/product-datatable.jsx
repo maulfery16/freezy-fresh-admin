@@ -79,9 +79,10 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 		},
 		{
 			title: 'Nama Produk',
-			dataIndex: `name['id']`,
+			dataIndex: 'name',
 			sorter: true,
 			render: (_, record) => record.name.id,
+			csvRender: (item) => item.name.id,
 		},
 		{
 			title: 'Stock Tersedia',
@@ -304,7 +305,6 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 		data,
 	}));
 
-	console.log(data);
 	return (
 		<AtomCard title="Daftar Produk">
 			<Row gutter={[0, 12]}>
