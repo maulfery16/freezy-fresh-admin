@@ -72,7 +72,7 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 		},
 		{
 			title: 'Stock Tersedia',
-			dataIndex: 'available_stock',
+			dataIndex: 'stock',
 			sorter: true,
 		},
 		{
@@ -85,10 +85,11 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 			dataIndex: 'name',
 			editable: true,
 			sorter: true,
+			render: (name) => name.id,
 		},
 		{
 			title: 'Jumlah Produk',
-			dataIndex: 'product_count',
+			dataIndex: 'total',
 			editable: true,
 			sorter: true,
 		},
@@ -146,12 +147,12 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 		{
 			title: 'Diskon',
 			dataIndex: 'discount_percentage',
-			render: (discount) => (discount ? `${discount} %` : null),
+			render: (discount) => (discount ? `${discount} %` : '-'),
 			sorter: true,
 		},
 		{
 			title: 'Promo',
-			dataIndex: 'promotion',
+			dataIndex: 'promotion_name',
 			sorter: true,
 		},
 		{

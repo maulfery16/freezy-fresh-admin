@@ -13,7 +13,7 @@ const MoleculeOrderUpdateInfo = (props) => {
 					title="Tanggal Pendaftaran"
 					content={
 						<ReactMoment format="DD MMMM YY HH:ss" locale="id">
-							{props?.order?.registration_date}
+							{props.createdAt}
 						</ReactMoment>
 					}
 				/>
@@ -23,21 +23,21 @@ const MoleculeOrderUpdateInfo = (props) => {
 					title="Tanggal Diperbaharui"
 					content={
 						<ReactMoment format="DD MMMM YY HH:ss" locale="id">
-							{props?.order?.updated_date}
+							{props.updatedAt}
 						</ReactMoment>
 					}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
-					title="Provinsi"
-					content={props.order?.registed_by}
+					title="Didaftarkah Oleh"
+					content={props.createdBy}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
-					title="Provinsi"
-					content={props.order?.updated_by}
+					title="Diperbaharui Oleh"
+					content={props.updatedBy}
 				/>
 			</Col>
 		</Row>
@@ -45,7 +45,10 @@ const MoleculeOrderUpdateInfo = (props) => {
 };
 
 MoleculeOrderUpdateInfo.propType = {
-	order: PropTypes.any,
+	createdAt: PropTypes.string,
+	createdBy: PropTypes.string,
+	updatedAt: PropTypes.string,
+	updatedBy: PropTypes.string,
 };
 
 export default MoleculeOrderUpdateInfo;

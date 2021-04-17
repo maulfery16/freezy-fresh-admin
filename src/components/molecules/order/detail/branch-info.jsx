@@ -5,66 +5,65 @@ import React from 'react';
 import MoleculeOrderInfoGroup from '../../info-group-order';
 
 const MoleculeOrderDetailBranchInfo = (props) => {
+	const { code, address, name } = props.branch;
+
 	return (
 		<Row gutter={[12, 12]}>
 			<Col span={12}>
-				<MoleculeOrderInfoGroup
-					title="Name Depan"
-					content={props.order?.branch_code}
-				/>
+				<MoleculeOrderInfoGroup title="Name Depan" content={code} />
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Cabang Freezy"
-					content={props.order?.branch?.id}
+					content={name?.id}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Provinsi"
-					content={props.order?.province?.name}
+					content={address?.province_name}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Kota"
-					content={props.order?.city?.id}
+					content={address?.city_name}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Kecamatan"
-					content={props.order?.district?.name}
+					content={address?.district_name}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Kelurahan"
-					content={props.order?.sub_district?.id}
+					content={address?.subdistrict_name}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Kode POS"
-					content={props.order?.zip_code}
+					content={address?.postal_code}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Nama Jalan"
-					content={props.order?.address}
+					content={address?.address}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Latitude"
-					content={props.order?.latitude}
+					content={address?.latitude}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Longitude"
-					content={props.order?.longitude}
+					content={address?.longitude}
 				/>
 			</Col>
 		</Row>
@@ -72,7 +71,24 @@ const MoleculeOrderDetailBranchInfo = (props) => {
 };
 
 MoleculeOrderDetailBranchInfo.propType = {
-	order: PropTypes.any,
+	branch: PropTypes.shape({
+		code: PropTypes.string,
+		address: PropTypes.shape({
+			additional_information: PropTypes.string,
+			address: PropTypes.string,
+			city_name: PropTypes.string,
+			district_name: PropTypes.string,
+			latitude: PropTypes.string,
+			longitude: PropTypes.string,
+			postal_code: PropTypes.string,
+			province_name: PropTypes.string,
+			subdistrict_name: PropTypes.string,
+		}),
+		name: PropTypes.shape({
+			en: PropTypes.string,
+			id: PropTypes.string,
+		}),
+	}),
 };
 
 export default MoleculeOrderDetailBranchInfo;

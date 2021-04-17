@@ -22,37 +22,37 @@ const MoleculeOrderDetailPaymentInfo = (props) => {
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Total Potongan Voucher"
-					content={props.order?.total_voucher_discount}
+					content={props.order?.total_voucher}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Biaya Pengiriman"
-					content={props.order?.delivery_fee}
+					content={props.order?.shipping_fee}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Biaya Pengaturan Pengiriman"
-					content={props.order?.develiry_setting_fee}
+					content={props.order?.shipping_arrangement_fee}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Biaya Parkir"
-					content={props.order?.park_fee}
+					content={props.order?.parking_fee}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Total Pembayaran"
-					content={props.order?.total_fee}
+					content={props.order?.sub_total}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Cashback"
-					content={props.order?.cashback}
+					content={props.order?.cashback_point}
 				/>
 			</Col>
 		</Row>

@@ -1,6 +1,23 @@
 import RequestAdapterService from './request-adapter';
 
 export default class OrderService extends RequestAdapterService {
+	async getOrderById(id) {
+		try {
+			const { data } = await super.sendGetRequest(
+				`${this.baseUrl}/v1/order/${id}`
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail getting order detail: ${super.generateErrorMessage(
+					error
+				)}`
+			);
+		}
+	}
+
 	async getOrderByPickUpCode(code) {
 		try {
 			const { data } = await super.sendGetRequest(
