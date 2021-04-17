@@ -725,7 +725,7 @@ const routes = [
 						),
 						exact: true,
 						guard: true,
-						name: 'Customer Friend List Page Page',
+						name: 'Customer List Page',
 						path: '/',
 					},
 					{

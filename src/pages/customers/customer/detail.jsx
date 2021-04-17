@@ -7,7 +7,6 @@ import { Link, useParams } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
 import AtomImage from '../../../components/atoms/image';
-import AtomNumberFormat from '../../../components/atoms/number-format';
 import AtomPrimaryButton from '../../../components/atoms/button/primary-button';
 import AtomSecondaryButton from '../../../components/atoms/button/secondary-button';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
@@ -17,100 +16,27 @@ import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
 import { translateGenderEnum } from '../../../utils/helpers';
-import CustomerService, {
-	translateAddressType,
-} from '../../../services/customer';
+import CustomerService from '../../../services/customer';
 const customerService = new CustomerService();
-
-const addressDataSource = {
-	data: [
-		{
-			id: 1,
-			address_type: 'home',
-			street_name: 'Jl. H Aen',
-			subdistrict_name: 'Nanjung',
-			district_name: 'Margaasih',
-			city_name: 'Kab. bandung',
-			province_name: 'Jawa Barat',
-			postal_code: 40217,
-			address: 'Jl. H Aen No 3 Rt09/11',
-			note_for_driver: 'depan isi ulang galon eka fresh',
-			parking_fee: 0,
-			receiver_name: 'Mikasa',
-			phone_number: '+6281910094095',
-			location_picture:
-				'https://api.backend.test/storage/uploads/images/id_card_image/RZaVKRV3mSkFYZKjxtre.png',
-			is_primary: true,
-		},
-		{
-			id: 2,
-			address_type: 'office',
-			street_name: 'Jl. Cemara',
-			subdistrict_name: 'Nanjung',
-			district_name: 'Margaasih',
-			city_name: 'Kab. bandung',
-			province_name: 'Jawa Barat',
-			postal_code: 40217,
-			address: 'Jl. Jl. Cemara No 3 Rt09/11',
-			note_for_driver: 'titipkan di receptionist lobby',
-			parking_fee: 3000,
-			receiver_name: 'Mikasa',
-			phone_number: '+6281910094095',
-			location_picture:
-				'https://api.backend.test/storage/uploads/images/id_card_image/RZaVKRV3mSkFYZKjxtre.png',
-			is_primary: false,
-		},
-		{
-			id: 3,
-			address_type: 'home',
-			street_name: 'Jl. Tanjung',
-			subdistrict_name: 'Nanjung',
-			district_name: 'Margaasih',
-			city_name: 'Kab. bandung',
-			province_name: 'Jawa Barat',
-			postal_code: 40217,
-			address: 'Jl. Tanjung No 3 Rt09/11',
-			note_for_driver: 'depan masjid',
-			parking_fee: 0,
-			receiver_name: 'Eren',
-			phone_number: '+6281910094095',
-			location_picture:
-				'https://api.backend.test/storage/uploads/images/id_card_image/RZaVKRV3mSkFYZKjxtre.png',
-			is_primary: false,
-		},
-	],
-	meta: {
-		include: [],
-		custom: [],
-		pagination: {
-			total: 3,
-			count: 3,
-			per_page: 10,
-			current_page: 1,
-			total_pages: 1,
-			links: {},
-		},
-	},
-};
 const bankDataSource = {
 	data: [
 		{
 			id: 1,
 			name: 'BCA',
 			account_number: 1241254356,
-			is_primary: true,
+			is_default: true,
 		},
 		{
 			id: 2,
 			name: 'BRI',
 			account_number: 2241254356,
-			is_primary: false,
+			is_default: false,
 		},
 		{
 			id: 3,
 			name: 'BNI',
 			account_number: 3241254356,
-			is_primary: false,
+			is_default: false,
 		},
 	],
 	meta: {
@@ -145,15 +71,15 @@ const CustomerDetailPage = () => {
 		{
 			align: 'center',
 			title: 'Set as Prirmary',
-			dataIndex: `is_primary`,
-			render: (is_primary, record) => {
-				const PrimaryButton = is_primary
+			dataIndex: `is_default`,
+			render: (is_default, record) => {
+				const PrimaryButton = is_default
 					? AtomPrimaryButton
 					: AtomSecondaryButton;
 
 				return (
 					<PrimaryButton
-						disabled={is_primary}
+						disabled={is_default}
 						onClick={() => setAddressAsPrimary(record.id)}
 						shape="circle"
 					>
@@ -164,13 +90,12 @@ const CustomerDetailPage = () => {
 		},
 		{
 			title: 'Nama ALamat',
-			dataIndex: 'address_type',
-			render: (_, record) => translateAddressType(record.address_type),
+			dataIndex: 'title',
 		},
 		{
 			title: 'Nama Jalan',
-			dataIndex: 'street_name',
-			render: (_, record) => record.street_name,
+			dataIndex: 'address',
+			render: (_, record) => record.address,
 		},
 		{
 			title: 'Kelurahan',
@@ -204,23 +129,23 @@ const CustomerDetailPage = () => {
 		},
 		{
 			title: 'Detail Alamat',
-			dataIndex: 'address',
-			render: (_, record) => record.address,
+			dataIndex: 'additional_information',
+			render: (_, record) => record.additional_information,
 			sorter: true,
 		},
 		{
 			title: 'Catatan Untuk Driver',
-			dataIndex: 'note_for_driver',
-			render: (_, record) => record.note_for_driver,
+			dataIndex: 'additional_information_driver',
+			render: (_, record) => record.additional_information_driver,
 		},
-		{
-			title: 'Biaya Parkir (Rp)',
-			dataIndex: 'parking_fee',
-			render: (_, record) => (
-				<AtomNumberFormat prefix="" value={record.parking_fee} />
-			),
-			sorter: true,
-		},
+		// {
+		// 	title: 'Biaya Parkir (Rp)',
+		// 	dataIndex: 'parking_fee',
+		// 	render: (_, record) => (
+		// 		<AtomNumberFormat prefix="" value={record.parking_fee} />
+		// 	),
+		// 	sorter: true,
+		// },
 		{
 			title: 'Nama Penerima',
 			dataIndex: 'receiver_name',
@@ -229,13 +154,13 @@ const CustomerDetailPage = () => {
 		},
 		{
 			title: 'No Telp. Penerima',
-			dataIndex: 'phone_number',
-			render: (_, record) => record.phone_number,
+			dataIndex: 'receiver_phone_number',
+			render: (_, record) => record.receiver_phone_number,
 		},
 		{
 			align: 'center',
 			title: 'Foto Lokasi',
-			dataIndex: 'location_picture',
+			dataIndex: 'image_location',
 			render: (image) => <AtomImage src={image} />,
 		},
 		{
@@ -264,15 +189,15 @@ const CustomerDetailPage = () => {
 		{
 			align: 'center',
 			title: 'Set as Prirmary',
-			dataIndex: `is_primary`,
-			render: (is_primary, record) => {
-				const PrimaryButton = is_primary
+			dataIndex: `is_default`,
+			render: (is_default, record) => {
+				const PrimaryButton = is_default
 					? AtomPrimaryButton
 					: AtomSecondaryButton;
 
 				return (
 					<PrimaryButton
-						disabled={is_primary}
+						disabled={is_default}
 						onClick={() => setLinkCardAsPrimary(record.id)}
 						shape="circle"
 					>
@@ -291,9 +216,10 @@ const CustomerDetailPage = () => {
 		},
 	];
 
-	const setAddressAsPrimary = async (id) => {
+	const setAddressAsPrimary = async (address_id) => {
 		try {
-			await customerService.setAddressAsPrimary(id);
+			await customerService.setAddressAsPrimary(id, address_id);
+			addressTableRef.current.refetchData();
 			message.success('Berhasil mengatur alamat menjadi alamat utama');
 		} catch (error) {
 			console.error(error.message);
@@ -322,7 +248,7 @@ const CustomerDetailPage = () => {
 				column={addressColumn}
 				getLimit={() => addressTableRef.current.totalData}
 				label="Alamat"
-				route={`/customer/${id}/detail`}
+				route={`/customer/${id}/detail/address-add`}
 				url="admin/customers"
 				withoutExportButton={true}
 			/>
@@ -338,7 +264,7 @@ const CustomerDetailPage = () => {
 	return (
 		<OrganismLayout
 			breadcumbs={[
-				{ name: 'Pelanggan', link: '/customers' },
+				{ name: 'Pelanggan', link: '/customer' },
 				{
 					name: 'Detail Pelanggan',
 					link: `/customer/${id}/detail`,
@@ -451,7 +377,10 @@ const CustomerDetailPage = () => {
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Nomor Handphone"
-										content={customer.phone_number || '-'}
+										content={
+											customer.receiver_phone_number ||
+											'-'
+										}
 									/>
 								</Col>
 							</Row>
@@ -505,7 +434,7 @@ const CustomerDetailPage = () => {
 							<OrganismDatatable
 								additionalAction={renderAddressAdditionalAction()}
 								columns={addressColumn}
-								dataSource={addressDataSource}
+								dataSourceURL={`customers/${id}/addresses`}
 								ref={addressTableRef}
 								scroll={1920}
 								searchInput={false}
@@ -519,6 +448,7 @@ const CustomerDetailPage = () => {
 							<OrganismDatatable
 								columns={bankColumn}
 								dataSource={bankDataSource}
+								dataSourceURL={''}
 								ref={bankTableRef}
 								scroll={600}
 								searchInput={false}

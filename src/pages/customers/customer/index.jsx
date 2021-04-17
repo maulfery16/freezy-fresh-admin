@@ -8,6 +8,7 @@ import { EditFilled, EyeFilled } from '@ant-design/icons';
 import AtomGenderDatatableFilter from '../../../components/atoms/selection/gender-datatable';
 import AtomImage from '../../../components/atoms/image';
 import AtomStatusSwitch from '../../../components/atoms/datatable/status-switch';
+import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 import MoleculeDatatableDateRange from '../../../components/molecules/datatable/date-range-plugin';
 import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
 import OrganismDatatable from '../../../components/organisms/datatable';
@@ -46,6 +47,7 @@ const CustomerPage = () => {
 			title: 'Foto Profile',
 			dataIndex: `social_avatar`,
 			render: (_, record) => <AtomImage src={record.social_avatar} />,
+			csvRender: (item) => item.social_avatar,
 		},
 		{
 			title: 'Tgl. Lahir',
@@ -56,6 +58,7 @@ const CustomerPage = () => {
 				) : (
 					'-'
 				),
+			csvRender: (item) => (item.birth ? item.birth : '-'),
 			sorter: true,
 		},
 		{
@@ -94,6 +97,7 @@ const CustomerPage = () => {
 			title: 'Foto KTP',
 			dataIndex: `id_card_image`,
 			render: (_, record) => <AtomImage src={record.id_card_image} />,
+			csvRender: (item) => item.id_card_image,
 		},
 		{
 			align: 'center',
@@ -133,6 +137,7 @@ const CustomerPage = () => {
 					)}
 				</Space>
 			),
+			skipExport: true,
 		},
 	];
 	const customerTableRef = useRef();
@@ -151,13 +156,25 @@ const CustomerPage = () => {
 		];
 	};
 
+	const renderAdditionalAction = () => {
+		return (
+			<MoleculeDatatableAdditionalAction
+				column={column}
+				label="Pelanggan"
+				getLimit={() => customerTableRef.current.totalData}
+				route="/customer"
+				url="admin/customers"
+			/>
+		);
+	};
+
 	return (
 		<OrganismLayout
 			breadcumbs={[{ name: 'Pelanggan', link: location.pathname }]}
 			title="Pelanggan Page"
 		>
 			<OrganismDatatable
-				additionalAction={null}
+				additionalAction={renderAdditionalAction()}
 				columns={column}
 				dataSourceURL={`admin/customers`}
 				filters={renderDatatableFilters()}
