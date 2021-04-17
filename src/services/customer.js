@@ -1,6 +1,38 @@
 import RequestAdapterService from './request-adapter';
 
 export default class CustomerService extends RequestAdapterService {
+	async createCustomer(customer) {
+		try {
+			const { data } = await super.sendPostMultipartRequest(
+				`${this.baseUrl}/v1/admin/customers`,
+				customer
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail creating customer: ${super.generateErrorMessage(error)}`
+			);
+		}
+	}
+
+	async editCustomer(id, customer) {
+		try {
+			const { data } = await super.sendPostMultipartRequest(
+				`${this.baseUrl}/v1/admin/customers/${id}?_method=PATCH`,
+				customer
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail updating customer:${super.generateErrorMessage(error)}`
+			);
+		}
+	}
+
 	async getCustomerById(id, params) {
 		try {
 			const { data } = await super.sendGetRequest(
@@ -18,25 +50,22 @@ export default class CustomerService extends RequestAdapterService {
 		}
 	}
 
-	async setAddressAsPrimary(id) {
-		return id;
-		// try {
-		// 	const {
-		// 		data,
-		// 	} = await super.sendPostRequest(
-		// 		`${this.baseUrl}/v1/admin/customers/address/${id}/primary`,
-		// 		{ id }
-		// 	);
+	async setAddressAsPrimary(customer_id, address_id) {
+		try {
+			const { data } = await super.sendPatchRequest(
+				`${this.baseUrl}/v1/customers/${customer_id}/addresses/${address_id}/default`,
+				{}
+			);
 
-		// 	return data;
-		// } catch (error) {
-		// 	console.error(error);
-		// 	throw new Error(
-		// 		`Setting address as primary: ${super.generateErrorMessage(
-		// 			error
-		// 		)}`
-		// 	);
-		// }
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Setting address as primary: ${super.generateErrorMessage(
+					error
+				)}`
+			);
+		}
 	}
 
 	async setLinkCardAsPrimary(id) {
@@ -45,7 +74,7 @@ export default class CustomerService extends RequestAdapterService {
 		// 	const {
 		// 		data,
 		// 	} = await super.sendPostRequest(
-		// 		`${this.baseUrl}/v1/admin/customers/link-card/${id}/primary`,
+		// 		`${this.baseUrl}/v1/customer/customers/link-card/${id}/primary`,
 		// 		{ id }
 		// 	);
 
@@ -59,8 +88,4 @@ export default class CustomerService extends RequestAdapterService {
 		// 	);
 		// }
 	}
-}
-
-export function translateAddressType(type) {
-	return type ? (type === 'office' ? 'Kantor' : 'Rumah') : '';
 }

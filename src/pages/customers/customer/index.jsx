@@ -162,7 +162,7 @@ const CustomerPage = () => {
 				column={column}
 				label="Pelanggan"
 				getLimit={() => customerTableRef.current.totalData}
-				route="/custumer"
+				route="/customer"
 				url="admin/customers"
 			/>
 		);

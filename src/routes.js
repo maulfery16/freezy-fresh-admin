@@ -699,7 +699,7 @@ const routes = [
 						),
 						exact: true,
 						guard: true,
-						name: 'Customer Page',
+						name: 'Customer List Page',
 						path: '/',
 					},
 					{
