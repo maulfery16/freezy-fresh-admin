@@ -7,6 +7,7 @@ import { Link, useParams } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
 import AtomImage from '../../../components/atoms/image';
+import AtomNumberFormat from '../../../components/atoms/number-format';
 import AtomPrimaryButton from '../../../components/atoms/button/primary-button';
 import AtomSecondaryButton from '../../../components/atoms/button/secondary-button';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
@@ -138,14 +139,14 @@ const CustomerDetailPage = () => {
 			dataIndex: 'additional_information_driver',
 			render: (_, record) => record.additional_information_driver,
 		},
-		// {
-		// 	title: 'Biaya Parkir (Rp)',
-		// 	dataIndex: 'parking_fee',
-		// 	render: (_, record) => (
-		// 		<AtomNumberFormat prefix="" value={record.parking_fee} />
-		// 	),
-		// 	sorter: true,
-		// },
+		{
+			title: 'Biaya Parkir (Rp)',
+			dataIndex: 'parking_fee',
+			render: (_, record) => (
+				<AtomNumberFormat prefix="" value={record.parking_fee || 0} />
+			),
+			sorter: true,
+		},
 		{
 			title: 'Nama Penerima',
 			dataIndex: 'receiver_name',
@@ -170,13 +171,13 @@ const CustomerDetailPage = () => {
 			render: (address_id) => (
 				<Space size="middle">
 					<Link
-						to={`/customer/${id}/detail/${address_id}/address-detail`}
+						to={`/customer/${id}/detail/address/${address_id}/detail`}
 					>
 						<EyeFilled className="f4 blue" />
 					</Link>
 
 					<Link
-						to={`/customer/${id}/detail/${address_id}/address-edit`}
+						to={`/customer/${id}/detail/address/${address_id}/edit`}
 					>
 						<EditFilled className="f4 orange" />
 					</Link>
@@ -248,7 +249,7 @@ const CustomerDetailPage = () => {
 				column={addressColumn}
 				getLimit={() => addressTableRef.current.totalData}
 				label="Alamat"
-				route={`/customer/${id}/detail/address-add`}
+				route={`/customer/${id}/detail/address`}
 				url="admin/customers"
 				withoutExportButton={true}
 			/>

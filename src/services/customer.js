@@ -50,6 +50,60 @@ export default class CustomerService extends RequestAdapterService {
 		}
 	}
 
+	/* Customer Address */
+	async createCustomerAddress(customer_id, address) {
+		try {
+			const { data } = await super.sendPostMultipartRequest(
+				`${this.baseUrl}/v1/customers/${customer_id}/addresses`,
+				address
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail creating customer address: ${super.generateErrorMessage(
+					error
+				)}`
+			);
+		}
+	}
+
+	async editCustomerAddress(customer_id, address_id, address) {
+		try {
+			const { data } = await super.sendPostMultipartRequest(
+				`${this.baseUrl}/v1/customers/${customer_id}/addresses/${address_id}?_method=PATCH`,
+				address
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail updating customer address:${super.generateErrorMessage(
+					error
+				)}`
+			);
+		}
+	}
+
+	async getCustomerAddressById(customer_id, address_id, params) {
+		try {
+			const { data } = await super.sendGetRequest(
+				`${this.baseUrl}/v1/customers/${customer_id}/addresses/${address_id}`,
+				params
+			);
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail getting customer address detail: ${super.generateErrorMessage(
+					error
+				)}`
+			);
+		}
+	}
+
 	async setAddressAsPrimary(customer_id, address_id) {
 		try {
 			const { data } = await super.sendPatchRequest(
@@ -68,6 +122,7 @@ export default class CustomerService extends RequestAdapterService {
 		}
 	}
 
+	/* Customer Link Card */
 	async setLinkCardAsPrimary(id) {
 		return id;
 		// try {
