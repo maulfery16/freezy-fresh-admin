@@ -1,7 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
+import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 import { Col, Form, message, Row, Skeleton, Typography } from 'antd';
-// import ReactMoment from 'react-moment';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
@@ -13,10 +13,10 @@ import MoleculeTextInputGroup from '../../../components/molecules/input-group/te
 import OrganismLayout from '../../../components/organisms/layout';
 
 import PelangganService from '../../../services/customer';
-const customerService = new PelangganService();
 
 const PelangganModifyPage = () => {
 	const { id } = useParams();
+	const customerService = new PelangganService();
 	const location = useLocation();
 	const history = useHistory();
 	const isCreating = location.pathname.includes('add') ? true : false;
@@ -43,17 +43,17 @@ const PelangganModifyPage = () => {
 		return isCreating
 			? {}
 			: {
-					birth: customer.birth,
+					birth: moment(new Date(customer.birth)),
 					email: customer.email,
 					first_name: customer.first_name,
-					frequency_groceries_one_month:
-						customer.frequency_groceries_one_month,
 					gender: customer.gender,
 					id_card_image: customer.id_card_image,
 					last_name: customer.last_name,
 					marital_status: customer.marital_status,
 					phone_number: customer.phone_number,
 					profile_image: customer.profile_image,
+					frequency_groceries_one_month:
+						customer.frequency_groceries_one_month,
 			  };
 	};
 
