@@ -47,6 +47,8 @@ const ColourModifyPage = () => {
 
 	const submit = async (values) => {
 		try {
+			setIsSubmitting(true);
+
 			const data = new FormData();
 			data.append('hexa_code', values.hexa_code.substring(1));
 			data.append('name[en]', values.en_name);
