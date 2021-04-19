@@ -87,6 +87,23 @@ export default class CustomerService extends RequestAdapterService {
 		}
 	}
 
+	async getCustomerAddresses(customer_id, params) {
+		try {
+			const { data } = await super.sendGetRequest(
+				`${this.baseUrl}/v1/customers/${customer_id}/addresses`,
+				params
+			);
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail getting customer address detail: ${super.generateErrorMessage(
+					error
+				)}`
+			);
+		}
+	}
+
 	async getCustomerAddressById(customer_id, address_id, params) {
 		try {
 			const { data } = await super.sendGetRequest(

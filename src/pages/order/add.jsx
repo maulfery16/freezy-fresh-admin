@@ -1,25 +1,51 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
-import ReactMoment from 'react-moment';
-import { Col, Divider, Form, Radio, Row, Space, Typography } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
+import { Col, Form, message, Radio, Row, Space, Typography } from 'antd';
 import { useHistory } from 'react-router';
 
 import AtomBranchSelect from '../../components/atoms/selection/branch';
 import AtomCard from '../../components/atoms/card';
-import AtomImage from '../../components/atoms/image';
+import MoleculeModifyActionButtons from '../../components/molecules/modify-action-buttons';
 import MoleculeNumberInputGroup from '../../components/molecules/input-group/number-input';
-import MoleculeOrderInfoGroup from '../../components/molecules/info-group-order';
+import MoleculeOrderCreationAddressInfo from '../../components/molecules/order/creation/address-info';
+import MoleculeOrderCreationCustomerInfo from '../../components/molecules/order/creation/customer-info';
 import MoleculeSelectInputGroup from '../../components/molecules/input-group/select-input';
 import MoleculeTextInputGroup from '../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../components/organisms/layout';
-import MoleculeModifyActionButtons from '../../components/molecules/modify-action-buttons';
 import OrganismProductOrderDatatable from '../../components/organisms/datatable/product-order-datatable';
 
-const ModifyOrderPage = () => {
-	const [address, setAddress] = useState(null);
-	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [customer, setCustomer] = useState(null);
+import CustomerService from '../../services/customer';
+
+const AddOrderPage = () => {
+	const addressInputSelectRef = useRef();
+	const customerService = new CustomerService();
 	const history = useHistory();
+	const [customerAddresses, setCustomerAddresses] = useState([]);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [selectedAddress, setSelectedAddress] = useState(null);
+	const [selectedBranch, setSelectedBranch] = useState(null);
+	const [selectedCustomer, setSelectedCustomer] = useState(null);
+
+	const getCustomerAddresses = async (id) => {
+		try {
+			const response = await customerService.getCustomerAddresses(id, {});
+			setCustomerAddresses(
+				response.data.map((address) => {
+					return {
+						value: address.id,
+						label: address.title,
+					};
+				})
+			);
+		} catch (error) {
+			message.error(error.message);
+		}
+	};
+
+	useEffect(() => {
+		addressInputSelectRef?.current?.refetchData();
+	}, [customerAddresses]);
 
 	return (
 		<OrganismLayout
@@ -39,13 +65,17 @@ const ModifyOrderPage = () => {
 			<Row className="mt4">
 				<Space className="w-100" direction="vertical" size="large">
 					<AtomCard title="Info Cabang">
-						<Row>
-							<Col span={12}>{/* <AtomBranchSelect /> */}</Col>
+						<Row className="mt3">
+							<Col span={12}>
+								<AtomBranchSelect
+									onChange={setSelectedBranch}
+								/>
+							</Col>
 						</Row>
 					</AtomCard>
 
 					<AtomCard title="Info Pelanggan">
-						<Row>
+						<Row className="mt3">
 							<Col span={12}>
 								<MoleculeSelectInputGroup
 									label="Pelanggan"
@@ -53,86 +83,23 @@ const ModifyOrderPage = () => {
 									placeholder="Pelanggan"
 									required
 									data={{
-										// url: 'customers',
-										// generateCustomOption: (item) => ({
-										// 	value: item.id,
-										// 	label: `${item.first_name} ${item.last_name}`,
-										// }),
-										options: [
-											{
-												value: 1,
-												label: 'John Doe',
-											},
-											{
-												value: 2,
-												label: 'Eric Cantona',
-											},
-											{
-												value: 3,
-												label: 'Marukana... Udon?',
-											},
-										],
+										url: 'admin/customers',
+										generateCustomOption: (item) => ({
+											value: item.id,
+											label: `${item.first_name} ${item.last_name}`,
+										}),
+										onChange: (value) => {
+											setSelectedCustomer(value);
+											getCustomerAddresses(value);
+										},
 									}}
 								/>
 							</Col>
 
 							<Col span={18}>
-								<Typography.Text>
-									<span className="gray fw5 mb2">
-										Info Pelanggan
-									</span>
-								</Typography.Text>
-
-								<Divider className="mv2" />
-
-								<Row gutter={[12, 12]}>
-									<Col span={12}>
-										<MoleculeOrderInfoGroup
-											title="ID Pelanggan"
-											content={customer?.id}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeOrderInfoGroup
-											title="Name Pelanggan"
-											content={
-												customer
-													? `${customer.first_name} ${customer.last_name}`
-													: '-'
-											}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeOrderInfoGroup
-											title="Nomor Handpone"
-											content={customer?.phone_number}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeOrderInfoGroup
-											title="Email"
-											content={customer?.email}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeOrderInfoGroup
-											title="Tanggal Lahir"
-											content={
-												customer ? (
-													<ReactMoment format="DD-MM-YY">
-														{customer.birth_date}
-													</ReactMoment>
-												) : (
-													'-'
-												)
-											}
-										/>
-									</Col>
-								</Row>
+								<MoleculeOrderCreationCustomerInfo
+									customerId={selectedCustomer}
+								/>
 							</Col>
 						</Row>
 					</AtomCard>
@@ -147,159 +114,19 @@ const ModifyOrderPage = () => {
 									name="addresses"
 									placeholder="Alamat"
 									required
+									optionsRef={addressInputSelectRef}
 									data={{
-										// url: 'addresses',
-										// generateCustomOption: (item) => ({
-										// 	value: item.id,
-										// 	label: item.name,
-										// }),
-										options: [
-											{
-												value: 1,
-												label: 'Marukana... Udon?',
-											},
-											{
-												value: 2,
-												label: 'Marukana... Udon?',
-											},
-											{
-												value: 3,
-												label: 'Marukana... Udon?',
-											},
-										],
+										options: customerAddresses,
+										onChange: setSelectedAddress,
 									}}
 								/>
 							</Col>
 
 							<Col span={18}>
-								<Typography.Text>
-									<span className="gray fw5 mb2">
-										Info Alamat
-									</span>
-								</Typography.Text>
-
-								<Divider className="mv2" />
-
-								<Row gutter={[12, 12]}>
-									<Col span={12}>
-										<MoleculeOrderInfoGroup
-											title="Nama Alamat"
-											content={address?.name}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeOrderInfoGroup
-											title="Name Penerima"
-											content={address?.receiver_name}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeOrderInfoGroup
-											title="Nama Jalan"
-											content={address?.address_name}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeOrderInfoGroup
-											title="No Handpone Penerima"
-											content={
-												address?.receiver_phone_number ||
-												'-'
-											}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeOrderInfoGroup
-											title="Provinsi"
-											content={address?.province?.name}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeOrderInfoGroup
-											title="Kota"
-											content={address?.city?.name}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeOrderInfoGroup
-											title="Kecamatan"
-											content={address?.district?.name}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeOrderInfoGroup
-											title="Kelurahan"
-											content={address?.village?.name}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeOrderInfoGroup
-											title="Detail Alamat"
-											content={address?.address_detail}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeOrderInfoGroup
-											title="Kode POS"
-											content={address?.portal_code}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeOrderInfoGroup
-											title="Latitude"
-											content={address?.latitude}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeOrderInfoGroup
-											title="Longitude"
-											content={address?.longitude}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeOrderInfoGroup
-											title="Catatan untuk driver"
-											content={address?.note}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeOrderInfoGroup
-											title="Biaya Parkir"
-											content={address?.park_fee}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeOrderInfoGroup
-											title="Kota"
-											content={
-												address ? (
-													<AtomImage
-														src={
-															address.location_image
-														}
-														size={170}
-													/>
-												) : (
-													'-'
-												)
-											}
-										/>
-									</Col>
-								</Row>
+								<MoleculeOrderCreationAddressInfo
+									addressId={selectedAddress}
+									customerId={selectedCustomer}
+								/>
 							</Col>
 						</Row>
 					</AtomCard>
@@ -370,7 +197,7 @@ const ModifyOrderPage = () => {
 								<Col span={12}>
 									<MoleculeSelectInputGroup
 										label="Tipe Pengiriman"
-										name="delivery_type"
+										name="shipping_type"
 										placeholder="Tipe Pengiriman"
 										required
 										data={{
@@ -485,4 +312,4 @@ const ModifyOrderPage = () => {
 	);
 };
 
-export default ModifyOrderPage;
+export default AddOrderPage;

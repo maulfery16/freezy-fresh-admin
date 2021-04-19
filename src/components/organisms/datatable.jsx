@@ -307,6 +307,9 @@ const OrganismDatatable = forwardRef((props, ref) => {
 					dataSource={data}
 					loading={isGettingData}
 					onChange={setDatatableMetadata}
+					rowKey={props.rowKey || 'id'}
+					scroll={{ x: props.scroll || 1080 }}
+					style={{ width: '100%' }}
 					pagination={{
 						current: filterParams.page,
 						itemRender: (_, type, originalEl) => {
@@ -328,9 +331,6 @@ const OrganismDatatable = forwardRef((props, ref) => {
 						responsive: true,
 						total: totalData,
 					}}
-					rowKey={props.rowKey || 'id'}
-					scroll={{ x: props.scroll || 1080 }}
-					style={{ width: '100%' }}
 				/>
 			</Col>
 		</Row>
