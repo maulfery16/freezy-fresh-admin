@@ -250,7 +250,7 @@ const ModifyOrderPage = () => {
 									<Col span={12}>
 										<MoleculeOrderInfoGroup
 											title="Kode POS"
-											content={address?.zip_code}
+											content={address?.portal_code}
 										/>
 									</Col>
 

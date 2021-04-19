@@ -10,13 +10,13 @@ const MoleculeOrderDetailVoucherInfo = (props) => {
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Name Voucher"
-					content={props.order?.voucher_name}
+					content={props.voucher}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Kode Voucher"
-					content={props.order?.voucher_code}
+					content={props.code}
 				/>
 			</Col>
 		</Row>
@@ -24,7 +24,8 @@ const MoleculeOrderDetailVoucherInfo = (props) => {
 };
 
 MoleculeOrderDetailVoucherInfo.propType = {
-	order: PropTypes.any,
+	code: PropTypes.string,
+	voucher: PropTypes.string,
 };
 
 export default MoleculeOrderDetailVoucherInfo;

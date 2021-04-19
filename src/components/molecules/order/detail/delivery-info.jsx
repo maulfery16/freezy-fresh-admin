@@ -10,85 +10,73 @@ const MoleculeOrderDeliveryInfo = (props) => {
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Nama Penerima"
-					content={props.order?.receiver_name}
+					content={props.delivery?.receiver_name}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Nomor Handpone Penerima"
-					content={props.order?.receiver_phone_number}
+					content={props.delivery?.receiver_phone_number}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Nama Alamat"
-					content={props.order?.address_name}
+					content={props.delivery?.address}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Nama jalan"
-					content={props.order?.street_name}
+					content={props.delivery?.additional_information}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Provinsi"
-					content={props.order?.province?.name}
+					content={props.delivery?.province_name}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Kota"
-					content={props.order?.city?.id}
+					content={props.delivery?.city_id}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Kecamatan"
-					content={props.order?.district?.name}
+					content={props.delivery?.district_name}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Kelurahan"
-					content={props.order?.sub_district?.id}
+					content={props.delivery?.subdistrict_id}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Kode POS"
-					content={props.order?.zip_code}
-				/>
-			</Col>
-			<Col span={12}>
-				<MoleculeOrderInfoGroup
-					title="Nama Jalan"
-					content={props.order?.address}
+					content={props.delivery?.portal_code}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Latitude"
-					content={props.order?.latitude}
+					content={props.delivery?.latitude}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Longitude"
-					content={props.order?.longitude}
+					content={props.delivery?.longitude}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
-					title="Latitude"
-					content={props.order?.notes}
-				/>
-			</Col>
-			<Col span={12}>
-				<MoleculeOrderInfoGroup
-					title="Longitude"
-					content={props.order?.park_fee ? 'Ya' : 'Tidak'}
+					title="Biaya Parkir"
+					content={props.delivery?.park_fee ? 'Ya' : 'Tidak'}
 				/>
 			</Col>
 		</Row>
@@ -96,7 +84,22 @@ const MoleculeOrderDeliveryInfo = (props) => {
 };
 
 MoleculeOrderDeliveryInfo.propType = {
-	order: PropTypes.any,
+	delivery: PropTypes.shape({
+		additional_information_driver: PropTypes.string,
+		additional_information: PropTypes.string,
+		address: PropTypes.string,
+		city_name: PropTypes.string,
+		district_name: PropTypes.string,
+		latitude: PropTypes.string,
+		longitude: PropTypes.string,
+		parking_fee: PropTypes.bool,
+		postal_code: PropTypes.string,
+		province_name: PropTypes.string,
+		receiver_name: PropTypes.string,
+		receiver_phone_number: PropTypes.string,
+		subdistrict_name: PropTypes.string,
+		title: PropTypes.string,
+	}),
 };
 
 export default MoleculeOrderDeliveryInfo;

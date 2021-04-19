@@ -32,6 +32,7 @@ const OrderPage = () => {
 			title: 'No',
 			dataIndex: 'id',
 			render: (id, _, index) => index + 1,
+			skipExport: true,
 		},
 		{
 			title: 'ID Pesanan',
@@ -42,6 +43,7 @@ const OrderPage = () => {
 			title: 'Cabang Freezy (ID)',
 			dataIndex: 'branch',
 			render: (branch) => branch.id,
+			csvRender: (item) => item.branch.id,
 			sorter: true,
 		},
 		{
@@ -73,6 +75,9 @@ const OrderPage = () => {
 			dataIndex: 'sub_total',
 			sorter: true,
 			render: (total) => <AtomNumberFormat prefix="Rp. " value={total} />,
+			csvRender: (item) => (
+				<AtomNumberFormat prefix="Rp. " value={item.sub_total} />
+			),
 		},
 		{
 			title: 'No Resi Pengiriman',
@@ -88,6 +93,10 @@ const OrderPage = () => {
 			title: 'Click 2 Receive (Hour)',
 			dataIndex: 'click_2_receive_hours',
 			sorter: true,
+			csvRender: (item) =>
+				`${moment(item.created_at).format('HH')} jam ${moment(
+					item.created_at
+				).format('mm')} menit`,
 			render: (date) => (
 				<>
 					<ReactMoment format="HH">{date}</ReactMoment> jam{' '}
@@ -114,6 +123,8 @@ const OrderPage = () => {
 			title: 'Status Pesanan Pelanggan',
 			dataIndex: 'admin_status',
 			sorter: status,
+			csvRender: (item) =>
+				orderService.translateOrderEnum(item.admin_status),
 			render: (status) => orderService.translateOrderEnum(status),
 		},
 	];
@@ -141,12 +152,14 @@ const OrderPage = () => {
 	const renderAdditionalAction = () => {
 		return (
 			<MoleculeDatatableAdditionalAction
+				child={<MoleculeOrderPickupModal />}
 				column={column}
 				getLimit={() => orderTableRef.current.totalData}
 				label="Pesanan"
+				requiredParams="branch"
+				requiredParamsLabel="cabang"
 				route="/order"
 				url="orders"
-				child={<MoleculeOrderPickupModal />}
 			/>
 		);
 	};
@@ -275,11 +288,14 @@ const OrderPage = () => {
 			sorter: true,
 			render: (_, record) =>
 				orderService.translateOrderEnum(record.status[owner.name]),
+			csvRender: (item) =>
+				orderService.translateOrderEnum(item.status[owner.name]),
 		})),
 		...productOwners.map((owner) => ({
 			align: 'center',
 			title: `Pesanan ${owner.name}`,
 			dataIndex: `status`,
+			skipExport: true,
 			render: (_, record) =>
 				record.status[owner.name] && (
 					<AtomSecondaryButton>

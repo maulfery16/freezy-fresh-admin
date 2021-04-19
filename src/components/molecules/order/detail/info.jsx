@@ -4,14 +4,17 @@ import ReactMoment from 'react-moment';
 import { Col, Row } from 'antd';
 
 import MoleculeOrderInfoGroup from '../../info-group-order';
+import OrderService from '../../../../services/order';
 
 const MoleculeOrderDetailInfo = (props) => {
+	const orderService = new OrderService();
+
 	return (
 		<Row gutter={[12, 12]}>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="ID Pesanan Freezy"
-					content={props.order?.order_id}
+					content={props.order?.id}
 				/>
 			</Col>
 			<Col span={12}>
@@ -23,7 +26,9 @@ const MoleculeOrderDetailInfo = (props) => {
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Status Pesanan Pelanggan"
-					content={props.order?.customer_order_status}
+					content={orderService.translateOrderEnum(
+						props.order?.customer_status
+					)}
 				/>
 			</Col>
 			<Col span={12}>
@@ -38,7 +43,7 @@ const MoleculeOrderDetailInfo = (props) => {
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
-					title="Tanggal Pesanan"
+					title="Tanggal Bayar"
 					content={
 						<ReactMoment format="DD MMMM YY HH:ss" locale="id">
 							{props?.order?.payment_date}
@@ -48,37 +53,37 @@ const MoleculeOrderDetailInfo = (props) => {
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
-					title="Tanggal Pesanan"
+					title="Tanggal Diproses"
 					content={
 						<ReactMoment format="DD MMMM YY HH:ss" locale="id">
-							{props?.order?.in_delivery_date}
+							{props?.order?.shipping_process_date}
 						</ReactMoment>
 					}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
-					title="Tanggal Pesanan"
+					title="Tanggal Sampai"
 					content={
 						<ReactMoment format="DD MMMM YY HH:ss" locale="id">
-							{props?.order?.arrived_date}
+							{props?.order?.shipping_delivered_date}
 						</ReactMoment>
 					}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
-					title="Tanggal Pesanan"
+					title="Tanggal Selesai"
 					content={
 						<ReactMoment format="DD MMMM YY HH:ss" locale="id">
-							{props?.order?.done_date}
+							{props?.order?.finish_date}
 						</ReactMoment>
 					}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
-					title="Tanggal Pesanan"
+					title="Tanggal Dibatalkan"
 					content={
 						<ReactMoment format="DD MMMM YY HH:ss" locale="id">
 							{props?.order?.cancel_date}
@@ -88,7 +93,7 @@ const MoleculeOrderDetailInfo = (props) => {
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
-					title="Tanggal Pesanan"
+					title="Tanggal Pengembalian"
 					content={
 						<ReactMoment format="DD MMMM YY HH:ss" locale="id">
 							{props?.order?.refund_date}
@@ -98,10 +103,10 @@ const MoleculeOrderDetailInfo = (props) => {
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
-					title="Tanggal Pesanan"
+					title="Tanggal Dikembalikan"
 					content={
 						<ReactMoment format="DD MMMM YY HH:ss" locale="id">
-							{props?.order?.return_created_date}
+							{props?.order?.return_date}
 						</ReactMoment>
 					}
 				/>

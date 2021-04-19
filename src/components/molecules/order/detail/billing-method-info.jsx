@@ -10,19 +10,19 @@ const MoleculeOrderDetailBillingMethodInfo = (props) => {
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Tipe Pembayaran"
-					content={props.order?.billing_type}
+					content={props.method}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Nama Bank"
-					content={props.order?.bank_name}
+					content={props.bank}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="ID Transaksi"
-					content={props.order?.transaction_id}
+					content={props.transactionId}
 				/>
 			</Col>
 		</Row>
@@ -30,7 +30,9 @@ const MoleculeOrderDetailBillingMethodInfo = (props) => {
 };
 
 MoleculeOrderDetailBillingMethodInfo.propType = {
-	order: PropTypes.any,
+	bank: PropTypes.string,
+	method: PropTypes.string,
+	transactionId: PropTypes.string,
 };
 
 export default MoleculeOrderDetailBillingMethodInfo;
