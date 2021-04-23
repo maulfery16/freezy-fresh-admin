@@ -26,8 +26,25 @@ const AddOrderPage = () => {
 	const [selectedAddress, setSelectedAddress] = useState(null);
 	const [selectedBranch, setSelectedBranch] = useState(null);
 	const [selectedCustomer, setSelectedCustomer] = useState(null);
+	const [selectedShippingType, setSelectedShippingType] = useState(null);
 
 	const getCustomerAddresses = async (id) => {
+		try {
+			const response = await customerService.getCustomerAddresses(id, {});
+			setCustomerAddresses(
+				response.data.map((address) => {
+					return {
+						value: address.id,
+						label: address.title,
+					};
+				})
+			);
+		} catch (error) {
+			message.error(error.message);
+		}
+	};
+
+	const getShippingTypeDetail = async (id) => {
 		try {
 			const response = await customerService.getCustomerAddresses(id, {});
 			setCustomerAddresses(
@@ -104,7 +121,7 @@ const AddOrderPage = () => {
 						</Row>
 					</AtomCard>
 
-					<OrganismProductOrderDatatable />
+					<OrganismProductOrderDatatable branch={selectedBranch} />
 
 					<AtomCard title="Info Alamat Tujuan">
 						<Row>
@@ -141,25 +158,11 @@ const AddOrderPage = () => {
 										placeholder="Jenis Pengiriman"
 										required
 										data={{
-											// url: 'delivery-types',
-											// generateCustomOption: (item) => ({
-											// 	value: item.id,
-											// 	label: item.name,
-											// }),
-											options: [
-												{
-													value: 1,
-													label: 'Marukana... Udon?',
-												},
-												{
-													value: 2,
-													label: 'Marukana... Udon?',
-												},
-												{
-													value: 3,
-													label: 'Marukana... Udon?',
-												},
-											],
+											url: 'develivery/types',
+											generateCustomOption: (item) => ({
+												value: item.value,
+												label: item.name.id,
+											}),
 										}}
 									/>
 								</Col>
@@ -170,27 +173,7 @@ const AddOrderPage = () => {
 										name="logistic"
 										placeholder="Perusahaan Logistik"
 										required
-										data={{
-											// url: 'logistic-companies',
-											// generateCustomOption: (item) => ({
-											// 	value: item.id,
-											// 	label: item.name,
-											// }),
-											options: [
-												{
-													value: 1,
-													label: 'Marukana... Udon?',
-												},
-												{
-													value: 2,
-													label: 'Marukana... Udon?',
-												},
-												{
-													value: 3,
-													label: 'Marukana... Udon?',
-												},
-											],
-										}}
+										data={{ url: 'shippings' }}
 									/>
 								</Col>
 
@@ -201,25 +184,8 @@ const AddOrderPage = () => {
 										placeholder="Tipe Pengiriman"
 										required
 										data={{
-											// url: 'delivery_types',
-											// generateCustomOption: (item) => ({
-											// 	value: item.id,
-											// 	label: item.name,
-											// }),
-											options: [
-												{
-													value: 1,
-													label: 'Marukana... Udon?',
-												},
-												{
-													value: 2,
-													label: 'Marukana... Udon?',
-												},
-												{
-													value: 3,
-													label: 'Marukana... Udon?',
-												},
-											],
+											url: 'shipping-company',
+											onChange: getShippingTypeDetail,
 										}}
 									/>
 								</Col>
@@ -247,25 +213,25 @@ const AddOrderPage = () => {
 										placeholder="Voucher"
 										required
 										data={{
-											// url: 'vouchers',
+											url: 'vouchers',
 											// generateCustomOption: (item) => ({
 											// 	value: item.id,
 											// 	label: item.name,
 											// }),
-											options: [
-												{
-													value: 1,
-													label: 'Marukana... Udon?',
-												},
-												{
-													value: 2,
-													label: 'Marukana... Udon?',
-												},
-												{
-													value: 3,
-													label: 'Marukana... Udon?',
-												},
-											],
+											// options: [
+											// 	{
+											// 		value: 1,
+											// 		label: 'Marukana... Udon?',
+											// 	},
+											// 	{
+											// 		value: 2,
+											// 		label: 'Marukana... Udon?',
+											// 	},
+											// 	{
+											// 		value: 3,
+											// 		label: 'Marukana... Udon?',
+											// 	},
+											// ],
 										}}
 									/>
 								</Col>
@@ -280,6 +246,16 @@ const AddOrderPage = () => {
 								</Col>
 							</Row>
 						</Form>
+					</AtomCard>
+
+					<AtomCard title="Rincian Biaya">
+						<Row className="mt3">
+							<Col span={18}>
+								<MoleculeOrderCreationCustomerInfo
+									customerId={selectedCustomer}
+								/>
+							</Col>
+						</Row>
 					</AtomCard>
 
 					<AtomCard title="Info Pembayaran">

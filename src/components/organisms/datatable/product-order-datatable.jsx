@@ -8,6 +8,7 @@ import {
 	Input,
 	InputNumber,
 	message,
+	Modal,
 	Popconfirm,
 	Row,
 	Space,
@@ -23,6 +24,8 @@ import MoleculeSelectInputGroup from '../../molecules/input-group/select-input';
 
 import ProductService from '../../../services/product';
 import AtomImage from '../../atoms/image';
+import MoleculeNumberInputGroup from '../../molecules/input-group/number-input';
+import MoleculeTextInputGroup from '../../molecules/input-group/text-input';
 
 const EditableCell = ({
 	children,
@@ -57,6 +60,14 @@ const EditableCell = ({
 };
 
 const OrganismProductOrderDatatable = forwardRef((props, ref) => {
+	const [data, setData] = useState(props.defaultData || []);
+	const [editingKey, setEditingKey] = useState('');
+	const [form] = Form.useForm();
+	const [isGettingData, setIsGettingData] = useState(false);
+	const [isPickProductVisible, setIsPickProductVisible] = useState(false);
+	const [keyword, setKeyword] = useState('');
+	const [productForm] = Form.useForm();
+	const [productID, setProductID] = useState(null);
 	const productService = new ProductService();
 
 	const columns = [
@@ -161,6 +172,11 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 			sorter: true,
 			editable: true,
 		},
+		{
+			title: 'Nama Keluarga',
+			dataIndex: 'family_name',
+			sorter: true,
+		},
 	];
 
 	if (!props.isReadOnly) {
@@ -192,15 +208,6 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 			},
 		});
 	}
-
-	const [data, setData] = useState(props.defaultData || []);
-	const [editingKey, setEditingKey] = useState('');
-	const [form] = Form.useForm();
-	const [isGettingData, setIsGettingData] = useState(false);
-	const [isPickProductVisible, setIsPickProductVisible] = useState(false);
-	const [keyword, setKeyword] = useState('');
-	const [productForm] = Form.useForm();
-	const [productID, setProductID] = useState(null);
 
 	const cancel = () => setEditingKey('');
 
@@ -265,7 +272,7 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 		try {
 			const response = await getDetailProduct(values.branches.join(', '));
 			productForm.resetFields();
-			setData([...data, response]);
+			setData([...data, { ...response, ...values }]);
 			setIsPickProductVisible(false);
 		} catch (error) {
 			message.error(error.message);
@@ -336,27 +343,136 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 				</Col>
 
 				{!props.isReadOnly && (
-					<Col span={12}>
-						<Row justify="end">
-							<Space>
-								<AtomSecondaryButton
-									onClick={() => deleteAllProduct()}
-									size="large"
-								>
-									Hapus Semua
-								</AtomSecondaryButton>
+					<>
+						<Col span={12}>
+							<Row justify="end">
+								<Space>
+									<AtomSecondaryButton
+										onClick={() => deleteAllProduct()}
+										size="large"
+									>
+										Hapus Semua
+									</AtomSecondaryButton>
 
-								<AtomPrimaryButton
-									onClick={() =>
-										setIsPickProductVisible(true)
-									}
-									size="large"
-								>
-									Pilih Produk
-								</AtomPrimaryButton>
-							</Space>
-						</Row>
-					</Col>
+									<AtomPrimaryButton
+										onClick={() => {
+											if (!props.branch) {
+												message.warning(
+													'Pilih cabang terlebih dahulu'
+												);
+												return;
+											}
+											setIsPickProductVisible(true);
+										}}
+										size="large"
+									>
+										Pilih Produk
+									</AtomPrimaryButton>
+								</Space>
+							</Row>
+						</Col>
+
+						<Modal
+							footer={null}
+							title="Pilih Produk"
+							visible={isPickProductVisible}
+							width={500}
+							onCancel={() => setIsPickProductVisible(false)}
+						>
+							<Form
+								form={productForm}
+								name="add-product"
+								onFinish={setProductToTable}
+								onFinishFailed={(error) => {
+									message.error(
+										`Failed: ${error.errorFields.for}`
+									);
+									console.error(error);
+								}}
+							>
+								<Row align="middle" justify="end" gutter={12}>
+									<Col span={17}>
+										<MoleculeSelectInputGroup
+											label="Nama Produk"
+											name="product"
+											placeholder="Nama Produk"
+											data={{
+												onChange: (value) =>
+													setProductID(value),
+												url: `client/products?branch_id=${props.branch}`,
+												generateCustomOption: (
+													item
+												) => ({
+													value: item.product_id,
+													label: `${item.sku_id} ${
+														item.name.id
+													} ${
+														item.variants[0]
+															?.variant?.id || ''
+													}`,
+												}),
+											}}
+										/>
+									</Col>
+
+									<Col span={7}>
+										<MoleculeNumberInputGroup
+											label="Jumlah"
+											min={1}
+											name="total"
+											placeholder="1"
+											required
+										/>
+									</Col>
+
+									<Col span={24}>
+										<MoleculeTextInputGroup
+											label="Catatan"
+											name="note"
+											placeholder="Masukan Catatan"
+										/>
+									</Col>
+
+									<Col span={24}>
+										<MoleculeSelectInputGroup
+											label="Nama Keluarga"
+											name="family_name"
+											placeholder="Nama Keluarga"
+											data={{
+												options: [
+													{
+														value: 1,
+														label:
+															'Marukana... Udon?',
+													},
+													{
+														value: 2,
+														label:
+															'Marukana... Udon?',
+													},
+													{
+														value: 3,
+														label:
+															'Marukana... Udon?',
+													},
+												],
+											}}
+										/>
+									</Col>
+
+									<Col>
+										<AtomPrimaryButton
+											htmlType="submit"
+											size="large"
+											loading={isGettingData}
+										>
+											Pilih Produk
+										</AtomPrimaryButton>
+									</Col>
+								</Row>
+							</Form>
+						</Modal>
+					</>
 				)}
 			</Row>
 
@@ -383,6 +499,7 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 });
 
 OrganismProductOrderDatatable.propTypes = {
+	branch: PropTypes.string,
 	defaultData: PropTypes.array,
 	isReadOnly: PropTypes.bool,
 };
