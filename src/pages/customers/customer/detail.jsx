@@ -18,43 +18,10 @@ import OrganismLayout from '../../../components/organisms/layout';
 
 import { translateGenderEnum } from '../../../utils/helpers';
 import CustomerService from '../../../services/customer';
-const customerService = new CustomerService();
-const bankDataSource = {
-	data: [
-		{
-			id: 1,
-			name: 'BCA',
-			account_number: 1241254356,
-			is_default: true,
-		},
-		{
-			id: 2,
-			name: 'BRI',
-			account_number: 2241254356,
-			is_default: false,
-		},
-		{
-			id: 3,
-			name: 'BNI',
-			account_number: 3241254356,
-			is_default: false,
-		},
-	],
-	meta: {
-		include: [],
-		custom: [],
-		pagination: {
-			total: 3,
-			count: 3,
-			per_page: 10,
-			current_page: 1,
-			total_pages: 1,
-			links: {},
-		},
-	},
-};
 
 const CustomerDetailPage = () => {
+	const customerService = new CustomerService();
+
 	const { id } = useParams();
 	const [customer, setCustomer] = useState(null);
 
@@ -190,15 +157,15 @@ const CustomerDetailPage = () => {
 		{
 			align: 'center',
 			title: 'Set as Prirmary',
-			dataIndex: `is_default`,
-			render: (is_default, record) => {
-				const PrimaryButton = is_default
+			dataIndex: `is_primary`,
+			render: (is_primary, record) => {
+				const PrimaryButton = is_primary
 					? AtomPrimaryButton
 					: AtomSecondaryButton;
 
 				return (
 					<PrimaryButton
-						disabled={is_default}
+						disabled={is_primary}
 						onClick={() => setLinkCardAsPrimary(record.id)}
 						shape="circle"
 					>
@@ -209,11 +176,11 @@ const CustomerDetailPage = () => {
 		},
 		{
 			title: 'Nama Bank',
-			dataIndex: `name`,
+			dataIndex: `bank_name`,
 		},
 		{
 			title: 'Nomor Kartu',
-			dataIndex: `account_number`,
+			dataIndex: `number_card`,
 		},
 	];
 
@@ -228,9 +195,10 @@ const CustomerDetailPage = () => {
 		}
 	};
 
-	const setLinkCardAsPrimary = async (id) => {
+	const setLinkCardAsPrimary = async (credit_card_id) => {
 		try {
-			await customerService.setLinkCardAsPrimary(id);
+			await customerService.setLinkCardAsPrimary(id, credit_card_id);
+			bankTableRef.current.refetchData();
 			message.success(
 				'Berhasil mengatur link card menjadi link card utama'
 			);
@@ -448,8 +416,7 @@ const CustomerDetailPage = () => {
 						<AtomCard title="">
 							<OrganismDatatable
 								columns={bankColumn}
-								dataSource={bankDataSource}
-								dataSourceURL={''}
+								dataSourceURL={`customers/${id}/credit-cards`}
 								ref={bankTableRef}
 								scroll={600}
 								searchInput={false}

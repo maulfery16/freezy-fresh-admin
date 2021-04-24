@@ -146,24 +146,21 @@ export default class CustomerService extends RequestAdapterService {
 	}
 
 	/* Customer Link Card */
-	async setLinkCardAsPrimary(id) {
-		return id;
-		// try {
-		// 	const {
-		// 		data,
-		// 	} = await super.sendPostRequest(
-		// 		`${this.baseUrl}/v1/customer/customers/link-card/${id}/primary`,
-		// 		{ id }
-		// 	);
+	async setLinkCardAsPrimary(customer_id, credit_card_id) {
+		try {
+			const { data } = await super.sendPatchRequest(
+				`${this.baseUrl}/v1/customers/${customer_id}/credit-cards/${credit_card_id}/is-primary`,
+				{}
+			);
 
-		// 	return data;
-		// } catch (error) {
-		// 	console.error(error);
-		// 	throw new Error(
-		// 		`Setting link card as primary: ${super.generateErrorMessage(
-		// 			error
-		// 		)}`
-		// 	);
-		// }
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Setting link card as primary: ${super.generateErrorMessage(
+					error
+				)}`
+			);
+		}
 	}
 }
