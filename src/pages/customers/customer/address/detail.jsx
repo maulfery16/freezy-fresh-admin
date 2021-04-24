@@ -62,7 +62,7 @@ const CustomerAddressDetailPage = () => {
 			) : (
 				<Row align="top" className="mt4" gutter={24}>
 					<Col span={18}>
-						<AtomCard title="Info Alamat Pelanggan">
+						<AtomCard title="Info Alamat">
 							<Row gutter={[12, 24]}>
 								<Col span={12}>
 									<MoleculeInfoGroup
@@ -175,7 +175,7 @@ const CustomerAddressDetailPage = () => {
 								<Col span={24} style={{ paddingTop: '2rem' }}>
 									<Typography.Text strong>
 										<span className="denim f5">
-											INFO UPDATE CABANG
+											INFO UPDATE ALAMAT
 										</span>
 									</Typography.Text>
 								</Col>

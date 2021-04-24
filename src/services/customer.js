@@ -122,6 +122,29 @@ export default class CustomerService extends RequestAdapterService {
 		}
 	}
 
+	async getRegionChild(id, region) {
+		try {
+			const { data } = await super.sendGetRequest(
+				`${this.baseUrl}/v1/regions/fetch/${
+					id
+						? region
+							? `${region}/${id}`
+							: `child/${id}`
+						: 'provinces'
+				}`,
+				{ filter: 'id;name', limit: 0 }
+			);
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail getting region child: ${super.generateErrorMessage(
+					error
+				)}`
+			);
+		}
+	}
+
 	/* Customer Link Card */
 	async setLinkCardAsPrimary(id) {
 		return id;

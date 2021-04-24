@@ -675,7 +675,7 @@ const routes = [
 								path: '/',
 							},
 							{
-								path: '/address/:address_id',
+								path: '/address',
 								children: [
 									{
 										component: React.lazy(() =>
@@ -689,26 +689,33 @@ const routes = [
 										path: '/add',
 									},
 									{
-										component: React.lazy(() =>
-											import(
-												'./pages/customers/customer/address/detail'
-											)
-										),
-										exact: true,
-										guard: true,
-										name: 'Customer Address Page Detail',
-										path: '/detail',
-									},
-									{
-										component: React.lazy(() =>
-											import(
-												'./pages/customers/customer/address/modify'
-											)
-										),
-										exact: true,
-										guard: true,
-										name: 'Customer Address Page Edit',
-										path: '/edit',
+										path: '/:address_id',
+										children: [
+											{
+												component: React.lazy(() =>
+													import(
+														'./pages/customers/customer/address/detail'
+													)
+												),
+												exact: true,
+												guard: true,
+												name:
+													'Customer Address Page Detail',
+												path: '/detail',
+											},
+											{
+												component: React.lazy(() =>
+													import(
+														'./pages/customers/customer/address/modify'
+													)
+												),
+												exact: true,
+												guard: true,
+												name:
+													'Customer Address Page Edit',
+												path: '/edit',
+											},
+										],
 									},
 								],
 							},
