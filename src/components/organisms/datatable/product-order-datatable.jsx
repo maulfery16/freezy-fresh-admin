@@ -67,7 +67,6 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 	const [isPickProductVisible, setIsPickProductVisible] = useState(false);
 	const [keyword, setKeyword] = useState('');
 	const [productForm] = Form.useForm();
-	const [productID, setProductID] = useState(null);
 	const productService = new ProductService();
 
 	const columns = [
@@ -96,7 +95,7 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 			dataIndex: 'name',
 			editable: true,
 			sorter: true,
-			render: (name) => name.id,
+			render: (name) => name?.id,
 		},
 		{
 			title: 'Jumlah Produk',
@@ -224,15 +223,15 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 		setEditingKey(record.product_id);
 	};
 
-	const getDetailProduct = async (branch_id) => {
+	const getDetailProduct = async (id) => {
 		setIsGettingData(true);
 
 		try {
 			const response = await productService.getProductDetailByIdAndBranch(
-				productID,
+				id,
 				{
-					branch_id,
-					priduct_detail_id: productID,
+					branch_id: props.branch,
+					priduct_detail_id: id,
 				}
 			);
 
@@ -243,6 +242,18 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 		} finally {
 			setIsGettingData(false);
 		}
+	};
+
+	const openProductPicker = () => {
+		if (!props.branch) {
+			message.warning('Pilih cabang terlebih dahulu');
+			return;
+		}
+		if (!props.customer) {
+			message.warning('Pilih customer terlebih dahulu');
+			return;
+		}
+		setIsPickProductVisible(true);
 	};
 
 	const isEditing = (record) => record.product_id === editingKey;
@@ -270,8 +281,9 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 
 	const setProductToTable = async (values) => {
 		try {
-			const response = await getDetailProduct(values.branches.join(', '));
+			const response = await getDetailProduct(values.product);
 			productForm.resetFields();
+
 			setData([...data, { ...response, ...values }]);
 			setIsPickProductVisible(false);
 		} catch (error) {
@@ -322,20 +334,6 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 										value: item.id,
 										label: item.name.id,
 									}),
-									options: [
-										{
-											value: 1,
-											label: 'Marukana... Udon?',
-										},
-										{
-											value: 2,
-											label: 'Marukana... Udon?',
-										},
-										{
-											value: 3,
-											label: 'Marukana... Udon?',
-										},
-									],
 								}}
 							/>
 						</Col>
@@ -355,15 +353,7 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 									</AtomSecondaryButton>
 
 									<AtomPrimaryButton
-										onClick={() => {
-											if (!props.branch) {
-												message.warning(
-													'Pilih cabang terlebih dahulu'
-												);
-												return;
-											}
-											setIsPickProductVisible(true);
-										}}
+										onClick={openProductPicker}
 										size="large"
 									>
 										Pilih Produk
@@ -397,8 +387,6 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 											name="product"
 											placeholder="Nama Produk"
 											data={{
-												onChange: (value) =>
-													setProductID(value),
 												url: `client/products?branch_id=${props.branch}`,
 												generateCustomOption: (
 													item
@@ -418,7 +406,6 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 									<Col span={7}>
 										<MoleculeNumberInputGroup
 											label="Jumlah"
-											min={1}
 											name="total"
 											placeholder="1"
 											required
@@ -439,23 +426,13 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 											name="family_name"
 											placeholder="Nama Keluarga"
 											data={{
-												options: [
-													{
-														value: 1,
-														label:
-															'Marukana... Udon?',
-													},
-													{
-														value: 2,
-														label:
-															'Marukana... Udon?',
-													},
-													{
-														value: 3,
-														label:
-															'Marukana... Udon?',
-													},
-												],
+												url: `admin/customers/${props.customer}/friends?search=type:2`,
+												generateCustomOption: (
+													item
+												) => ({
+													value: item.product_id,
+													label: `${item.first_name} ${item.last_name}`,
+												}),
 											}}
 										/>
 									</Col>

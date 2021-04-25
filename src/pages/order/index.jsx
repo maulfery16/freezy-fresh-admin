@@ -18,13 +18,11 @@ import MoleculeSelectInputGroup from '../../components/molecules/input-group/sel
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
 
-import MasterService from '../../services/master';
 import OrderService from '../../services/order';
 
 const OrderPage = () => {
 	const [pickedProductOwner, setPickedProductOwner] = useState(null);
 	const [productOwners, setProductOwners] = useState([]);
-	const masterService = new MasterService();
 	const orderService = new OrderService();
 	const orderTableRef = useRef();
 	const baseColumn = [
@@ -108,6 +106,9 @@ const OrderPage = () => {
 			title: 'Tipe Pembayaran',
 			dataIndex: 'payment_method',
 			sorter: true,
+			render: (status) => orderService.transaltePaymentEnum(status),
+			csvRender: (item) =>
+				orderService.transaltePaymentEnum(item.admin_status),
 		},
 		{
 			title: 'Nama Bank',
@@ -123,9 +124,9 @@ const OrderPage = () => {
 			title: 'Status Pesanan Pelanggan',
 			dataIndex: 'admin_status',
 			sorter: status,
+			render: (status) => orderService.translateOrderEnum(status),
 			csvRender: (item) =>
 				orderService.translateOrderEnum(item.admin_status),
-			render: (status) => orderService.translateOrderEnum(status),
 		},
 	];
 	const [
@@ -137,8 +138,10 @@ const OrderPage = () => {
 
 	const getProductOwners = async () => {
 		try {
-			const { data } = await masterService.getOptions('product-owners');
-			setProductOwners(data);
+			const response = await orderService.getOrders();
+			setProductOwners(
+				Object.keys(response.data[0].status).map((key) => key)
+			);
 		} catch (error) {
 			message.error(error.message);
 		}
@@ -243,11 +246,11 @@ const OrderPage = () => {
 			...filters,
 			...productOwners.map((owner) => (
 				<MoleculeDatatableFilter
-					name={`${owner.name.toLowerCase()}-order-status`}
+					name={`${owner.toLowerCase()}-order-status`}
 					operator=":"
-					identifier={`${owner.name.toLowerCase()}-order-status-fiter`}
-					label={`Status Pesanan ${owner.name}`}
-					key={owner.name}
+					identifier={`${owner.toLowerCase()}-order-status-fiter`}
+					label={`Status Pesanan ${owner}`}
+					key={owner}
 					placeholder="Semua status pesanan"
 					data={{
 						// url: 'customers',
@@ -267,8 +270,8 @@ const OrderPage = () => {
 		let initialValues = {};
 
 		productOwners.forEach((owner) => {
-			initialValues[`${owner.name?.toLowerCase()}_order_status`] =
-				pickedProductOwner[`${owner.name?.toLowerCase()}_order_status`];
+			initialValues[`${owner?.toLowerCase()}_order_status`] =
+				pickedProductOwner[`${owner?.toLowerCase()}_order_status`];
 		});
 
 		return initialValues;
@@ -283,25 +286,23 @@ const OrderPage = () => {
 	const column = [
 		...baseColumn,
 		...productOwners.map((owner) => ({
-			title: `Status Pesanan ${owner.name}`,
+			title: `Status Pesanan ${owner}`,
 			dataIndex: `status`,
 			sorter: true,
 			render: (_, record) =>
-				orderService.translateOrderEnum(record.status[owner.name]),
+				orderService.translateOrderEnum(record.status[owner]),
 			csvRender: (item) =>
-				orderService.translateOrderEnum(item.status[owner.name]),
+				orderService.translateOrderEnum(item.status[owner]),
 		})),
 		...productOwners.map((owner) => ({
 			align: 'center',
-			title: `Pesanan ${owner.name}`,
+			title: `Pesanan ${owner}`,
 			dataIndex: `status`,
 			skipExport: true,
 			render: (_, record) =>
-				record.status[owner.name] && (
+				record.status[owner] && (
 					<AtomSecondaryButton>
-						{orderService.translateOrderEnum(
-							record.status[owner.name]
-						)}
+						{orderService.translateOrderEnum(record.status[owner])}
 					</AtomSecondaryButton>
 				),
 		})),
@@ -371,9 +372,9 @@ const OrderPage = () => {
 											span={12}
 										>
 											<MoleculeSelectInputGroup
-												label={`${owner.name} status`}
-												name={`${owner.name?.toLowerCase()}_order_status`}
-												placeholder={`${owner.name} status`}
+												label={`${owner} status`}
+												name={`${owner?.toLowerCase()}_order_status`}
+												placeholder={`${owner} status`}
 												required
 												data={{
 													options: [
