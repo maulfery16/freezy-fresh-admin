@@ -18,6 +18,21 @@ export default class OrderService extends RequestAdapterService {
 		}
 	}
 
+	async getOrders() {
+		try {
+			const { data } = await super.sendGetRequest(
+				`${this.baseUrl}/v1/orders`
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail getting order list: ${super.generateErrorMessage(error)}`
+			);
+		}
+	}
+
 	async getOrderByPickUpCode(code) {
 		try {
 			const { data } = await super.sendGetRequest(
@@ -53,6 +68,16 @@ export default class OrderService extends RequestAdapterService {
 		};
 
 		if (ORDER_STATUS_ENUM[status]) return ORDER_STATUS_ENUM[status];
+		return '-';
+	}
+
+	transaltePaymentEnum(status) {
+		const ORDER_PAYMENT_ENUM = {
+			FREEZY_CASH: 'Freezy Cash',
+			FREEZY_POINT: 'Freezy Point',
+		};
+
+		if (ORDER_PAYMENT_ENUM[status]) return ORDER_PAYMENT_ENUM[status];
 		return '-';
 	}
 }

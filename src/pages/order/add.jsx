@@ -121,7 +121,10 @@ const AddOrderPage = () => {
 						</Row>
 					</AtomCard>
 
-					<OrganismProductOrderDatatable branch={selectedBranch} />
+					<OrganismProductOrderDatatable
+						branch={selectedBranch}
+						customer={selectedCustomer}
+					/>
 
 					<AtomCard title="Info Alamat Tujuan">
 						<Row>
