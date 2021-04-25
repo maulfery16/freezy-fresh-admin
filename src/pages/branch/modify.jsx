@@ -57,8 +57,7 @@ const BranchModifyPage = () => {
 
 	const getBranchDetail = async (id) => {
 		try {
-			let branch = await branchService.getBranchById(id);
-			branch = branch.data;
+			const { data: branch } = await branchService.getBranchById(id);
 
 			setProvinceId(
 				branch && branch.address && branch.address.province_id
