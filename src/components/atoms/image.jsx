@@ -6,7 +6,7 @@ const AtomImage = (props) => {
 	return (
 		<Image
 			{...props}
-			preview
+			preview={props.preview || true}
 			src={props.src}
 			height={props.size || 100}
 			width={props.size || 100}
@@ -17,6 +17,7 @@ const AtomImage = (props) => {
 AtomImage.propTypes = {
 	size: PropTypes.number,
 	src: PropTypes.string,
+	preview: PropTypes.bool,
 };
 
 export default AtomImage;

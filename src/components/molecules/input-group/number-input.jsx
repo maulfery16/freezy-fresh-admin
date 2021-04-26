@@ -12,6 +12,20 @@ const MoleculeNumberInputGroup = (props) => {
 		});
 	}
 
+	if (props.min) {
+		rules.push({
+			message: `Harus lebih dari ${props.min}`,
+			min: props.min,
+		});
+	}
+
+	if (props.max) {
+		rules.push({
+			message: `Harus kurang dari ${props.max}`,
+			max: props.max,
+		});
+	}
+
 	return (
 		<Form.Item>
 			<Space className="w-100" direction="vertical" size={0}>
@@ -24,6 +38,7 @@ const MoleculeNumberInputGroup = (props) => {
 						{...props}
 						className={`br3 ba bw1 b--black-10 pv2 ph3 w-100 ${props.className}`}
 						size="small"
+						min={props.min || 0}
 						formatter={(value) =>
 							value
 								.toString()

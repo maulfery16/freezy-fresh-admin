@@ -29,7 +29,6 @@ import AtomSecondaryButton from '../../atoms/button/secondary-button';
 import MoleculeSelectInputGroup from '../../molecules/input-group/select-input';
 
 import ProductService from '../../../services/product';
-const productService = new ProductService();
 
 const EditableCell = ({
 	editing,
@@ -65,14 +64,9 @@ const EditableCell = ({
 };
 
 const OrganismProductDatatable = forwardRef((props, ref) => {
+	const productService = new ProductService();
+
 	const columns = [
-		// {
-		// 	title: 'Cabang',
-		// 	dataIndex: 'branches',
-		// 	sorter: true,
-		// 	render: (branches) =>
-		// 		branches.map((branch) => branch.name).join(', '),
-		// },
 		{
 			title: 'Cabang',
 			dataIndex: 'branch',
@@ -85,9 +79,10 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 		},
 		{
 			title: 'Nama Produk',
-			dataIndex: `name['id']`,
+			dataIndex: 'name',
 			sorter: true,
 			render: (_, record) => record.name.id,
+			csvRender: (item) => item.name.id,
 		},
 		{
 			title: 'Stock Tersedia',
@@ -310,7 +305,6 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 		data,
 	}));
 
-	console.log(data);
 	return (
 		<AtomCard title="Daftar Produk">
 			<Row gutter={[0, 12]}>
