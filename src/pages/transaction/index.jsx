@@ -4,7 +4,7 @@ import ReactMoment from 'react-moment';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { Space } from 'antd';
-import { EditFilled, EyeFilled } from '@ant-design/icons';
+import { EyeFilled } from '@ant-design/icons';
 
 import AtomNumberFormat from '../../components/atoms/number-format';
 import AtomStatusSelect from '../../components/atoms/datatable/status-select';
@@ -19,16 +19,17 @@ import {
 	translateTransactionStatus,
 } from '../../services/transaction';
 
+// eslint-disable-next-line no-unused-vars
 const dataSource = {
 	data: [
 		{
 			id: 5,
-			trans_source: 'manual',
-			trans_kind: 'cashback',
-			trans_type: 'credit',
+			transaction_from: 'manual',
+			transaction_for: 'cashback',
+			transaction_type: 'credit',
 			created_at: new Date(),
-			success_at: new Date(),
-			customer: {
+			finish_at: new Date(),
+			customer_info: {
 				id: 83510986823,
 				name: {
 					first_name: 'Kim',
@@ -62,24 +63,27 @@ const TransactionPage = () => {
 		},
 		{
 			title: 'Asal Transaksi',
-			dataIndex: 'trans_source',
-			render: (_, record) => record.trans_source,
+			dataIndex: 'transaction_from',
+			render: (_, record) => record.transaction_from,
 			sorter: true,
 		},
 		{
 			title: 'Jenis Transaksi',
-			dataIndex: 'trans_kind',
-			render: (_, record) => translateTransactionKind(record.trans_kind),
-			csvRender: (item) => (item.is_active ? 'Aktif' : 'Tidak Aktif'),
+			dataIndex: 'transaction_for',
+			render: (_, record) =>
+				translateTransactionKind(record.transaction_for),
+			csvRender: (item) =>
+				item.transaction_for ===
+				translateTransactionKind(item.transaction_for),
 			sorter: true,
 		},
 		{
 			title: 'Tipe Transaksi',
-			dataIndex: 'trans_type',
+			dataIndex: 'transaction_type',
 			render: (_, record) =>
-				record.trans_type === 'debt' ? 'Debit' : 'Kredit',
+				record.transaction_type === 'DEBIT' ? 'Debit' : 'Kredit',
 			csvRender: (item) =>
-				item.trans_type === 'debt' ? 'Debit' : 'Kredit',
+				item.transaction_type === 'DEBIT' ? 'Debit' : 'Kredit',
 			sorter: true,
 		},
 		{
@@ -94,49 +98,53 @@ const TransactionPage = () => {
 		},
 		{
 			title: 'Tanggal Transaksi Berhasil',
-			dataIndex: 'success_at',
-			render: (date) => (
-				<ReactMoment format="DD/MM/YY H:mm">{date}</ReactMoment>
-			),
+			dataIndex: 'finish_at',
+			render: (date) =>
+				date ? (
+					<ReactMoment format="DD/MM/YY H:mm:ss">{date}</ReactMoment>
+				) : (
+					'-'
+				),
 			csvRender: (item) =>
-				moment(item.success_at).format('DD/MM/YYYY H:mm'),
+				item.finish_at
+					? moment(item.finish_at).format('DD/MM/YYYY H:mm:ss')
+					: '-',
 			sorter: true,
 		},
 		{
 			title: 'ID Pelanggan',
-			dataIndex: 'customer[id]',
-			render: (_, record) => record.customer.id,
+			dataIndex: 'customer_info[code]',
+			render: (_, record) => record.customer_info.code,
 			sorter: true,
 		},
 		{
 			title: 'Nama Pelanggan',
-			dataIndex: 'customer[name]',
-			render: (_, record) =>
-				`${record.customer.name.first_name} ${record.customer.name.last_name}`,
+			dataIndex: 'customer_info[name]',
+			render: (_, record) => `${record.customer_info.name}`,
 			sorter: true,
 		},
 		{
 			title: 'Nominal Transaksi (Rp)',
-			dataIndex: 'total',
-			render: (_, record) => <AtomNumberFormat value={record.total} />,
+			dataIndex: 'amount',
+			render: (_, record) => <AtomNumberFormat value={record.amount} />,
 			sorter: true,
 		},
 		{
 			title: 'Merchant',
-			dataIndex: 'merchant',
-			render: (_, record) => record.merchant,
+			dataIndex: 'product_owner_info',
+			render: (_, record) => record.product_owner_info,
 			sorter: true,
 		},
 		{
 			title: 'Cabang Freezy',
-			dataIndex: 'freezy_branch',
-			render: (_, record) => record.freezy_branch,
+			dataIndex: 'branch_info[id]',
+			render: (_, record) => record.branch_info.id,
 			sorter: true,
 		},
 		{
 			title: 'Cabang Rezeki',
-			dataIndex: 'rezeki_branch',
-			render: (_, record) => record.rezeki_branch,
+			dataIndex: 'branch_info[id]',
+			render: (_, record) => record.branch_info.id,
 			sorter: true,
 		},
 		{
@@ -157,17 +165,12 @@ const TransactionPage = () => {
 						tableRef={transactionTableRef}
 						url="transactions"
 						options={[
-							{ value: 'pending', label: 'Pending' },
-							{ value: 'failed', label: 'Gagal' },
-							{ value: 'success', label: 'Berhasil' },
+							{ value: 'FAILED', label: 'Gagal' },
+							{ value: 'SUCCESS', label: 'Berhasil' },
 						]}
 					/>
 					<Link to={`/transaction/${record.id}/detail`}>
 						<EyeFilled className="f4 blue" />
-					</Link>
-
-					<Link to={`/transaction/${record.id}/edit`}>
-						<EditFilled className="f4 orange" />
 					</Link>
 				</Space>
 			),
@@ -208,10 +211,10 @@ const TransactionPage = () => {
 				data={{
 					options: [
 						{
-							value: 'credit',
+							value: 'CREDIT',
 							label: 'Kredit',
 						},
-						{ value: 'debt', label: 'Debit' },
+						{ value: 'DEBIT', label: 'Debit' },
 					],
 				}}
 			/>,
@@ -246,11 +249,9 @@ const TransactionPage = () => {
 				placeholder="Semua status"
 				data={{
 					options: [
-						{
-							value: 'true',
-							label: 'Aktif',
-						},
-						{ value: 'false', label: 'Tidak Aktif' },
+						{ value: 'PENDING', label: 'Pending' },
+						{ value: 'FAILED', label: 'Gagal' },
+						{ value: 'SUCCESS', label: 'Berhasil' },
 					],
 				}}
 			/>,
@@ -264,10 +265,10 @@ const TransactionPage = () => {
 				data={{
 					options: [
 						{
-							value: 'manual',
+							value: 'MANUAL',
 							label: 'Manual',
 						},
-						{ value: 'system', label: 'System' },
+						{ value: 'SYSTEM', label: 'System' },
 					],
 				}}
 			/>,
@@ -281,52 +282,52 @@ const TransactionPage = () => {
 				data={{
 					options: [
 						{
-							value: 'adjustment_credit',
+							value: 'ADJUSTMENT_CREDIT',
 							label: 'Adjustment Credit',
 						},
 						{
-							value: 'adjustment_debt',
+							value: 'ADJUSTMENT_CREDIT',
 							label: 'Adjustment Debit',
 						},
 						{
-							value: 'cashback',
-							label: 'Cashback',
+							value: 'CASHBACK',
+							label: 'cashback',
 						},
 						{
-							value: 'payment',
+							value: 'PAYMENTT',
 							label: 'Pembayaran',
 						},
 						{
-							value: 'refund',
+							value: 'REFUND',
 							label: 'Pengembalian Dana',
 						},
 						{
-							value: 'top_up',
+							value: 'TOP_UP',
 							label: 'Top Up',
 						},
 					],
 				}}
 			/>,
 			<MoleculeDatatableFilter
-				identifier="customer-filter"
-				key="customer"
+				identifier="customer_info-filter"
+				key="customer_info"
 				label="Nama Pelanggan"
-				name="customer"
+				name="customer_info"
 				operator=":"
 				placeholder="Semua Pelanggan"
 				data={{
-					// url: 'customers',
-					// generateCustomOption: (item) => ({
-					// 	value: item.id,
-					// 	label: `${item.first_name} ${item.last_name}`,
-					// }),
-					options: [
-						{
-							value: '12312',
-							label: 'Nani',
-						},
-						{ value: '12312', label: 'Kore' },
-					],
+					url: `admin/customers?filter=code;first_name;last_name`,
+					generateCustomOption: (item) => ({
+						value: item.code,
+						label: `${item.first_name} ${item.last_name}`,
+					}),
+					// options: [
+					// 	{
+					// 		value: '12312',
+					// 		label: 'Nani',
+					// 	},
+					// 	{ value: '12312', label: 'Kore' },
+					// ],
 				}}
 			/>,
 		];
@@ -340,8 +341,8 @@ const TransactionPage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSource={dataSource}
-				// dataSourceURL={`transactions`}
+				// dataSource={dataSource}
+				dataSourceURL={`transactions`}
 				filters={renderDatatableFilters()}
 				ref={transactionTableRef}
 				scroll={1920}

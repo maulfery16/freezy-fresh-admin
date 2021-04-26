@@ -1,31 +1,26 @@
+import RequestAdapterService from './request-adapter';
+
+export default class TransactionService extends RequestAdapterService {}
+
 export const translateTransactionKind = (kind) => {
-	switch (kind) {
-		case 'adjustment_credit':
-			return 'Adjustment Credit';
-		case 'adjustment_debt':
-			return 'Adjustment Debit';
-		case 'cashback':
-			return 'Cashback';
-		case 'payment':
-			return 'Pembayaran';
-		case 'refund':
-			return 'Pengembalian Dana';
-		case 'top_up':
-			return 'Top Up';
-		default:
-			'';
-	}
+	const TRASN_FOR_ENUM = {
+		ADJUSTMENT_CREDIT: 'Adjustment Credit',
+		ADJUSTMENT_DEBIT: 'Adjustment Debit',
+		CASHBACK: 'Cashback',
+		PAYMENT: 'Pembayaran',
+		REFUND: 'Pengembalian Dana',
+		TOP_UP: 'Top Up',
+	};
+
+	return kind ? TRASN_FOR_ENUM[kind] : '-';
 };
 
 export const translateTransactionStatus = (status) => {
-	switch (status) {
-		case 'success':
-			return 'Berhasil';
-		case 'pending':
-			return 'Pending';
-		case 'failed':
-			return 'Gagal';
-		default:
-			'';
-	}
+	const TRASN_STATUS = {
+		SUCCESS: 'Berhasil',
+		PENDING: 'Pending',
+		FAILED: 'Gagal',
+	};
+
+	return status ? TRASN_STATUS[status] : '-';
 };
