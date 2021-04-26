@@ -2,7 +2,7 @@ import { Col, message, Modal, Row, Select, Typography } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 
-// import DatatableService from '../../../services/datatable';
+import DatatableService from '../../../services/datatable';
 import AtomPrimaryButton from '../button/primary-button';
 import AtomSecondaryButton from '../button/secondary-button';
 
@@ -10,7 +10,7 @@ const AtomStatusSelect = (props) => {
 	const [isVisible, setIsVisible] = useState(false);
 	const [options, setOptions] = useState(null);
 	const [selectedOption, setSelectedOption] = useState(null);
-	// const datatableService = new DatatableService();
+	const datatableService = new DatatableService();
 
 	const cancelChangeStatus = () => {
 		setIsVisible(false);
@@ -18,11 +18,11 @@ const AtomStatusSelect = (props) => {
 
 	const changeActiveStatus = async () => {
 		try {
-			// await datatableService.updateActiveStatus(
-			// 	props.id,
-			// 	props.status,
-			// 	props.url
-			// );
+			await datatableService.updateItemStatus(
+				props.url,
+				props.id,
+				selectedOption
+			);
 			message.success('Berhasil memperbaharui status');
 			props.tableRef.current.refetchData();
 		} catch (error) {
@@ -57,6 +57,7 @@ const AtomStatusSelect = (props) => {
 							style={{ width: 120 }}
 							showSearch
 							optionFilterProp="children"
+							onChange={(value) => setSelectedOption(value)}
 							filterOption={(input, option) =>
 								option.children
 									.toLowerCase()
@@ -73,9 +74,6 @@ const AtomStatusSelect = (props) => {
 							{options &&
 								options.map((option, index) => (
 									<Select.Option
-										onChange={(value) =>
-											setSelectedOption(value)
-										}
 										key={`${
 											props.indentifier || ''
 										}_input-select_${index}`}
@@ -102,13 +100,7 @@ const AtomStatusSelect = (props) => {
 							<Col span={12}>
 								<AtomPrimaryButton
 									block
-									onClick={() =>
-										changeActiveStatus(
-											props.id,
-											selectedOption,
-											props.active
-										)
-									}
+									onClick={() => changeActiveStatus()}
 									size="middle"
 								>
 									Ubah
