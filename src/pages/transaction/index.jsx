@@ -19,35 +19,6 @@ import {
 	translateTransactionStatus,
 } from '../../services/transaction';
 
-// eslint-disable-next-line no-unused-vars
-const dataSource = {
-	data: [
-		{
-			id: 5,
-			transaction_from: 'manual',
-			transaction_for: 'cashback',
-			transaction_type: 'credit',
-			created_at: new Date(),
-			finish_at: new Date(),
-			customer_info: {
-				id: 83510986823,
-				name: {
-					first_name: 'Kim',
-					last_name: '',
-				},
-			},
-			total: 27500,
-			merchant: 'Freezy Fresh',
-			freezy_branch: 'Bandung',
-			rezeki_branch: 'Kalimantan',
-			status: 'success',
-		},
-	],
-	meta: {
-		pagination: { total: 1 },
-	},
-};
-
 const TransactionPage = () => {
 	const column = [
 		{
@@ -205,39 +176,30 @@ const TransactionPage = () => {
 				identifier="type-filter"
 				key="type"
 				label="Tipe Transaksi"
-				name="type"
+				name="transaction_type"
 				operator=":"
 				placeholder="Semua Transaksi"
 				data={{
-					options: [
-						{
-							value: 'CREDIT',
-							label: 'Kredit',
-						},
-						{ value: 'DEBIT', label: 'Debit' },
-					],
+					url: 'transactions/parameters/type',
+					generateCustomOption: (item) => ({
+						value: item.value,
+						label: `${item.name.id} / ${item.name.en} `,
+					}),
 				}}
 			/>,
 			<MoleculeDatatableFilter
 				identifier="merchant-filter"
 				key="merchant"
 				label="Merchant"
-				name="merchant"
+				name="product_owner_id"
 				operator=":"
 				placeholder="Semua Merchant"
 				data={{
-					// url: 'roles',
-					// generateCustomOption: (item) => ({
-					// 	value: item.name,
-					// 	label: item.name,
-					// }),
-					options: [
-						{
-							value: 'm1',
-							label: 'Merchant 1',
-						},
-						{ value: 'm2', label: 'Merchant 2' },
-					],
+					url: 'product-owners?filter=id;name',
+					generateCustomOption: (item) => ({
+						value: item.id,
+						label: item.name,
+					}),
 				}}
 			/>,
 			<MoleculeDatatableFilter
@@ -259,60 +221,37 @@ const TransactionPage = () => {
 				identifier="source-filter"
 				key="source"
 				label="Asal Transaksi"
-				name="source"
+				name="transaction_from"
 				operator=":"
 				placeholder="Semua Asal Transaksi"
 				data={{
-					options: [
-						{
-							value: 'MANUAL',
-							label: 'Manual',
-						},
-						{ value: 'SYSTEM', label: 'System' },
-					],
+					url: 'transactions/parameters/from',
+					generateCustomOption: (item) => ({
+						value: item.value,
+						label: `${item.name.id} / ${item.name.en} `,
+					}),
 				}}
 			/>,
 			<MoleculeDatatableFilter
 				identifier="kind-filter"
 				key="kind"
 				label="Jenis Transaksi"
-				name="kind"
+				name="transaction_for"
 				operator=":"
 				placeholder="Semua Jenis Transaksi"
 				data={{
-					options: [
-						{
-							value: 'ADJUSTMENT_CREDIT',
-							label: 'Adjustment Credit',
-						},
-						{
-							value: 'ADJUSTMENT_CREDIT',
-							label: 'Adjustment Debit',
-						},
-						{
-							value: 'CASHBACK',
-							label: 'cashback',
-						},
-						{
-							value: 'PAYMENTT',
-							label: 'Pembayaran',
-						},
-						{
-							value: 'REFUND',
-							label: 'Pengembalian Dana',
-						},
-						{
-							value: 'TOP_UP',
-							label: 'Top Up',
-						},
-					],
+					url: 'transactions/parameters/for',
+					generateCustomOption: (item) => ({
+						value: item.value,
+						label: `${item.name.id} / ${item.name.en} `,
+					}),
 				}}
 			/>,
 			<MoleculeDatatableFilter
 				identifier="customer_info-filter"
 				key="customer_info"
 				label="Nama Pelanggan"
-				name="customer_info"
+				name="customer_id"
 				operator=":"
 				placeholder="Semua Pelanggan"
 				data={{
@@ -321,13 +260,6 @@ const TransactionPage = () => {
 						value: item.code,
 						label: `${item.first_name} ${item.last_name}`,
 					}),
-					// options: [
-					// 	{
-					// 		value: '12312',
-					// 		label: 'Nani',
-					// 	},
-					// 	{ value: '12312', label: 'Kore' },
-					// ],
 				}}
 			/>,
 		];
@@ -341,7 +273,6 @@ const TransactionPage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				// dataSource={dataSource}
 				dataSourceURL={`transactions`}
 				filters={renderDatatableFilters()}
 				ref={transactionTableRef}

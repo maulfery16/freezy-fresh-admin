@@ -43,7 +43,7 @@ export const translateTransactionKind = (kind) => {
 		ADJUSTMENT_DEBIT: 'Adjustment Debit',
 		CASHBACK: 'Cashback',
 		PAYMENT: 'Pembayaran',
-		REFUND: 'Pengembalian Dana',
+		BALANCE_REFUND: 'Pengembalian Dana',
 		TOP_UP: 'Top Up',
 	};
 
