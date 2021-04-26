@@ -85,4 +85,22 @@ export default class DatatableService extends RequestAdapterService {
 			);
 		}
 	}
+
+	async updateItemStatus(url, id, status) {
+		try {
+			const { data } = await super.sendPatchRequest(
+				`${this.baseUrl}/v1/${url}/status/${id}/${status}`,
+				{}
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail updating ${url} status: ${super.generateErrorMessage(
+					error
+				)}`
+			);
+		}
+	}
 }
