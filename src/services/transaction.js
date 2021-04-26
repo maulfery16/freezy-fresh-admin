@@ -1,6 +1,41 @@
 import RequestAdapterService from './request-adapter';
 
-export default class TransactionService extends RequestAdapterService {}
+export default class TransactionService extends RequestAdapterService {
+	async createTransaction(transaction) {
+		try {
+			const { data } = await super.sendPostMultipartRequest(
+				`${this.baseUrl}/v1/transactions`,
+				transaction
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail creating transaction: ${super.generateErrorMessage(
+					error
+				)}`
+			);
+		}
+	}
+
+	async getTransactionById(id) {
+		try {
+			const { data } = await super.sendGetRequest(
+				`${this.baseUrl}/v1/transactions/${id}`
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail getting transaction detail: ${super.generateErrorMessage(
+					error
+				)}`
+			);
+		}
+	}
+}
 
 export const translateTransactionKind = (kind) => {
 	const TRASN_FOR_ENUM = {

@@ -10,11 +10,11 @@ import AtomSecondaryButton from '../../components/atoms/button/secondary-button'
 import MoleculeInfoGroup from '../../components/molecules/info-group';
 import OrganismLayout from '../../components/organisms/layout';
 
-import {
+import TransactionService, {
 	translateTransactionKind,
 	translateTransactionStatus,
 } from '../../services/transaction';
-// const transactionService = new TransactionService();
+const transactionService = new TransactionService();
 
 const TransactionModifyPage = () => {
 	const { id } = useParams();
@@ -22,35 +22,37 @@ const TransactionModifyPage = () => {
 
 	const getTransactionDetail = async () => {
 		try {
-			// const { data: transaction } = await transactionService.getTransactionById(id);
-			const transaction = {
-				id: 5,
-				trans_source: 'manual',
-				trans_kind: 'cashback',
-				trans_type: 'credit',
-				created_at: new Date(),
-				created_by: 'Mikasa',
-				success_at: new Date(),
-				failed_at: new Date(),
-				customer: {
-					id: 83510986823,
-					name: {
-						first_name: 'Kim',
-						last_name: '',
-					},
-				},
-				total: 27500,
-				merchant: 'Freezy Fresh',
-				freezy_branch: 'Bandung',
-				rezeki_branch: 'Kalimantan',
-				freezy_cash: 15000,
-				freezy_point: 3500,
-				url_payment: 'http:/google.com',
-				description: 'System payment failed, do manual payment please',
-				status: 'success',
-				updated_at: new Date(),
-				updated_by: 'Eren',
-			};
+			const {
+				data: transaction,
+			} = await transactionService.getTransactionById(id);
+			// const transaction = {
+			// 	id: 5,
+			// 	transaction_from: 'manual',
+			// 	transaction_for: 'cashback',
+			// 	transaction_type: 'credit',
+			// 	created_at: new Date(),
+			// 	created_by: 'Mikasa',
+			// 	finish_at: new Date(),
+			// 	failed_at: new Date(),
+			// 	customer: {
+			// 		id: 83510986823,
+			// 		name: {
+			// 			first_name: 'Kim',
+			// 			last_name: '',
+			// 		},
+			// 	},
+			// 	total: 27500,
+			// 	merchant: 'Freezy Fresh',
+			// 	freezy_branch: 'Bandung',
+			// 	rezeki_branch: 'Kalimantan',
+			// 	freezy_cash: 15000,
+			// 	freezy_point: 3500,
+			// 	url_payment: 'http:/google.com',
+			// 	description: 'System payment failed, do manual payment please',
+			// 	status: 'success',
+			// 	updated_at: new Date(),
+			// 	updated_by: 'Eren',
+			// };
 			setTransaction(transaction);
 		} catch (error) {
 			message.error(error.message);
@@ -104,7 +106,7 @@ const TransactionModifyPage = () => {
 										title="Nominal Transaksi (Rp)"
 										content={
 											<AtomNumberFormat
-												value={transaction.total}
+												value={transaction.amount}
 											/>
 										}
 									/>
@@ -113,7 +115,7 @@ const TransactionModifyPage = () => {
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Merchant"
-										content={transaction.merchant}
+										content={transaction.product_owner_info}
 									/>
 								</Col>
 
@@ -121,7 +123,7 @@ const TransactionModifyPage = () => {
 									<MoleculeInfoGroup
 										title="Jenis Transaksi"
 										content={translateTransactionKind(
-											transaction.trans_kind
+											transaction.transaction_for
 										)}
 									/>
 								</Col>
@@ -141,7 +143,8 @@ const TransactionModifyPage = () => {
 									<MoleculeInfoGroup
 										title="Tipe Transaksi"
 										content={
-											transaction.trans_type === 'debt'
+											transaction.transaction_type ===
+											'DEBIT'
 												? 'Debit'
 												: 'Kredit'
 										}
@@ -152,9 +155,13 @@ const TransactionModifyPage = () => {
 									<MoleculeInfoGroup
 										title="Tanggal Transaksi Berhasil"
 										content={
-											<ReactMoment format="DD/MM/YY H:mm">
-												{transaction.success_at}
-											</ReactMoment>
+											transaction.finish_at ? (
+												<ReactMoment format="DD/MM/YY H:mm:ss">
+													{transaction.finish_at}
+												</ReactMoment>
+											) : (
+												'-'
+											)
 										}
 									/>
 								</Col>
@@ -162,7 +169,7 @@ const TransactionModifyPage = () => {
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Asal Transaksi"
-										content={transaction.trans_source}
+										content={transaction.transaction_from}
 									/>
 								</Col>
 
@@ -170,9 +177,13 @@ const TransactionModifyPage = () => {
 									<MoleculeInfoGroup
 										title="Tanggal Transaksi Gagal"
 										content={
-											<ReactMoment format="DD/MM/YY H:mm">
-												{transaction.failed_at}
-											</ReactMoment>
+											transaction.failed_at ? (
+												<ReactMoment format="DD/MM/YY H:mm:ss">
+													{transaction.failed_at}
+												</ReactMoment>
+											) : (
+												'-'
+											)
 										}
 									/>
 								</Col>
@@ -180,14 +191,14 @@ const TransactionModifyPage = () => {
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Cabang Freezy"
-										content={transaction.freezy_branch}
+										content={transaction.branch_info.id}
 									/>
 								</Col>
 
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Cabang Rezeki"
-										content={transaction.rezeki_branch}
+										content={transaction.branch_info.id}
 									/>
 								</Col>
 
@@ -199,9 +210,14 @@ const TransactionModifyPage = () => {
 												<MoleculeInfoGroup
 													title="Freezy Cash (Rp)"
 													content={
-														<AtomNumberFormat
-															value={`-${transaction.freezy_cash}`}
-														/>
+														transaction.source_or_destination ===
+														'FREEZY_CASH' ? (
+															<AtomNumberFormat
+																value={`-${transaction.amount}`}
+															/>
+														) : (
+															'-'
+														)
 													}
 												/>
 											</Col>
@@ -210,9 +226,14 @@ const TransactionModifyPage = () => {
 												<MoleculeInfoGroup
 													title="Nominal Transaksi (Rp)"
 													content={
-														<AtomNumberFormat
-															value={`-${transaction.freezy_point}`}
-														/>
+														transaction.source_or_destination ===
+														'FREEZY_POINT' ? (
+															<AtomNumberFormat
+																value={`-${transaction.amount}`}
+															/>
+														) : (
+															'-'
+														)
 													}
 												/>
 											</Col>
@@ -223,20 +244,14 @@ const TransactionModifyPage = () => {
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Nama Pelanggan"
-										content={`${
-											transaction.customer.name
-												.first_name || ''
-										} ${
-											transaction.customer.name
-												.last_name || ''
-										}`}
+										content={`${transaction.customer_info.name}`}
 									/>
 								</Col>
 
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="ID Pelanggan"
-										content={transaction.customer.id}
+										content={transaction.customer_info.code}
 									/>
 								</Col>
 
@@ -245,9 +260,9 @@ const TransactionModifyPage = () => {
 										title="URL Payment"
 										content={
 											<a
-												href={`${transaction.url_payment}`}
+												href={`${transaction.payment_url}`}
 											>
-												{transaction.url_payment}
+												{transaction.payment_url || '-'}
 											</a>
 										}
 									/>
@@ -256,7 +271,7 @@ const TransactionModifyPage = () => {
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Keterangan"
-										content={transaction.description}
+										content={transaction.note}
 									/>
 								</Col>
 
