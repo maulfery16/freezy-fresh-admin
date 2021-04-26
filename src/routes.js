@@ -775,22 +775,11 @@ const routes = [
 				path: '/',
 			},
 			{
-				component: React.lazy(() =>
-					import('./pages/transaction/modify')
-				),
+				component: React.lazy(() => import('./pages/transaction/add')),
 				exact: true,
 				guard: true,
 				name: 'Add Transaction Page',
 				path: '/add',
-			},
-			{
-				component: React.lazy(() =>
-					import('./pages/transaction/modify')
-				),
-				exact: true,
-				guard: true,
-				name: 'Edit Transaction Page',
-				path: '/:id/edit',
 			},
 			{
 				component: React.lazy(() =>
