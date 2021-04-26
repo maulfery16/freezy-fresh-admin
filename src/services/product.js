@@ -68,6 +68,23 @@ export default class ProductService extends RequestAdapterService {
 		}
 	}
 
+	async getProductVariantByProductDetaiId(id) {
+		try {
+			const { data } = await super.sendGetRequest(
+				`${this.baseUrl}/v1/products/variant/find/${id}`
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail getting produc variant detail: ${super.generateErrorMessage(
+					error
+				)}`
+			);
+		}
+	}
+
 	async getNotDiscountProducts() {
 		try {
 			const { data } = await super.sendGetRequest(

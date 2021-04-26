@@ -82,7 +82,7 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 		},
 		{
 			title: 'Stock Tersedia',
-			dataIndex: 'stock',
+			dataIndex: 'available_stock',
 			sorter: true,
 		},
 		{
@@ -107,7 +107,7 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 			title: 'Kategori Dasar',
 			dataIndex: 'base_category',
 			sorter: true,
-			render: (data) => data?.name?.id || '-',
+			render: (data) => data?.id || '-',
 		},
 		{
 			title: 'Batas Umur',
@@ -115,7 +115,7 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 			sorter: true,
 		},
 		{
-			title: 'Batas Umur',
+			title: 'Freezy Pick?',
 			dataIndex: 'is_freezy_pick',
 			sorter: true,
 			render: (pick) => (pick ? 'Ya' : 'Tidak'),
@@ -124,13 +124,13 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 			title: 'Zona',
 			dataIndex: 'zone',
 			sorter: true,
-			render: (data) => data?.name?.id || '-',
+			render: (data) => data?.id || '-',
 		},
 		{
 			title: 'Brand',
 			dataIndex: 'brand',
 			sorter: true,
-			render: (data) => data?.name?.id || '-',
+			render: (data) => data?.id || '-',
 		},
 		{
 			title: 'Product Owner',
@@ -227,15 +227,11 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 		setIsGettingData(true);
 
 		try {
-			const response = await productService.getProductDetailByIdAndBranch(
-				id,
-				{
-					branch_id: props.branch,
-					priduct_detail_id: id,
-				}
+			const response = await productService.getProductVariantByProductDetaiId(
+				id
 			);
 
-			return response.data[0];
+			return response.data;
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
@@ -391,12 +387,11 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 												generateCustomOption: (
 													item
 												) => ({
-													value: item.product_id,
-													label: `${item.sku_id} ${
-														item.name.id
+													value: item?.product_id,
+													label: `${item?.sku_id} ${
+														item?.name?.id
 													} ${
-														item.variants[0]
-															?.variant?.id || ''
+														item?.variant?.id || ''
 													}`,
 												}),
 											}}
@@ -430,7 +425,7 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 												generateCustomOption: (
 													item
 												) => ({
-													value: item.product_id,
+													value: `${item.first_name} ${item.last_name}`,
 													label: `${item.first_name} ${item.last_name}`,
 												}),
 											}}
