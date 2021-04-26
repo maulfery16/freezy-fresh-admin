@@ -7,7 +7,7 @@ const AtomBranchDatatableFilter = (props) => {
 		<MoleculeDatatableFilter
 			{...props}
 			identifier="branch-filter"
-			label="Cabang"
+			label={props.label || 'Cabang'}
 			name="branch"
 			operator=":"
 			placeholder="Semua cabang"

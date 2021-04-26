@@ -126,7 +126,7 @@ const ProductOwnerModifyPage = () => {
 											label="Nama Perusahaan"
 											placeholder="Nama Perusahaan"
 											required
-											type="text"
+											type="alphanumeric"
 										/>
 									</Col>
 

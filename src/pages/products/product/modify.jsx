@@ -1,5 +1,4 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-/* eslint-disable no-unused-vars */
 
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -30,6 +29,7 @@ import MoleculeProductVariantsInput from '../../../components/molecules/product/
 
 import MasterService from '../../../services/master';
 import ProductService from '../../../services/product';
+import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
 
 const ProductModifyPage = () => {
 	const beautyImageRef = useRef();
@@ -44,6 +44,7 @@ const ProductModifyPage = () => {
 	const isCreating = location.pathname.includes('add') ? true : false;
 
 	const { id } = useParams();
+	const [form] = Form.useForm();
 	const [attributes, setAttributes] = useState([]);
 	const [branches, setBranches] = useState([]);
 	const [fullDescEn, setFullDescEn] = useState('');
@@ -51,42 +52,26 @@ const ProductModifyPage = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [product, setProduct] = useState(null);
 	const [productVariants, setProductVariants] = useState([]);
-	const [variants, setVariants] = useState([
-		{
-			name: {
-				en: 'BLUE|SMALL',
-				id: 'BIRU|KECIL',
-			},
-			sku_id: 'SKU0071',
-			image:
-				'https://api.ms-freezy-fresh.local/storage/uploads/medias/generals/P5e6sOeOXvi6r61Njk91.jpg',
-			upc_code: '1234567890',
-			supplier: 'Unilever',
-			long_cm: '10',
-			wide_cm: '10',
-			height_cm: '10',
-			weight_gr: '1000',
-		},
-	]);
+	const [variants, setVariants] = useState([]);
 
-	const combineProductVariantWithExisting = (
-		existingProductVariants,
-		incomingVProductVariants
-	) => {
-		if (existingProductVariants) return incomingVProductVariants;
+	const combineProductVariantWithExisting = (newProductVariants) => {
+		let combinedProductVariants = [];
 
-		let combinedProductVariants = [...existingProductVariants];
-		const isProductVariantExist = (item) => {
-			return existingProductVariants.some((productVariant) => {
-				return (
-					productVariant.branch.id === item.branch.id &&
-					productVariant.sku_id === item.sku_id
+		newProductVariants.forEach((variant) => {
+			const existingProductVariantId = productVariants.findIndex(
+				(productVariant) => {
+					return (
+						productVariant.branch.id === variant.branch.id &&
+						productVariant.sku_id === variant.sku_id
+					);
+				}
+			);
+
+			if (existingProductVariantId > -1) {
+				combinedProductVariants.push(
+					productVariants[existingProductVariantId]
 				);
-			});
-		};
-
-		incomingVProductVariants.forEach((variant) => {
-			if (!isProductVariantExist(variant.id)) {
+			} else {
 				combinedProductVariants.push({ ...variant });
 			}
 		});
@@ -94,14 +79,17 @@ const ProductModifyPage = () => {
 		return combinedProductVariants;
 	};
 
-	const combineVariantWithExisting = (existingVariants, incomingVariants) => {
-		let combinedVariants = [...existingVariants];
-		const isVariantExist = (item) => {
-			return existingVariants.some((variant) => variant.name.id === item);
-		};
+	const combineVariantWithExisting = (newVariants) => {
+		let combinedVariants = [];
 
-		incomingVariants.forEach((variant) => {
-			if (!isVariantExist(variant.id)) {
+		newVariants.forEach((variant) => {
+			const existingVariantIndex = variants.findIndex(
+				(extVariant) => extVariant.name.id === variant.id
+			);
+
+			if (existingVariantIndex > -1) {
+				combinedVariants.push(variants[existingVariantIndex]);
+			} else {
 				combinedVariants.push({ name: { ...variant } });
 			}
 		});
@@ -109,9 +97,23 @@ const ProductModifyPage = () => {
 		return combinedVariants;
 	};
 
-	const generateProductsVariants = () => {
+	const generateProductVariants = () => {
+		if (branches.length === 0) {
+			message.warning(
+				'Gagal untuk menghasilkan produk variant: belum ada cabang terpilih'
+			);
+			return;
+		}
+
+		if (variants.length === 0) {
+			message.warning(
+				'Gagal untuk menghasilkan produk variant: belum ada variants yang diatur'
+			);
+			return;
+		}
+
 		try {
-			let newProductVariants = [...productVariants];
+			let newProductVariants = [];
 			let generatedProductsVariants = [];
 
 			branches.map((branch) => {
@@ -135,7 +137,6 @@ const ProductModifyPage = () => {
 			});
 
 			newProductVariants = combineProductVariantWithExisting(
-				newProductVariants,
 				generatedProductsVariants
 			);
 
@@ -153,14 +154,11 @@ const ProductModifyPage = () => {
 		}
 
 		try {
-			let newVariants = [...variants];
+			let newVariants = [];
 			let values = attributes.map((attr) => attr.values);
 
 			if (values.length === 1) {
-				newVariants = combineVariantWithExisting(
-					newVariants,
-					values[0]
-				);
+				newVariants = combineVariantWithExisting(values[0]);
 			} else {
 				let combiningAvailable = true;
 
@@ -181,10 +179,7 @@ const ProductModifyPage = () => {
 					values = [combinedValues, ...other];
 				}
 
-				newVariants = combineVariantWithExisting(
-					newVariants,
-					values[0]
-				);
+				newVariants = combineVariantWithExisting(values[0]);
 			}
 
 			setVariants(newVariants);
@@ -196,17 +191,94 @@ const ProductModifyPage = () => {
 	const getProductDetail = async () => {
 		try {
 			const response = await productService.getProductById(id);
+
+			setAttributes(response.data.attributes);
+			setFullDescEn(response.data.full_description.en);
+			setFullDescId(response.data.full_description.id);
 			setProduct(response.data);
+			setProductVariants(
+				response.data.details.map((variant) => ({
+					...variant,
+					branch_sku_id: variant.branch.id + variant.sku_id,
+				}))
+			);
+			setVariants(response.data.variants);
 		} catch (error) {
 			message.error(error.message);
 		}
 	};
 
-	const submit = async (values) => {
+	const setProductInitialValues = () => {
+		return isCreating
+			? {}
+			: {
+					additional_category_id: product.additional_category_id,
+					age_limit: product.age_limit,
+					base_category_id: product.base_category_id,
+					brand_id: product.brand_id,
+					company: product.product_owner_id,
+					en_short_desc: product.short_description.en,
+					height_cm: product.height_cm,
+					id_short_desc: product.short_description.id,
+					long_cm: product.height_cm,
+					name_en: product.name.en,
+					name_id: product.name.id,
+					related_products: product.related_products,
+					similar_products: product.similar_products,
+					sku_id: product.sku_id,
+					supplier: product.supplier,
+					txt1: product.txt1,
+					txt2: product.txt2,
+					txt3: product.txt3,
+					txt4: product.txt4,
+					upc_code: product.upc_code,
+					weight_gr: product.weight_gr,
+					width_cm: product.width_cm,
+					zone_id: product.zone_id,
+			  };
+	};
+
+	const submitProduct = async (values) => {
 		setIsSubmitting(true);
 
 		try {
-			await uploadProductImages();
+			const images = await uploadProductImages();
+
+			const newProduct = {
+				...values,
+				...images,
+				attributes,
+				details: productVariants,
+				variants,
+				product_owner_id: values.company,
+				name: {
+					id: values.name_id,
+					en: values.name_en,
+				},
+				short_description: {
+					id: values.id_short_desc,
+					en: values.en_short_desc,
+				},
+				full_description: {
+					id: fullDescId,
+					en: fullDescEn,
+				},
+			};
+
+			if (isCreating) {
+				await productService.createProduct(newProduct);
+				message.success('Berhasil membuat produk baru');
+			} else {
+				await productService.editProduct(id, newProduct);
+				message.success('Berhasil mengubah data produk');
+			}
+
+			message.info(
+				'Akan dikembalikan ke halaman daftar produk dalam 2 detik'
+			);
+			setTimeout(() => {
+				history.push('/products');
+			}, 2000);
 		} catch (error) {
 			message.error(error.message);
 		} finally {
@@ -247,12 +319,6 @@ const ProductModifyPage = () => {
 		})();
 	}, []);
 
-	useEffect(() => {
-		if (branches.length > 0) {
-			generateProductsVariants();
-		}
-	}, [branches, variants]);
-
 	return (
 		<OrganismLayout
 			breadcumbs={[
@@ -281,13 +347,15 @@ const ProductModifyPage = () => {
 				>
 					<Form
 						className="w-100 mt4"
+						form={form}
 						name="modify_product"
-						// initialValues={setproductInitialValues()}
-						// onFinish={submit}
-						onFinishFailed={(error) => {
-							message.error(`Failed: ${error}`);
-							console.error(error);
-						}}
+						initialValues={setProductInitialValues()}
+						onFinish={submitProduct}
+						onFinishFailed={() =>
+							message.error(
+								'Kesalahan saat mengambil nilai pada form. Silahkan periksa kembali'
+							)
+						}
 					>
 						{' '}
 						<AtomCard title="Info Produk">
@@ -329,7 +397,8 @@ const ProductModifyPage = () => {
 										]}
 									/>
 								</Col>
-								<Col span={24}>
+
+								<Col span={12}>
 									<MoleculeTextInputGroup
 										label="SKU ID"
 										name="sku_id"
@@ -338,6 +407,17 @@ const ProductModifyPage = () => {
 										type="code"
 									/>
 								</Col>
+
+								<Col span={12}>
+									<MoleculeTextInputGroup
+										label="Kode UPC"
+										name="upc_code"
+										placeholder="Kode UPC"
+										required
+										type="code"
+									/>
+								</Col>
+
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										name="name_id"
@@ -347,6 +427,7 @@ const ProductModifyPage = () => {
 										type="text"
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										name="name_en"
@@ -356,6 +437,7 @@ const ProductModifyPage = () => {
 										type="text"
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										label="Deskripsi Singkat (ID)"
@@ -369,6 +451,7 @@ const ProductModifyPage = () => {
 										}}
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										label="Deskripsi Singkat (EN)"
@@ -382,6 +465,7 @@ const ProductModifyPage = () => {
 										}}
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeTextEditorGroup
 										label="Deskripsi Lengkap (ID)"
@@ -390,6 +474,7 @@ const ProductModifyPage = () => {
 										required={true}
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeTextEditorGroup
 										label="Deskripsi Lengkap (EN)"
@@ -398,10 +483,11 @@ const ProductModifyPage = () => {
 										required={true}
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeSelectInputGroup
 										label="Kategori Tambahan"
-										name="additional-categories"
+										name="additional_category_id"
 										placeholder="Kategori Tambahan"
 										required
 										data={{
@@ -413,6 +499,7 @@ const ProductModifyPage = () => {
 										}}
 									/>
 								</Col>
+
 								<Col span={12}>
 									<AtomBranchSelection
 										onChange={(_, options) => {
@@ -424,7 +511,6 @@ const ProductModifyPage = () => {
 													}))
 												);
 											}
-											generateProductsVariants();
 										}}
 										mode="multiple"
 										required
@@ -434,7 +520,7 @@ const ProductModifyPage = () => {
 								<Col span={12}>
 									<MoleculeSelectInputGroup
 										label="Kategori Dasar"
-										name="base-categories"
+										name="base_category_id"
 										placeholder="Kategori Dasar"
 										required
 										data={{
@@ -446,13 +532,15 @@ const ProductModifyPage = () => {
 										}}
 									/>
 								</Col>
+
 								<Col span={12}>
 									<AtomProductOwnerSelect required />
 								</Col>
+
 								<Col span={12}>
 									<MoleculeSelectInputGroup
 										label="Zona"
-										name="zone"
+										name="zone_id"
 										placeholder="Zona"
 										required
 										data={{
@@ -464,10 +552,11 @@ const ProductModifyPage = () => {
 										}}
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeSelectInputGroup
 										label="Brand"
-										name="brand"
+										name="brand_id"
 										placeholder="Brand"
 										required
 										data={{
@@ -479,6 +568,7 @@ const ProductModifyPage = () => {
 										}}
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeNumberInputGroup
 										id="age_limit"
@@ -487,6 +577,7 @@ const ProductModifyPage = () => {
 										placeholder="Batas Umur"
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										name="supplier"
@@ -496,10 +587,11 @@ const ProductModifyPage = () => {
 										type="text"
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeSelectInputGroup
 										label="Produk Serupa"
-										name="similar_product"
+										name="similar_products"
 										mode="multiple"
 										placeholder="Produk Serupa"
 										required
@@ -512,10 +604,11 @@ const ProductModifyPage = () => {
 										}}
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeSelectInputGroup
 										label="Produk Terkait"
-										name="related_product"
+										name="related_products"
 										mode="multiple"
 										placeholder="Produk Terkait"
 										required
@@ -528,6 +621,55 @@ const ProductModifyPage = () => {
 										}}
 									/>
 								</Col>
+
+								<Col span={12}>
+									<Row gutter={12}>
+										<Col span={6}>
+											<MoleculeTextInputGroup
+												name="long_cm"
+												label="P"
+												placeholder="Panjang"
+												required
+												suffix="cm"
+												type="text"
+											/>
+										</Col>
+
+										<Col span={6}>
+											<MoleculeTextInputGroup
+												name="width_cm"
+												label="L"
+												placeholder="Lebar"
+												required
+												suffix="cm"
+												type="text"
+											/>
+										</Col>
+
+										<Col span={6}>
+											<MoleculeTextInputGroup
+												name="height_cm"
+												label="T"
+												placeholder="Tinggi"
+												required
+												suffix="cm"
+												type="text"
+											/>
+										</Col>
+									</Row>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeTextInputGroup
+										name="weight_gr"
+										label="Berat"
+										placeholder="Berat"
+										required
+										suffix="gr"
+										type="text"
+									/>
+								</Col>
+
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										name="txt1"
@@ -537,6 +679,7 @@ const ProductModifyPage = () => {
 										type="text"
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										name="txt2"
@@ -546,6 +689,7 @@ const ProductModifyPage = () => {
 										type="text"
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										name="txt3"
@@ -555,6 +699,7 @@ const ProductModifyPage = () => {
 										type="text"
 									/>
 								</Col>
+
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										name="txt4"
@@ -599,7 +744,20 @@ const ProductModifyPage = () => {
 
 					<OrganismProductBranchDatatable
 						defaultData={productVariants}
+						isEditing={!isCreating}
+						generateProductVariants={generateProductVariants}
+						setProductVariants={setProductVariants}
 					/>
+
+					<Col className="mt4" span={24}>
+						<MoleculeModifyActionButtons
+							backUrl="/products"
+							isCreating={isCreating}
+							isSubmitting={isSubmitting}
+							label="Produk"
+							onClick={() => form.submit()}
+						/>
+					</Col>
 				</Space>
 			)}
 		</OrganismLayout>

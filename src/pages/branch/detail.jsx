@@ -12,7 +12,7 @@ import OrganismLayout from '../../components/organisms/layout';
 import BranchService from '../../services/branch';
 const branchService = new BranchService();
 
-const BranchModifyPage = () => {
+const BranchDetailPage = () => {
 	const { id } = useParams();
 	const [branch, setBranch] = useState(null);
 
@@ -212,4 +212,4 @@ const BranchModifyPage = () => {
 	);
 };
 
-export default BranchModifyPage;
+export default BranchDetailPage;

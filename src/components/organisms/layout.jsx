@@ -69,6 +69,10 @@ const menus = [
 		subMenuKey: 'order',
 		subMenus: [
 			{
+				name: 'Pesanan',
+				link: '/order/',
+			},
+			{
 				name: 'Pesanan Dikomplain',
 				link: '/order/complain',
 			},
@@ -179,31 +183,31 @@ const menus = [
 	{
 		name: 'Pelanggan',
 		icon: <CustomerServiceOutlined />,
-		subMenuKey: 'customers',
+		subMenuKey: 'customer',
 		subMenus: [
 			{
 				name: 'Pelanggan',
-				link: '/customers/',
+				link: '/customer/',
 			},
 			{
 				name: 'Daftar Teman',
-				link: '/customers/friend-list',
+				link: '/customer/friend-list',
 			},
 			{
 				name: 'Daftar Keluarga',
-				link: '/customers/family-list',
+				link: '/customer/family-list',
 			},
 			{
 				name: 'Favorite',
-				link: '/customers/favorite',
+				link: '/customer/favorite',
 			},
 			{
 				name: 'My Catalog',
-				link: '/customers/catalog',
+				link: '/customer/catalog',
 			},
 			{
 				name: 'MGM',
-				link: '/customers/mgm',
+				link: '/customer/mgm',
 			},
 		],
 	},
@@ -415,13 +419,19 @@ const OrganismLayout = (props) => {
 														style={{ fontSize: 10 }}
 													>
 														{user.branches.length >
-															0 &&
-															user.branches
-																.map(
-																	(res) =>
-																		res.name
-																)
-																.join(', ')}
+														0
+															? user.branches
+																	.map(
+																		(res) =>
+																			res
+																				.name
+																				.id ||
+																			res
+																				.name
+																				.en
+																	)
+																	.join(', ')
+															: '-'}
 													</span>
 												</Typography.Text>
 											</Space>

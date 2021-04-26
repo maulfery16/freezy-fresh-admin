@@ -15,7 +15,7 @@ const MoleculeModifyActionButtons = (props) => {
 			<AtomPrimaryButton
 				htmlType={props.onClick ? 'button' : 'submit'}
 				loading={props.isSubmitting}
-				onClick={props.onClick ? () => props.onClick : () => {}}
+				onClick={props.onClick ? () => props.onClick() : () => {}}
 				size="large"
 			>
 				{`${props.isCreating ? 'Tambah' : 'Ubah'} ${props.label}`}

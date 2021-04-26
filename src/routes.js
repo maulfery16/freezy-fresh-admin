@@ -138,6 +138,32 @@ const routes = [
 		],
 	},
 	{
+		path: '/order',
+		children: [
+			{
+				component: React.lazy(() => import('./pages/order/index')),
+				exact: true,
+				guard: true,
+				name: 'Order Page',
+				path: '/',
+			},
+			{
+				component: React.lazy(() => import('./pages/order/add')),
+				exact: true,
+				// guard: true,
+				name: 'Add Order Page',
+				path: '/add',
+			},
+			{
+				component: React.lazy(() => import('./pages/order/detail')),
+				exact: true,
+				// guard: true,
+				name: 'Order Page Detail',
+				path: '/:id/detail',
+			},
+		],
+	},
+	{
 		path: '/products',
 		children: [
 			{
@@ -604,8 +630,99 @@ const routes = [
 		],
 	},
 	{
-		path: '/customers',
+		path: '/customer',
 		children: [
+			{
+				component: React.lazy(() =>
+					import('./pages/customers/customer')
+				),
+				exact: true,
+				guard: true,
+				name: 'Customer Page',
+				path: '/',
+			},
+			{
+				component: React.lazy(() =>
+					import('./pages/customers/customer/modify')
+				),
+				exact: true,
+				guard: true,
+				name: 'Customer Page Add',
+				path: '/add',
+			},
+			{
+				path: '/:id',
+				children: [
+					{
+						component: React.lazy(() =>
+							import('./pages/customers/customer/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Customer Page Edit',
+						path: '/edit',
+					},
+					{
+						path: '/detail',
+						children: [
+							{
+								component: React.lazy(() =>
+									import('./pages/customers/customer/detail')
+								),
+								exact: true,
+								guard: true,
+								name: 'Customer Page Detail',
+								path: '/',
+							},
+							{
+								path: '/address',
+								children: [
+									{
+										component: React.lazy(() =>
+											import(
+												'./pages/customers/customer/address/modify'
+											)
+										),
+										exact: true,
+										guard: true,
+										name: 'Customer Address Page Add',
+										path: '/add',
+									},
+									{
+										path: '/:address_id',
+										children: [
+											{
+												component: React.lazy(() =>
+													import(
+														'./pages/customers/customer/address/detail'
+													)
+												),
+												exact: true,
+												guard: true,
+												name:
+													'Customer Address Page Detail',
+												path: '/detail',
+											},
+											{
+												component: React.lazy(() =>
+													import(
+														'./pages/customers/customer/address/modify'
+													)
+												),
+												exact: true,
+												guard: true,
+												name:
+													'Customer Address Page Edit',
+												path: '/edit',
+											},
+										],
+									},
+								],
+							},
+						],
+					},
+				],
+			},
 			{
 				path: '/friend-list',
 				children: [
@@ -615,7 +732,7 @@ const routes = [
 						),
 						exact: true,
 						guard: true,
-						name: 'Customer Page',
+						name: 'Customer List Page',
 						path: '/',
 					},
 					{

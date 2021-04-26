@@ -84,17 +84,18 @@ const OrganismDatatable = forwardRef((props, ref) => {
 		const existingFilter = [...filters];
 
 		appliedFilters.forEach((applFilter) => {
-			const newFilter = { ...applFilter };
-			const existingFilterIndex = filters.findIndex(
-				(filter) =>
-					newFilter.name === filter.name &&
-					applFilter.name === filter.operator
-			);
+			const existingFilterIndex = filters.findIndex((filter) => {
+				return (
+					applFilter.name === filter.name &&
+					applFilter.operator === filter.operator
+				);
+			});
 
-			if (existingFilterIndex > -1)
+			if (existingFilterIndex > -1) {
 				existingFilter.splice(existingFilterIndex, 1);
+			}
 
-			multipleFilters.push(newFilter);
+			multipleFilters.push(applFilter);
 		});
 
 		setFilters([...existingFilter, ...multipleFilters]);
@@ -126,11 +127,11 @@ const OrganismDatatable = forwardRef((props, ref) => {
 			filterParams.search.split(';')[0].includes(':') ||
 			filterParams.search.split(';')[0].length === 0
 				? ''
-				: `${filterParams.search.split(';')[0]};`;
+				: `${filterParams.search.split(';')[0]}`;
 
 		const filterParameter = {
 			...filterParams,
-			search: `${keyword}${keyword && ';'}${filters
+			search: `${keyword}${filters
 				.map((query) => `${query.name}${query.operator}${query.value}`)
 				.join(';')}`,
 			page: 1,
@@ -151,18 +152,19 @@ const OrganismDatatable = forwardRef((props, ref) => {
 			setFilterParams({ ...filterParams, search: keyword.join(';') });
 		}
 
-		setUrlParams(keyword);
+		setUrlParams(search);
 	};
 
 	const setUrlParams = (keyword) => {
-		history.push(
-			history.location.pathname +
-				'?' +
-				`q=${keyword}&` +
-				`${filters
-					.map((query) => `${query.name}=${query.value}`)
-					.join('&')}`
-		);
+		let url = history.location.pathname + '?';
+
+		if (keyword !== '') url += `q=${keyword}&`;
+		if (filters.length > 0)
+			url += `${filters
+				.map((query) => `${query.name}=${query.value}`)
+				.join('&')}`;
+
+		history.push(url);
 	};
 
 	useEffect(() => {
@@ -178,10 +180,11 @@ const OrganismDatatable = forwardRef((props, ref) => {
 	}, [filterParams]);
 
 	useImperativeHandle(ref, () => ({
+		data,
+		totalData,
 		async refetchData() {
 			await getData();
 		},
-		totalData,
 	}));
 
 	return (
@@ -250,7 +253,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 								footer={null}
 								title="Filter  by"
 								visible={isFilterVisible}
-								width={350}
+								width={props.filterModalWidth || 350}
 								onCancel={() => setIsFilterVisible(false)}
 							>
 								<Space className="w-100" direction="vertical">
@@ -304,6 +307,9 @@ const OrganismDatatable = forwardRef((props, ref) => {
 					dataSource={data}
 					loading={isGettingData}
 					onChange={setDatatableMetadata}
+					rowKey={props.rowKey || 'id'}
+					scroll={{ x: props.scroll || 1080 }}
+					style={{ width: '100%' }}
 					pagination={{
 						current: filterParams.page,
 						itemRender: (_, type, originalEl) => {
@@ -325,9 +331,6 @@ const OrganismDatatable = forwardRef((props, ref) => {
 						responsive: true,
 						total: totalData,
 					}}
-					rowKey={props.rowKey || 'id'}
-					scroll={{ x: props.scroll || 1080 }}
-					style={{ width: '100%' }}
 				/>
 			</Col>
 		</Row>
@@ -340,6 +343,7 @@ OrganismDatatable.propTypes = {
 	columns: PropTypes.array.isRequired,
 	dataSourceURL: PropTypes.string.isRequired,
 	filters: PropTypes.arrayOf(PropTypes.node),
+	filterModalWidth: PropTypes.number,
 	limit: PropTypes.number,
 	scroll: PropTypes.number,
 	title: PropTypes.string,
