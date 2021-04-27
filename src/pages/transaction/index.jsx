@@ -109,19 +109,34 @@ const TransactionPage = () => {
 		{
 			title: 'Cabang Freezy',
 			dataIndex: 'branch_info[id]',
-			render: (_, record) => record.branch_info.id,
+			render: (_, record) =>
+				record.product_owner_info === 'Freezy'
+					? record.branch_info.id
+					: '-',
+			csvRender: (item) =>
+				item.product_owner_info === 'Freezy'
+					? item.branch_info.id
+					: '-',
 			sorter: true,
 		},
 		{
 			title: 'Cabang Rezeki',
 			dataIndex: 'branch_info[id]',
-			render: (_, record) => record.branch_info.id,
+			render: (_, record) =>
+				record.product_owner_info === 'Rezeki'
+					? record.branch_info.id
+					: '-',
+			csvRender: (item) =>
+				item.product_owner_info === 'Rezeki'
+					? item.branch_info.id
+					: '-',
 			sorter: true,
 		},
 		{
 			title: 'Status',
 			dataIndex: 'status',
 			render: (_, record) => translateTransactionStatus(record.status),
+			csvRender: (item) => translateTransactionStatus(item.status),
 			sorter: true,
 		},
 		{

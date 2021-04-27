@@ -25,34 +25,6 @@ const TransactionModifyPage = () => {
 			const {
 				data: transaction,
 			} = await transactionService.getTransactionById(id);
-			// const transaction = {
-			// 	id: 5,
-			// 	transaction_from: 'manual',
-			// 	transaction_for: 'cashback',
-			// 	transaction_type: 'credit',
-			// 	created_at: new Date(),
-			// 	created_by: 'Mikasa',
-			// 	finish_at: new Date(),
-			// 	failed_at: new Date(),
-			// 	customer: {
-			// 		id: 83510986823,
-			// 		name: {
-			// 			first_name: 'Kim',
-			// 			last_name: '',
-			// 		},
-			// 	},
-			// 	total: 27500,
-			// 	merchant: 'Freezy Fresh',
-			// 	freezy_branch: 'Bandung',
-			// 	rezeki_branch: 'Kalimantan',
-			// 	freezy_cash: 15000,
-			// 	freezy_point: 3500,
-			// 	url_payment: 'http:/google.com',
-			// 	description: 'System payment failed, do manual payment please',
-			// 	status: 'success',
-			// 	updated_at: new Date(),
-			// 	updated_by: 'Eren',
-			// };
 			setTransaction(transaction);
 		} catch (error) {
 			message.error(error.message);
@@ -191,14 +163,24 @@ const TransactionModifyPage = () => {
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Cabang Freezy"
-										content={transaction.branch_info.id}
+										content={
+											transaction.product_owner_info ===
+											'Freezy'
+												? transaction.branch_info.id
+												: '-'
+										}
 									/>
 								</Col>
 
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Cabang Rezeki"
-										content={transaction.branch_info.id}
+										content={
+											transaction.product_owner_info ===
+											'Rezeki'
+												? transaction.branch_info.id
+												: '-'
+										}
 									/>
 								</Col>
 
@@ -213,7 +195,7 @@ const TransactionModifyPage = () => {
 														transaction.source_or_destination ===
 														'FREEZY_CASH' ? (
 															<AtomNumberFormat
-																value={`-${transaction.amount}`}
+																value={`${transaction.amount}`}
 															/>
 														) : (
 															'-'
@@ -229,7 +211,7 @@ const TransactionModifyPage = () => {
 														transaction.source_or_destination ===
 														'FREEZY_POINT' ? (
 															<AtomNumberFormat
-																value={`-${transaction.amount}`}
+																value={`${transaction.amount}`}
 															/>
 														) : (
 															'-'
@@ -278,7 +260,7 @@ const TransactionModifyPage = () => {
 								<Col span={24} style={{ paddingTop: '2rem' }}>
 									<Typography.Text strong>
 										<span className="denim f5">
-											INFO UPDATE PRODUK
+											INFO UPDATE
 										</span>
 									</Typography.Text>
 								</Col>

@@ -6,6 +6,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 
 import AtomBranchSelection from '../../components/atoms/selection/branch';
 import AtomCard from '../../components/atoms/card';
+import AtomNumberFormat from '../../components/atoms/number-format';
 import MoleculeInfoGroup from '../../components/molecules/info-group';
 import MoleculeModifyActionButtons from '../../components/molecules/modify-action-buttons';
 import MoleculeNumberInputGroup from '../../components/molecules/input-group/number-input';
@@ -62,8 +63,8 @@ const TransactionModifyPage = () => {
 
 	const changeTransTypeValue = (transaction_for) => {
 		switch (transaction_for) {
-			case 'adjustment_debt':
-			case 'payment':
+			case 'ADJUSTMENT_DEBIT':
+			case 'PAYMENT':
 				setTransType('Debit');
 				break;
 			default:
@@ -140,16 +141,19 @@ const TransactionModifyPage = () => {
 										}}
 										data={{
 											url:
-												'admin/customers?filter=id;first_name;last_name;phone_number;email;birth',
+												'admin/customers?filter=id;first_name;last_name;phone_number;email;birth;freezy_cash;freezy_point',
 											generateCustomOption: (item) => ({
 												value: JSON.stringify(item),
 												label: `${item.first_name} ${
 													item.last_name || ''
 												} (${item.id}, ${
-													item.email
-														? item.email + ','
+													item.email ? item.email : ''
+												} ${
+													item.phone_number
+														? ', ' +
+														  item.phone_number
 														: ''
-												} ${item.phone_number || ''})`,
+												})`,
 											}),
 										}}
 									/>
@@ -225,6 +229,42 @@ const TransactionModifyPage = () => {
 															) : (
 																'-'
 															)
+														) : (
+															'-'
+														)
+													}
+												/>
+											</Col>
+
+											<Col span={12}>
+												<MoleculeInfoGroup
+													title="Freezy Point"
+													content={
+														customer ? (
+															<AtomNumberFormat
+																value={
+																	customer.freezy_point ||
+																	0
+																}
+															/>
+														) : (
+															'-'
+														)
+													}
+												/>
+											</Col>
+
+											<Col span={12}>
+												<MoleculeInfoGroup
+													title="Freezy Cash"
+													content={
+														customer ? (
+															<AtomNumberFormat
+																value={
+																	customer.freezy_fresh ||
+																	0
+																}
+															/>
 														) : (
 															'-'
 														)

@@ -123,7 +123,7 @@ const CustomerPage = () => {
 						<EyeFilled className="f4 blue" />
 					</Link>
 
-					<Link to={`/view/customer/${id}/edit`}>
+					<Link to={`/customer/${id}/edit`}>
 						<EditFilled className="f4 orange" />
 					</Link>
 
