@@ -1,7 +1,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/display-name */
 import PropTypes from 'prop-types';
-import React, { forwardRef, useImperativeHandle, useState } from 'react';
+import React, {
+	forwardRef,
+	useEffect,
+	useImperativeHandle,
+	useState,
+} from 'react';
 import {
 	Col,
 	Form,
@@ -305,6 +310,10 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 		data,
 	}));
 
+	useEffect(() => {
+		props.onDataChange(data);
+	}, [data]);
+
 	return (
 		<AtomCard title="Info Produk">
 			<Row align="middle" gutter={[0, 12]} justify="space-between">
@@ -474,6 +483,7 @@ OrganismProductOrderDatatable.propTypes = {
 	branch: PropTypes.string,
 	defaultData: PropTypes.array,
 	isReadOnly: PropTypes.bool,
+	onDataChange: PropTypes.func,
 };
 
 export default OrganismProductOrderDatatable;

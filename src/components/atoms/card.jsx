@@ -6,7 +6,7 @@ const AtomCard = (props) => {
 	return (
 		<div
 			className={`${
-				!props.title ? 'pa3' : 'pa4'
+				props.title ? 'pa4' : 'pa3'
 			} bg-white br3 shadow-3 w-100`}
 		>
 			{props.title && (
@@ -17,7 +17,7 @@ const AtomCard = (props) => {
 				</Typography.Text>
 			)}
 
-			<div className={!props.title && 'mt3'}>{props.children}</div>
+			<div className={!props.title ? 'mt3' : ''}>{props.children}</div>
 		</div>
 	);
 };

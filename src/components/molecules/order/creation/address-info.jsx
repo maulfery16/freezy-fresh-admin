@@ -18,7 +18,6 @@ const MoleculeOrderCreationAddressInfo = (props) => {
 				props.addressId
 			);
 
-			console.log(response.data);
 			setAddress(response.data);
 		} catch (error) {
 			message.error(error.message);
