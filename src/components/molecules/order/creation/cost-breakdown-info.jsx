@@ -7,8 +7,6 @@ import AtomNumberFormat from '../../../atoms/number-format';
 import MoleculeOrderInfoGroup from '../../info-group-order';
 
 const MoleculeOrderCostBreakdownInfo = (props) => {
-	console.log(props.products);
-
 	const totalDiscount = props.products?.reduce((current, product) => {
 		return (
 			current +
