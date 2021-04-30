@@ -49,13 +49,20 @@ const VoucherModifyPage = () => {
 				<Skeleton active />
 			) : (
 				<Row align="top" className="mt4" gutter={24}>
-					<Col span={15}>
+					<Col span={18}>
 						<AtomCard title="Info Voucher">
 							<Row gutter={[12, 24]}>
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Target Voucher"
 										content={voucher.target}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
+										title="Name Voucher"
+										content={voucher.code || '-'}
 									/>
 								</Col>
 
@@ -91,6 +98,13 @@ const VoucherModifyPage = () => {
 
 								<Col span={12}>
 									<MoleculeInfoGroup
+										title="Kuota"
+										content={voucher.quota}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
 										title="Minimum Pembalian (Rp)"
 										content={
 											<AtomNumberFormat
@@ -112,13 +126,6 @@ const VoucherModifyPage = () => {
 												}
 											/>
 										}
-									/>
-								</Col>
-
-								<Col span={12}>
-									<MoleculeInfoGroup
-										title="Kuota"
-										content={voucher.quota}
 									/>
 								</Col>
 
