@@ -1,5 +1,4 @@
 /* eslint-disable react/display-name */
-import moment from 'moment';
 import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
 import { Link } from 'react-router-dom';
@@ -7,7 +6,6 @@ import { Space } from 'antd';
 import { EditFilled, EyeFilled } from '@ant-design/icons';
 
 import AtomNumberFormat from '../../components/atoms/number-format';
-// import AtomStatusSwitch from '../../components/atoms/datatable/status-switch';
 import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
 import MoleculeDatatableFilter from '../../components/molecules/datatable/filter-plugin';
 import MoleculeDeleteConfirm from '../../components/molecules/delete-confirm';
@@ -43,8 +41,6 @@ const VoucherPage = () => {
 			dataIndex: 'cashback_type',
 			render: (cashback_type) =>
 				cashback_type === 'PERSENTAGE' ? 'Persentase' : 'Rupiah',
-			csvRender: (item) =>
-				item.cashback_type === 'PERSENTAGE' ? 'Persentase' : 'Rupiah',
 			sorter: true,
 		},
 		{
@@ -77,8 +73,6 @@ const VoucherPage = () => {
 					render: (date) => (
 						<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
 					),
-					csvRender: (item) =>
-						moment(item.start_periode).format('DD/MM/YYYY'),
 					sorter: true,
 				},
 				{
@@ -92,8 +86,6 @@ const VoucherPage = () => {
 					render: (date) => (
 						<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
 					),
-					csvRender: (item) =>
-						moment(item.end_periode).format('DD/MM/YYYY'),
 					sorter: true,
 				},
 				{
@@ -106,16 +98,6 @@ const VoucherPage = () => {
 					dataIndex: 'is_active',
 					render: (is_active) =>
 						is_active ? 'Aktif' : 'Tidak Aktif',
-					// render: (active, record) => (
-					// 	<AtomStatusSwitch
-					// 		active={active}
-					// 		id={record.id}
-					// 		tableRef={voucherTableRef}
-					// 		url="vouchers"
-					// 	/>
-					// ),
-					csvRender: (item) =>
-						item.is_active ? 'Aktif' : 'Tidak Aktif',
 				},
 			],
 		},
@@ -151,10 +133,11 @@ const VoucherPage = () => {
 		return (
 			<MoleculeDatatableAdditionalAction
 				column={column}
-				label="Voucher"
 				getLimit={() => voucherTableRef.current.totalData}
+				label="Voucher"
 				route="/voucher"
 				url="vouchers"
+				withoutExportButton={true}
 			/>
 		);
 	};
@@ -193,14 +176,14 @@ const VoucherPage = () => {
 				identifier="status-filter"
 				key="status"
 				label="Status"
-				name="is_active"
+				name="status"
 				operator=":"
 				placeholder="Semua status"
 				data={{
 					options: [
-						{ value: 'true', label: 'Aktif' },
-						{ value: 'false', label: 'Tidak Aktif' },
-						{ value: 'coming_soon', label: 'Mendatang' },
+						{ value: 'ACTIVE', label: 'Aktif' },
+						{ value: 'NOT_ACTIVE', label: 'Tidak Aktif' },
+						{ value: 'UPCOMING', label: 'Mendatang' },
 					],
 				}}
 			/>,
