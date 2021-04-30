@@ -249,6 +249,7 @@ const PelangganModifyPage = () => {
 											label="Frekuensi Belanja (Per Bulan)"
 											placeholder="Frekuensi Belanja (Per Bulan)"
 											type="number"
+											min={0}
 											required={true}
 										/>
 									</Col>
