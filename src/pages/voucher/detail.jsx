@@ -5,23 +5,22 @@ import { Col, message, Row, Skeleton, Space, Typography } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 
 import AtomCard from '../../components/atoms/card';
-import AtomImage from '../../components/atoms/image';
+import AtomNumberFormat from '../../components/atoms/number-format';
 import AtomSecondaryButton from '../../components/atoms/button/secondary-button';
 import MoleculeInfoGroup from '../../components/molecules/info-group';
 import OrganismLayout from '../../components/organisms/layout';
 
-import { translateGenderEnum } from '../../utils/helpers';
-import AdminService from '../../services/admin';
-const adminService = new AdminService();
+import VoucherService from '../../services/voucher';
+const voucherService = new VoucherService();
 
-const AdminModifyPage = () => {
+const VoucherModifyPage = () => {
 	const { id } = useParams();
-	const [admin, setAdmin] = useState(null);
+	const [voucher, setVoucher] = useState(null);
 
-	const getAdminDetail = async () => {
+	const getVoucherDetail = async () => {
 		try {
-			const admin = await adminService.getAdminById(id);
-			setAdmin(admin.data);
+			const voucher = await voucherService.getVoucherById(id);
+			setVoucher(voucher.data);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
@@ -30,36 +29,68 @@ const AdminModifyPage = () => {
 
 	useEffect(() => {
 		(async () => {
-			getAdminDetail(id);
+			getVoucherDetail(id);
 		})();
 	}, []);
 
 	return (
 		<OrganismLayout
 			breadcumbs={[
-				{ name: 'Admin', link: '/admin' },
+				{ name: 'Voucher', link: '/voucher' },
 				{ name: 'Detail', link: location.pathname },
 			]}
-			title="Detail Admin"
+			title="Detail Voucher"
 		>
 			<Typography.Title level={4}>
-				<span className="fw7">{`Detail Admin`.toUpperCase()}</span>
+				<span className="fw7">{`Detail Voucher`.toUpperCase()}</span>
 			</Typography.Title>
 
-			{!admin ? (
+			{!voucher ? (
 				<Skeleton active />
 			) : (
 				<Row align="top" className="mt4" gutter={24}>
-					<Col span={15}>
-						<AtomCard title="Info Admin">
+					<Col span={18}>
+						<AtomCard title="Info Voucher">
 							<Row gutter={[12, 24]}>
 								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Foto Profil"
+										title="Target Voucher"
+										content={voucher.target}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
+										title="Name Voucher"
+										content={voucher.code || '-'}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
+										title="Name Voucher"
+										content={voucher.name}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
+										title="Tipe Voucher"
 										content={
-											<AtomImage
-												src={admin.profile_image}
-												size={170}
+											voucher.cashback_type ===
+											'PERSENTAGE'
+												? 'Persentase'
+												: 'Rupiah'
+										}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
+										title="Nominal Cashback (Rp)"
+										content={
+											<AtomNumberFormat
+												value={voucher.cashback_rp || 0}
 											/>
 										}
 									/>
@@ -67,11 +98,19 @@ const AdminModifyPage = () => {
 
 								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Foto KTP"
+										title="Kuota"
+										content={voucher.quota}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
+										title="Minimum Pembalian (Rp)"
 										content={
-											<AtomImage
-												src={admin.idcard_image}
-												size={170}
+											<AtomNumberFormat
+												value={
+													voucher.min_order_rp || 0
+												}
 											/>
 										}
 									/>
@@ -79,122 +118,106 @@ const AdminModifyPage = () => {
 
 								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Name Depan"
-										content={admin.first_name}
-									/>
-								</Col>
-
-								<Col span={12}>
-									<MoleculeInfoGroup
-										title="Name Belakang"
-										content={admin.last_name}
-									/>
-								</Col>
-
-								<Col span={12}>
-									<MoleculeInfoGroup
-										title="Jenis Kelamin"
-										content={translateGenderEnum(
-											admin.gender
-										)}
-									/>
-								</Col>
-
-								<Col span={12}>
-									<MoleculeInfoGroup
-										title="Nomor Handphone"
-										content={admin.phone_number}
-									/>
-								</Col>
-
-								<Col span={12}>
-									<MoleculeInfoGroup
-										title="Bank"
+										title="Maksimal Pembelian (Rp)"
 										content={
-											admin.bank_info.bank
-												? admin.bank_info.bank.name
-												: '-'
+											<AtomNumberFormat
+												value={
+													voucher.max_discount_rp || 0
+												}
+											/>
 										}
 									/>
 								</Col>
 
+								<Col span={24} style={{ paddingTop: '2rem' }}>
+									<Typography.Text strong>
+										<span className="denim f5">
+											INFO PERIODE
+										</span>
+									</Typography.Text>
+								</Col>
+
 								<Col span={12}>
 									<MoleculeInfoGroup
-										title="No Rekening"
-										content={admin.bank_info.account_number}
-									/>
-								</Col>
-							</Row>
-						</AtomCard>
-					</Col>
-
-					<Col span={9}>
-						<AtomCard title="Info Ototitas">
-							<Row gutter={[12, 24]}>
-								<Col span={24}>
-									<MoleculeInfoGroup
-										title="Tanggal Daftar"
+										title="Tanggal Mulai"
 										content={
 											<ReactMoment format="DD-MM-YY">
-												{admin.created_at}
+												{voucher.start_periode}
 											</ReactMoment>
 										}
 									/>
 								</Col>
 
-								<Col span={24}>
+								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Otorisasi Pendaftaran oleh"
-										content={admin.created_by || '-'}
+										title="Jam Mulai"
+										content={
+											voucher.start_time_periode || '-'
+										}
 									/>
 								</Col>
 
-								<Col span={24}>
+								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Tanggal Diperbaharui"
+										title="Tanggal Selesai"
 										content={
 											<ReactMoment format="DD-MM-YY">
-												{admin.updated_at}
+												{voucher.end_periode}
 											</ReactMoment>
 										}
 									/>
 								</Col>
 
-								<Col span={24}>
-									<MoleculeInfoGroup
-										title="Pembaharuan Data Terakhir oleh"
-										content={admin.updated_by || '-'}
-									/>
-								</Col>
-							</Row>
-						</AtomCard>
-					</Col>
-
-					<Col className="mt4" span={15}>
-						<AtomCard title="Info Admin">
-							<Row gutter={[12, 24]}>
 								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Email"
-										content={admin.email}
+										title="Jam Selesai"
+										content={
+											voucher.end_time_periode || '-'
+										}
 									/>
+								</Col>
+
+								<Col span={24} style={{ paddingTop: '2rem' }}>
+									<Typography.Text strong>
+										<span className="denim f5">
+											INFO UPDATE
+										</span>
+									</Typography.Text>
 								</Col>
 
 								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Peran"
-										content={admin.roles
-											.map((role) => role.name)
-											.join(', ')}
+										title="Tanggal di Daftarkan"
+										content={
+											<ReactMoment format="DD-MM-YY">
+												{voucher.created_at}
+											</ReactMoment>
+										}
 									/>
 								</Col>
 
-								<Col span={24}>
+								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Cabang"
-										content={admin.branches
-											.map((branch) => branch.name.id)
-											.join(', ')}
+										title="Tanggal di Update"
+										content={
+											<ReactMoment format="DD-MM-YY">
+												{voucher.updated_at}
+											</ReactMoment>
+										}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
+										title="Didaftarkan Oleh"
+										content={voucher.created_by || '-'}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
+										title="Diupdate Oleh"
+										content={voucher.updated_by || '-'}
 									/>
 								</Col>
 							</Row>
@@ -203,7 +226,7 @@ const AdminModifyPage = () => {
 
 					<Col className="mt4" span={24}>
 						<Space>
-							<Link to="/admin">
+							<Link to="/voucher">
 								<AtomSecondaryButton size="large">
 									Kembali
 								</AtomSecondaryButton>
@@ -216,4 +239,4 @@ const AdminModifyPage = () => {
 	);
 };
 
-export default AdminModifyPage;
+export default VoucherModifyPage;

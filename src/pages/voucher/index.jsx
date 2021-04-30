@@ -50,9 +50,12 @@ const VoucherPage = () => {
 		{
 			title: 'Nominal Cashback (Rp)',
 			dataIndex: 'cashback_rp',
-			render: (_, record) => (
-				<AtomNumberFormat value={record.cashback_rp} />
-			),
+			render: (_, record) =>
+				record.cashback_rp ? (
+					<AtomNumberFormat value={record.cashback_rp} />
+				) : (
+					'-'
+				),
 			sorter: true,
 		},
 		{
