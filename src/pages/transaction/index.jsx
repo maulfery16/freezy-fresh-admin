@@ -221,7 +221,7 @@ const TransactionPage = () => {
 				identifier="status-filter"
 				key="status"
 				label="Status"
-				name="is_active"
+				name="status"
 				operator=":"
 				placeholder="Semua status"
 				data={{
