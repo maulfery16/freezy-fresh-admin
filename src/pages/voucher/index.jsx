@@ -147,7 +147,7 @@ const VoucherPage = () => {
 			<MoleculeDatatableFilter
 				identifier="status-filter"
 				key="status"
-				label="Tipe Cashback"
+				label="Target Voucher"
 				name="target"
 				operator=":"
 				placeholder="Semua target"
