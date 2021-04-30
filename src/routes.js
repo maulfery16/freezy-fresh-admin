@@ -765,6 +765,39 @@ const routes = [
 		],
 	},
 	{
+		path: '/voucher',
+		children: [
+			{
+				component: React.lazy(() => import('./pages/voucher')),
+				exact: true,
+				guard: true,
+				name: 'Voucher Page',
+				path: '/',
+			},
+			{
+				component: React.lazy(() => import('./pages/voucher/modify')),
+				exact: true,
+				guard: true,
+				name: 'Add Voucher Page',
+				path: '/add',
+			},
+			{
+				component: React.lazy(() => import('./pages/voucher/detail')),
+				exact: true,
+				guard: true,
+				name: 'Voucher Detail Page',
+				path: '/:id/detail',
+			},
+			{
+				component: React.lazy(() => import('./pages/voucher/modify')),
+				exact: true,
+				guard: true,
+				name: 'Edit Voucher Page',
+				path: '/:id/edit',
+			},
+		],
+	},
+	{
 		path: '/transaction',
 		children: [
 			{
