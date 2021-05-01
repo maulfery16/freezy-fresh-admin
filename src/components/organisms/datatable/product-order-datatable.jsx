@@ -311,7 +311,7 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 	}));
 
 	useEffect(() => {
-		props.onDataChange(data);
+		if (props.onDataChange) props.onDataChange(data);
 	}, [data]);
 
 	return (

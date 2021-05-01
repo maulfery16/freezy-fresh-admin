@@ -4,7 +4,7 @@ export default class OrderService extends RequestAdapterService {
 	async getOrderById(id) {
 		try {
 			const { data } = await super.sendGetRequest(
-				`${this.baseUrl}/v1/order/${id}`
+				`${this.baseUrl}/v1/orders/${id}`
 			);
 
 			return data;
@@ -48,6 +48,15 @@ export default class OrderService extends RequestAdapterService {
 				)}`
 			);
 		}
+	}
+
+	translateBankEnum(status) {
+		const ORDER_BANK_ENUM = {
+			FREEZY_PAY: 'Freezy Pay',
+		};
+
+		if (ORDER_BANK_ENUM[status]) return ORDER_BANK_ENUM[status];
+		return '-';
 	}
 
 	translateOrderEnum(status) {

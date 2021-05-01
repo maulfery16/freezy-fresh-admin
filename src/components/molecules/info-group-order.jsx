@@ -16,7 +16,7 @@ const MoleculeOrderInfoGroup = (props) => {
 
 MoleculeOrderInfoGroup.propTypes = {
 	content: PropTypes.node,
-	title: PropTypes.string.isRequired,
+	title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 };
 
 export default MoleculeOrderInfoGroup;

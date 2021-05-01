@@ -40,7 +40,7 @@ const MoleculeOrderDeliveryInfo = (props) => {
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Kota"
-					content={props.delivery?.city_id}
+					content={props.delivery?.city_name}
 				/>
 			</Col>
 			<Col span={12}>
@@ -52,13 +52,13 @@ const MoleculeOrderDeliveryInfo = (props) => {
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Kelurahan"
-					content={props.delivery?.subdistrict_id}
+					content={props.delivery?.subdistrict_name}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Kode POS"
-					content={props.delivery?.portal_code}
+					content={props.delivery?.postal_code}
 				/>
 			</Col>
 			<Col span={12}>
