@@ -29,8 +29,6 @@ const OrderDetailPage = () => {
 
 		try {
 			const response = await orderService.getOrderById(id);
-
-			console.log(response.data);
 			setOrder(response.data);
 		} catch (error) {
 			message.error(error.message);

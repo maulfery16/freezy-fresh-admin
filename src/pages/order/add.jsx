@@ -16,7 +16,6 @@ import { useHistory } from 'react-router';
 import AtomBranchSelect from '../../components/atoms/selection/branch';
 import AtomCard from '../../components/atoms/card';
 import MoleculeModifyActionButtons from '../../components/molecules/modify-action-buttons';
-import MoleculeNumberInputGroup from '../../components/molecules/input-group/number-input';
 import MoleculeOrderCostBreakdownInfo from '../../components/molecules/order/creation/cost-breakdown-info';
 import MoleculeOrderCreationAddressInfo from '../../components/molecules/order/creation/address-info';
 import MoleculeOrderCreationCustomerInfo from '../../components/molecules/order/creation/customer-info';
@@ -47,7 +46,105 @@ const AddOrderPage = () => {
 	const [selectedBranch, setSelectedBranch] = useState(null);
 	const [selectedCustomer, setSelectedCustomer] = useState(null);
 	const [selectedShippingType, setSelectedShippingType] = useState(null);
+	const [selectedShipping, setSelectedShipping] = useState(null);
 	const [selectedVoucher, setSelectedVoucher] = useState(null);
+
+	const calculateCashback = () => {
+		return 0;
+	};
+
+	const calculateSubTotal = () => {
+		return (
+			calculateTotalOrder() -
+			calculateTotalDiscount() -
+			calculateVocuherDiscount +
+			selectedShippingType?.price +
+			selectedShippingType?.shipping_arrangement_fee +
+			customerAdress?.parking_fee
+		);
+	};
+
+	const calculateTotalDiscount = () => {
+		products?.reduce((current, product) => {
+			return current + product.total * parseInt(product.price, 10);
+		}, 0);
+	};
+
+	const calculateTotalOrder = () => {
+		products?.reduce((current, product) => {
+			return (
+				current +
+				product.total *
+					(parseInt(product.price, 10) -
+						parseInt(product.fixed_price, 10))
+			);
+		}, 0);
+	};
+
+	const calculateVocuherDiscount = () => {
+		if (!selectedVoucher) return 0;
+
+		const {
+			cashback_type,
+			cashback_rp,
+			cashback_percentage,
+			max_discount_rp,
+			min_order_rp,
+		} = selectedVoucher;
+
+		if (cashback_type === 'RUPIAH') {
+			return cashback_rp;
+		} else {
+			const productTotalPrice = products?.reduce((current, product) => {
+				return (
+					current + product.total * parseInt(product.fixed_price, 10)
+				);
+			}, 0);
+
+			if (productTotalPrice < min_order_rp) {
+				message.warning(
+					`Tidak dapat menggunakan voucher, minimal belanja harus ${(
+						<AtomNumberFormat prefix="Rp. " value={min_order_rp} />
+					)}`
+				);
+			}
+
+			const discountValue =
+				(cashback_percentage / 100) * productTotalPrice;
+
+			return discountValue < max_discount_rp
+				? discountValue
+				: max_discount_rp;
+		}
+	};
+
+	const createOrder = () => {
+		try {
+			const newOrder = {
+				branch_id: selectedBranch,
+				customer_id: selectedCustomer,
+				products: products,
+				delivery_address_id: selectedAddress,
+				shipping_id: selectedShipping,
+				shipping_type_id: selectedShippingType.id,
+				voucher: selectedVoucher.id,
+				voucher_code: selectedVoucher.code,
+				payment_method: 'FREEZY_CASH',
+				is_using_freezy_point: false,
+				total_order: calculateTotalOrder(),
+				total_discount: calculateTotalDiscount(),
+				total_voucher: calculateVocuherDiscount(),
+				shipping_fee: selectedShippingType.price,
+				parking_fee: customerAdress.parking_fee,
+				sub_total: calculateSubTotal(),
+				cashback: calculateCashback(),
+				shipping_arrangement_fee:
+					selectedShippingType.shipping_arrangement_fee,
+			};
+		} catch (error) {
+			message.error(error.message);
+		}
+	};
 
 	const getCustomerAddresses = async (id) => {
 		try {
@@ -97,7 +194,18 @@ const AddOrderPage = () => {
 		}
 	};
 
-	const getVoucherDetail = async (id) => {
+	const getVoucherDetailByCode = async (code) => {
+		if (code.length < 10) return;
+
+		try {
+			const response = await voucherService.getVoucherByCode(code);
+			setSelectedVoucher(response.data);
+		} catch (error) {
+			message.error(error.message);
+		}
+	};
+
+	const getVoucherDetailById = async (id) => {
 		try {
 			const response = await voucherService.getVoucherById(id);
 			setSelectedVoucher(response.data);
@@ -229,7 +337,10 @@ const AddOrderPage = () => {
 										name="logistic"
 										placeholder="Perusahaan Logistik"
 										required
-										data={{ url: 'shippings' }}
+										data={{
+											url: 'shippings',
+											onDataChange: setSelectedShipping,
+										}}
 									/>
 								</Col>
 
@@ -276,7 +387,11 @@ const AddOrderPage = () => {
 										required
 										data={{
 											url: 'vouchers',
-											onChange: getVoucherDetail,
+											onChange: getVoucherDetailById,
+											generateCustomOption: (item) => ({
+												value: item.id,
+												label: item.name.id,
+											}),
 										}}
 									/>
 								</Col>
@@ -287,8 +402,22 @@ const AddOrderPage = () => {
 										label="Kode Voucher"
 										placeholder="Kode Voucher"
 										type="text"
+										onChange={(e) =>
+											getVoucherDetailByCode(
+												e.target.value
+											)
+										}
 									/>
 								</Col>
+
+								{selectedVoucher && (
+									<Col span={24}>
+										<MoleculeOrderInfoGroup
+											title="Voucher dipilih"
+											content={`${selectedVoucher.code} - ${selectedVoucher.name.id}`}
+										/>
+									</Col>
+								)}
 							</Row>
 						</Form>
 					</AtomCard>
@@ -298,14 +427,14 @@ const AddOrderPage = () => {
 							<Col span={18}>
 								<MoleculeOrderCostBreakdownInfo
 									customerId={selectedCustomer}
-									products={products}
 									parkingFee={customerAdress?.parking_fee}
 									shippingCost={selectedShippingType?.price}
+									totalDiscount={calculateTotalDiscount()}
+									totalOrder={calculateTotalOrder()}
+									voucherDiscount={calculateVocuherDiscount()}
+									subTotal={calculateSubTotal()}
 									shippingArrangementCost={
 										selectedShippingType?.shipping_arrangement_fee
-									}
-									voucherDiscount={
-										selectedVoucher?.cashback_rp
 									}
 								/>
 							</Col>
