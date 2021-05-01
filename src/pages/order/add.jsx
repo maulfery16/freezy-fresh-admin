@@ -28,6 +28,8 @@ import OrganismProductOrderDatatable from '../../components/organisms/datatable/
 import CustomerService from '../../services/customer';
 import ShippingService from '../../services/shipping';
 import VoucherService from '../../services/voucher';
+import MoleculeOrderInfoGroup from '../../components/molecules/info-group-order';
+import AtomNumberFormat from '../../components/atoms/number-format';
 
 const AddOrderPage = () => {
 	const addressInputSelectRef = useRef();
@@ -245,12 +247,18 @@ const AddOrderPage = () => {
 								</Col>
 
 								<Col span={12}>
-									<MoleculeNumberInputGroup
-										disabled
-										id="estimation_fee"
-										label="Estimasi Biaya Pengiriman (Rp)"
-										name="estimation_fee"
-										placeholder="Estimasi Biaya Pengiriman"
+									<MoleculeOrderInfoGroup
+										title="Estimasi Biaya Pengiriman"
+										content={
+											selectedShippingType?.price && (
+												<AtomNumberFormat
+													prefix="Rp. "
+													value={
+														selectedShippingType?.price
+													}
+												/>
+											)
+										}
 									/>
 								</Col>
 							</Row>
