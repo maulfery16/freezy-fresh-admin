@@ -16,6 +16,10 @@ const MoleculeDatatableAdditionalAction = (props) => {
 	const history = useHistory();
 
 	const exportAsCSV = async () => {
+		if (props.exportUrl) {
+			window.open(props.exportUrl, '_blank');
+		}
+
 		setIsExporting(true);
 
 		try {
@@ -90,6 +94,7 @@ const MoleculeDatatableAdditionalAction = (props) => {
 
 MoleculeDatatableAdditionalAction.propTypes = {
 	child: PropTypes.node,
+	exportUrl: PropTypes.string,
 	getLimit: PropTypes.func.isRequired,
 	importRoute: PropTypes.string,
 	isEdit: PropTypes.bool,
