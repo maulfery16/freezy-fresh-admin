@@ -134,14 +134,36 @@ const OrderPage = () => {
 		setIsChangeStatusModalVisible,
 	] = useState(false);
 
-	const changeStatus = () => {};
+	const changeStatus = async (values) => {
+		try {
+			let request = [];
+
+			for (const [key, value] of Object.entries(values)) {
+				if (key) {
+					request.push(
+						await orderService.updateOrderStatus(
+							pickedProductOwner.id,
+							{
+								product_owner_id: key,
+								status: value,
+							}
+						)
+					);
+				}
+			}
+
+			await Promise.all(request);
+			message.success('Berhasil memperbaharui status');
+			orderTableRef.current.refetchData();
+		} catch (error) {
+			message.error(error.message);
+		}
+	};
 
 	const getProductOwners = async () => {
 		try {
 			const response = await orderService.getOrders();
-			setProductOwners(
-				Object.keys(response.data[0].status).map((key) => key)
-			);
+			setProductOwners(response.data[0].status);
 		} catch (error) {
 			message.error(error.message);
 		}
@@ -157,6 +179,7 @@ const OrderPage = () => {
 			<MoleculeDatatableAdditionalAction
 				child={<MoleculeOrderPickupModal />}
 				column={column}
+				exportUrl="https://api.freezyfresh.abcwork.id/storage/templates/orders/order.xlsx"
 				getLimit={() => orderTableRef.current.totalData}
 				label="Pesanan"
 				requiredParams="branch"
@@ -186,13 +209,11 @@ const OrderPage = () => {
 				key="delivery-type-filter"
 				placeholder="Semua Tipe Pengiriman"
 				data={{
-					// url: 'delivery-types',
-					options: [
-						{
-							label: 'Marukana.. Udon?',
-							value: 'Marukana.. Udon?',
-						},
-					],
+					url: 'develivery/types',
+					generateCustomOption: (item) => ({
+						value: item.value,
+						label: item.name.id,
+					}),
 				}}
 			/>,
 			<MoleculeDatatableFilter
@@ -231,13 +252,11 @@ const OrderPage = () => {
 				key="customer"
 				placeholder="Semua nama pelanggan"
 				data={{
-					// url: 'customers',
-					options: [
-						{
-							label: 'Marukana.. Udon?',
-							value: 'Marukana.. Udon?',
-						},
-					],
+					url: 'admin/customers',
+					generateCustomOption: (item) => ({
+						value: item.id,
+						label: `${item.first_name} ${item.last_name}`,
+					}),
 				}}
 			/>,
 		];
@@ -246,20 +265,18 @@ const OrderPage = () => {
 			...filters,
 			...productOwners.map((owner) => (
 				<MoleculeDatatableFilter
-					name={`${owner.toLowerCase()}-order-status`}
+					name={`${owner.product_owner_id}`}
 					operator=":"
-					identifier={`${owner.toLowerCase()}-order-status-fiter`}
-					label={`Status Pesanan ${owner}`}
-					key={owner}
+					identifier={`${owner.product_owner_id}-fiter`}
+					label={`Status Pesanan ${owner.product_owner_name}`}
+					key={owner.product_owner_id}
 					placeholder="Semua status pesanan"
 					data={{
-						// url: 'customers',
-						options: [
-							{
-								label: 'Marukana.. Udon?',
-								value: 'Marukana.. Udon?',
-							},
-						],
+						url: `orders/parameter/status`,
+						generateCustomOption: (item) => ({
+							label: orderService.translateOrderEnum(item.value),
+							value: item.value,
+						}),
 					}}
 				/>
 			)),
@@ -270,11 +287,21 @@ const OrderPage = () => {
 		let initialValues = {};
 
 		productOwners.forEach((owner) => {
-			initialValues[`${owner?.toLowerCase()}_order_status`] =
-				pickedProductOwner[`${owner?.toLowerCase()}_order_status`];
+			initialValues[`${owner?.product_owner_id}`] =
+				pickedProductOwner[`${owner?.product_owner_id}`];
 		});
 
 		return initialValues;
+	};
+
+	const updateOrderStatus = async (id, orderStatus) => {
+		try {
+			await orderService.updateOrderStatus(id, orderStatus);
+			message.success('Berhasil memperbaharui status order');
+			orderTableRef.current.refetchData();
+		} catch (error) {
+			message.error(error.message);
+		}
 	};
 
 	useEffect(() => {
@@ -285,24 +312,28 @@ const OrderPage = () => {
 
 	const column = [
 		...baseColumn,
-		...productOwners.map((owner) => ({
-			title: `Status Pesanan ${owner}`,
+		...productOwners.map((owner, index) => ({
+			title: `Status Pesanan ${owner.product_owner_name || ''}`,
 			dataIndex: `status`,
 			sorter: true,
 			render: (_, record) =>
-				orderService.translateOrderEnum(record.status[owner]),
+				orderService.translateOrderEnum(record.status[index].status),
 			csvRender: (item) =>
-				orderService.translateOrderEnum(item.status[owner]),
+				orderService.translateOrderEnum(item.status[index].status),
 		})),
-		...productOwners.map((owner) => ({
+		...productOwners.map((owner, index) => ({
 			align: 'center',
-			title: `Pesanan ${owner}`,
+			title: `Pesanan ${owner.product_owner_name || ''}`,
 			dataIndex: `status`,
 			skipExport: true,
 			render: (_, record) =>
-				record.status[owner] && (
-					<AtomSecondaryButton>
-						{orderService.translateOrderEnum(record.status[owner])}
+				record.status[index].status && (
+					<AtomSecondaryButton
+						onClick={() => updateOrderStatus(record.id, owner)}
+					>
+						{orderService.translateOrderEnum(
+							record.status[index].status
+						)}
 					</AtomSecondaryButton>
 				),
 		})),
@@ -372,19 +403,26 @@ const OrderPage = () => {
 											span={12}
 										>
 											<MoleculeSelectInputGroup
-												label={`${owner} status`}
-												name={`${owner?.toLowerCase()}_order_status`}
-												placeholder={`${owner} status`}
+												label={`${
+													owner?.product_owner_name ||
+													''
+												} status`}
+												name={`${owner?.product_owner_id}`}
+												placeholder={`${
+													owner?.product_owner_name ||
+													''
+												} status`}
 												required
 												data={{
-													options: [
-														{
-															label:
-																'Marukana.. Udon?',
-															value:
-																'Marukana.. Udon?',
-														},
-													],
+													url: `orders/parameter/status`,
+													generateCustomOption: (
+														item
+													) => ({
+														label: orderService.translateOrderEnum(
+															item.value
+														),
+														value: item.value,
+													}),
 												}}
 											/>
 										</Col>
@@ -397,6 +435,7 @@ const OrderPage = () => {
 							<AtomPrimaryButton
 								className="br3 w-50"
 								size="large"
+								htmlType="submit"
 							>
 								Ubah
 							</AtomPrimaryButton>

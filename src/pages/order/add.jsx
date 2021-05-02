@@ -40,16 +40,18 @@ const AddOrderPage = () => {
 	const history = useHistory();
 
 	const [cashback, setCashback] = useState(0);
-	const [customerAddresses, setCustomerAddresses] = useState([]);
 	const [customer, setCustomer] = useState(null);
+	const [customerAddresses, setCustomerAddresses] = useState([]);
 	const [customerAdress, setCustomerAdress] = useState(null);
-	const [products, setProducts] = useState(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [isUsingFreezyPoint, setIsUsingFreezyPoint] = useState(false);
+	const [paymentMethod, setPaymentMethod] = useState(null);
+	const [products, setProducts] = useState(null);
 	const [selectedAddress, setSelectedAddress] = useState(null);
 	const [selectedBranch, setSelectedBranch] = useState(null);
 	const [selectedCustomer, setSelectedCustomer] = useState(null);
-	const [selectedShippingType, setSelectedShippingType] = useState(null);
 	const [selectedShipping, setSelectedShipping] = useState(null);
+	const [selectedShippingType, setSelectedShippingType] = useState(null);
 	const [selectedVoucher, setSelectedVoucher] = useState(null);
 
 	const calculateCashback = async () => {
@@ -149,10 +151,10 @@ const AddOrderPage = () => {
 				cashback: cashback,
 				customer_id: selectedCustomer,
 				delivery_address_id: selectedAddress,
-				is_using_freezy_point: false,
+				is_using_freezy_point: isUsingFreezyPoint,
 				parking_fee: customerAdress.parking_fee,
-				payment_method: 'FREEZY_CASH',
-				products: products,
+				payment_method: paymentMethod,
+				products,
 				shipping_fee: selectedShippingType.price,
 				shipping_id: selectedShipping,
 				shipping_type_id: selectedShippingType.id,
@@ -481,20 +483,22 @@ const AddOrderPage = () => {
 					<AtomCard title="Info Pembayaran">
 						<Radio.Group
 							style={{ marginTop: '20px', width: '100%' }}
+							onChange={(e) => setPaymentMethod(e.target.value)}
 						>
 							<Space
 								direction="vertical"
 								style={{ width: '100%' }}
 								size="large"
 							>
-								<Radio value={1} style={{ width: '100%' }}>
+								<Radio
+									value="FREEZY_CASH"
+									style={{ width: '100%' }}
+								>
 									<Space
 										direction="vertical"
 										style={{ width: '100%' }}
 									>
-										<span className="fw6">
-											E-Wallet Cashlez
-										</span>
+										<span className="fw6">Frezzy Cash</span>
 
 										<>
 											<Row>
@@ -510,14 +514,21 @@ const AddOrderPage = () => {
 														0}
 												</Col>
 											</Row>
-											<Checkbox className="fw6">
+											<Checkbox
+												className="fw6"
+												onChange={(e) =>
+													setIsUsingFreezyPoint(
+														e.target.checked
+													)
+												}
+											>
 												Pakai Freezy Point
 											</Checkbox>
 										</>
 									</Space>
 								</Radio>
 
-								<Radio value={2}>
+								<Radio value="E_WALLET_CASHLEZ">
 									<span className="fw6">
 										E-Wallet Cashlez
 									</span>

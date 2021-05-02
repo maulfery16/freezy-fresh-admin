@@ -84,6 +84,53 @@ export default class OrderService extends RequestAdapterService {
 		}
 	}
 
+	async getOrderStatuses() {
+		try {
+			const { data } = await super.sendGetRequest(
+				`${this.baseUrl}/v1/orders/parameter/status`
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail getting order status list: ${super.generateErrorMessage(
+					error
+				)}`
+			);
+		}
+	}
+
+	async updateOrderStatus(id, status) {
+		try {
+			let newStatus = '';
+			const { data: statuses } = await this.getOrderStatuses();
+
+			const currentStatusIdx = Object.values(statuses).findIndex(
+				(stat) => stat.value === status.status
+			);
+
+			newStatus = statuses[currentStatusIdx + 1].value;
+
+			const { data } = await super.sendPatchRequest(
+				`${this.baseUrl}/v1/orders/status/${id}`,
+				{
+					product_owner_id: status.product_owner_id,
+					status: newStatus,
+				}
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail updating order status: ${super.generateErrorMessage(
+					error
+				)}`
+			);
+		}
+	}
+
 	translateBankEnum(status) {
 		const ORDER_BANK_ENUM = {
 			FREEZY_PAY: 'Freezy Pay',
@@ -101,12 +148,14 @@ export default class OrderService extends RequestAdapterService {
 			NEW_ORDER: 'Pesanan Baru',
 			NEW_REFUND: 'Komplain Dibuat',
 			PROCESSED: 'Di proses',
+			READY_TO_PICKUP: 'Siap Dikirim',
 			REFUND_COMPLETED_BY_ADMIN: 'Komplain Selesai oleh Admin',
 			REFUND_COMPLETED_BY_CUSTOMER: 'Komplain Selesai Oleh Pelanggan',
 			REFUND_PROCESS: 'Komplain Diproses',
-			REQUEST_PICKUP: 'Siap Dikirim',
+			REQUEST_SHUTTLE: 'Paket Diproses',
 			RETURN: 'Dikembalikan',
 			SHIPPING: 'Dalam Pengiriman',
+			SHUTTLE_RECEIVE: 'Paket diterima',
 			WAITING_CONFIRMATION: 'Menunggu Pembayaran',
 		};
 
