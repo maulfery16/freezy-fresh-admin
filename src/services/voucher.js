@@ -33,6 +33,23 @@ export default class VoucherService extends RequestAdapterService {
 		}
 	}
 
+	async getVoucherByCode(code) {
+		try {
+			const { data } = await super.sendGetRequest(
+				`${this.baseUrl}/v1/vouchers/code/${code}`
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail getting voucher detail: ${super.generateErrorMessage(
+					error
+				)}`
+			);
+		}
+	}
+
 	async getVoucherById(id) {
 		try {
 			const { data } = await super.sendGetRequest(

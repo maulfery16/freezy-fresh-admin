@@ -15,11 +15,12 @@ import { useHistory } from 'react-router';
 
 import AtomBranchSelect from '../../components/atoms/selection/branch';
 import AtomCard from '../../components/atoms/card';
+import AtomNumberFormat from '../../components/atoms/number-format';
 import MoleculeModifyActionButtons from '../../components/molecules/modify-action-buttons';
-import MoleculeNumberInputGroup from '../../components/molecules/input-group/number-input';
 import MoleculeOrderCostBreakdownInfo from '../../components/molecules/order/creation/cost-breakdown-info';
 import MoleculeOrderCreationAddressInfo from '../../components/molecules/order/creation/address-info';
 import MoleculeOrderCreationCustomerInfo from '../../components/molecules/order/creation/customer-info';
+import MoleculeOrderInfoGroup from '../../components/molecules/info-group-order';
 import MoleculeSelectInputGroup from '../../components/molecules/input-group/select-input';
 import MoleculeTextInputGroup from '../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../components/organisms/layout';
@@ -28,14 +29,17 @@ import OrganismProductOrderDatatable from '../../components/organisms/datatable/
 import CustomerService from '../../services/customer';
 import ShippingService from '../../services/shipping';
 import VoucherService from '../../services/voucher';
+import OrderService from '../../services/order';
 
 const AddOrderPage = () => {
 	const addressInputSelectRef = useRef();
 	const customerService = new CustomerService();
 	const shippingService = new ShippingService();
 	const voucherService = new VoucherService();
+	const orderService = new OrderService();
 	const history = useHistory();
 
+	const [cashback, setCashback] = useState(0);
 	const [customerAddresses, setCustomerAddresses] = useState([]);
 	const [customer, setCustomer] = useState(null);
 	const [customerAdress, setCustomerAdress] = useState(null);
@@ -45,7 +49,134 @@ const AddOrderPage = () => {
 	const [selectedBranch, setSelectedBranch] = useState(null);
 	const [selectedCustomer, setSelectedCustomer] = useState(null);
 	const [selectedShippingType, setSelectedShippingType] = useState(null);
+	const [selectedShipping, setSelectedShipping] = useState(null);
 	const [selectedVoucher, setSelectedVoucher] = useState(null);
+
+	const calculateCashback = async () => {
+		if (!products || products.length === 0) return 0;
+
+		try {
+			const payload = {
+				added_by: customer.name,
+				is_order_owner: true,
+				products: products.map((product) => ({
+					product_name: product.name,
+					total: product.total * product.price,
+				})),
+			};
+
+			const { data: cashback } = await orderService.calculateCashback(
+				payload
+			);
+
+			setCashback(cashback.reduce((acc, cash) => acc + cash.cashback, 0));
+		} catch (error) {
+			message.error(error.message);
+		}
+	};
+
+	const calculateSubTotal = () => {
+		return (
+			calculateTotalOrder() -
+			calculateTotalDiscount() -
+			calculateVocuherDiscount +
+			selectedShippingType?.price +
+			selectedShippingType?.shipping_arrangement_fee +
+			customerAdress?.parking_fee
+		);
+	};
+
+	const calculateTotalDiscount = () => {
+		products?.reduce((current, product) => {
+			return current + product.total * parseInt(product.price, 10);
+		}, 0);
+	};
+
+	const calculateTotalOrder = () => {
+		products?.reduce((current, product) => {
+			return (
+				current +
+				product.total *
+					(parseInt(product.price, 10) -
+						parseInt(product.fixed_price, 10))
+			);
+		}, 0);
+	};
+
+	const calculateVocuherDiscount = () => {
+		if (!selectedVoucher) return 0;
+
+		const {
+			cashback_type,
+			cashback_rp,
+			cashback_percentage,
+			max_discount_rp,
+			min_order_rp,
+		} = selectedVoucher;
+
+		if (cashback_type === 'RUPIAH') {
+			return cashback_rp;
+		} else {
+			const productTotalPrice = products?.reduce((current, product) => {
+				return (
+					current + product.total * parseInt(product.fixed_price, 10)
+				);
+			}, 0);
+
+			if (productTotalPrice < min_order_rp) {
+				message.warning(
+					`Tidak dapat menggunakan voucher, minimal belanja harus ${(
+						<AtomNumberFormat prefix="Rp. " value={min_order_rp} />
+					)}`
+				);
+			}
+
+			const discountValue =
+				(cashback_percentage / 100) * productTotalPrice;
+
+			return discountValue < max_discount_rp
+				? discountValue
+				: max_discount_rp;
+		}
+	};
+
+	const createOrder = async () => {
+		setIsSubmitting(true);
+
+		try {
+			const newOrder = {
+				branch_id: selectedBranch,
+				cashback: cashback,
+				customer_id: selectedCustomer,
+				delivery_address_id: selectedAddress,
+				is_using_freezy_point: false,
+				parking_fee: customerAdress.parking_fee,
+				payment_method: 'FREEZY_CASH',
+				products: products,
+				shipping_fee: selectedShippingType.price,
+				shipping_id: selectedShipping,
+				shipping_type_id: selectedShippingType.id,
+				sub_total: calculateSubTotal(),
+				total_discount: calculateTotalDiscount(),
+				total_order: calculateTotalOrder(),
+				total_voucher: calculateVocuherDiscount(),
+				voucher_code: selectedVoucher.code,
+				voucher: selectedVoucher.id,
+				shipping_arrangement_fee:
+					selectedShippingType.shipping_arrangement_fee,
+			};
+
+			await orderService.createOrder(newOrder);
+
+			message.success('Berhasil menambah pesanan');
+			message.info('Akan dikembalikan ke halaman pesanan dalam 2 detik');
+			setTimeout(() => history.push('/orders'), 2000);
+		} catch (error) {
+			message.error(error.message);
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
 
 	const getCustomerAddresses = async (id) => {
 		try {
@@ -95,7 +226,18 @@ const AddOrderPage = () => {
 		}
 	};
 
-	const getVoucherDetail = async (id) => {
+	const getVoucherDetailByCode = async (code) => {
+		if (code.length < 10) return;
+
+		try {
+			const response = await voucherService.getVoucherByCode(code);
+			setSelectedVoucher(response.data);
+		} catch (error) {
+			message.error(error.message);
+		}
+	};
+
+	const getVoucherDetailById = async (id) => {
 		try {
 			const response = await voucherService.getVoucherById(id);
 			setSelectedVoucher(response.data);
@@ -107,6 +249,10 @@ const AddOrderPage = () => {
 	useEffect(() => {
 		addressInputSelectRef?.current?.refetchData();
 	}, [customerAddresses]);
+
+	useEffect(() => {
+		calculateCashback();
+	}, [products]);
 
 	return (
 		<OrganismLayout
@@ -227,7 +373,10 @@ const AddOrderPage = () => {
 										name="logistic"
 										placeholder="Perusahaan Logistik"
 										required
-										data={{ url: 'shippings' }}
+										data={{
+											url: 'shippings',
+											onDataChange: setSelectedShipping,
+										}}
 									/>
 								</Col>
 
@@ -245,12 +394,18 @@ const AddOrderPage = () => {
 								</Col>
 
 								<Col span={12}>
-									<MoleculeNumberInputGroup
-										disabled
-										id="estimation_fee"
-										label="Estimasi Biaya Pengiriman (Rp)"
-										name="estimation_fee"
-										placeholder="Estimasi Biaya Pengiriman"
+									<MoleculeOrderInfoGroup
+										title="Estimasi Biaya Pengiriman"
+										content={
+											selectedShippingType?.price && (
+												<AtomNumberFormat
+													prefix="Rp. "
+													value={
+														selectedShippingType?.price
+													}
+												/>
+											)
+										}
 									/>
 								</Col>
 							</Row>
@@ -268,7 +423,11 @@ const AddOrderPage = () => {
 										required
 										data={{
 											url: 'vouchers',
-											onChange: getVoucherDetail,
+											onChange: getVoucherDetailById,
+											generateCustomOption: (item) => ({
+												value: item.id,
+												label: item.name.id,
+											}),
 										}}
 									/>
 								</Col>
@@ -279,8 +438,22 @@ const AddOrderPage = () => {
 										label="Kode Voucher"
 										placeholder="Kode Voucher"
 										type="text"
+										onChange={(e) =>
+											getVoucherDetailByCode(
+												e.target.value
+											)
+										}
 									/>
 								</Col>
+
+								{selectedVoucher && (
+									<Col span={24}>
+										<MoleculeOrderInfoGroup
+											title="Voucher dipilih"
+											content={`${selectedVoucher.code} - ${selectedVoucher.name.id}`}
+										/>
+									</Col>
+								)}
 							</Row>
 						</Form>
 					</AtomCard>
@@ -289,15 +462,16 @@ const AddOrderPage = () => {
 						<Row className="mt3">
 							<Col span={18}>
 								<MoleculeOrderCostBreakdownInfo
+									cashback={cashback}
 									customerId={selectedCustomer}
-									products={products}
 									parkingFee={customerAdress?.parking_fee}
 									shippingCost={selectedShippingType?.price}
+									totalDiscount={calculateTotalDiscount()}
+									totalOrder={calculateTotalOrder()}
+									voucherDiscount={calculateVocuherDiscount()}
+									subTotal={calculateSubTotal()}
 									shippingArrangementCost={
 										selectedShippingType?.shipping_arrangement_fee
-									}
-									voucherDiscount={
-										selectedVoucher?.cashback_rp
 									}
 								/>
 							</Col>
@@ -358,6 +532,7 @@ const AddOrderPage = () => {
 							isCreating={true}
 							isSubmitting={isSubmitting}
 							label="Pesanan"
+							onClick={createOrder}
 						/>
 					</Col>
 				</Space>

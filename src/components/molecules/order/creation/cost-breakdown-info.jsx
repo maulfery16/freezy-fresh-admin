@@ -7,19 +7,6 @@ import AtomNumberFormat from '../../../atoms/number-format';
 import MoleculeOrderInfoGroup from '../../info-group-order';
 
 const MoleculeOrderCostBreakdownInfo = (props) => {
-	const totalDiscount = props.products?.reduce((current, product) => {
-		return (
-			current +
-			product.total *
-				(parseInt(product.price, 10) -
-					parseInt(product.fixed_price, 10))
-		);
-	}, 0);
-
-	const totalOrder = props.products?.reduce((current, product) => {
-		return current + product.total * parseInt(product.price, 10);
-	}, 0);
-
 	return (
 		<>
 			<Row gutter={[12, 12]}>
@@ -27,10 +14,10 @@ const MoleculeOrderCostBreakdownInfo = (props) => {
 					<MoleculeOrderInfoGroup
 						title="Total Pesanan"
 						content={
-							totalOrder && (
+							props.totalOrder && (
 								<AtomNumberFormat
 									prefix="Rp. "
-									value={totalOrder}
+									value={props.totalOrder}
 								/>
 							)
 						}
@@ -41,10 +28,10 @@ const MoleculeOrderCostBreakdownInfo = (props) => {
 					<MoleculeOrderInfoGroup
 						title="Total Diskon"
 						content={
-							totalDiscount && (
+							props.totalDiscount && (
 								<AtomNumberFormat
 									prefix="Rp. "
-									value={totalDiscount}
+									value={props.totalDiscount}
 								/>
 							)
 						}
@@ -113,13 +100,7 @@ const MoleculeOrderCostBreakdownInfo = (props) => {
 						content={
 							<AtomNumberFormat
 								prefix="Rp. "
-								value={
-									totalOrder -
-									totalDiscount -
-									props.voucherDiscount +
-									props.shippingCost +
-									props.shippingArrangementCost
-								}
+								value={props.subTotal}
 							/>
 						}
 					/>

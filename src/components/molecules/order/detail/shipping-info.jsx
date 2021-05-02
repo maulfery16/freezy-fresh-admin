@@ -53,6 +53,7 @@ const MoleculeOrderDetailShippingInfo = (props) => {
 					title="Estimasi Biaya Pengiriman"
 					content={
 						<AtomNumberFormat
+							prefix="Rp. "
 							value={props.shipping?.shipping_estimation_fee}
 						/>
 					}
