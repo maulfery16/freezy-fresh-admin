@@ -26,6 +26,7 @@ const MoleculeModifyActionButtons = (props) => {
 
 MoleculeModifyActionButtons.propTypes = {
 	submit: PropTypes.func,
+	onClick: PropTypes.func,
 	isCreating: PropTypes.bool.isRequired,
 	isSubmitting: PropTypes.bool.isRequired,
 	label: PropTypes.string.isRequired,

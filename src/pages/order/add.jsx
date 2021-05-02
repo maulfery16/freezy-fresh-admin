@@ -15,10 +15,12 @@ import { useHistory } from 'react-router';
 
 import AtomBranchSelect from '../../components/atoms/selection/branch';
 import AtomCard from '../../components/atoms/card';
+import AtomNumberFormat from '../../components/atoms/number-format';
 import MoleculeModifyActionButtons from '../../components/molecules/modify-action-buttons';
 import MoleculeOrderCostBreakdownInfo from '../../components/molecules/order/creation/cost-breakdown-info';
 import MoleculeOrderCreationAddressInfo from '../../components/molecules/order/creation/address-info';
 import MoleculeOrderCreationCustomerInfo from '../../components/molecules/order/creation/customer-info';
+import MoleculeOrderInfoGroup from '../../components/molecules/info-group-order';
 import MoleculeSelectInputGroup from '../../components/molecules/input-group/select-input';
 import MoleculeTextInputGroup from '../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../components/organisms/layout';
@@ -27,16 +29,17 @@ import OrganismProductOrderDatatable from '../../components/organisms/datatable/
 import CustomerService from '../../services/customer';
 import ShippingService from '../../services/shipping';
 import VoucherService from '../../services/voucher';
-import MoleculeOrderInfoGroup from '../../components/molecules/info-group-order';
-import AtomNumberFormat from '../../components/atoms/number-format';
+import OrderService from '../../services/order';
 
 const AddOrderPage = () => {
 	const addressInputSelectRef = useRef();
 	const customerService = new CustomerService();
 	const shippingService = new ShippingService();
 	const voucherService = new VoucherService();
+	const orderService = new OrderService();
 	const history = useHistory();
 
+	const [cashback, setCashback] = useState(0);
 	const [customerAddresses, setCustomerAddresses] = useState([]);
 	const [customer, setCustomer] = useState(null);
 	const [customerAdress, setCustomerAdress] = useState(null);
@@ -49,8 +52,27 @@ const AddOrderPage = () => {
 	const [selectedShipping, setSelectedShipping] = useState(null);
 	const [selectedVoucher, setSelectedVoucher] = useState(null);
 
-	const calculateCashback = () => {
-		return 0;
+	const calculateCashback = async () => {
+		if (!products || products.length === 0) return 0;
+
+		try {
+			const payload = {
+				added_by: customer.name,
+				is_order_owner: true,
+				products: products.map((product) => ({
+					product_name: product.name,
+					total: product.total * product.price,
+				})),
+			};
+
+			const { data: cashback } = await orderService.calculateCashback(
+				payload
+			);
+
+			setCashback(cashback.reduce((acc, cash) => acc + cash.cashback, 0));
+		} catch (error) {
+			message.error(error.message);
+		}
 	};
 
 	const calculateSubTotal = () => {
@@ -118,31 +140,41 @@ const AddOrderPage = () => {
 		}
 	};
 
-	const createOrder = () => {
+	const createOrder = async () => {
+		setIsSubmitting(true);
+
 		try {
 			const newOrder = {
 				branch_id: selectedBranch,
+				cashback: cashback,
 				customer_id: selectedCustomer,
-				products: products,
 				delivery_address_id: selectedAddress,
+				is_using_freezy_point: false,
+				parking_fee: customerAdress.parking_fee,
+				payment_method: 'FREEZY_CASH',
+				products: products,
+				shipping_fee: selectedShippingType.price,
 				shipping_id: selectedShipping,
 				shipping_type_id: selectedShippingType.id,
-				voucher: selectedVoucher.id,
-				voucher_code: selectedVoucher.code,
-				payment_method: 'FREEZY_CASH',
-				is_using_freezy_point: false,
-				total_order: calculateTotalOrder(),
-				total_discount: calculateTotalDiscount(),
-				total_voucher: calculateVocuherDiscount(),
-				shipping_fee: selectedShippingType.price,
-				parking_fee: customerAdress.parking_fee,
 				sub_total: calculateSubTotal(),
-				cashback: calculateCashback(),
+				total_discount: calculateTotalDiscount(),
+				total_order: calculateTotalOrder(),
+				total_voucher: calculateVocuherDiscount(),
+				voucher_code: selectedVoucher.code,
+				voucher: selectedVoucher.id,
 				shipping_arrangement_fee:
 					selectedShippingType.shipping_arrangement_fee,
 			};
+
+			await orderService.createOrder(newOrder);
+
+			message.success('Berhasil menambah pesanan');
+			message.info('Akan dikembalikan ke halaman pesanan dalam 2 detik');
+			setTimeout(() => history.push('/orders'), 2000);
 		} catch (error) {
 			message.error(error.message);
+		} finally {
+			setIsSubmitting(false);
 		}
 	};
 
@@ -217,6 +249,10 @@ const AddOrderPage = () => {
 	useEffect(() => {
 		addressInputSelectRef?.current?.refetchData();
 	}, [customerAddresses]);
+
+	useEffect(() => {
+		calculateCashback();
+	}, [products]);
 
 	return (
 		<OrganismLayout
@@ -426,6 +462,7 @@ const AddOrderPage = () => {
 						<Row className="mt3">
 							<Col span={18}>
 								<MoleculeOrderCostBreakdownInfo
+									cashback={cashback}
 									customerId={selectedCustomer}
 									parkingFee={customerAdress?.parking_fee}
 									shippingCost={selectedShippingType?.price}
@@ -495,6 +532,7 @@ const AddOrderPage = () => {
 							isCreating={true}
 							isSubmitting={isSubmitting}
 							label="Pesanan"
+							onClick={createOrder}
 						/>
 					</Col>
 				</Space>

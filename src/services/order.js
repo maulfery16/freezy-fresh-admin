@@ -1,6 +1,40 @@
 import RequestAdapterService from './request-adapter';
 
 export default class OrderService extends RequestAdapterService {
+	async calculateCashback(payload) {
+		try {
+			const { data } = await super.sendPostRequest(
+				`${this.baseUrl}/v1/cashback-calculators`,
+				payload
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail getting cashback calculation: ${super.generateErrorMessage(
+					error
+				)}`
+			);
+		}
+	}
+
+	async createOrder(payload) {
+		try {
+			const { data } = await super.sendPostRequest(
+				`${this.baseUrl}/v1/orders`,
+				payload
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail creating order: ${super.generateErrorMessage(error)}`
+			);
+		}
+	}
+
 	async getOrderById(id) {
 		try {
 			const { data } = await super.sendGetRequest(
