@@ -53,6 +53,12 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 			render: (variant) => (variant ? variant.replaceAll('|', ' ') : '-'),
 		},
 		{
+			title: 'Tipe TOWS',
+			dataIndex: 'branches',
+			render: (_, record) => record.branch.tows,
+			sorter: true,
+		},
+		{
 			title: 'Rating',
 			dataIndex: 'rating',
 			sorter: true,

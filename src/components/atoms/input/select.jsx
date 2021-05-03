@@ -53,7 +53,8 @@ const AtomCustomSelect = forwardRef((props, ref) => {
 
 	const optionalProps = { ...props };
 	if (props.data.onChange)
-		optionalProps.onChange = (value) => props.data.onChange(value);
+		optionalProps.onChange = (value, options) =>
+			props.data.onChange(value, options);
 	if (optionalProps.optionsRef) delete optionalProps.optionsRef;
 
 	return options ? (
