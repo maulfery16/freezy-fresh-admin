@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 /* eslint-disable no-mixed-spaces-and-tabs */
 
 import React, { useEffect, useRef, useState } from 'react';
@@ -8,28 +9,29 @@ import {
 	Row,
 	Skeleton,
 	Space,
+	Table,
 	Tabs,
 	Typography,
 } from 'antd';
 import { useLocation, useParams } from 'react-router';
 
 import AtomBranchSelection from '../../../components/atoms/selection/branch';
+import AtomCustomSelect from '../../../components/atoms/input/select';
 import AtomCard from '../../../components/atoms/card';
 import AtomProductOwnerSelect from '../../../components/atoms/selection/product-owner';
+import MoleculeFileInputGroup from '../../../components/molecules/input-group/file-input';
+import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
+import MoleculeNumberInputGroup from '../../../components/molecules/input-group/number-input';
+import MoleculeProductAttributesInput from '../../../components/molecules/product/attributes-input';
+import MoleculeProductVariantsInput from '../../../components/molecules/product/variants-input';
 import MoleculeSelectInputGroup from '../../../components/molecules/input-group/select-input';
 import MoleculeTextEditorGroup from '../../../components/molecules/input-group/text-editor';
 import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../../components/organisms/layout';
 import OrganismProductBranchDatatable from '../../../components/organisms/datatable/product-branch-datatable';
 
-import MoleculeNumberInputGroup from '../../../components/molecules/input-group/number-input';
-import MoleculeProductAttributesInput from '../../../components/molecules/product/attributes-input';
-import MoleculeFileInputGroup from '../../../components/molecules/input-group/file-input';
-import MoleculeProductVariantsInput from '../../../components/molecules/product/variants-input';
-
 import MasterService from '../../../services/master';
 import ProductService from '../../../services/product';
-import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
 
 const ProductModifyPage = () => {
 	const beautyImageRef = useRef();
@@ -53,6 +55,32 @@ const ProductModifyPage = () => {
 	const [product, setProduct] = useState(null);
 	const [productVariants, setProductVariants] = useState([]);
 	const [variants, setVariants] = useState([]);
+
+	const towsColumns = [
+		{
+			title: 'Cabang Freezy',
+			dataIndex: 'branch',
+			key: 'branch',
+		},
+		{
+			title: 'Cabang TOWS',
+			dataIndex: 'branch_id',
+			key: 'branch_id',
+			render: (id, record) => (
+				<AtomCustomSelect
+					placeholder={`Pilih cabang ${record.branch}`}
+					data={{
+						url: `branches/${id}`,
+						options: [
+							{ label: 'Cabang Paling Jauh', value: 'FAR' },
+							{ label: 'Cabang Paling Dekat', value: 'NEAR' },
+						],
+						onChange: (val) => setBranchTOWS(val, id),
+					}}
+				/>
+			),
+		},
+	];
 
 	const combineProductVariantWithExisting = (newProductVariants) => {
 		let combinedProductVariants = [];
@@ -131,6 +159,7 @@ const ProductModifyPage = () => {
 						variant: variant.name.id,
 						branch: {
 							id: branch.branch,
+							tows: branch.tows,
 						},
 					});
 				});
@@ -236,6 +265,13 @@ const ProductModifyPage = () => {
 					width_cm: product.width_cm,
 					zone_id: product.zone_id,
 			  };
+	};
+
+	const setBranchTOWS = (val, id) => {
+		branches.map((branch) => {
+			if (id === branch.id) branch.rows = val;
+			return branch;
+		});
 	};
 
 	const submitProduct = async (values) => {
@@ -502,6 +538,8 @@ const ProductModifyPage = () => {
 
 								<Col span={12}>
 									<AtomBranchSelection
+										mode="multiple"
+										required
 										onChange={(_, options) => {
 											if (branches.length !== options) {
 												setBranches(
@@ -512,8 +550,6 @@ const ProductModifyPage = () => {
 												);
 											}
 										}}
-										mode="multiple"
-										required
 									/>
 								</Col>
 
@@ -712,6 +748,17 @@ const ProductModifyPage = () => {
 							</Row>
 						</AtomCard>
 					</Form>
+
+					<AtomCard title="Pengaturan TOWS">
+						<Row className="mt3">
+							<Col span={12}>
+								<Table
+									columns={towsColumns}
+									dataSource={branches}
+								/>
+							</Col>
+						</Row>
+					</AtomCard>
 
 					<AtomCard title="">
 						<Tabs

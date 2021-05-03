@@ -20,7 +20,7 @@ const AtomBranchSelect = (props) => {
 					label: item.name.id,
 				}),
 				onChange: props.onChange
-					? (value) => props.onChange(value)
+					? (value, options) => props.onChange(value, options)
 					: () => {},
 			}}
 		/>
