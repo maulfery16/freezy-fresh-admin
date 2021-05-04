@@ -18,12 +18,13 @@ import {
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { MdRssFeed } from 'react-icons/md';
+import { BsPersonFill } from 'react-icons/bs';
 import {
 	AiFillGift,
 	AiOutlineTransaction,
 	AiTwotoneBank,
 } from 'react-icons/ai';
-import { BsPersonFill } from 'react-icons/bs';
 import {
 	FaBuilding,
 	FaMoneyBill,
@@ -210,6 +211,11 @@ const menus = [
 				link: '/customer/mgm',
 			},
 		],
+	},
+	{
+		name: 'Feed',
+		icon: <MdRssFeed />,
+		link: '/feed',
 	},
 	{
 		name: 'Transaksi',

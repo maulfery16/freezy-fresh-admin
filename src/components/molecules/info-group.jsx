@@ -9,7 +9,7 @@ const MoleculeInfoGroup = (props) => {
 				<span className="gray f5 fw7">{props.title}</span>
 			</Typography.Text>
 
-			<div className="dark-gray fw5 f6 w-100">{props.content}</div>
+			<div className="dark-gray fw5 f6 w-100">{props.content || '-'}</div>
 		</Space>
 	);
 };
