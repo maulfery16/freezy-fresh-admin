@@ -102,7 +102,7 @@ const FeedModifyPage = () => {
 					link: location.pathname,
 				},
 			]}
-			title={`${isCreating ? 'Tambah' : 'Ubah'} Cabang Freezy`}
+			title={`${isCreating ? 'Tambah' : 'Ubah'} Konten`}
 		>
 			<Typography.Title level={4}>
 				<span className="fw7">
@@ -258,7 +258,7 @@ const FeedModifyPage = () => {
 								backUrl="/feed"
 								isCreating={isCreating}
 								isSubmitting={isSubmitting}
-								label="Cabang Freezy"
+								label="Konten"
 							/>
 						</Col>
 					</Row>
