@@ -20,8 +20,6 @@ const FeedDetailPage = () => {
 	const getFeedDetail = async () => {
 		try {
 			const response = await feedService.getFeedById(id);
-			console.log(response.data);
-
 			setFeed(response.data);
 		} catch (error) {
 			message.error(error.message);
@@ -44,9 +42,7 @@ const FeedDetailPage = () => {
 			title="Detail Feed"
 		>
 			<Typography.Title level={4}>
-				<span className="fw7">
-					{`Detail Cabang Freezy`.toUpperCase()}
-				</span>
+				<span className="fw7">{`Detail Feed`.toUpperCase()}</span>
 			</Typography.Title>
 
 			{!feed ? (
@@ -54,7 +50,7 @@ const FeedDetailPage = () => {
 			) : (
 				<Row align="top" className="mt4" gutter={24}>
 					<Col span={18}>
-						<AtomCard title="Info Cabang Freezy">
+						<AtomCard title="Info Feed">
 							<Row gutter={[12, 24]}>
 								<Col span={12}>
 									<MoleculeInfoGroup
