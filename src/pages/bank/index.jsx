@@ -1,8 +1,10 @@
 /* eslint-disable react/display-name */
-import { Space } from 'antd';
 import moment from 'moment';
 import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
+import { EditFilled } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
+import { Space } from 'antd';
 
 import AtomStatusSwitch from '../../components/atoms/datatable/status-switch';
 import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
@@ -69,6 +71,10 @@ const BankPage = () => {
 			dataIndex: 'id',
 			render: (id, record) => (
 				<Space size="middle">
+					<Link to={`/bank/${id}/edit`}>
+						<EditFilled className="f4 orange" />
+					</Link>
+
 					{!record.is_active && (
 						<MoleculeDeleteConfirm
 							id={id}

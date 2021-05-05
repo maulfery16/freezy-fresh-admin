@@ -1,20 +1,33 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import React, { useState } from 'react';
-import { Col, Form, message, Row, Typography } from 'antd';
-import { useHistory } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Col, Form, message, Row, Skeleton, Typography } from 'antd';
+import { useHistory, useParams } from 'react-router-dom';
 
 import AtomCard from '../../components/atoms/card';
+import MoleculeModifyActionButtons from '../../components/molecules/modify-action-buttons';
 import MoleculeTextInputGroup from '../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../components/organisms/layout';
 
 import BankService from '../../services/bank';
-import MoleculeModifyActionButtons from '../../components/molecules/modify-action-buttons';
-const bankService = new BankService();
 
 const BankModifyPage = () => {
+	const bankService = new BankService();
 	const history = useHistory();
+	const isCreating = history.location.pathname.includes('add') ? true : false;
 
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [bank, setBank] = useState(null);
+	const { id } = useParams();
+
+	const getBankDetail = async (id) => {
+		try {
+			const response = await bankService.getBankById(id);
+			setBank(response.data);
+		} catch (error) {
+			message.error(error.message);
+			console.error(error);
+		}
+	};
 
 	const submit = async (values) => {
 		try {
@@ -22,7 +35,6 @@ const BankModifyPage = () => {
 
 			const data = new FormData();
 			data.append('name', values.name);
-			data.append('code', values.code);
 
 			await bankService.createBank(data);
 
@@ -41,6 +53,22 @@ const BankModifyPage = () => {
 		}
 	};
 
+	const setBankInitialValue = () => {
+		return isCreating || !bank
+			? {}
+			: {
+					name: bank.name,
+			  };
+	};
+
+	useEffect(() => {
+		(async () => {
+			if (!isCreating) {
+				await getBankDetail(id);
+			}
+		})();
+	}, []);
+
 	return (
 		<OrganismLayout
 			breadcumbs={[
@@ -56,50 +84,46 @@ const BankModifyPage = () => {
 				<span className="fw7">{`Tambah Bank`.toUpperCase()}</span>
 			</Typography.Title>
 
-			<Form
-				className="w-100 mt4"
-				name="modify_bank"
-				onFinish={submit}
-				onFinishFailed={(error) => {
-					message.error(`Failed: ${error}`);
-					console.error(error);
-				}}
-			>
-				<Row>
-					<Col span={15}>
-						<AtomCard title="Info Bank">
-							<Row gutter={12}>
-								<Col span={12}>
-									<MoleculeTextInputGroup
-										name="name"
-										label="Nama Bank"
-										placeholder="Nama Bank"
-										type="text"
-									/>
-								</Col>
+			{!isCreating && !bank ? (
+				<Skeleton active />
+			) : (
+				<Form
+					className="w-100 mt4"
+					name="modify_bank"
+					initialValues={setBankInitialValue()}
+					onFinish={submit}
+					onFinishFailed={(error) => {
+						message.error(`Failed: ${error}`);
+						console.error(error);
+					}}
+				>
+					<Row>
+						<Col span={15}>
+							<AtomCard title="Info Bank">
+								<Row gutter={12}>
+									<Col span={24}>
+										<MoleculeTextInputGroup
+											name="name"
+											label="Nama Bank"
+											placeholder="Nama Bank"
+											type="text"
+										/>
+									</Col>
+								</Row>
+							</AtomCard>
+						</Col>
 
-								<Col span={12}>
-									<MoleculeTextInputGroup
-										name="code"
-										label="Kode Bank"
-										placeholder="Kode Bank"
-										type="text"
-									/>
-								</Col>
-							</Row>
-						</AtomCard>
-					</Col>
-
-					<Col className="mt4" span={24}>
-						<MoleculeModifyActionButtons
-							backUrl="/bank"
-							isCreating={true}
-							isSubmitting={isSubmitting}
-							label="Bank"
-						/>
-					</Col>
-				</Row>
-			</Form>
+						<Col className="mt4" span={24}>
+							<MoleculeModifyActionButtons
+								backUrl="/bank"
+								isCreating={true}
+								isSubmitting={isSubmitting}
+								label="Bank"
+							/>
+						</Col>
+					</Row>
+				</Form>
+			)}
 		</OrganismLayout>
 	);
 };
