@@ -14,3 +14,16 @@ export function translateGenderEnum(gender) {
 
 	return gender ? GENDER_ENUM[gender] : '-';
 }
+
+export function generateFormFailedError(errors) {
+	if (errors) {
+		console.error(errors.errorFields);
+
+		let detail = [];
+		errors.errorFields.map((item) => {
+			detail.push(item.errors);
+		});
+
+		return detail.join(',\n');
+	} else return null;
+}

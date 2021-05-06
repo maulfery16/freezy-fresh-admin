@@ -81,7 +81,7 @@ const VoucherPage = () => {
 					sorter: true,
 				},
 				{
-					title: 'Tgl. Berakhir',
+					title: 'Tgl. Selesai',
 					dataIndex: 'end_periode',
 					render: (date) => (
 						<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
@@ -89,7 +89,7 @@ const VoucherPage = () => {
 					sorter: true,
 				},
 				{
-					title: 'Jam Berakhir',
+					title: 'Jam Selesai',
 					dataIndex: 'end_time_periode',
 					sorter: true,
 				},

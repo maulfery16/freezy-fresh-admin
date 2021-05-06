@@ -5,7 +5,7 @@ import { Col, Form, message, Row, Skeleton, Typography } from 'antd';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
-import MoleculeDatePickerGroup from '../../../components/molecules/input-group/date-input';
+import MoleculeDatePickerGroup from '../../../components/molecules/input-group/date-time-input';
 import MoleculeFileInputGroup from '../../../components/molecules/input-group/file-input';
 import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
 import MoleculeSelectInputGroup from '../../../components/molecules/input-group/select-input';
@@ -64,7 +64,7 @@ const PelangganModifyPage = () => {
 			const idCardImage = await idCardImageRef.current.getImage();
 
 			const data = new FormData();
-			data.append('birth', values.birth || '1998-04-11');
+			data.append('birth', values.birth);
 			data.append('email', values.email);
 			data.append('first_name', values.first_name);
 			data.append(
@@ -135,9 +135,13 @@ const PelangganModifyPage = () => {
 					name="modify_customer"
 					initialValues={setCustomerInitialValues()}
 					onFinish={submit}
-					onFinishFailed={(error) => {
-						message.error(`Failed: ${error}`);
-						console.error(error);
+					onFinishFailed={(errors) => {
+						if (typeof errors === 'object') {
+							errors.errorFields.map((item) => {
+								message.error(`Failed: ${item.errors}`);
+							});
+							console.error(errors.errorFields);
+						}
 					}}
 				>
 					<Row>

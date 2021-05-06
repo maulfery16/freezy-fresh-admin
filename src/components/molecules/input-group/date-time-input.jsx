@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { DatePicker, Form, Space, Typography } from 'antd';
+import { DatePicker, Form, Space, TimePicker, Typography } from 'antd';
 
-const MoleculeDatePickerGroup = (props) => {
+const MoleculeDateTimePickerGroup = (props) => {
 	let rules = [];
 
 	if (props.required) {
@@ -28,17 +28,22 @@ const MoleculeDatePickerGroup = (props) => {
 				</Typography.Text>
 
 				<Form.Item name={props.name} noStyle rules={rules}>
-					<DatePicker {...inputProps} />
+					{props.type === 'time' ? (
+						<TimePicker {...inputProps} />
+					) : (
+						<DatePicker {...inputProps} />
+					)}
 				</Form.Item>
 			</Space>
 		</Form.Item>
 	);
 };
 
-MoleculeDatePickerGroup.propTypes = {
+MoleculeDateTimePickerGroup.propTypes = {
 	label: PropTypes.string,
 	name: PropTypes.string,
+	type: PropTypes.string,
 	placeholder: PropTypes.string,
 };
 
-export default MoleculeDatePickerGroup;
+export default MoleculeDateTimePickerGroup;
