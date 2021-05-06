@@ -1,41 +1,65 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import React, { useEffect, useRef, useState } from 'react';
-import { Col, Form, message, Row, Skeleton, Typography } from 'antd';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import {
+	Col,
+	Form,
+	message,
+	Row,
+	Skeleton,
+	// Tabs,
+	Typography,
+} from 'antd';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
-import AtomBranchSelection from '../../components/atoms/selection/branch';
 import AtomCard from '../../components/atoms/card';
-import AtomProductOwnerSelect from '../../components/atoms/selection/product-owner';
-import MoleculeFileInputGroup from '../../components/molecules/input-group/file-input';
+import MoleculeDatePickerGroup from '../../components/molecules/input-group/date-time-input';
 import MoleculeModifyActionButtons from '../../components/molecules/modify-action-buttons';
-import MoleculePasswordInputGroup from '../../components/molecules/input-group/password-input';
+import MoleculeNumberInputGroup from '../../components/molecules/input-group/number-input';
 import MoleculeSelectInputGroup from '../../components/molecules/input-group/select-input';
+import MoleculeTextEditorGroup from '../../components/molecules/input-group/text-editor';
 import MoleculeTextInputGroup from '../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../components/organisms/layout';
 
-import AdminService from '../../services/admin';
-const adminService = new AdminService();
+import VoucherService from '../../services/voucher';
+import { generateFormFailedError } from '../../utils/helpers';
 
-const AdminModifyPage = () => {
-	const profileImageRef = useRef();
-	const idCardImageRef = useRef();
+const VoucherModifyPage = () => {
+	const voucherService = new VoucherService();
 
 	const { id } = useParams();
 	const location = useLocation();
 	const history = useHistory();
 	const isCreating = location.pathname.includes('add') ? true : false;
 
-	const [admin, setAdmin] = useState(null);
+	const [form] = Form.useForm();
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [voucher, setVoucher] = useState(null);
 
-	const getAdminDetail = async (id) => {
+	const [cashbackNominal, setCashbackNominal] = useState(null);
+	const [howToUseEn, setHowToUseEn] = useState('');
+	const [howToUseId, setHowToUseId] = useState('');
+	const [maxDiscount, setMaxDiscount] = useState(null);
+	const [minOrder, setMinOrder] = useState(null);
+	const [quota, setQuota] = useState(null);
+	const [termEn, setTermEn] = useState('');
+	const [termId, setTermId] = useState('');
+
+	const [isCashbackNominalEnabled, setIsCashbackNominalEnabled] = useState(
+		false
+	);
+	const [isCodeEnabled, setIsCodeEnabled] = useState(false);
+
+	const getVoucherDetail = async (id) => {
 		try {
-			let admin = await adminService.getAdminById(id);
-			admin = admin.data;
-			admin.roles = admin.roles.map((role) => role.name);
-			admin.branches = admin.branches.map((branch) => branch.id);
+			let voucher = await voucherService.getVoucherById(id);
+			voucher = voucher.data;
 
-			setAdmin(admin);
+			setVoucher(voucher);
+			setTermId(voucher.terms_and_condition?.id);
+			setTermEn(voucher.terms_and_condition?.en);
+			setHowToUseId(voucher.how_to_use?.id);
+			setHowToUseEn(voucher.how_to_use?.en);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
@@ -45,40 +69,38 @@ const AdminModifyPage = () => {
 	const submit = async (values) => {
 		try {
 			setIsSubmitting(true);
-			const profileImage = await profileImageRef.current.getImage();
-			const idCardImage = await idCardImageRef.current.getImage();
 
 			const data = new FormData();
-			data.append('bank_account_number', values.rek_number);
-			data.append('bank_id', values.bank);
-			data.append('email', values.email);
-			data.append('first_name', values.first_name);
-			data.append('gender', values.gender);
-			data.append('last_name', values.last_name);
-			data.append('phone_number', values.phone_number);
-			data.append('role_name', values.role);
-			data.append('company', values.company);
-			if (idCardImage) data.append('idcard_image', idCardImage);
-			if (profileImage) data.append('profile_image', profileImage);
-			if (isCreating) data.append('password', values.password);
-			values.branches.forEach((branch) => {
-				data.append('branch_id[]', branch);
-			});
+			data.append('target', values.target);
+			data.append('code', values.code);
+			data.append('name[id]', values.id_name);
+			data.append('name[en]', values.en_name);
+			data.append('cashback_type', values.cashback_type);
+			data.append('cashback_percentage', values.cashback_percentage);
+			data.append('cashback_rp', values.cashback_rp);
+			data.append('max_discount_rp', values.max_discount_rp);
+			data.append('min_order_rp', values.min_order_rp);
+			data.append('quota', values.quota);
+			data.append('estimation_costs_rp', values.estimation_costs_rp);
+			data.append('start_date_periode', values.start_date_periode);
+			data.append('end_date_periode', values.end_date_periode);
+			data.append('start_time_periode', values.start_time_periode);
+			data.append('end_time_periode', values.end_time_periode);
 
 			if (isCreating) {
-				await adminService.createAdmin(data);
+				await voucherService.createVoucher(data);
 
-				message.success('Berhasil menambah admin');
+				message.success('Berhasil menambah voucher');
 			} else {
-				await adminService.editAdmin(id, data);
-				message.success('Berhasil mengubah admin');
+				await voucherService.editVoucher(id, data);
+				message.success('Berhasil mengubah voucher');
 			}
 
 			message.info(
-				'Akan dikembalikan ke halaman daftar admin dalam 2 detik'
+				'Akan dikembalikan ke halaman daftar voucher dalam 2 detik'
 			);
 			setTimeout(() => {
-				history.push('/admin');
+				history.push('/voucher');
 			}, 2000);
 		} catch (error) {
 			message.error(error.message);
@@ -88,29 +110,76 @@ const AdminModifyPage = () => {
 		}
 	};
 
-	const setAdminInitialValues = () => {
-		return isCreating || !admin
+	const setVoucherInitialValues = () => {
+		return isCreating || !voucher
 			? {}
 			: {
-					bank: admin.bank_info.bank ? admin.bank_info.bank.id : null,
-					branches: admin.branches,
-					company: admin.company,
-					email: admin.email,
-					first_name: admin.first_name,
-					profile_image: admin.profile_image,
-					idcard_image: admin.idcard_image,
-					gender: admin.gender,
-					last_name: admin.last_name,
-					phone_number: admin.phone_number,
-					rek_number: admin.bank_info.account_number,
-					role: admin.roles,
+					target: voucher.target,
+					code: voucher.code,
+					en_name: voucher.name ? voucher.name.en : null,
+					id_name: voucher.name ? voucher.name.id : null,
+					cashback_type: voucher.cashback_type,
+					cashback_percentage: voucher.cashback_percentage,
+					cashback_rp: voucher.cashback_rp,
+					max_discount_rp: voucher.max_discount_rp,
+					min_order_rp: voucher.min_order_rp,
+					quota: voucher.quota,
+					estimation_costs_rp: voucher.estimation_costs_rp,
+					start_date_periode: moment(
+						new Date(voucher.start_date_periode)
+					),
+					end_date_periode: moment(
+						new Date(voucher.end_date_periode)
+					),
+					start_time_periode: voucher.start_time_periode,
+					end_time_periode: voucher.end_time_periode,
 			  };
 	};
 
 	useEffect(() => {
+		if (isCashbackNominalEnabled) {
+			form.setFieldsValue({
+				cashback_percentage: null,
+				max_discount_rp: null,
+			});
+		} else {
+			form.setFieldsValue({
+				cashback_rp: null,
+			});
+		}
+	}, [isCashbackNominalEnabled]);
+
+	useEffect(() => {
+		if (isCashbackNominalEnabled) {
+			form.setFieldsValue({
+				estimation_costs_rp: cashbackNominal,
+			});
+		} else {
+			if (quota) {
+				const _quota = quota.target.value || 0;
+				form.setFieldsValue({
+					estimation_costs_rp: _quota * (maxDiscount || 0),
+				});
+			}
+		}
+	}, [cashbackNominal, maxDiscount, quota]);
+
+	useEffect(() => {
+		if (!isCodeEnabled) {
+			form.setFieldsValue({
+				code: null,
+			});
+		}
+	}, [isCodeEnabled]);
+
+	useEffect(() => {
+		console.log('');
+	}, [minOrder]);
+
+	useEffect(() => {
 		(async () => {
 			if (!isCreating) {
-				await getAdminDetail(id);
+				await getVoucherDetail(id);
 			}
 		})();
 	}, []);
@@ -118,70 +187,60 @@ const AdminModifyPage = () => {
 	return (
 		<OrganismLayout
 			breadcumbs={[
-				{ name: 'Admin', link: '/admin' },
+				{ name: 'Voucher', link: '/voucher' },
 				{
 					name: location.pathname.includes('add') ? 'Tambah' : 'Ubah',
 					link: location.pathname,
 				},
 			]}
-			title={`${isCreating ? 'Tambah' : 'Ubah'} Admin`}
+			title={`${isCreating ? 'Tambah' : 'Ubah'} Voucher`}
 		>
 			<Typography.Title level={4}>
 				<span className="fw7">
-					{`${isCreating ? 'Tambah' : 'Ubah'} Admin`.toUpperCase()}
+					{`${isCreating ? 'Tambah' : 'Ubah'} Voucher`.toUpperCase()}
 				</span>
 			</Typography.Title>
 
-			{!isCreating && !admin ? (
+			{!isCreating && !voucher ? (
 				<Skeleton active />
 			) : (
 				<Form
 					className="w-100 mt4"
-					name="modify_admin"
-					initialValues={setAdminInitialValues()}
+					name="modify_voucher"
+					form={form}
+					initialValues={setVoucherInitialValues()}
 					onFinish={submit}
-					onFinishFailed={(error) => {
-						message.error(`Failed: ${error}`);
-						console.error(error);
+					onFinishFailed={(errors) => {
+						message.error(
+							`Failed: ${generateFormFailedError(errors)}`
+						);
 					}}
 				>
 					<Row>
-						<Col span={15}>
-							<AtomCard title="Info Admin">
+						<Col span={18}>
+							<AtomCard title="Info Voucher">
 								<Row gutter={12}>
 									<Col span={12}>
-										<MoleculeTextInputGroup
-											name="first_name"
-											label="Nama Depan"
-											placeholder="Nama Depan"
-											type="text"
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeTextInputGroup
-											name="last_name"
-											label="Nama Belakang"
-											placeholder="Nama Belakang"
-											type="text"
-										/>
-									</Col>
-
-									<Col span={12}>
 										<MoleculeSelectInputGroup
-											label="Jenis Kelamin"
-											name="gender"
-											placeholder="Jenis Kelamin"
-											required
+											label="Target Voucher"
+											name="target"
+											placeholder="Pilih Target Voucher"
+											required={true}
+											value="PUBLIC"
+											onChange={(value) =>
+												setIsCodeEnabled(
+													value === 'LIMITED'
+												)
+											}
 											data={{
 												options: [
 													{
-														label: 'Pria',
-														value: 'MALE',
+														value: 'PUBLIC',
+														label: 'Publik',
 													},
 													{
-														label: 'Wanita',
-														value: 'FEMALE',
+														value: 'LIMITED',
+														label: 'Terbatas',
 													},
 												],
 											}}
@@ -190,114 +249,223 @@ const AdminModifyPage = () => {
 
 									<Col span={12}>
 										<MoleculeTextInputGroup
-											name="phone_number"
-											label="Nomor Handpone"
-											placeholder="Nomor Handpone"
-											type="phone"
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeSelectInputGroup
-											label="Bank (Opsional)"
-											name="bank"
-											placeholder="Bank (Opsional)"
-											data={{
-												url: 'banks',
-											}}
+											disabled={!isCodeEnabled}
+											maxLength={10}
+											minLength={10}
+											name="code"
+											label="Kode Voucher"
+											placeholder="Masukkan Kode Voucher"
+											type="alphanumeric"
 										/>
 									</Col>
 
 									<Col span={12}>
 										<MoleculeTextInputGroup
-											name="rek_number"
-											label="Nomor Rekening"
-											placeholder="Nomor Rekening"
+											label="Nama Voucher (ID)"
+											name="id_name"
+											placeholder="Masukkan Nama Voucher (ID)"
+											type="text"
+											required={true}
+										/>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeTextInputGroup
+											label="Nama Voucher (EN)"
+											name="en_name"
+											placeholder="Masukkan Nama Voucher (EN)"
+											type="text"
+											required={true}
+										/>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeSelectInputGroup
+											label="Tipe Cashback"
+											name="cashback_type"
+											placeholder="Pilih Tipe Cashback"
+											required={true}
+											value="RUPIAH"
+											onChange={(value) =>
+												setIsCashbackNominalEnabled(
+													value === 'RUPIAH'
+												)
+											}
+											data={{
+												options: [
+													{
+														value: 'RUPIAH',
+														label: 'Rupiah',
+													},
+													{
+														value: 'PERSENTAGE',
+														label: 'Persentase',
+													},
+												],
+											}}
+										/>
+									</Col>
+
+									<Col span={12}></Col>
+
+									<Col span={12}>
+										<MoleculeTextInputGroup
+											disabled={isCashbackNominalEnabled}
+											name="cashback_percentage"
+											label="Persentase Cashback (%)"
+											placeholder="Masukkan Persentase Cashback"
 											type="number"
 										/>
 									</Col>
 
-									<Col span={24}>
-										<MoleculeFileInputGroup
-											label="Foto Profile"
-											fileInputs={[
-												{
-													defaultValue: admin
-														? admin.profile_image
-														: null,
-													ref: profileImageRef,
+									<Col span={12}>
+										<MoleculeNumberInputGroup
+											disabled={!isCashbackNominalEnabled}
+											name="cashback_rp"
+											label="Nominal Cashback (Rp)"
+											placeholder="Masukkan Nominal Cashback (Rp)"
+											onChange={(value) =>
+												setCashbackNominal(value)
+											}
+										/>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeNumberInputGroup
+											disabled={isCashbackNominalEnabled}
+											name="max_discount_rp"
+											label="Maksimum Pembelian (Rp)"
+											placeholder="Masukkan Maksimum Pembelian (Rp)"
+											onChange={(value) =>
+												setMaxDiscount(value)
+											}
+										/>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeNumberInputGroup
+											name="min_discount_rp"
+											label="Minimal Pembelian (Rp)"
+											placeholder="Masukkan Minimal Pembelian (Rp)"
+											rules={({ getFieldValue }) => ({
+												validator(_, value) {
+													if (
+														value <
+															getFieldValue(
+																'cashback_rp'
+															) ||
+														value <
+															getFieldValue(
+																'max_discount_rp'
+															)
+													) {
+														return Promise.resolve();
+													}
+													return Promise.reject(
+														'Minimum Pembelian Tidak Boleh Kurang Dari Nominal Diskon atau Maksimum Diskon'
+													);
 												},
-											]}
+											})}
+											onChange={(value) =>
+												setMinOrder(value)
+											}
+										/>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeNumberInputGroup
+											name="quota"
+											label="Kuota"
+											placeholder="Masukkan Kuota"
+											onChange={(value) =>
+												setQuota(value)
+											}
+											required={true}
+										/>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeNumberInputGroup
+											name="estimation_costs_rp"
+											label="Maksimum Pengeluaran Toko (Rp)"
+											placeholder="0"
+											value={0}
+											readOnly
+										/>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeDatePickerGroup
+											format={'YYYY-MM-DD'}
+											label="Tanggal Mulai"
+											name="start_date_periode"
+											placeholder="Tanggal Lahir"
+											required={true}
+										/>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeDatePickerGroup
+											// format={'YYYY-MM-DD'}
+											label="Jam Mulai"
+											type="time"
+											name="start_time_periode"
+											placeholder="Jam Mulai"
+											required={true}
+										/>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeDatePickerGroup
+											format={'YYYY-MM-DD'}
+											label="Tanggal Selesai"
+											name="end_date_periode"
+											placeholder="Tanggal Selesai"
+											required={true}
+										/>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeDatePickerGroup
+											// format={'YYYY-MM-DD'}
+											label="Jam Selesai"
+											type="time"
+											name="end_time_periode"
+											placeholder="Jam Selesai"
+											required={true}
 										/>
 									</Col>
 
 									<Col span={24}>
-										<MoleculeFileInputGroup
-											label="Foto KTP"
-											fileInputs={[
-												{
-													defaultValue: admin
-														? admin.idcard_image
-														: null,
-													ref: idCardImageRef,
-												},
-											]}
-										/>
-									</Col>
-								</Row>
-							</AtomCard>
-						</Col>
-
-						<Col className="mt4" span={15}>
-							<AtomCard title="Info Admin">
-								<Row gutter={12}>
-									<Col span={12}>
-										<MoleculeTextInputGroup
-											name="email"
-											label="Email"
-											placeholder="Email"
-											required
-											type="email"
+										<MoleculeTextEditorGroup
+											label="Syarat dan Ketentuan (ID)"
+											onChange={setTermId}
+											value={termId}
 										/>
 									</Col>
 
-									{isCreating && (
-										<Col span={12}>
-											<MoleculePasswordInputGroup
-												name="password"
-												label="Password"
-												placeholder="Password"
-											/>
-										</Col>
-									)}
-
-									<Col span={12}>
-										<MoleculeSelectInputGroup
-											label="Peranan"
-											name="role"
-											placeholder="Peranan"
-											required
-											data={{
-												url: 'roles',
-												generateCustomOption: (
-													item
-												) => ({
-													value: item.name,
-													label: item.name,
-												}),
-											}}
+									<Col span={24}>
+										<MoleculeTextEditorGroup
+											label="Syarat dan Ketentuan (EN)"
+											onChange={setTermEn}
+											value={termEn}
 										/>
 									</Col>
 
-									<Col span={12}>
-										<AtomBranchSelection
-											mode="multiple"
-											required
+									<Col span={24}>
+										<MoleculeTextEditorGroup
+											label="Cara Pakai (ID)"
+											onChange={setHowToUseId}
+											value={howToUseId}
 										/>
 									</Col>
 
-									<Col span={12}>
-										<AtomProductOwnerSelect required />
+									<Col span={24}>
+										<MoleculeTextEditorGroup
+											label="Cara Pakai (EN)"
+											onChange={setHowToUseEn}
+											value={howToUseEn}
+										/>
 									</Col>
 								</Row>
 							</AtomCard>
@@ -305,10 +473,10 @@ const AdminModifyPage = () => {
 
 						<Col className="mt4" span={24}>
 							<MoleculeModifyActionButtons
-								backUrl="/admin"
+								backUrl="/voucher"
 								isCreating={isCreating}
 								isSubmitting={isSubmitting}
-								label="Admin"
+								label="Voucher"
 							/>
 						</Col>
 					</Row>
@@ -318,4 +486,4 @@ const AdminModifyPage = () => {
 	);
 };
 
-export default AdminModifyPage;
+export default VoucherModifyPage;
