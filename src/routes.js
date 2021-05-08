@@ -161,6 +161,38 @@ const routes = [
 				name: 'Order Page Detail',
 				path: '/:id/detail',
 			},
+			{
+				path: '/review',
+				children: [
+					{
+						component: React.lazy(() =>
+							import('./pages/order/review/index')
+						),
+						exact: true,
+						guard: true,
+						name: 'Order Review Page',
+						path: '/',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/order/review/detail')
+						),
+						exact: true,
+						guard: true,
+						name: 'Order Review Page Detail',
+						path: '/:id/detail',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/order/review/order-detail')
+						),
+						exact: true,
+						guard: true,
+						name: 'Order Review Page Detail',
+						path: '/:id/detail/order/:order_id/detail',
+					},
+				],
+			},
 		],
 	},
 	{
