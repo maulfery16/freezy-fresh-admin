@@ -15,6 +15,7 @@ import OrganismProductBranchDatatable from '../../../components/organisms/datata
 
 import ProductService from '../../../services/product';
 import MoleculeProductAttributes from '../../../components/molecules/product/attributes';
+import OrganismProductTOWSDatatable from '../../../components/organisms/datatable/product-tows-datatable';
 
 const OrganismProductDetail = () => {
 	const [isFetchingDetail, setIsFetchingDetail] = useState(true);
@@ -313,6 +314,8 @@ const OrganismProductDetail = () => {
 							</Col>
 						</Row>
 					</AtomCard>
+
+					<OrganismProductTOWSDatatable isReadOnly />
 
 					<AtomCard title="">
 						<Tabs>

@@ -9,14 +9,12 @@ import {
 	Row,
 	Skeleton,
 	Space,
-	Table,
 	Tabs,
 	Typography,
 } from 'antd';
 import { useLocation, useParams } from 'react-router';
 
 import AtomBranchSelection from '../../../components/atoms/selection/branch';
-import AtomCustomSelect from '../../../components/atoms/input/select';
 import AtomCard from '../../../components/atoms/card';
 import AtomProductOwnerSelect from '../../../components/atoms/selection/product-owner';
 import MoleculeFileInputGroup from '../../../components/molecules/input-group/file-input';
@@ -29,6 +27,7 @@ import MoleculeTextEditorGroup from '../../../components/molecules/input-group/t
 import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../../components/organisms/layout';
 import OrganismProductBranchDatatable from '../../../components/organisms/datatable/product-branch-datatable';
+import OrganismProductTOWSDatatable from '../../../components/organisms/datatable/product-tows-datatable';
 
 import MasterService from '../../../services/master';
 import ProductService from '../../../services/product';
@@ -55,32 +54,6 @@ const ProductModifyPage = () => {
 	const [product, setProduct] = useState(null);
 	const [productVariants, setProductVariants] = useState([]);
 	const [variants, setVariants] = useState([]);
-
-	const towsColumns = [
-		{
-			title: 'Cabang Freezy',
-			dataIndex: 'branch',
-			key: 'branch',
-		},
-		{
-			title: 'Cabang TOWS',
-			dataIndex: 'branch_id',
-			key: 'branch_id',
-			render: (id, record) => (
-				<AtomCustomSelect
-					placeholder={`Pilih cabang ${record.branch}`}
-					data={{
-						url: `branches/${id}`,
-						options: [
-							{ label: 'Cabang Paling Jauh', value: 'FAR' },
-							{ label: 'Cabang Paling Dekat', value: 'NEAR' },
-						],
-						onChange: (val) => setBranchTOWS(val, id),
-					}}
-				/>
-			),
-		},
-	];
 
 	const combineProductVariantWithExisting = (newProductVariants) => {
 		let combinedProductVariants = [];
@@ -265,13 +238,6 @@ const ProductModifyPage = () => {
 					width_cm: product.width_cm,
 					zone_id: product.zone_id,
 			  };
-	};
-
-	const setBranchTOWS = (val, id) => {
-		branches.map((branch) => {
-			if (id === branch.id) branch.rows = val;
-			return branch;
-		});
 	};
 
 	const submitProduct = async (values) => {
@@ -749,16 +715,7 @@ const ProductModifyPage = () => {
 						</AtomCard>
 					</Form>
 
-					<AtomCard title="Pengaturan TOWS">
-						<Row className="mt3">
-							<Col span={12}>
-								<Table
-									columns={towsColumns}
-									dataSource={branches}
-								/>
-							</Col>
-						</Row>
-					</AtomCard>
+					<OrganismProductTOWSDatatable setBranches={setBranches} />
 
 					<AtomCard title="">
 						<Tabs

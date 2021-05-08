@@ -78,10 +78,12 @@ const BankModifyPage = () => {
 					link: location.pathname,
 				},
 			]}
-			title={`Tambah Bank`}
+			title={`${isCreating ? 'Tambah' : 'Ubah'} Bank`}
 		>
 			<Typography.Title level={4}>
-				<span className="fw7">{`Tambah Bank`.toUpperCase()}</span>
+				<span className="fw7">
+					{`${isCreating ? 'Tambah' : 'Ubah'} Bank`.toUpperCase()}
+				</span>
 			</Typography.Title>
 
 			{!isCreating && !bank ? (
@@ -116,7 +118,7 @@ const BankModifyPage = () => {
 						<Col className="mt4" span={24}>
 							<MoleculeModifyActionButtons
 								backUrl="/bank"
-								isCreating={true}
+								isCreating={isCreating}
 								isSubmitting={isSubmitting}
 								label="Bank"
 							/>
