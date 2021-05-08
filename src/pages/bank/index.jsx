@@ -116,6 +116,7 @@ const BankPage = () => {
 				additionalAction={renderAdditionalAction()}
 				columns={column}
 				dataSourceURL={`banks`}
+				limit={15}
 				ref={bankTableRef}
 				scroll={1920}
 				searchInput={true}
