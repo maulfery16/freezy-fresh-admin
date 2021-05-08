@@ -200,7 +200,10 @@ const OrderPage = () => {
 				label="Tanggal Pemesanan"
 				placeholder="Filter tanggal pemesanan"
 			/>,
-			<AtomBranchDatatableFilter key="branch-filter" />,
+			<AtomBranchDatatableFilter
+				key="branch-filter"
+				label="Cabang Freezy (ID)"
+			/>,
 			<MoleculeDatatableFilter
 				name="delivery-type"
 				operator=":"
@@ -237,7 +240,7 @@ const OrderPage = () => {
 				name="bank"
 				operator=":"
 				identifier="bank-filter"
-				label="Bank"
+				label="Nama Bank"
 				key="bank-filter"
 				placeholder="Semua Bank"
 				data={{
@@ -245,17 +248,17 @@ const OrderPage = () => {
 				}}
 			/>,
 			<MoleculeDatatableFilter
-				name="customer"
+				name="admin_status"
 				operator=":"
-				identifier="customer-filter"
-				label="Nama Pelanggan"
-				key="customer"
-				placeholder="Semua nama pelanggan"
+				identifier="admn-stts-flter"
+				label="Status Pesanan Pelanggan"
+				key="admin-stts-filter"
+				placeholder="Semua status pesanan"
 				data={{
-					url: 'admin/customers',
+					url: `orders/parameter/status`,
 					generateCustomOption: (item) => ({
-						value: item.id,
-						label: `${item.first_name} ${item.last_name}`,
+						label: orderService.translateOrderEnum(item.value),
+						value: item.value,
 					}),
 				}}
 			/>,
@@ -280,6 +283,21 @@ const OrderPage = () => {
 					}}
 				/>
 			)),
+			<MoleculeDatatableFilter
+				name="customer"
+				operator=":"
+				identifier="customer-filter"
+				label="Nama Pelanggan"
+				key="customer"
+				placeholder="Semua nama pelanggan"
+				data={{
+					url: 'admin/customers',
+					generateCustomOption: (item) => ({
+						value: item.id,
+						label: `${item.first_name} ${item.last_name}`,
+					}),
+				}}
+			/>,
 		];
 	};
 
