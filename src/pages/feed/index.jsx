@@ -32,8 +32,8 @@ const FeedPage = () => {
 		{
 			title: 'Title Story',
 			dataIndex: 'title',
-			render: (title) => title.id,
-			csvRender: (item) => item.title.id,
+			render: (title) => title?.id,
+			csvRender: (item) => item.title?.id,
 			sorter: true,
 		},
 		{
@@ -45,8 +45,8 @@ const FeedPage = () => {
 		{
 			title: 'Title Video',
 			dataIndex: 'video_title',
-			render: (title) => title.id,
-			csvRender: (item) => item.video_title.id,
+			render: (title) => title?.id,
+			csvRender: (item) => item.video_title?.id,
 			sorter: true,
 		},
 		{
