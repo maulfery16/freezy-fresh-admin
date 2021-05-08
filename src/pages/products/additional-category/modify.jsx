@@ -4,11 +4,11 @@ import { Col, Form, message, Row, Skeleton, Typography } from 'antd';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
+import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
 import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../../components/organisms/layout';
 
 import AdditionalCategoryService from '../../../services/additional-category';
-import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
 const additionalCategoryService = new AdditionalCategoryService();
 
 const AdditionalCategoryModifyPage = () => {

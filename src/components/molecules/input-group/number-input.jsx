@@ -26,6 +26,9 @@ const MoleculeNumberInputGroup = (props) => {
 		});
 	}
 
+	if (props.rules) {
+		rules.push(props.rules);
+	}
 	return (
 		<Form.Item>
 			<Space className="w-100" direction="vertical" size={0}>
@@ -33,7 +36,13 @@ const MoleculeNumberInputGroup = (props) => {
 					<span className="gray fw5 mb2">{props.label}</span>
 				</Typography.Text>
 
-				<Form.Item name={props.name} noStyle rules={rules}>
+				<Form.Item
+					name={props.name}
+					noStyle
+					rules={rules}
+					validateStatus={props.validateStatus}
+					help={props.help}
+				>
 					<InputNumber
 						{...props}
 						className={`br3 ba bw1 b--black-10 pv2 ph3 w-100 ${props.className}`}

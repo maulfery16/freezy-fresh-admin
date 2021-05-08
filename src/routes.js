@@ -858,6 +858,39 @@ const routes = [
 			},
 		],
 	},
+	{
+		path: '/feed',
+		children: [
+			{
+				component: React.lazy(() => import('./pages/feed/')),
+				exact: true,
+				guard: true,
+				name: 'Feed Page',
+				path: '/',
+			},
+			{
+				component: React.lazy(() => import('./pages/feed/detail')),
+				exact: true,
+				guard: true,
+				name: 'Detail Feed Page',
+				path: '/:id/detail',
+			},
+			{
+				component: React.lazy(() => import('./pages/feed/modify')),
+				exact: true,
+				guard: true,
+				name: 'Edit Feed Page',
+				path: '/:id/edit',
+			},
+			{
+				component: React.lazy(() => import('./pages/feed/modify')),
+				exact: true,
+				guard: true,
+				name: 'Add Feed Page',
+				path: '/add',
+			},
+		],
+	},
 ];
 
 export default routes;
