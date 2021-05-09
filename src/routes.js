@@ -162,6 +162,20 @@ const routes = [
 				path: '/:id/detail',
 			},
 			{
+				path: '/complain',
+				children: [
+					{
+						component: React.lazy(() =>
+							import('./pages/order/complain/index')
+						),
+						exact: true,
+						guard: true,
+						name: 'Order Complained Page',
+						path: '/',
+					},
+				],
+			},
+			{
 				path: '/review',
 				children: [
 					{

@@ -163,6 +163,25 @@ export default class OrderService extends RequestAdapterService {
 		return '-';
 	}
 
+	translateOrderProblemTypeEnum(type) {
+		const ORDER_PROBLEM_TYPE = {
+			FREEZY_CASH: 'Freezy Cash',
+			FREEZY_POINT: 'Freezy Point',
+		};
+
+		if (ORDER_PROBLEM_TYPE[type]) return ORDER_PROBLEM_TYPE[type];
+		return '-';
+	}
+
+	translateOrderReturnTypeEnum(type) {
+		const ORDER_RETURN_TYPE = {
+			REFUND: 'Pengembalian Dana',
+		};
+
+		if (ORDER_RETURN_TYPE[type]) return ORDER_RETURN_TYPE[type];
+		return '-';
+	}
+
 	transaltePaymentEnum(status) {
 		const ORDER_PAYMENT_ENUM = {
 			FREEZY_CASH: 'Freezy Cash',
