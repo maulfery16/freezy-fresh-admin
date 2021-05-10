@@ -715,7 +715,10 @@ const ProductModifyPage = () => {
 						</AtomCard>
 					</Form>
 
-					<OrganismProductTOWSDatatable setBranches={setBranches} />
+					<OrganismProductTOWSDatatable
+						branches={branches}
+						setBranches={setBranches}
+					/>
 
 					<AtomCard title="">
 						<Tabs

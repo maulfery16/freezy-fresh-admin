@@ -163,6 +163,26 @@ export default class OrderService extends RequestAdapterService {
 		return '-';
 	}
 
+	translateOrderProblemTypeEnum(type) {
+		const ORDER_PROBLEM_TYPE = {
+			PRODUCT_IS_INCOMPLETED: 'Produk Tidak Lengkap',
+			PRODUCT_IS_BROKEN: 'Produk Rusak',
+		};
+
+		if (ORDER_PROBLEM_TYPE[type]) return ORDER_PROBLEM_TYPE[type];
+		return '-';
+	}
+
+	translateOrderReturnTypeEnum(type) {
+		const ORDER_RETURN_TYPE = {
+			RETURN_BALANCE: 'Pengembalian Dana',
+			RETURN_GOODS: 'Pengembalian Barang',
+		};
+
+		if (ORDER_RETURN_TYPE[type]) return ORDER_RETURN_TYPE[type];
+		return '-';
+	}
+
 	transaltePaymentEnum(status) {
 		const ORDER_PAYMENT_ENUM = {
 			FREEZY_CASH: 'Freezy Cash',

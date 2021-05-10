@@ -272,7 +272,8 @@ const OrganismDatatable = forwardRef((props, ref) => {
 												<Col
 													key={`dattable-filter-${index}`}
 													span={
-														props.filters.length > 4
+														props.filters.length >=
+														4
 															? 12
 															: 24
 													}
