@@ -4,11 +4,7 @@ import React from 'react';
 
 const AtomCard = (props) => {
 	return (
-		<div
-			className={`${
-				props.title ? 'pa4' : 'pa3'
-			} bg-white br3 shadow-3 w-100`}
-		>
+		<div className={`pa4 bg-white br3 shadow-3 w-100`}>
 			{props.title && (
 				<Typography.Text strong>
 					<span className="denim f5">

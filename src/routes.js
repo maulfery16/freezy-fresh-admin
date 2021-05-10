@@ -173,6 +173,15 @@ const routes = [
 						name: 'Order Complained Page',
 						path: '/',
 					},
+					{
+						component: React.lazy(() =>
+							import('./pages/order/complain/detail')
+						),
+						exact: true,
+						guard: true,
+						name: 'Order Complain Detail Page',
+						path: '/:id/detail',
+					},
 				],
 			},
 			{

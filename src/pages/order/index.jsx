@@ -179,11 +179,9 @@ const OrderPage = () => {
 			<MoleculeDatatableAdditionalAction
 				child={<MoleculeOrderPickupModal />}
 				column={column}
-				exportUrl="https://api.freezyfresh.abcwork.id/storage/templates/orders/order.xlsx"
+				exportUrl="https://api.freezyfresh.abcwork.id/storage/exports/orders/order.xlsx"
 				getLimit={() => orderTableRef.current.totalData}
 				label="Pesanan"
-				requiredParams="branch"
-				requiredParamsLabel="cabang"
 				route="/order"
 				url="orders"
 			/>
