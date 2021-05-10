@@ -315,7 +315,10 @@ const OrganismProductDetail = () => {
 						</Row>
 					</AtomCard>
 
-					<OrganismProductTOWSDatatable isReadOnly />
+					<OrganismProductTOWSDatatable
+						branches={product?.branches}
+						isReadOnly
+					/>
 
 					<AtomCard title="">
 						<Tabs>

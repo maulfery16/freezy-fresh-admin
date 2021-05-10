@@ -225,11 +225,14 @@ const OrderPage = () => {
 				key="payment-type-filter"
 				placeholder="Semua Tipe Pembayaran"
 				data={{
-					// url: 'delivery-types',
 					options: [
 						{
-							label: 'Marukana.. Udon?',
-							value: 'Marukana.. Udon?',
+							label: 'Freezy Cash',
+							value: 'FREEZY_CASH',
+						},
+						{
+							label: 'Freezy Point',
+							value: 'FREEZY_POINT',
 						},
 					],
 				}}
