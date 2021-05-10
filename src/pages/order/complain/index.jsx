@@ -163,11 +163,14 @@ const OrderComplainPage = () => {
 				key="payment-type-filter"
 				placeholder="Semua tipe masalah"
 				data={{
-					// url: 'problem-types',
 					options: [
 						{
-							label: 'Marukana.. Udon?',
-							value: 'Marukana.. Udon?',
+							label: 'Produk Tidak Lengkap',
+							value: 'PRODUCT_IS_INCOMPLETED',
+						},
+						{
+							label: 'Produk Rusak',
+							value: 'PRODUCT_IS_BROKEN',
 						},
 					],
 				}}
@@ -180,11 +183,14 @@ const OrderComplainPage = () => {
 				key="payment-type-filter"
 				placeholder="Semua Tipe Pengembalian"
 				data={{
-					// url: 'return-types',
 					options: [
 						{
-							label: 'Marukana.. Udon?',
-							value: 'Marukana.. Udon?',
+							label: 'Pengembalian Dana',
+							value: 'RETURN_BALANCE',
+						},
+						{
+							label: 'Pengembalian Barang',
+							value: 'RETURN_GOODS',
 						},
 					],
 				}}

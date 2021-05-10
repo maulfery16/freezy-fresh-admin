@@ -165,8 +165,8 @@ export default class OrderService extends RequestAdapterService {
 
 	translateOrderProblemTypeEnum(type) {
 		const ORDER_PROBLEM_TYPE = {
-			FREEZY_CASH: 'Freezy Cash',
-			FREEZY_POINT: 'Freezy Point',
+			PRODUCT_IS_INCOMPLETED: 'Produk Tidak Lengkap',
+			PRODUCT_IS_BROKEN: 'Produk Rusak',
 		};
 
 		if (ORDER_PROBLEM_TYPE[type]) return ORDER_PROBLEM_TYPE[type];
@@ -175,7 +175,8 @@ export default class OrderService extends RequestAdapterService {
 
 	translateOrderReturnTypeEnum(type) {
 		const ORDER_RETURN_TYPE = {
-			REFUND: 'Pengembalian Dana',
+			RETURN_BALANCE: 'Pengembalian Dana',
+			RETURN_GOODS: 'Pengembalian Barang',
 		};
 
 		if (ORDER_RETURN_TYPE[type]) return ORDER_RETURN_TYPE[type];
