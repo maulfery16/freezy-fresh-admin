@@ -52,6 +52,23 @@ export default class OrderService extends RequestAdapterService {
 		}
 	}
 
+	async getComplaintOrderById(id) {
+		try {
+			const { data } = await super.sendGetRequest(
+				`${this.baseUrl}/v1/order-complaints/${id}`
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail getting order detail: ${super.generateErrorMessage(
+					error
+				)}`
+			);
+		}
+	}
+
 	async getOrders() {
 		try {
 			const { data } = await super.sendGetRequest(
@@ -151,7 +168,7 @@ export default class OrderService extends RequestAdapterService {
 			READY_TO_PICKUP: 'Siap Dikirim',
 			REFUND_COMPLETED_BY_ADMIN: 'Komplain Selesai oleh Admin',
 			REFUND_COMPLETED_BY_CUSTOMER: 'Komplain Selesai Oleh Pelanggan',
-			REFUND_PROCESS: 'Komplain Diproses',
+			REFUND_PROCESSED: 'Pengembalian Diproses',
 			REQUEST_SHUTTLE: 'Paket Diproses',
 			RETURN: 'Dikembalikan',
 			SHIPPING: 'Dalam Pengiriman',
