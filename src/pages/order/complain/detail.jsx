@@ -9,21 +9,28 @@ import AtomImage from '../../../components/atoms/image';
 import AtomSecondaryButton from '../../../components/atoms/button/secondary-button';
 import MoleculeInfoGroup from '../../../components/molecules/info-group';
 import OrganismLayout from '../../../components/organisms/layout';
+import OrganismOrderComplaintProduct from '../../../components/organisms/order/order-complain-product';
 
 import OrderService from '../../../services/order';
 
 const OrderComplainDetailPage = () => {
 	const { id } = useParams();
 	const [order, setOrder] = useState(null);
+	const [isLoading, setIsLoading] = useState(true);
+
 	const orderService = new OrderService();
 
 	const getOrderComplaintDetail = async () => {
+		setIsLoading(true);
+
 		try {
 			const response = await orderService.getComplaintOrderById(id);
 			setOrder(response.data);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -41,110 +48,243 @@ const OrderComplainDetailPage = () => {
 			]}
 			title="Detail Pesanan Dikomplain"
 		>
-			<Typography.Title level={4}>
-				<span className="fw7">
-					{`Detail Pesanan Dikomplain`.toUpperCase()}
-				</span>
-			</Typography.Title>
+			{isLoading ? (
+				<Skeleton active />
+			) : (
+				<>
+					<Typography.Title level={4}>
+						<span className="fw7">
+							{`Detail Pesanan Dikomplain`.toUpperCase()}
+						</span>
+					</Typography.Title>
 
-			<Row align="top" className="mt4" gutter={24}>
-				<Col span={18}>
-					<AtomCard>
-						<Row gutter={[12, 24]}>
-							<Col span={24}>
-								<Typography.Text strong>
-									<span className="denim f5">
-										INFO KOMPLAIN
-									</span>
-								</Typography.Text>
-							</Col>
+					<Row align="top" className="mt4" gutter={24}>
+						<Col span={16}>
+							<AtomCard>
+								<Row gutter={[12, 24]}>
+									<Col span={24}>
+										<Typography.Text strong>
+											<span className="denim f5">
+												INFO TRANSAKSI
+											</span>
+										</Typography.Text>
+									</Col>
 
-							<Col span={12}>
-								<MoleculeInfoGroup
-									title="ID Pesanan"
-									content={order?.order_info?.order_id}
-								/>
-							</Col>
+									<Col span={12}>
+										<MoleculeInfoGroup
+											title="ID Pesanan"
+											content={
+												order?.order_info?.order_id
+											}
+										/>
+									</Col>
 
-							<Col span={12}>
-								<MoleculeInfoGroup
-									title="ID Tiket"
-									content={order?.id}
-								/>
-							</Col>
+									<Col span={12}>
+										<MoleculeInfoGroup
+											title="ID Tiket"
+											content={order?.id}
+										/>
+									</Col>
 
-							<Col span={12}>
-								<MoleculeInfoGroup
-									title="Tipe Masalah"
-									content={orderService.translateOrderProblemTypeEnum(
-										order?.problem_type
-									)}
-								/>
-							</Col>
+									<Col span={12}>
+										<MoleculeInfoGroup
+											title="Tipe Masalah"
+											content={orderService.translateOrderProblemTypeEnum(
+												order?.problem_type
+											)}
+										/>
+									</Col>
 
-							<Col span={12}>
-								<MoleculeInfoGroup
-									title="Nama Pelanggan"
-									content={order?.customer_info?.full_name}
-								/>
-							</Col>
+									<Col span={12}>
+										<MoleculeInfoGroup
+											title="Nama Pelanggan"
+											content={
+												order?.customer_info?.full_name
+											}
+										/>
+									</Col>
 
-							<Col span={12}>
-								<MoleculeInfoGroup
-									title="Cabang Freezy (ID)"
-									content={order?.branch_info?.name?.id}
-								/>
-							</Col>
+									<Col span={12}>
+										<MoleculeInfoGroup
+											title="Cabang Freezy (ID)"
+											content={
+												order?.branch_info?.name?.id
+											}
+										/>
+									</Col>
 
-							<Col span={12}>
-								<MoleculeInfoGroup
-									title="Tanggal Komplain"
-									content={
-										order?.created_at && (
-											<ReactMoment format="DD-MM-YYYY">
-												{order?.created_at}
-											</ReactMoment>
-										)
-									}
-								/>
-							</Col>
+									<Col span={12}>
+										<MoleculeInfoGroup
+											title="Tanggal Komplain"
+											content={
+												order?.created_at && (
+													<ReactMoment format="DD-MM-YYYY">
+														{order?.created_at}
+													</ReactMoment>
+												)
+											}
+										/>
+									</Col>
 
-							<Col span={12}>
-								<MoleculeInfoGroup
-									title="Tanggal Komplain Selesai oleh Pelanggan"
-									content={
-										order?.finish_at && (
-											<ReactMoment format="DD-MM-YYYY">
-												{order?.finish_at}
-											</ReactMoment>
-										)
-									}
-								/>
-							</Col>
+									<Col span={12}>
+										<MoleculeInfoGroup
+											title="Tanggal Komplain Selesai oleh Pelanggan"
+											content={
+												order?.finish_at && (
+													<ReactMoment format="DD-MM-YYYY">
+														{order?.finish_at}
+													</ReactMoment>
+												)
+											}
+										/>
+									</Col>
 
-							<Col span={12}>
-								<MoleculeInfoGroup
-									title="Status Pesanan Pelanggan"
-									content={orderService.translateOrderEnum(
-										order?.customer_status
-									)}
-								/>
-							</Col>
+									<Col span={12}>
+										<MoleculeInfoGroup
+											title="Status Pesanan Pelanggan"
+											content={orderService.translateOrderEnum(
+												order?.order_info
+													?.customer_status
+											)}
+										/>
+									</Col>
+
+									<Divider />
+
+									<Col
+										span={24}
+										style={{ paddingTop: '2rem' }}
+									>
+										<Typography.Text strong>
+											<span className="denim f5">
+												INFO KOMPLAIN
+											</span>
+										</Typography.Text>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeInfoGroup
+											title="Tipe Masalah"
+											content={orderService.translateOrderProblemTypeEnum(
+												order?.problem_type
+											)}
+										/>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeInfoGroup
+											title="Detail Komplain"
+											content={order?.complaint_detail}
+										/>
+									</Col>
+
+									<Divider />
+
+									<Col
+										span={24}
+										style={{ paddingTop: '2rem' }}
+									>
+										<Typography.Text strong>
+											<span className="denim f5">
+												INFO SOLUSI
+											</span>
+										</Typography.Text>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeInfoGroup
+											title="Tipe Pengembalian"
+											content={orderService.translateOrderReturnTypeEnum(
+												order?.return_type
+											)}
+										/>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeInfoGroup
+											title="Bukti Pengembalian"
+											content={order?.complaint_detail}
+										/>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeInfoGroup
+											title="Catatan"
+											content={order?.note}
+										/>
+									</Col>
+
+									<Divider />
+
+									<Col
+										span={24}
+										style={{ paddingTop: '2rem' }}
+									>
+										<Typography.Text strong>
+											<span className="denim f5">
+												INFO UPDATE
+											</span>
+										</Typography.Text>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeInfoGroup
+											title="Tanggal Daftar"
+											content={
+												<ReactMoment format="DD-MM-YY">
+													{order?.created_at}
+												</ReactMoment>
+											}
+										/>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeInfoGroup
+											title="Tanggal Diperbaharui"
+											content={
+												<ReactMoment format="DD-MM-YY">
+													{order?.updated_at}
+												</ReactMoment>
+											}
+										/>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeInfoGroup
+											title="Didaftarkan oleh"
+											content={order?.created_by || '-'}
+										/>
+									</Col>
+
+									<Col span={12}>
+										<MoleculeInfoGroup
+											title="Diperbarui oleh"
+											content={order?.updated_by || '-'}
+										/>
+									</Col>
+								</Row>
+							</AtomCard>
+						</Col>
+
+						<Col span={8}>
+							<AtomCard title="Produk Yang Dikomplain">
+								<Row gutter={[12, 24]}>
+									<OrganismOrderComplaintProduct
+										isReadOnly
+										products={order.products}
+									/>
+								</Row>
+							</AtomCard>
 
 							<Divider />
 
-							<Col span={24} style={{ paddingTop: '2rem' }}>
-								<Typography.Text strong>
-									<span className="denim f5">
-										INFO KOMPLAIN
-									</span>
-								</Typography.Text>
-							</Col>
-						</Row>
-					</AtomCard>
-				</Col>
-			</Row>
-
+							<AtomCard title="Diskusi Komplain">
+								<Row gutter={[12, 24]}></Row>
+							</AtomCard>
+						</Col>
+					</Row>
+				</>
+			)}
 			<Row>
 				<Col className="mt4" span={24}>
 					<Space>
