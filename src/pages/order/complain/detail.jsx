@@ -16,12 +16,12 @@ import OrderService from '../../../services/order';
 const OrderComplainDetailPage = () => {
 	const { id } = useParams();
 	const [order, setOrder] = useState(null);
-	const [isLoading, setIsLoading] = useState(true);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const orderService = new OrderService();
 
 	const getOrderComplaintDetail = async () => {
-		setIsLoading(true);
+		// setIsLoading(true);
 
 		try {
 			const response = await orderService.getComplaintOrderById(id);
@@ -52,11 +52,21 @@ const OrderComplainDetailPage = () => {
 				<Skeleton active />
 			) : (
 				<>
-					<Typography.Title level={4}>
-						<span className="fw7">
-							{`Detail Pesanan Dikomplain`.toUpperCase()}
-						</span>
-					</Typography.Title>
+					<Row justify="space-between">
+						<Col>
+							<Typography.Title level={4}>
+								<span className="fw7">
+									{`Detail Pesanan Dikomplain`.toUpperCase()}
+								</span>
+							</Typography.Title>
+						</Col>
+
+						<Col>
+							<AtomSecondaryButton size="large">
+								Detail Pesanan
+							</AtomSecondaryButton>
+						</Col>
+					</Row>
 
 					<Row align="top" className="mt4" gutter={24}>
 						<Col span={16}>
@@ -271,7 +281,7 @@ const OrderComplainDetailPage = () => {
 								<Row gutter={[12, 24]}>
 									<OrganismOrderComplaintProduct
 										isReadOnly
-										products={order.products}
+										products={order?.products}
 									/>
 								</Row>
 							</AtomCard>

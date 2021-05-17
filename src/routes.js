@@ -182,6 +182,15 @@ const routes = [
 						name: 'Order Complain Detail Page',
 						path: '/:id/detail',
 					},
+					{
+						component: React.lazy(() =>
+							import('./pages/order/complain/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Order Complain Add Page',
+						path: '/add',
+					},
 				],
 			},
 			{
@@ -754,8 +763,7 @@ const routes = [
 												),
 												exact: true,
 												guard: true,
-												name:
-													'Customer Address Page Detail',
+												name: 'Customer Address Page Detail',
 												path: '/detail',
 											},
 											{
@@ -766,8 +774,7 @@ const routes = [
 												),
 												exact: true,
 												guard: true,
-												name:
-													'Customer Address Page Edit',
+												name: 'Customer Address Page Edit',
 												path: '/edit',
 											},
 										],

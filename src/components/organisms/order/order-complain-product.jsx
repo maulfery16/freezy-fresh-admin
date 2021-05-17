@@ -12,7 +12,7 @@ const OrganismOrderComplaintProduct = (props) => {
 	return (
 		<div className="ph2">
 			<Row gutter={[0, 12]} style={{ marginTop: '20px' }}>
-				{products.map((product, key) => {
+				{products?.map((product, key) => {
 					return (
 						<Col key={`ordr-cmpltn-key_${key}`} span={24}>
 							<Row align="top" gutter={24}>
