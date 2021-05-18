@@ -178,7 +178,7 @@ const OrderComplainPage = () => {
 			<MoleculeDatatableFilter
 				name="return_type"
 				operator=":"
-				identifier="payment-type-filter"
+				identifier="return-type-filter"
 				label="Tipe Pengembalian"
 				key="payment-type-filter"
 				placeholder="Semua Tipe Pengembalian"
