@@ -19,7 +19,7 @@ import MoleculeTextInputGroup from '../../../components/molecules/input-group/te
 
 const ModifyOrderComplainPage = () => {
 	const complaintTicketImageRef = useRef();
-	const customerService = new CustomerService();
+	const complaintReturnImageRef = useRef();
 	const orderService = new OrderService();
 	const history = useHistory();
 	const isCreating = history.location.pathname.includes('add') ? true : false;
@@ -51,16 +51,7 @@ const ModifyOrderComplainPage = () => {
 	};
 
 	const setComplaintTicketInitialValues = () => {
-		return isCreating || !complaintTicket
-			? {}
-			: {
-					content_type: complaintTicket.cotent_type,
-					products: complaintTicket.products,
-					short_description: complaintTicket.short_description,
-					title: complaintTicket.title?.id,
-					video_link: complaintTicket.video_link,
-					video_title: complaintTicket.video_title?.id,
-			  };
+		return isCreating || !complaintTicket ? {} : {};
 	};
 
 	const submit = async () => {
@@ -240,6 +231,66 @@ const ModifyOrderComplainPage = () => {
 								}}
 							/>
 						</Col>
+
+						{!isCreating && (
+							<>
+								<AtomSectionTitle
+									className="mt3"
+									title="Info Solusi"
+								/>
+
+								<Col span={12}>
+									<MoleculeSelectInputGroup
+										label="Tipe Pengembalian"
+										name="return_type"
+										placeholder="Pilih Tipe Pengembalian"
+										required
+										data={{
+											options: [
+												{
+													label: 'Pengembalian Dana',
+													value: 'RETURN_BALANCE',
+												},
+												{
+													label: 'Pengembalian Barang',
+													value: 'RETURN_GOODS',
+												},
+											],
+										}}
+									/>
+								</Col>
+
+								<Col span={1}></Col>
+
+								<Col span={12}>
+									<MoleculeFileInputGroup
+										label="Bukti Gambar/Video Pengembalian (Opsional)"
+										fileInputs={[
+											{
+												defaultValue: complaintTicket
+													? complaintTicket.image
+													: null,
+												ref: complaintReturnImageRef,
+											},
+										]}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeTextInputGroup
+										label="Catatan"
+										name="notes"
+										placeholder="Masukan Catatan Pengembalian"
+										required
+										type="textarea"
+										autoSize={{
+											minRows: 2,
+											maxRows: 6,
+										}}
+									/>
+								</Col>
+							</>
+						)}
 					</Row>
 				</AtomCard>
 			</Form>
