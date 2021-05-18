@@ -84,7 +84,7 @@ const FeedModifyPage = () => {
 					content_type: 'VIDEO',
 			  }
 			: {
-					content_type: feed.cotent_type,
+					content_type: feed.content_type,
 					products: feed.products,
 					short_description: feed.short_description,
 					title: feed.title?.id,
