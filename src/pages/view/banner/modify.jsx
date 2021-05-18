@@ -54,6 +54,8 @@ const BannerModifyPage = () => {
 
 	const submit = async (values) => {
 		try {
+			console.log(values);
+
 			setIsSubmitting(true);
 			const dekstopImage = await dekstopImageRef.current.getImage();
 			const mobileImage = await mobileImageRef.current.getImage();
@@ -153,8 +155,7 @@ const BannerModifyPage = () => {
 													defaultValue: banner
 														? banner.image_desktop
 														: null,
-													label:
-														'Foto Banner Dekstop',
+													label: 'Foto Banner Dekstop',
 													ref: dekstopImageRef,
 												},
 											]}
@@ -211,7 +212,10 @@ const BannerModifyPage = () => {
 									</Col>
 
 									<Col span={24}>
-										<AtomBranchSelection mode="multiple" />
+										<AtomBranchSelection
+											required
+											mode="multiple"
+										/>
 									</Col>
 								</Row>
 							</AtomCard>

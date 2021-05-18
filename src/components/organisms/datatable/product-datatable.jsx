@@ -343,8 +343,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 												placeholder="Kategori Produk"
 												required
 												data={{
-													url:
-														'additional-categories',
+													url: 'additional-categories',
 													generateCustomOption: (
 														item
 													) => ({
@@ -420,28 +419,25 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 																setProductID(
 																	value
 																),
-															url:
-																'products/not/discounted',
-															generateCustomOption: (
-																item
-															) => ({
-																value:
-																	item.product_id,
-																label: `${
-																	item.sku_id
-																} ${
-																	item
-																		.product_name
-																		.id
-																} ${
-																	item.variants
-																		? item
-																				.variants[0]
-																				.variant
-																				.id
-																		: ''
-																}`,
-															}),
+															url: 'products/not/discounted',
+															generateCustomOption:
+																(item) => ({
+																	value: item.product_id,
+																	label: `${
+																		item.sku_id
+																	} ${
+																		item
+																			.product_name
+																			.id
+																	} ${
+																		item.variants
+																			? item
+																					.variants[0]
+																					.variant
+																					.id
+																			: ''
+																	}`,
+																}),
 														}}
 													/>
 												</Col>
@@ -449,10 +445,10 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 												<Col span={24}>
 													<AtomBranchSelection
 														mode="multiple"
+														required
 														optionsRef={
 															branchOptionsRef
 														}
-														required
 														data={{
 															url: productID
 																? `products/${productID}/branches`
