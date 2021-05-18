@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import ReactMoment from 'react-moment';
-import { Col, Divider, message, Row, Typography } from 'antd';
+import { Col, message, Row } from 'antd';
 
 import MoleculeOrderInfoGroup from '../../info-group-order';
 import CustomerService from '../../../../services/customer';
@@ -30,14 +30,12 @@ const MoleculeOrderCreationCustomerInfo = (props) => {
 	}, [props]);
 
 	return (
-		<>
-			<Typography.Text>
-				<span className="gray fw5 mb2">Info Pelanggan</span>
-			</Typography.Text>
+		<fieldset>
+			<legend>
+				<span className="moon-gray">Info Pelanggan</span>
+			</legend>
 
-			<Divider className="mv2" />
-
-			<Row gutter={[12, 12]}>
+			<Row className="ph3" gutter={[12, 12]}>
 				<Col span={12}>
 					<MoleculeOrderInfoGroup
 						title="ID Pelanggan"
@@ -85,7 +83,7 @@ const MoleculeOrderCreationCustomerInfo = (props) => {
 					/>
 				</Col>
 			</Row>
-		</>
+		</fieldset>
 	);
 };
 

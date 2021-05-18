@@ -36,14 +36,18 @@ const VoucherModifyPage = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [voucher, setVoucher] = useState(null);
 
-	const [cashbackNominal, setCashbackNominal] = useState(null);
+	const [cashbackNominal, setCashbackNominal] = useState(0);
 	const [howToUseEn, setHowToUseEn] = useState('');
 	const [howToUseId, setHowToUseId] = useState('');
-	const [maxDiscount, setMaxDiscount] = useState(null);
+	const [maxDiscount, setMaxDiscount] = useState(0);
 	const [minOrder, setMinOrder] = useState(null);
 	const [quota, setQuota] = useState(null);
 	const [termEn, setTermEn] = useState('');
 	const [termId, setTermId] = useState('');
+	const [minOrderValidation, setMinOrderValidation] = useState({
+		validateStatus: 'success',
+		errorMsg: null,
+	});
 
 	const [isCashbackNominalEnabled, setIsCashbackNominalEnabled] = useState(
 		false
@@ -136,6 +140,31 @@ const VoucherModifyPage = () => {
 			  };
 	};
 
+	const validateMinOrder = () => {
+		if (!isCashbackNominalEnabled && minOrder > maxDiscount) {
+			setMinOrderValidation({
+				validateStatus: 'error',
+				errorMsg:
+					'Minimum Pembelian Tidak Boleh Kurang Dari Maksimum Diskon',
+			});
+			return;
+		}
+
+		if (isCashbackNominalEnabled && minOrder > cashbackNominal) {
+			setMinOrderValidation({
+				validateStatus: 'error',
+				errorMsg:
+					'Minimum Pembelian Tidak Boleh Kurang Dari Nominal Diskon',
+			});
+			return;
+		}
+
+		setMinOrderValidation({
+			validateStatus: 'success',
+			errorMsg: null,
+		});
+	};
+
 	useEffect(() => {
 		if (isCashbackNominalEnabled) {
 			form.setFieldsValue({
@@ -162,6 +191,8 @@ const VoucherModifyPage = () => {
 				});
 			}
 		}
+
+		validateMinOrder();
 	}, [cashbackNominal, maxDiscount, quota]);
 
 	useEffect(() => {
@@ -173,7 +204,7 @@ const VoucherModifyPage = () => {
 	}, [isCodeEnabled]);
 
 	useEffect(() => {
-		console.log('');
+		validateMinOrder();
 	}, [minOrder]);
 
 	useEffect(() => {
@@ -347,25 +378,44 @@ const VoucherModifyPage = () => {
 											name="min_discount_rp"
 											label="Minimal Pembelian (Rp)"
 											placeholder="Masukkan Minimal Pembelian (Rp)"
-											rules={({ getFieldValue }) => ({
-												validator(_, value) {
-													if (
-														value <
-															getFieldValue(
-																'cashback_rp'
-															) ||
-														value <
-															getFieldValue(
-																'max_discount_rp'
-															)
-													) {
-														return Promise.resolve();
-													}
-													return Promise.reject(
-														'Minimum Pembelian Tidak Boleh Kurang Dari Nominal Diskon atau Maksimum Diskon'
-													);
-												},
-											})}
+											help={
+												minOrderValidation.errorMsg ||
+												''
+											}
+											validateStatus={
+												minOrderValidation.validateStatus
+											}
+											// rules={[
+											// 	{
+											// 		min: maxDiscount,
+											// 		message:
+											// 			'Minimum pembelian tidka boleh kurang dari diskon atau maksimum diskon',
+											// 	},
+											// 	{
+											// 		min: cashbackNominal,
+											// 		message:
+											// 			'Minimum pembelian tidka boleh kurang dari diskon atau maksimum diskon',
+											// 		},
+											// 	]}
+											// rules={({ getFieldValue }) => ({
+											// 	validator(_, value) {
+											// 		if (
+											// 			value <
+											// 				getFieldValue(
+											// 					'cashback_rp'
+											// 				) ||
+											// 			value <
+											// 				getFieldValue(
+											// 					'max_discount_rp'
+											// 				)
+											// 		) {
+											// 			return Promise.resolve();
+											// 		}
+											// 		return Promise.reject(
+											// 			'Minimum Pembelian Tidak Boleh Kurang Dari Nominal Diskon atau Maksimum Diskon'
+											// 		);
+											// 	},
+											// })}
 											onChange={(value) =>
 												setMinOrder(value)
 											}

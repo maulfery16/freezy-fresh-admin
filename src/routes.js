@@ -162,15 +162,63 @@ const routes = [
 				path: '/:id/detail',
 			},
 			{
+				path: '/complain',
+				children: [
+					{
+						component: React.lazy(() =>
+							import('./pages/order/complain/index')
+						),
+						exact: true,
+						guard: true,
+						name: 'Order Complained Page',
+						path: '/',
+					},
+					{
+						path: '/:id/detail',
+						children: [
+							{
+								component: React.lazy(() =>
+									import('./pages/order/complain/detail')
+								),
+								exact: true,
+								guard: true,
+								name: 'Order Complain Detail Page',
+								path: '/',
+							},
+							{
+								component: React.lazy(() =>
+									import(
+										'./pages/order/complain/order-detail.jsx'
+									)
+								),
+								exact: true,
+								guard: true,
+								name: 'Order Complain Order Detail Page',
+								path: '/orders',
+							},
+						],
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/order/complain/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Order Complain Add Page',
+						path: '/add',
+					},
+				],
+			},
+			{
 				path: '/review',
 				children: [
 					{
 						component: React.lazy(() =>
-							import('./pages/order/review/index')
+							import('./pages/order/review')
 						),
 						exact: true,
 						guard: true,
-						name: 'Order Review Page',
+						name: 'Order Review List Page',
 						path: '/',
 					},
 					{

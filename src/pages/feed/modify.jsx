@@ -37,18 +37,24 @@ const FeedModifyPage = () => {
 
 	const submit = async (values) => {
 		try {
+			if (!selectedContentType)
+				message.warning('Pilih tipe konten terlebih dahulu');
+
 			setIsSubmitting(true);
-			const storyImage = await storyImageRef.current.getImage();
 
 			const data = new FormData();
-			if (storyImage) data.append('image', storyImage);
-			data.append('content_type', values.content_type);
-			data.append('products', values.products);
-			data.append('long_description[id]', longDescription);
-			data.append('short_description[id]', values.short_description);
-			data.append('title[id]', values.title);
-			data.append('video_link', values.video_link);
-			data.append('video_title[id]', values.video_title);
+			data.append('content_type', selectedContentType);
+			if (selectedContentType === 'VIDEO') {
+				data.append('video_link', values.video_link);
+				data.append('video_title[id]', values.video_title);
+			} else {
+				const storyImage = await storyImageRef.current.getImage();
+				if (storyImage) data.append('image', storyImage);
+				data.append('products', values.products);
+				data.append('long_description[id]', longDescription);
+				data.append('short_description[id]', values.short_description);
+				data.append('title[id]', values.title);
+			}
 
 			if (isCreating) {
 				await feedService.createFeed(data);
@@ -74,9 +80,11 @@ const FeedModifyPage = () => {
 
 	const setFeedInitialValues = () => {
 		return isCreating || !feed
-			? {}
+			? {
+					content_type: 'VIDEO',
+			  }
 			: {
-					content_type: feed.cotent_type,
+					content_type: feed.content_type,
 					products: feed.products,
 					short_description: feed.short_description,
 					title: feed.title?.id,
@@ -132,7 +140,6 @@ const FeedModifyPage = () => {
 											name="content_type"
 											label="Tipe Konten"
 											placeholder="Pilih Tipe Konten"
-											required={true}
 											data={{
 												onChange: (val) =>
 													setSelectedContentType(val),
@@ -216,8 +223,7 @@ const FeedModifyPage = () => {
 													placeholder="Produk Terkait"
 													required
 													data={{
-														url:
-															'product/variants/lists',
+														url: 'product/variants/lists',
 														generateCustomOption: (
 															item
 														) => ({

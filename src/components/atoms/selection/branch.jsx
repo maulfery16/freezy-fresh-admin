@@ -6,6 +6,14 @@ import MoleculeSelectInputGroup from '../../molecules/input-group/select-input';
 const AtomBranchSelect = (props) => {
 	const { optionValue, ...restProps } = props;
 
+	const setOnChangeFunction = () => {
+		if (props.onChange) {
+			return (value, options) => {
+				props.onChange(value, options);
+			};
+		}
+	};
+
 	return (
 		<MoleculeSelectInputGroup
 			{...restProps}
@@ -19,9 +27,7 @@ const AtomBranchSelect = (props) => {
 					value: optionValue ? item[optionValue] : item.id,
 					label: item.name.id,
 				}),
-				onChange: props.onChange
-					? (value, options) => props.onChange(value, options)
-					: () => {},
+				onChange: setOnChangeFunction(),
 			}}
 		/>
 	);

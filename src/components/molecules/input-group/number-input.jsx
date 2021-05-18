@@ -3,6 +3,8 @@ import React from 'react';
 import { Form, InputNumber, Space, Typography } from 'antd';
 
 const MoleculeNumberInputGroup = (props) => {
+	const { name, help, validateStatus, ...inputProps } = props;
+
 	let rules = [];
 	if (props.required) {
 		rules.push({
@@ -27,33 +29,31 @@ const MoleculeNumberInputGroup = (props) => {
 	}
 
 	if (props.rules) {
-		rules.push(props.rules);
+		rules.push(...props.rules);
 	}
+
+	const formItemProps = { help, validateStatus };
+	if (rules.length > 0) formItemProps.rules = rules;
+
 	return (
-		<Form.Item>
+		<Form.Item {...formItemProps}>
 			<Space className="w-100" direction="vertical" size={0}>
 				<Typography.Text>
 					<span className="gray fw5 mb2">{props.label}</span>
 				</Typography.Text>
 
-				<Form.Item
-					name={props.name}
-					noStyle
-					rules={rules}
-					validateStatus={props.validateStatus}
-					help={props.help}
-				>
+				<Form.Item name={name} noStyle>
 					<InputNumber
-						{...props}
+						{...inputProps}
 						className={`br3 ba bw1 b--black-10 pv2 ph3 w-100 ${props.className}`}
 						size="small"
 						min={props.min || 0}
+						parser={(value) => value.replaceAll('.', '')}
 						formatter={(value) =>
 							value
 								.toString()
 								.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 						}
-						parser={(value) => value.replaceAll('.', '')}
 					/>
 				</Form.Item>
 			</Space>

@@ -179,11 +179,9 @@ const OrderPage = () => {
 			<MoleculeDatatableAdditionalAction
 				child={<MoleculeOrderPickupModal />}
 				column={column}
-				exportUrl="https://api.freezyfresh.abcwork.id/storage/templates/orders/order.xlsx"
+				exportUrl="https://api.freezyfresh.abcwork.id/storage/exports/orders/order.xlsx"
 				getLimit={() => orderTableRef.current.totalData}
 				label="Pesanan"
-				requiredParams="branch"
-				requiredParamsLabel="cabang"
 				route="/order"
 				url="orders"
 			/>
@@ -227,11 +225,14 @@ const OrderPage = () => {
 				key="payment-type-filter"
 				placeholder="Semua Tipe Pembayaran"
 				data={{
-					// url: 'delivery-types',
 					options: [
 						{
-							label: 'Marukana.. Udon?',
-							value: 'Marukana.. Udon?',
+							label: 'Freezy Cash',
+							value: 'FREEZY_CASH',
+						},
+						{
+							label: 'Freezy Point',
+							value: 'FREEZY_POINT',
 						},
 					],
 				}}
