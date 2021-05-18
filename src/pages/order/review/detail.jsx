@@ -225,7 +225,14 @@ const OrderReviewDetailPage = () => {
 						</Col>
 
 						<Col>
-							<Link to={`/order/${order?.id}/detail`}>
+							<Link
+								to={{
+									pathname: `/order/${order?.id}/detail`,
+									state: {
+										backUrl: `${location.pathname}`,
+									},
+								}}
+							>
 								<AtomSecondaryButton size="large">
 									Detail Pesanan
 								</AtomSecondaryButton>
