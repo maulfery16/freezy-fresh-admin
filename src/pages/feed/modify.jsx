@@ -80,7 +80,9 @@ const FeedModifyPage = () => {
 
 	const setFeedInitialValues = () => {
 		return isCreating || !feed
-			? {}
+			? {
+					content_type: 'VIDEO',
+			  }
 			: {
 					content_type: feed.cotent_type,
 					products: feed.products,
@@ -221,8 +223,7 @@ const FeedModifyPage = () => {
 													placeholder="Produk Terkait"
 													required
 													data={{
-														url:
-															'product/variants/lists',
+														url: 'product/variants/lists',
 														generateCustomOption: (
 															item
 														) => ({
