@@ -225,9 +225,11 @@ const OrderReviewDetailPage = () => {
 						</Col>
 
 						<Col>
-							<AtomSecondaryButton size="large">
-								Detail Pesanan
-							</AtomSecondaryButton>
+							<Link to={`/order/${order?.id}/detail`}>
+								<AtomSecondaryButton size="large">
+									Detail Pesanan
+								</AtomSecondaryButton>
+							</Link>
 						</Col>
 					</Row>
 
