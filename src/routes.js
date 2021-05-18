@@ -236,7 +236,7 @@ const routes = [
 						),
 						exact: true,
 						guard: true,
-						name: 'Order Page Detail',
+						name: 'Review Detail Order Page',
 						path: '/:id/detail/order/:order_id/detail',
 					},
 				],
