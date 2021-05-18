@@ -174,13 +174,29 @@ const routes = [
 						path: '/',
 					},
 					{
-						component: React.lazy(() =>
-							import('./pages/order/complain/detail')
-						),
-						exact: true,
-						guard: true,
-						name: 'Order Complain Detail Page',
 						path: '/:id/detail',
+						children: [
+							{
+								component: React.lazy(() =>
+									import('./pages/order/complain/detail')
+								),
+								exact: true,
+								guard: true,
+								name: 'Order Complain Detail Page',
+								path: '/',
+							},
+							{
+								component: React.lazy(() =>
+									import(
+										'./pages/order/complain/order-detail.jsx'
+									)
+								),
+								exact: true,
+								guard: true,
+								name: 'Order Complain Order Detail Page',
+								path: '/orders',
+							},
+						],
 					},
 					{
 						component: React.lazy(() =>
