@@ -179,6 +179,10 @@ const menus = [
 				name: 'Promo',
 				link: '/view/promotion',
 			},
+			{
+				name: 'Iklan',
+				link: '/view/ads',
+			},
 		],
 	},
 	{

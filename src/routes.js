@@ -484,6 +484,27 @@ const routes = [
 				path: '/:id/detail',
 			},
 			{
+				path: '/ads',
+				children: [
+					{
+						component: React.lazy(() => import('./pages/view/ads')),
+						exact: true,
+						guard: true,
+						name: 'Advertisement Page',
+						path: '/',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/view/ads/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Edit Advertisement Page',
+						path: '/edit',
+					},
+				],
+			},
+			{
 				path: '/banner',
 				children: [
 					{
@@ -779,7 +800,8 @@ const routes = [
 												),
 												exact: true,
 												guard: true,
-												name: 'Customer Address Page Detail',
+												name:
+													'Customer Address Page Detail',
 												path: '/detail',
 											},
 											{
@@ -790,7 +812,8 @@ const routes = [
 												),
 												exact: true,
 												guard: true,
-												name: 'Customer Address Page Edit',
+												name:
+													'Customer Address Page Edit',
 												path: '/edit',
 											},
 										],
