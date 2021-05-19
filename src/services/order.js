@@ -52,6 +52,23 @@ export default class OrderService extends RequestAdapterService {
 		}
 	}
 
+	async getReviewOrderById(id) {
+		try {
+			const { data } = await super.sendGetRequest(
+				`${this.baseUrl}/v1/admin/review/${id}`
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail getting review order detail: ${super.generateErrorMessage(
+					error
+				)}`
+			);
+		}
+	}
+
 	async getComplaintOrderById(id) {
 		try {
 			const { data } = await super.sendGetRequest(

@@ -214,31 +214,22 @@ const routes = [
 				children: [
 					{
 						component: React.lazy(() =>
-							import('./pages/order/review/index')
+							import('./pages/order/review')
 						),
 						exact: true,
 						guard: true,
-						name: 'Order Review Page',
+						name: 'Order Review List Page',
 						path: '/',
 					},
-					// {
-					// 	component: React.lazy(() =>
-					// 		import('./pages/order/review/detail')
-					// 	),
-					// 	exact: true,
-					// 	guard: true,
-					// 	name: 'Order Review Page Detail',
-					// 	path: '/:id/detail',
-					// },
-					// {
-					// 	component: React.lazy(() =>
-					// 		import('./pages/order/review/order-detail')
-					// 	),
-					// 	exact: true,
-					// 	guard: true,
-					// 	name: 'Order Review Page Detail',
-					// 	path: '/:id/detail/order/:order_id/detail',
-					// },
+					{
+						component: React.lazy(() =>
+							import('./pages/order/review/detail')
+						),
+						exact: true,
+						guard: true,
+						name: 'Order Review Page Detail',
+						path: '/:id/detail',
+					},
 				],
 			},
 		],
@@ -779,7 +770,8 @@ const routes = [
 												),
 												exact: true,
 												guard: true,
-												name: 'Customer Address Page Detail',
+												name:
+													'Customer Address Page Detail',
 												path: '/detail',
 											},
 											{
@@ -790,7 +782,8 @@ const routes = [
 												),
 												exact: true,
 												guard: true,
-												name: 'Customer Address Page Edit',
+												name:
+													'Customer Address Page Edit',
 												path: '/edit',
 											},
 										],

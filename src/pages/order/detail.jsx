@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import { Collapse, message, Skeleton, Space, Typography } from 'antd';
-import { useParams } from 'react-router';
+import { Col, Collapse, message, Row, Skeleton, Space, Typography } from 'antd';
+import { Link, useParams, withRouter } from 'react-router-dom';
 
 import AtomCard from '../../components/atoms/card';
+import AtomSecondaryButton from '../../components/atoms/button/secondary-button';
 import AtomDetailCollapseHeader from '../../components/atoms/order-detail-collapse-header';
 import MoleculeOrderDeliveryInfo from '../../components/molecules/order/detail/delivery-info';
 import MoleculeOrderDetailBillingMethodInfo from '../../components/molecules/order/detail/billing-method-info';
@@ -18,7 +19,7 @@ import OrganismLayout from '../../components/organisms/layout';
 import OrganismProductOrderDatatable from '../../components/organisms/datatable/product-order-datatable';
 import OrderService from '../../services/order';
 
-const OrderDetailPage = () => {
+const OrderDetailPage = (props) => {
 	const orderService = new OrderService();
 	const { id } = useParams();
 	const [order, setOrder] = useState(null);
@@ -55,12 +56,24 @@ const OrderDetailPage = () => {
 				<Skeleton active />
 			) : (
 				<>
-					{' '}
-					<Typography.Title level={4}>
-						<span className="fw7">
-							{`Detail Pesanan`.toUpperCase()}
-						</span>
-					</Typography.Title>
+					<Row justify="space-between">
+						<Typography.Title level={4}>
+							<span className="fw7">
+								{`Detail Pesanan`.toUpperCase()}
+							</span>
+						</Typography.Title>
+
+						{props?.location?.state?.backUrl && (
+							<Col>
+								<Link to={props.location.state.backUrl}>
+									<AtomSecondaryButton size="large">
+										Kembali
+									</AtomSecondaryButton>
+								</Link>
+							</Col>
+						)}
+					</Row>
+
 					<Space
 						className="mt3 w-100"
 						direction="vertical"
@@ -187,6 +200,4 @@ const OrderDetailPage = () => {
 	);
 };
 
-export default OrderDetailPage;
-
-<div>ldflwjkflkwjef</div>;
+export default withRouter(OrderDetailPage);

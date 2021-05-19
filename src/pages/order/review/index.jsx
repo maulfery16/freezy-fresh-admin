@@ -76,7 +76,7 @@ const ReviewPage = () => {
 			dataIndex: 'status',
 			render: (_, record) => (
 				<Space size="middle">
-					<Link to={`/admin/review/${record.id}/detail`}>
+					<Link to={`/order/review/${record.id}/detail`}>
 						<EyeFilled className="f4 blue" />
 					</Link>
 
