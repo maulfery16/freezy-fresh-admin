@@ -13,7 +13,6 @@ import AtomSecondaryButton from '../../components/atoms/button/secondary-button'
 import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
 import MoleculeDatatableDateRange from '../../components/molecules/datatable/date-range-plugin';
 import MoleculeDatatableFilter from '../../components/molecules/datatable/filter-plugin';
-import MoleculeOrderPickupModal from '../../components/molecules/order/pickup-modal';
 import MoleculeSelectInputGroup from '../../components/molecules/input-group/select-input';
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
@@ -129,10 +128,8 @@ const OrderPage = () => {
 				orderService.translateOrderEnum(item.admin_status),
 		},
 	];
-	const [
-		isChangeStatusModalVisible,
-		setIsChangeStatusModalVisible,
-	] = useState(false);
+	const [isChangeStatusModalVisible, setIsChangeStatusModalVisible] =
+		useState(false);
 
 	const changeStatus = async (values) => {
 		try {
@@ -177,7 +174,6 @@ const OrderPage = () => {
 	const renderAdditionalAction = () => {
 		return (
 			<MoleculeDatatableAdditionalAction
-				child={<MoleculeOrderPickupModal />}
 				column={column}
 				exportUrl="https://api.freezyfresh.abcwork.id/storage/exports/orders/order.xlsx"
 				getLimit={() => orderTableRef.current.totalData}
