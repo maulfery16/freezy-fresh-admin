@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/display-name */
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -57,11 +58,13 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 			dataIndex: 'branches',
 			render: (_, record) => record.branch.tows,
 			sorter: true,
+			hidden: !props.isEditing || !props.isReadOnly ? true : false,
 		},
 		{
 			title: 'Rating',
 			dataIndex: 'rating',
 			sorter: true,
+			hidden: !props.isEditing || !props.isReadOnly ? true : false,
 		},
 		{
 			title: 'Jumlah Favorite',
@@ -122,6 +125,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
 			),
 			sorter: true,
+			hidden: !props.isEditing || !props.isReadOnly ? true : false,
 		},
 		{
 			title: 'Date Exp Terlama',
@@ -131,6 +135,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
 			),
 			sorter: true,
+			hidden: !props.isEditing || !props.isReadOnly ? true : false,
 		},
 		{
 			title: 'Harga Normal',
@@ -152,19 +157,26 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 			sorter: true,
 		},
 		{
-			title: 'Diskon',
+			title: 'Diskon (%)',
 			dataIndex: 'discount_percentage',
 			editable: true,
 			render: (discount) => (discount ? `${discount} %` : null),
 			sorter: true,
 		},
-	];
-
-	if (!props.isReadOnly) {
-		columns.push({
+		{
+			title: 'Status Binding',
+			dataIndex: 'binding_status',
+			render: (synced) => (
+				<SyncOutlined
+					className={`f4 fw8 ${synced ? 'dark-green' : 'dark-red'}`}
+				/>
+			),
+		},
+		{
 			align: 'center',
 			title: 'Aksi',
 			dataIndex: 'action',
+			hidden: props.isReadOnly ? true : false,
 			render: (_, record) => {
 				const editable = isEditing(record);
 				return editable ? (
@@ -179,35 +191,38 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 						</Popconfirm>
 					</Space>
 				) : (
-					<AtomPrimaryButton
-						disabled={editingKey !== ''}
-						onClick={() => edit(record)}
-					>
-						Atur
-					</AtomPrimaryButton>
+					<Space>
+						<AtomPrimaryButton
+							disabled={editingKey !== ''}
+							onClick={() => edit(record)}
+						>
+							Atur
+						</AtomPrimaryButton>
+
+						<AtomPrimaryButton
+							onClick={() =>
+								setBeingSyncedProductId(record.branch_sku_id)
+							}
+						>
+							<SyncOutlined
+								className={`f4 fw8 ${
+									record.is_synced ? 'dark-green' : 'dark-red'
+								}`}
+							/>
+						</AtomPrimaryButton>
+					</Space>
 				);
 			},
-		});
-	}
+		},
+		p,
+	];
 
-	if (props.isReadOnly || props.isEditing) {
-		columns.push({
-			align: 'center',
-			title: '',
-			dataIndex: 'is_synced',
-			render: (synced) => (
-				<SyncOutlined
-					className={`f4 fw8 ${synced ? 'dark-green' : 'dark-red'}`}
-				/>
-			),
-		});
-	}
-
+	const [beingSyncedProductId, setBeingSyncedProductId] = useState(null);
+	const [branch, setBranch] = useState(null);
 	const [data, setData] = useState(props.defaultData);
 	const [editingKey, setEditingKey] = useState('');
 	const [form] = Form.useForm();
 	const [keyword, setKeyword] = useState('');
-	const [branch, setBranch] = useState(null);
 
 	const cancel = () => setEditingKey('');
 
@@ -370,9 +385,11 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 				<Table
 					bordered
 					dataSource={getDatatableData()}
-					columns={mergeColumn}
+					columns={mergeColumn.filter((column) => !column.hidden)}
 					rowKey="branch_sku_id"
-					scroll={{ x: 2880 }}
+					scroll={{
+						x: !props.isEditing || !props.isReadOnly ? 2160 : 2880,
+					}}
 					components={{
 						body: {
 							cell: EditableCell,
