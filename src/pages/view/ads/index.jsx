@@ -103,7 +103,7 @@ const AdsPage = () => {
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Title Iklan (EN)"
-										content={` ${ads.title.en || '-'}`}
+										content={`${ads.title.en || '-'}`}
 									/>
 								</Col>
 
