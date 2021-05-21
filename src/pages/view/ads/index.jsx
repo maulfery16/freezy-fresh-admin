@@ -94,17 +94,34 @@ const AdsPage = () => {
 
 								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Title Iklan (ID | EN)"
-										content={`${ads.title.id || '-'} | ${
-											ads.title.en || '-'
-										}`}
+										title="Title Iklan (ID)"
+										content={`${ads.title.id || '-'}
+										`}
 									/>
 								</Col>
 
 								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Nama Promosi"
-										content={ads.promotion_title?.id || '-'}
+										title="Title Iklan (EN)"
+										content={` ${ads.title.en || '-'}`}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
+										title="Nama Promosi (ID)"
+										content={
+											ads.promotion?.title?.id || '-'
+										}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
+										title="Nama Promosi (EN)"
+										content={
+											ads.promotion?.title?.en || '-'
+										}
 									/>
 								</Col>
 
