@@ -214,7 +214,6 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 				);
 			},
 		},
-		p,
 	];
 
 	const [beingSyncedProductId, setBeingSyncedProductId] = useState(null);
