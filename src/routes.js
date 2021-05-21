@@ -496,6 +496,29 @@ const routes = [
 				],
 			},
 			{
+				path: '/special-benefit',
+				children: [
+					{
+						component: React.lazy(() =>
+							import('./pages/view/special-benefit')
+						),
+						exact: true,
+						guard: true,
+						name: 'Special Benefit Page',
+						path: '/',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/view/special-benefit/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Edit Special Benefit Page',
+						path: '/edit',
+					},
+				],
+			},
+			{
 				path: '/banner',
 				children: [
 					{
