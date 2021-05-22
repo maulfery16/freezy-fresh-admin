@@ -22,7 +22,9 @@ const AdsPage = () => {
 			setLoading(true);
 
 			const { data: ads } = await adsService.getAdvertisement();
-			setAds(ads.data);
+
+			if (typeof ads.data === Object)
+				if (ads.data.length > 0) setAds(ads.data);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
@@ -94,17 +96,34 @@ const AdsPage = () => {
 
 								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Title Iklan (ID | EN)"
-										content={`${ads.title.id || '-'} | ${
-											ads.title.en || '-'
-										}`}
+										title="Title Iklan (ID)"
+										content={`${ads.title.id || '-'}
+										`}
 									/>
 								</Col>
 
 								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Nama Promosi"
-										content={ads.promotion_title?.id || '-'}
+										title="Title Iklan (EN)"
+										content={`${ads.title.en || '-'}`}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
+										title="Nama Promosi (ID)"
+										content={
+											ads.promotion?.title?.id || '-'
+										}
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeInfoGroup
+										title="Nama Promosi (EN)"
+										content={
+											ads.promotion?.title?.en || '-'
+										}
 									/>
 								</Col>
 

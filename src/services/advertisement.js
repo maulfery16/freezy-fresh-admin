@@ -1,11 +1,11 @@
 import RequestAdapterService from './request-adapter';
 
 export default class AdvertisementService extends RequestAdapterService {
-	async editAdvertisement(id, circleFavorite) {
+	async editAdvertisement(ads) {
 		try {
 			const { data } = await super.sendPostMultipartRequest(
-				`${this.baseUrl}/v1/advertisements/`,
-				circleFavorite
+				`${this.baseUrl}/v1/advertisements`,
+				ads
 			);
 
 			return data;
