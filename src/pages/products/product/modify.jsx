@@ -27,7 +27,6 @@ import MoleculeTextEditorGroup from '../../../components/molecules/input-group/t
 import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../../components/organisms/layout';
 import OrganismProductBranchDatatable from '../../../components/organisms/datatable/product-branch-datatable';
-import OrganismProductTOWSDatatable from '../../../components/organisms/datatable/product-tows-datatable';
 
 import MasterService from '../../../services/master';
 import ProductService from '../../../services/product';
@@ -714,12 +713,6 @@ const ProductModifyPage = () => {
 							</Row>
 						</AtomCard>
 					</Form>
-
-					<OrganismProductTOWSDatatable
-						branches={branches}
-						setBranches={setBranches}
-					/>
-
 					<AtomCard title="">
 						<Tabs
 							onTabClick={(key) => {

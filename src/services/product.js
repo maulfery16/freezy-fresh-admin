@@ -50,6 +50,23 @@ export default class ProductService extends RequestAdapterService {
 		}
 	}
 
+	async getTenantProduct(tenant) {
+		try {
+			const { data } = await super.sendGetRequest(
+				`${this.baseUrl}/v1/products/fresh-factory/${tenant}`
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail getting ${tenant} products: ${super.generateErrorMessage(
+					error
+				)}`
+			);
+		}
+	}
+
 	async getProductDetailByIdAndBranch(id, params) {
 		try {
 			const { data } = await super.sendGetRequest(

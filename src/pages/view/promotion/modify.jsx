@@ -72,11 +72,16 @@ const PromotionModifyPage = () => {
 	const submit = async (values) => {
 		try {
 			setIsSubmitting(true);
-			const promotionImageMobile = await promotionImageMobileRef.current.getImage();
-			const promotionImageDekstop = await promotionImageDekstopRef.current.getImage();
-			const promotionImageSmall1 = await promotionImageSmall1Ref.current.getImage();
-			const promotionImageSmall2 = await promotionImageSmall2Ref.current.getImage();
-			const promotionImageSmall3 = await promotionImageSmall3Ref.current.getImage();
+			const promotionImageMobile =
+				await promotionImageMobileRef.current.getImage();
+			const promotionImageDekstop =
+				await promotionImageDekstopRef.current.getImage();
+			const promotionImageSmall1 =
+				await promotionImageSmall1Ref.current.getImage();
+			const promotionImageSmall2 =
+				await promotionImageSmall2Ref.current.getImage();
+			const promotionImageSmall3 =
+				await promotionImageSmall3Ref.current.getImage();
 			const dataProduct = await viewTableRef.current.data;
 
 			console.log(dataProduct);
@@ -177,46 +182,46 @@ const PromotionModifyPage = () => {
 														minimum 0 x 0px (Untuk gambar optimal gunakan ukuran minimum 0 x 0 px)"
 														fileInputs={[
 															{
-																defaultValue: promotion
-																	? promotion.image_mobile
-																	: null,
+																defaultValue:
+																	promotion
+																		? promotion.image_mobile
+																		: null,
 																isMobileImage: true,
-																label:
-																	'Foto Banner Mobile',
+																label: 'Foto Banner Mobile',
 																ref: promotionImageMobileRef,
 																required: true,
 															},
 															{
-																defaultValue: promotion
-																	? promotion.image_desktop
-																	: null,
-																label:
-																	'Foto Banner Dekstop',
+																defaultValue:
+																	promotion
+																		? promotion.image_desktop
+																		: null,
+																label: 'Foto Banner Dekstop',
 																ref: promotionImageDekstopRef,
 																required: true,
 															},
 															{
-																defaultValue: promotion
-																	? promotion.addition_image_1
-																	: null,
-																label:
-																	'Foto Banner Kecil 1',
+																defaultValue:
+																	promotion
+																		? promotion.addition_image_1
+																		: null,
+																label: 'Foto Banner Kecil 1',
 																ref: promotionImageSmall1Ref,
 															},
 															{
-																defaultValue: promotion
-																	? promotion.addition_image_2
-																	: null,
-																label:
-																	'Foto Banner Kecil 2',
+																defaultValue:
+																	promotion
+																		? promotion.addition_image_2
+																		: null,
+																label: 'Foto Banner Kecil 2',
 																ref: promotionImageSmall2Ref,
 															},
 															{
-																defaultValue: promotion
-																	? promotion.addition_image_3
-																	: null,
-																label:
-																	'Foto Banner Kecil 3',
+																defaultValue:
+																	promotion
+																		? promotion.addition_image_3
+																		: null,
+																label: 'Foto Banner Kecil 3',
 																ref: promotionImageSmall3Ref,
 															},
 														]}
@@ -253,13 +258,11 @@ const PromotionModifyPage = () => {
 															options: [
 																{
 																	value: true,
-																	label:
-																		'Info',
+																	label: 'Info',
 																},
 																{
 																	value: false,
-																	label:
-																		'Promo',
+																	label: 'Promo',
 																},
 															],
 														}}

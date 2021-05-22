@@ -5,6 +5,7 @@ import React, {
 	forwardRef,
 	useEffect,
 	useImperativeHandle,
+	useRef,
 	useState,
 } from 'react';
 import ReactMoment from 'react-moment';
@@ -15,11 +16,13 @@ import {
 	Input,
 	InputNumber,
 	message,
+	Modal,
 	Popconfirm,
 	Row,
 	Select,
 	Space,
 	Table,
+	Typography,
 } from 'antd';
 import {
 	CheckOutlined,
@@ -32,6 +35,10 @@ import AtomBranchSelection from '../../atoms/selection/branch';
 import AtomCard from '../../atoms/card';
 import AtomNumberFormat from '../../atoms/number-format';
 import AtomPrimaryButton from '../../atoms/button/primary-button';
+import AtomSecondaryButton from '../../atoms/button/secondary-button';
+
+import ProductService from '../../../services/product';
+import MoleculeSelectInputGroup from '../../molecules/input-group/select-input';
 
 const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 	const columns = [
@@ -43,7 +50,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		{
 			title: 'Cabang',
 			dataIndex: 'branches',
-			render: (_, record) => record.branch.id,
+			render: (_, record) => record.branch?.id,
 			sorter: true,
 		},
 		{
@@ -57,11 +64,13 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 			dataIndex: 'branches',
 			render: (_, record) => record.branch.tows,
 			sorter: true,
+			hidden: !props.isEditing || !props.isReadOnly ? true : false,
 		},
 		{
 			title: 'Rating',
 			dataIndex: 'rating',
 			sorter: true,
+			hidden: !props.isEditing || !props.isReadOnly ? true : false,
 		},
 		{
 			title: 'Jumlah Favorite',
@@ -122,6 +131,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
 			),
 			sorter: true,
+			hidden: !props.isEditing || !props.isReadOnly ? true : false,
 		},
 		{
 			title: 'Date Exp Terlama',
@@ -131,6 +141,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
 			),
 			sorter: true,
+			hidden: !props.isEditing || !props.isReadOnly ? true : false,
 		},
 		{
 			title: 'Harga Normal',
@@ -152,20 +163,31 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 			sorter: true,
 		},
 		{
-			title: 'Diskon',
+			title: 'Diskon (%)',
 			dataIndex: 'discount_percentage',
 			editable: true,
 			render: (discount) => (discount ? `${discount} %` : null),
 			sorter: true,
 		},
-	];
-
-	if (!props.isReadOnly) {
-		columns.push({
+		{
+			title: 'Status Binding',
+			dataIndex: 'fresh_factory_product_sku_number',
+			align: 'center',
+			render: (synced, _, index) => (
+				<SyncOutlined
+					onClick={() => setBeingSyncedProductIndex(index)}
+					className={`f4 fw8 pointer ${
+						synced ? 'dark-green' : 'dark-red'
+					}`}
+				/>
+			),
+		},
+		{
 			align: 'center',
 			title: 'Aksi',
 			dataIndex: 'action',
-			render: (_, record) => {
+			hidden: props.isReadOnly ? true : false,
+			render: (_, record, index) => {
 				const editable = isEditing(record);
 				return editable ? (
 					<Space>
@@ -179,37 +201,67 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 						</Popconfirm>
 					</Space>
 				) : (
-					<AtomPrimaryButton
-						disabled={editingKey !== ''}
-						onClick={() => edit(record)}
-					>
-						Atur
-					</AtomPrimaryButton>
+					<Space>
+						<AtomPrimaryButton
+							disabled={editingKey !== ''}
+							onClick={() => edit(record)}
+						>
+							Atur
+						</AtomPrimaryButton>
+
+						<AtomSecondaryButton
+							onClick={() =>
+								record.fresh_factory_product_sku_number
+									? setBeingRemoveFFProductIndex(index)
+									: setBeingSyncedProductIndex(index)
+							}
+						>
+							<SyncOutlined
+								className={`f6 fw8 ${
+									record.fresh_factory_product_sku_number
+										? 'dark-green'
+										: 'dark-red'
+								}`}
+							/>
+						</AtomSecondaryButton>
+					</Space>
 				);
 			},
-		});
-	}
+		},
+	];
 
-	if (props.isReadOnly || props.isEditing) {
-		columns.push({
-			align: 'center',
-			title: '',
-			dataIndex: 'is_synced',
-			render: (synced) => (
-				<SyncOutlined
-					className={`f4 fw8 ${synced ? 'dark-green' : 'dark-red'}`}
-				/>
-			),
-		});
-	}
+	const productService = new ProductService();
+	const tenantSelectRef = useRef();
 
+	const [branch, setBranch] = useState(null);
 	const [data, setData] = useState(props.defaultData);
 	const [editingKey, setEditingKey] = useState('');
 	const [form] = Form.useForm();
+	const [inventroyProduct, setInventroyProduct] = useState([]);
 	const [keyword, setKeyword] = useState('');
-	const [branch, setBranch] = useState(null);
+	const [selectedTenant, setSelectedTenant] = useState(null);
+	const [selectedFFProduct, setSelectedFFProduct] = useState(null);
+	const [T2TProduct, setT2TProduct] = useState([]);
+	const [TOWSProduct, setTOWSProduct] = useState([]);
+	const [beingSyncedProductIndex, setBeingSyncedProductIndex] =
+		useState(null);
+	const [beingRemoveFFProductIndex, setBeingRemoveFFProductIndex] =
+		useState(null);
 
 	const cancel = () => setEditingKey('');
+
+	const connectProduct = () => {
+		const newData = [...data];
+
+		newData[beingSyncedProductIndex].fresh_factory_product_sku_number =
+			selectedFFProduct;
+		newData[beingSyncedProductIndex].fresh_factory_product_type =
+			selectedTenant;
+		setSelectedTenant(null);
+		setSelectedFFProduct(null);
+		setBeingSyncedProductIndex(null);
+		setData(newData);
+	};
 
 	const countPriceWithDiscount = (row, index) => {
 		let discountChanged = false;
@@ -282,7 +334,31 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		return filteredData;
 	};
 
+	const getTenantProduct = async (tenant, setter) => {
+		try {
+			const response = await productService.getTenantProduct(tenant);
+
+			setter(
+				response.data.map((data) => ({
+					label: data.name,
+					value: data.skuNumber,
+				}))
+			);
+		} catch (error) {
+			message.error(error.message);
+		}
+	};
+
 	const isEditing = (record) => record.branch_sku_id === editingKey;
+
+	const removeSyncedProduct = () => {
+		const newData = [...data];
+
+		newData[beingRemoveFFProductIndex].fresh_factory_product_sku_number =
+			null;
+		setBeingRemoveFFProductIndex(null);
+		setData(newData);
+	};
 
 	const save = async (id) => {
 		try {
@@ -310,6 +386,19 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		}
 	};
 
+	const setTenantProduct = () => {
+		if (!selectedTenant) return [];
+
+		switch (selectedTenant) {
+			case 'TOWS':
+				return TOWSProduct;
+			case 'INVENTORY':
+				return inventroyProduct;
+			case 'T2T':
+				return T2TProduct;
+		}
+	};
+
 	const mergeColumn = columns.map((col) => {
 		if (!col.editable) return col;
 
@@ -323,6 +412,14 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 			}),
 		};
 	});
+
+	useEffect(() => {
+		(async () => {
+			await getTenantProduct('inventory', setInventroyProduct);
+			await getTenantProduct('tows', setTOWSProduct);
+			await getTenantProduct('t2t', setT2TProduct);
+		})();
+	}, []);
 
 	useEffect(() => {
 		setData(props.defaultData);
@@ -370,9 +467,11 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 				<Table
 					bordered
 					dataSource={getDatatableData()}
-					columns={mergeColumn}
+					columns={mergeColumn.filter((column) => !column.hidden)}
 					rowKey="branch_sku_id"
-					scroll={{ x: 2880 }}
+					scroll={{
+						x: !props.isEditing || !props.isReadOnly ? 2160 : 2880,
+					}}
 					components={{
 						body: {
 							cell: EditableCell,
@@ -383,6 +482,111 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 					}}
 				/>
 			</Form>
+
+			{beingSyncedProductIndex !== null && (
+				<Modal
+					visible={true}
+					footer={
+						<AtomPrimaryButton
+							size="large"
+							onClick={connectProduct}
+						>
+							Simpan
+						</AtomPrimaryButton>
+					}
+					title={
+						<span className="f5">
+							Hubungkan produk Fresh Factory ke Freezy Fresh
+						</span>
+					}
+				>
+					<Row>
+						<Col span={24}>
+							<MoleculeSelectInputGroup
+								label="Jenis Produk"
+								name="product_type"
+								placeholder="Jenis Produk"
+								data={{
+									onChange: (_, options) => {
+										setSelectedTenant(options.value);
+										tenantSelectRef.current.refetchData();
+									},
+									options: [
+										{ label: 'TOWS', value: 'TOWS' },
+										{
+											label: 'Inventory',
+											value: 'INVENTORY',
+										},
+										{ label: 'T2T', value: 'T2T' },
+									],
+								}}
+							/>
+						</Col>
+
+						<Col span={24}>
+							<MoleculeSelectInputGroup
+								label="Nama Produk"
+								name="product_type"
+								optionsRef={tenantSelectRef}
+								placeholder="Nama Produk"
+								data={{
+									options: setTenantProduct(),
+									onChange: (_, options) => {
+										setSelectedFFProduct(options.value);
+									},
+								}}
+							/>
+						</Col>
+					</Row>
+				</Modal>
+			)}
+
+			{beingRemoveFFProductIndex !== null && (
+				<Modal
+					footer={false}
+					closable={false}
+					title={false}
+					visible={true}
+					width={420}
+				>
+					<Row
+						gutter={[0, 24]}
+						className="ph3 br4 pv2"
+						justify="center"
+					>
+						<Col>
+							<Typography.Text strong>
+								Apakah anda akan melepas binding produk ini?
+							</Typography.Text>
+						</Col>
+
+						<Col span={24}>
+							<Row justify="space-between">
+								<Col span={11}>
+									<AtomSecondaryButton
+										block
+										size="large"
+										onClick={() =>
+											setBeingRemoveFFProductIndex(null)
+										}
+									>
+										Tidak
+									</AtomSecondaryButton>
+								</Col>
+								<Col span={11}>
+									<AtomPrimaryButton
+										block
+										size="large"
+										onClick={removeSyncedProduct}
+									>
+										Ya
+									</AtomPrimaryButton>
+								</Col>
+							</Row>
+						</Col>
+					</Row>
+				</Modal>
+			)}
 		</AtomCard>
 	);
 });
