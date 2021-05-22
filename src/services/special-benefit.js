@@ -1,35 +1,35 @@
 import RequestAdapterService from './request-adapter';
 
-export default class AdvertisementService extends RequestAdapterService {
-	async editAdvertisement(ads) {
+export default class SpecialBenefitService extends RequestAdapterService {
+	async editSpecialBenefit(specialBenefit) {
 		try {
 			const { data } = await super.sendPostMultipartRequest(
-				`${this.baseUrl}/v1/advertisements`,
-				ads
+				`${this.baseUrl}/v1/special-benefits`,
+				specialBenefit
 			);
 
 			return data;
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail updating advertisement: ${super.generateErrorMessage(
+				`Fail updating special benefit: ${super.generateErrorMessage(
 					error
 				)}`
 			);
 		}
 	}
 
-	async getAdvertisement() {
+	async getSpecialBenefit() {
 		try {
 			const data = await super.sendGetRequest(
-				`${this.baseUrl}/v1/advertisements`
+				`${this.baseUrl}/v1/special-benefits`
 			);
 
 			return data;
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail getting advertisement: ${super.generateErrorMessage(
+				`Fail getting special benefit: ${super.generateErrorMessage(
 					error
 				)}`
 			);

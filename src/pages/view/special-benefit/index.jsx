@@ -10,21 +10,24 @@ import MoleculeInfoGroup from '../../../components/molecules/info-group';
 import MoleculeImageGroup from '../../../components/molecules/molecule-image-group';
 import OrganismLayout from '../../../components/organisms/layout';
 
-import AdvertisementService from '../../../services/advertisement';
+import SpecialBenefitService from '../../../services/special-benefit';
 
-const AdsPage = () => {
-	const adsService = new AdvertisementService();
-	const [ads, setAds] = useState(null);
+const SpecialBenefitPage = () => {
+	const specialBenefitService = new SpecialBenefitService();
+	const [specialBenefit, setSpecialBenefit] = useState(null);
 	const [loading, setLoading] = useState(null);
 
-	const getAdsDetail = async () => {
+	const getSpecialBenefitDetail = async () => {
 		try {
 			setLoading(true);
 
-			const { data: ads } = await adsService.getAdvertisement();
+			const {
+				data: specialBenefit,
+			} = await specialBenefitService.getSpecialBenefit();
 
-			if (typeof ads.data === Object)
-				if (ads.data.length > 0) setAds(ads.data);
+			if (typeof specialBenefit.data === Object)
+				if (specialBenefit.data.length > 0)
+					setSpecialBenefit(specialBenefit.data);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
@@ -35,7 +38,7 @@ const AdsPage = () => {
 
 	useEffect(() => {
 		(async () => {
-			getAdsDetail();
+			getSpecialBenefitDetail();
 		})();
 	}, []);
 
@@ -43,23 +46,25 @@ const AdsPage = () => {
 		<OrganismLayout
 			breadcumbs={[
 				{ name: `Tampilan`, link: '/view' },
-				{ name: `Iklan`, link: location.pathname },
+				{ name: `Special Benefit`, link: location.pathname },
 			]}
-			title="Iklan"
+			title="Special Benefit"
 		>
 			<Row align="middle" justify="space-between">
 				<Col>
 					<Typography.Title level={4}>
-						<span className="fw7">{`Iklan`.toUpperCase()}</span>
+						<span className="fw7">
+							{`Special Benefit`.toUpperCase()}
+						</span>
 					</Typography.Title>
 				</Col>
 
 				<Col>
 					<Link
 						to={{
-							pathname: '/view/ads/edit',
+							pathname: '/view/special-benefit/edit',
 							state: {
-								ads: ads,
+								specialBenefit: specialBenefit,
 							},
 						}}
 					>
@@ -70,14 +75,16 @@ const AdsPage = () => {
 
 			{loading ? (
 				<Skeleton active />
-			) : !ads && !loading ? (
+			) : !specialBenefit && !loading ? (
 				<Typography.Text strong>
-					<span className="denim f5">Belum ada Iklan</span>
+					<span className="denim f5">
+						Belum ada Special Benefit, edit detail untuk menambahkan
+					</span>
 				</Typography.Text>
 			) : (
 				<Row align="top" className="mt4" gutter={24}>
 					<Col span={18}>
-						<AtomCard title={`Info Iklan`}>
+						<AtomCard title={`Info Special Benefit`}>
 							<Row
 								align="top"
 								style={{ paddingTop: '1rem' }}
@@ -87,7 +94,7 @@ const AdsPage = () => {
 									<MoleculeInfoGroup
 										title="Status"
 										content={
-											ads.is_active
+											specialBenefit.is_active
 												? 'AKTIF'
 												: 'TIDAK AKTIF' || '-'
 										}
@@ -96,34 +103,20 @@ const AdsPage = () => {
 
 								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Title Iklan (ID)"
-										content={`${ads.title.id || '-'}
+										title="Title Special Benefit (ID)"
+										content={`${
+											specialBenefit.title.id || '-'
+										}
 										`}
 									/>
 								</Col>
 
 								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Title Iklan (EN)"
-										content={`${ads.title.en || '-'}`}
-									/>
-								</Col>
-
-								<Col span={12}>
-									<MoleculeInfoGroup
-										title="Nama Promosi (ID)"
-										content={
-											ads.promotion?.title?.id || '-'
-										}
-									/>
-								</Col>
-
-								<Col span={12}>
-									<MoleculeInfoGroup
-										title="Nama Promosi (EN)"
-										content={
-											ads.promotion?.title?.en || '-'
-										}
+										title="Title Special Benefit (EN)"
+										content={`${
+											specialBenefit.title.en || '-'
+										}`}
 									/>
 								</Col>
 
@@ -135,13 +128,13 @@ const AdsPage = () => {
 												images={[
 													{
 														source:
-															ads.banner_mobile ||
+															specialBenefit.banner_mobile ||
 															null,
 														label: 'Mobile',
 													},
 													{
 														source:
-															ads.banner_desktop ||
+															specialBenefit.banner_desktop ||
 															null,
 														label: 'Dekstop',
 													},
@@ -164,7 +157,8 @@ const AdsPage = () => {
 										title="Tanggal di Daftarkan"
 										content={
 											<ReactMoment format="DD-MM-YYYY">
-												{ads.created_at || '-'}
+												{specialBenefit.created_at ||
+													'-'}
 											</ReactMoment>
 										}
 									/>
@@ -175,7 +169,8 @@ const AdsPage = () => {
 										title="Tanggal di Update"
 										content={
 											<ReactMoment format="DD-MM-YYYY">
-												{ads.updated_at || '-'}
+												{specialBenefit.updated_at ||
+													'-'}
 											</ReactMoment>
 										}
 									/>
@@ -184,14 +179,18 @@ const AdsPage = () => {
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Didaftarkan Oleh"
-										content={ads.created_by || '-'}
+										content={
+											specialBenefit.created_by || '-'
+										}
 									/>
 								</Col>
 
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Diupdate Oleh"
-										content={ads.updated_by || '-'}
+										content={
+											specialBenefit.updated_by || '-'
+										}
 									/>
 								</Col>
 							</Row>
@@ -203,4 +202,4 @@ const AdsPage = () => {
 	);
 };
 
-export default AdsPage;
+export default SpecialBenefitPage;
