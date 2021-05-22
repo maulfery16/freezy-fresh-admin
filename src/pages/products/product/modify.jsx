@@ -743,35 +743,7 @@ const ProductModifyPage = () => {
 					</AtomCard>
 
 					<OrganismProductBranchDatatable
-						// defaultData={productVariants}
-						defaultData={[
-							{
-								branch_id: 'azkvml597yxe8b9j',
-								sku_id: 'SKU0071',
-								is_freezy_pick: true,
-								is_manage_stock: true,
-								published_stock: 5,
-								price: 10000,
-								discount_percentage: 0,
-								fixed_price: 10000,
-								fresh_factory_product_type: 'INVENTORY',
-								fresh_factory_product_sku_number: '002',
-							},
-							{
-								branch_id: 'azkvml597yxe8b9j',
-								sku_id: 'SKU0072',
-								is_freezy_pick: true,
-								is_manage_stock: true,
-								published_stock: 5,
-								price: 10000,
-								discount_percentage: 0,
-								fixed_price: 10000,
-								fresh_factory_product_type: 'TOWS',
-								fresh_factory_product_sku_number: '001',
-							},
-						]}
-						isEditing={!isCreating}
-						generateProductVariants={generateProductVariants}
+						defaultData={productVariants}
 						setProductVariants={setProductVariants}
 					/>
 
