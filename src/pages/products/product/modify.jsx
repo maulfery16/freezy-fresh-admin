@@ -744,6 +744,8 @@ const ProductModifyPage = () => {
 
 					<OrganismProductBranchDatatable
 						defaultData={productVariants}
+						isEditing={!isCreating}
+						generateProductVariants={generateProductVariants}
 						setProductVariants={setProductVariants}
 					/>
 
