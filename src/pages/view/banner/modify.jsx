@@ -54,8 +54,6 @@ const BannerModifyPage = () => {
 
 	const submit = async (values) => {
 		try {
-			console.log(values);
-
 			setIsSubmitting(true);
 			const dekstopImage = await dekstopImageRef.current.getImage();
 			const mobileImage = await mobileImageRef.current.getImage();
