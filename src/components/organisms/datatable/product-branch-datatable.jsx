@@ -16,11 +16,13 @@ import {
 	Input,
 	InputNumber,
 	message,
+	Modal,
 	Popconfirm,
 	Row,
 	Select,
 	Space,
 	Table,
+	Typography,
 } from 'antd';
 import {
 	CheckOutlined,
@@ -33,6 +35,7 @@ import AtomBranchSelection from '../../atoms/selection/branch';
 import AtomCard from '../../atoms/card';
 import AtomNumberFormat from '../../atoms/number-format';
 import AtomPrimaryButton from '../../atoms/button/primary-button';
+import AtomSecondaryButton from '../../atoms/button/secondary-button';
 
 const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 	const columns = [
@@ -44,7 +47,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		{
 			title: 'Cabang',
 			dataIndex: 'branches',
-			render: (_, record) => record.branch.id,
+			render: (_, record) => record.branch?.id,
 			sorter: true,
 		},
 		{
@@ -165,7 +168,8 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		},
 		{
 			title: 'Status Binding',
-			dataIndex: 'binding_status',
+			dataIndex: 'fresh_factory_product_sku_number',
+			align: 'center',
 			render: (synced) => (
 				<SyncOutlined
 					className={`f4 fw8 ${synced ? 'dark-green' : 'dark-red'}`}
@@ -177,7 +181,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 			title: 'Aksi',
 			dataIndex: 'action',
 			hidden: props.isReadOnly ? true : false,
-			render: (_, record) => {
+			render: (_, record, index) => {
 				const editable = isEditing(record);
 				return editable ? (
 					<Space>
@@ -199,25 +203,32 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 							Atur
 						</AtomPrimaryButton>
 
-						<AtomPrimaryButton
+						<AtomSecondaryButton
 							onClick={() =>
-								setBeingSyncedProductId(record.branch_sku_id)
+								record.fresh_factory_product_sku_number
+									? setBeingRemoveFFProductIndex(index)
+									: setBeingSyncedProductIndex(index)
 							}
 						>
 							<SyncOutlined
-								className={`f4 fw8 ${
-									record.is_synced ? 'dark-green' : 'dark-red'
+								className={`f6 fw8 ${
+									record.fresh_factory_product_sku_number
+										? 'dark-green'
+										: 'dark-red'
 								}`}
 							/>
-						</AtomPrimaryButton>
+						</AtomSecondaryButton>
 					</Space>
 				);
 			},
 		},
 	];
 
-	const [beingSyncedProductId, setBeingSyncedProductId] = useState(null);
+	const [beingSyncedProductIndex, setBeingSyncedProductIndex] =
+		useState(null);
 	const [branch, setBranch] = useState(null);
+	const [beingRemoveFFProductIndex, setBeingRemoveFFProductIndex] =
+		useState(null);
 	const [data, setData] = useState(props.defaultData);
 	const [editingKey, setEditingKey] = useState('');
 	const [form] = Form.useForm();
@@ -297,6 +308,15 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 	};
 
 	const isEditing = (record) => record.branch_sku_id === editingKey;
+
+	const removeSyncedProduct = () => {
+		const newData = [...data];
+
+		newData[beingRemoveFFProductIndex].fresh_factory_product_sku_number =
+			null;
+		setBeingRemoveFFProductIndex(null);
+		setData(newData);
+	};
 
 	const save = async (id) => {
 		try {
@@ -399,6 +419,53 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 					}}
 				/>
 			</Form>
+
+			{beingRemoveFFProductIndex !== null && (
+				<Modal
+					footer={false}
+					closable={false}
+					title={false}
+					visible={true}
+					width={420}
+				>
+					<Row
+						gutter={[0, 24]}
+						className="ph3 br4 pv2"
+						justify="center"
+					>
+						<Col>
+							<Typography.Text strong>
+								Apakah anda akan melepas binding produk ini?
+							</Typography.Text>
+						</Col>
+
+						<Col span={24}>
+							<Row justify="space-between">
+								<Col span={11}>
+									<AtomSecondaryButton
+										block
+										size="large"
+										onClick={() =>
+											setBeingRemoveFFProductIndex(null)
+										}
+									>
+										Tidak
+									</AtomSecondaryButton>
+								</Col>
+								<Col span={11}>
+									<AtomPrimaryButton
+										block
+										size="large"
+										onClick={removeSyncedProduct}
+									>
+										Ya
+									</AtomPrimaryButton>
+								</Col>
+							</Row>
+						</Col>
+					</Row>
+				</Modal>
+			)}
 		</AtomCard>
 	);
 });
