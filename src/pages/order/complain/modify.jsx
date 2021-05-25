@@ -7,15 +7,15 @@ import { useHistory, useParams } from 'react-router';
 import AtomBranchSelect from '../../../components/atoms/selection/branch';
 import AtomCard from '../../../components/atoms/card';
 import AtomSectionTitle from '../../../components/atoms/section-title';
+import MoleculeFileInputGroup from '../../../components/molecules/input-group/file-input';
 import MoleculeOrderCreationCustomerInfo from '../../../components/molecules/order/creation/customer-info';
 import MoleculeSelectInputGroup from '../../../components/molecules/input-group/select-input';
+import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../../components/organisms/layout';
+import OrganismOrderComplaintModifyProduct from '../../../components/organisms/order/modify-product';
 
 import CustomerService from '../../../services/customer';
 import OrderService from '../../../services/order';
-import OrganismOrderComplaintProduct from '../../../components/organisms/order/order-complain-product';
-import MoleculeFileInputGroup from '../../../components/molecules/input-group/file-input';
-import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
 
 const ModifyOrderComplainPage = () => {
 	const complaintTicketImageRef = useRef();
@@ -44,6 +44,7 @@ const ModifyOrderComplainPage = () => {
 	const getOrderDetail = async (id) => {
 		try {
 			const response = await orderService.getOrderById(id);
+			console.log(response.data);
 			setOrder(response.data);
 		} catch (error) {
 			message.error(error.message);
@@ -170,11 +171,13 @@ const ModifyOrderComplainPage = () => {
 							/>
 						</Col>
 
-						<AtomSectionTitle title="Produk Yang Dikomplain" />
+						<Col span={16}>
+							<AtomSectionTitle title="Produk Yang Dikomplain" />
 
-						<OrganismOrderComplaintProduct
-							products={order?.products}
-						/>
+							<OrganismOrderComplaintModifyProduct
+								products={order?.products}
+							/>
+						</Col>
 
 						<AtomSectionTitle
 							className="mt3"
