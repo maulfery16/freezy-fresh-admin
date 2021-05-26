@@ -504,7 +504,6 @@ const ProductModifyPage = () => {
 								<Col span={12}>
 									<AtomBranchSelection
 										mode="multiple"
-										required
 										onChange={(_, options) => {
 											if (branches.length !== options) {
 												setBranches(

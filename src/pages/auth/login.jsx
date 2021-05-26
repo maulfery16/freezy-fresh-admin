@@ -28,6 +28,7 @@ const authService = new AuthService();
 const LoginPages = () => {
 	const dispatch = useDispatch();
 	const [isChecked, setIsChecked] = useState(false);
+	const [isLoggingIn, setIsLoggingIn] = useState(false);
 
 	const handleCheckChanged = () => {
 		setIsChecked(!isChecked);
@@ -45,6 +46,8 @@ const LoginPages = () => {
 	};
 
 	const login = async (values) => {
+		setIsLoggingIn(true);
+
 		try {
 			const { access_token, refresh_token } = await authService.login({
 				...values,
@@ -66,6 +69,8 @@ const LoginPages = () => {
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
+		} finally {
+			setIsLoggingIn(false);
 		}
 	};
 
@@ -148,7 +153,7 @@ const LoginPages = () => {
 									block
 									className="f6 fw5 shadow-3"
 									htmlType="submit"
-									// loading={isLoggingIn}
+									loading={isLoggingIn}
 									size="large"
 									style={{ borderRadius: '8px' }}
 								>
