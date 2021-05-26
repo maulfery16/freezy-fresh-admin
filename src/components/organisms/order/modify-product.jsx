@@ -1,5 +1,6 @@
-/* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+/* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable react/display-name */
+import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
 	Checkbox,
@@ -15,16 +16,18 @@ import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import AtomImage from '../../atoms/image';
 import AtomNumberFormat from '../../atoms/number-format';
 
-const OrganismOrderComplaintModifyProduct = (props) => {
+const OrganismOrderComplaintModifyProduct = forwardRef((props, ref) => {
 	const [products, setProducts] = useState(
-		props.products.map((product) => {
-			if (!product.quantity) {
-				product.quantity = 1;
-				return product;
-			}
+		props.products && props.products.length > 0
+			? props.products.map((product) => {
+					if (!product.quantity) {
+						product.quantity = 1;
+						return product;
+					}
 
-			return product;
-		})
+					return product;
+			  })
+			: []
 	);
 
 	const setProductQuantity = (value, index) => {
@@ -34,82 +37,91 @@ const OrganismOrderComplaintModifyProduct = (props) => {
 		setProducts(newProducrts);
 	};
 
+	useImperativeHandle(ref, () => ({
+		products,
+	}));
+
 	return (
 		<Checkbox.Group className="ph2 w-100">
-			{products?.map((product, index) => {
-				return (
-					<Row
-						align="middle"
-						gutter={[0, 12]}
-						key={`ordr-cmpltn-key_${index}`}
-						justify="space-between"
-					>
-						<Col span={14}>
-							<Row align="middle">
-								<Col span={2}>
-									<Checkbox />
-								</Col>
+			{products &&
+				products.map((product, index) => {
+					return (
+						<Row
+							align="middle"
+							gutter={[0, 12]}
+							key={`ordr-cmpltn-key_${index}`}
+							justify="space-between"
+						>
+							<Col span={14}>
+								<Row align="middle">
+									<Col span={2}>
+										<Checkbox />
+									</Col>
 
-								<Col span={22}>
-									<Space align="center">
-										<AtomImage
-											src={product.image}
-											size={50}
-										/>
+									<Col span={22}>
+										<Space align="center">
+											<AtomImage
+												src={product.image}
+												size={50}
+											/>
 
-										<Space
-											className="w-100"
-											direction="vertical"
-											size={0}
-										>
-											<Typography.Text strong>
-												{product.sku_id || ''}{' '}
-												{product.name.id}
-											</Typography.Text>
+											<Space
+												className="w-100"
+												direction="vertical"
+												size={0}
+											>
+												<Typography.Text strong>
+													{product.sku_id || ''}{' '}
+													{product.name.id}
+												</Typography.Text>
 
-											<Typography.Text type="secondary">
-												<AtomNumberFormat
-													prefix="Rp. "
-													value={product.price}
-												/>
-											</Typography.Text>
+												<Typography.Text type="secondary">
+													<AtomNumberFormat
+														prefix="Rp. "
+														value={product.price}
+													/>
+												</Typography.Text>
+											</Space>
 										</Space>
+									</Col>
+								</Row>
+							</Col>
+
+							<Col span={10}>
+								<Space size="large">
+									<Space>
+										<MinusOutlined />
+										<InputNumber
+											min={1}
+											onChange={(value) =>
+												setProductQuantity(value, index)
+											}
+											parser={(value) =>
+												value.replaceAll('.', '')
+											}
+											formatter={(value) =>
+												value
+													.toString()
+													.replace(/\D/g, '')
+											}
+											style={{ width: 55 }}
+										/>
+										<PlusOutlined />
 									</Space>
-								</Col>
-							</Row>
-						</Col>
 
-						<Col span={10}>
-							<Space size="large">
-								<Space>
-									<MinusOutlined />
-									<InputNumber
-										min={1}
-										onChange={(value) =>
-											setProductQuantity(value, index)
-										}
-										parser={(value) =>
-											value.replaceAll('.', '')
-										}
-										formatter={(value) =>
-											value.toString().replace(/\D/g, '')
-										}
-										style={{ width: 55 }}
-									/>
-									<PlusOutlined />
+									<Typography.Text type="secondary">
+										<AtomNumberFormat
+											prefix="Rp. "
+											value={
+												product.price * product.quantity
+											}
+										/>
+									</Typography.Text>
 								</Space>
-
-								<Typography.Text type="secondary">
-									<AtomNumberFormat
-										prefix="Rp. "
-										value={product.price * product.quantity}
-									/>
-								</Typography.Text>
-							</Space>
-						</Col>
-					</Row>
-				);
-			})}
+							</Col>
+						</Row>
+					);
+				})}
 
 			<Divider />
 
@@ -138,7 +150,7 @@ const OrganismOrderComplaintModifyProduct = (props) => {
 			</Row>
 		</Checkbox.Group>
 	);
-};
+});
 
 OrganismOrderComplaintModifyProduct.propTypes = {
 	isReadOnly: PropTypes.bool,

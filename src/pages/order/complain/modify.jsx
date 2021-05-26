@@ -1,33 +1,39 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from 'react';
-import { Col, Form, message, Row, Typography } from 'antd';
+import { Col, Form, message, Row, Space, Typography } from 'antd';
 import { useHistory, useParams } from 'react-router';
 
 import AtomBranchSelect from '../../../components/atoms/selection/branch';
 import AtomCard from '../../../components/atoms/card';
+import AtomFileInput from '../../../components/atoms/input/file-input';
 import AtomSectionTitle from '../../../components/atoms/section-title';
-import MoleculeFileInputGroup from '../../../components/molecules/input-group/file-input';
+import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
 import MoleculeOrderCreationCustomerInfo from '../../../components/molecules/order/creation/customer-info';
 import MoleculeSelectInputGroup from '../../../components/molecules/input-group/select-input';
 import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../../components/organisms/layout';
 import OrganismOrderComplaintModifyProduct from '../../../components/organisms/order/modify-product';
 
-import CustomerService from '../../../services/customer';
 import OrderService from '../../../services/order';
+import MasterService from '../../../services/master';
 
 const ModifyOrderComplainPage = () => {
-	const complaintTicketImageRef = useRef();
-	const complaintReturnImageRef = useRef();
-	const orderService = new OrderService();
 	const history = useHistory();
 	const isCreating = history.location.pathname.includes('add') ? true : false;
 
+	const masterService = new MasterService();
+	const orderService = new OrderService();
+	const productModifyRef = useRef();
+
 	const [complaintTicket, setComplaintTicket] = useState(null);
+	const [form] = Form.useForm();
+	const [complaintMediaUrl, setComplaintMediaUrl] = useState(null);
+	const [proofOfReturnUrl, setProofOfReturnUrl] = useState(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [selectedBranch, setSelectedBranch] = useState(null);
 	const [selectedCustomer, setSelectedCustomer] = useState(null);
+	const [selectedOrder, setSelectedOrder] = useState(null);
 	const [order, setOrder] = useState(null);
 	const { id } = useParams();
 
@@ -44,7 +50,6 @@ const ModifyOrderComplainPage = () => {
 	const getOrderDetail = async (id) => {
 		try {
 			const response = await orderService.getOrderById(id);
-			console.log(response.data);
 			setOrder(response.data);
 		} catch (error) {
 			message.error(error.message);
@@ -52,18 +57,78 @@ const ModifyOrderComplainPage = () => {
 	};
 
 	const setComplaintTicketInitialValues = () => {
-		return isCreating || !complaintTicket ? {} : {};
+		if (!isCreating) {
+			setSelectedOrder(complaintTicket.order_id);
+			setSelectedCustomer(complaintTicket.customer_id);
+			setSelectedBranch(complaintTicket.branch_id);
+			getOrderDetail(complaintTicket.order_id);
+			setOrder({
+				...order,
+				products: complaintTicket.products,
+			});
+		}
+
+		return isCreating || !complaintTicket
+			? {}
+			: {
+					branch_id: complaintTicket.branch_id,
+					complaint_detail: complaintTicket.detail,
+					customer_id: complaintTicket.customer_id,
+					order_id: complaintTicket.order_id,
+					problem_type: complaintTicket.problem_type,
+			  };
 	};
 
-	const submit = async () => {
+	const submit = async (values) => {
+		if (!selectedBranch) {
+			message.error('Pilih cabang terlebih dahulu');
+			return;
+		}
+
+		if (!selectedCustomer) {
+			message.error('Pilih customer terlebih dahulu');
+			return;
+		}
+
+		if (!selectedOrder) {
+			message.error('Pilih pesanan terlebih dahulu');
+			return;
+		}
+
 		setIsSubmitting(true);
 
 		try {
-			const data = {};
+			const data = {
+				branch_id: selectedBranch,
+				complaint_detail: values.detail,
+				customer_id: selectedCustomer,
+				order_id: selectedOrder,
+				problem_type: values.problem_type,
+				products: productModifyRef.current.products,
+				total_funds_problem: productModifyRef.current.products.reduce(
+					(current, product) => {
+						return current + product.price * product.quantity;
+					},
+					0
+				),
+				complaint_media_url: [
+					{
+						url: complaintMediaUrl,
+					},
+				],
+			};
 
 			if (isCreating) {
 				await orderService.createComplaintTicket(data);
 			} else {
+				data.return_type = values.return_type;
+				data.notes = values.notes;
+				data.proof_of_return_url = [
+					{
+						url: proofOfReturnUrl,
+					},
+				];
+
 				await orderService.editComplaintTicket(data);
 			}
 
@@ -74,6 +139,21 @@ const ModifyOrderComplainPage = () => {
 			message.error(error.message);
 		} finally {
 			setIsSubmitting(false);
+		}
+	};
+
+	const uploadImage = async (file, setter) => {
+		try {
+			if (file && file.uid !== '-1') {
+				const data = new FormData();
+				data.append('file', file);
+				data.append('type', 'image');
+				const url = await masterService.uploadImage(data);
+
+				setter(url);
+			}
+		} catch (error) {
+			message.error(error.message);
 		}
 	};
 
@@ -109,6 +189,7 @@ const ModifyOrderComplainPage = () => {
 				className="w-100 mt4"
 				name="modify_complaint_ticket"
 				initialValues={setComplaintTicketInitialValues()}
+				form={form}
 				onFinish={submit}
 				onFinishFailed={(error) => {
 					message.error(`Failed: ${error.errorFields}`);
@@ -130,7 +211,6 @@ const ModifyOrderComplainPage = () => {
 								label="Pelanggan"
 								name="customer_id"
 								placeholder="Pelanggan"
-								required
 								data={{
 									url: 'admin/customers',
 									generateCustomOption: (item) => ({
@@ -157,7 +237,6 @@ const ModifyOrderComplainPage = () => {
 								label="Info Pesanan"
 								name="order_id"
 								placeholder="Pilih ID Pesanan"
-								required
 								data={{
 									url: 'orders',
 									generateCustomOption: (item) => ({
@@ -165,6 +244,7 @@ const ModifyOrderComplainPage = () => {
 										label: item.code,
 									}),
 									onChange: (value) => {
+										setSelectedOrder(value);
 										getOrderDetail(value);
 									},
 								}}
@@ -176,6 +256,7 @@ const ModifyOrderComplainPage = () => {
 
 							<OrganismOrderComplaintModifyProduct
 								products={order?.products}
+								ref={productModifyRef}
 							/>
 						</Col>
 
@@ -208,17 +289,22 @@ const ModifyOrderComplainPage = () => {
 						<Col span={1}></Col>
 
 						<Col span={12}>
-							<MoleculeFileInputGroup
-								label="Pilih Gambar/Video (Opsional)"
-								fileInputs={[
-									{
-										defaultValue: complaintTicket
-											? complaintTicket.image
-											: null,
-										ref: complaintTicketImageRef,
-									},
-								]}
-							/>
+							<Space direction="vertical">
+								<Typography.Text>
+									<span className="gray fw5 mb2">
+										Pilih Gambar/Video (Opsional)
+									</span>
+								</Typography.Text>
+
+								<AtomFileInput
+									defaultValue={
+										complaintTicket?.complaint_media_url[0]
+									}
+									onChange={async (file) =>
+										uploadImage(file, setComplaintMediaUrl)
+									}
+								/>
+							</Space>
 						</Col>
 
 						<Col span={12}>
@@ -266,17 +352,27 @@ const ModifyOrderComplainPage = () => {
 								<Col span={1}></Col>
 
 								<Col span={12}>
-									<MoleculeFileInputGroup
-										label="Bukti Gambar/Video Pengembalian (Opsional)"
-										fileInputs={[
-											{
-												defaultValue: complaintTicket
-													? complaintTicket.image
-													: null,
-												ref: complaintReturnImageRef,
-											},
-										]}
-									/>
+									<Space direction="vertical">
+										<Typography.Text>
+											<span className="gray fw5 mb2">
+												Pilih Gambar/Video Pengembalian
+												(Opsional)
+											</span>
+										</Typography.Text>
+
+										<AtomFileInput
+											defaultValue={
+												complaintTicket
+													?.proof_of_return_url[0]
+											}
+											onChange={async (file) =>
+												uploadImage(
+													file,
+													setProofOfReturnUrl
+												)
+											}
+										/>
+									</Space>
 								</Col>
 
 								<Col span={12}>
@@ -297,6 +393,16 @@ const ModifyOrderComplainPage = () => {
 					</Row>
 				</AtomCard>
 			</Form>
+
+			<Col className="mt4" span={24}>
+				<MoleculeModifyActionButtons
+					backUrl="/order/complain"
+					isCreating={isCreating}
+					isSubmitting={isSubmitting}
+					label="Pesanan Dikomplain"
+					onClick={() => form.submit()}
+				/>
+			</Col>
 		</OrganismLayout>
 	);
 };
