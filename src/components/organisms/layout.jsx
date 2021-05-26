@@ -216,7 +216,7 @@ const menus = [
 			},
 			{
 				name: 'MGM',
-				link: '/customer/mgm',
+				link: '/customer/member-get-member',
 			},
 		],
 	},

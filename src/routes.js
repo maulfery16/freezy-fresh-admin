@@ -814,8 +814,7 @@ const routes = [
 												),
 												exact: true,
 												guard: true,
-												name:
-													'Customer Address Page Detail',
+												name: 'Customer Address Page Detail',
 												path: '/detail',
 											},
 											{
@@ -826,8 +825,7 @@ const routes = [
 												),
 												exact: true,
 												guard: true,
-												name:
-													'Customer Address Page Edit',
+												name: 'Customer Address Page Edit',
 												path: '/edit',
 											},
 										],
@@ -874,6 +872,29 @@ const routes = [
 								path: '/detail/:friend_id',
 							},
 						],
+					},
+				],
+			},
+			{
+				path: '/member-get-member',
+				children: [
+					{
+						component: React.lazy(() =>
+							import('./pages/customers/member-get-member')
+						),
+						exact: true,
+						guard: true,
+						name: 'Member Get Member List Page',
+						path: '/',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/customers/member-get-member/edit')
+						),
+						exact: true,
+						guard: true,
+						name: 'Edit Member Get Member Page',
+						path: '/:id/edit',
 					},
 				],
 			},
