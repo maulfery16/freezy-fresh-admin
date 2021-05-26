@@ -7,6 +7,7 @@ import AtomCard from '../../../components/atoms/card';
 import AtomPromotionSelect from '../../../components/atoms/selection/promotion';
 import MoleculeFileInputGroup from '../../../components/molecules/input-group/file-input';
 import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
+import MoleculeSelectInputGroup from '../../../components/molecules/input-group/select-input';
 import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../../components/organisms/layout';
 
@@ -30,6 +31,7 @@ const AdsModifyPage = (props) => {
 	const setAdsInitialValues = () => {
 		return ads
 			? {
+					is_active: ads.is_active,
 					promo: ads.promotion_id,
 					title_en: ads.title.en,
 					title_id: ads.title.id,
@@ -49,6 +51,7 @@ const AdsModifyPage = (props) => {
 			data.append('title[en]', values.title_en);
 			data.append('title[id]', values.title_id);
 			data.append('promotion_id', values.promotion_id);
+			data.append('is_active', values.is_active);
 
 			await adsService.editAdvertisement(data);
 
@@ -101,6 +104,27 @@ const AdsModifyPage = (props) => {
 								style={{ paddingTop: '1rem' }}
 								gutter={12}
 							>
+								<Col span={12}>
+									<MoleculeSelectInputGroup
+										name="is_active"
+										label="Status"
+										placeholder="Status"
+										required={true}
+										data={{
+											options: [
+												{
+													label: 'Aktif',
+													value: true,
+												},
+												{
+													label: 'Tidak Aktif',
+													value: false,
+												},
+											],
+										}}
+									/>
+								</Col>
+								<Col span={12}></Col>
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										name="title_id"
