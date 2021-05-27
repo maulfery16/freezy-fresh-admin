@@ -1,23 +1,42 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/display-name */
-import React, { useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import ReactMoment from 'react-moment';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-import { Col, Row, Space, Typography } from 'antd';
+import { Col, message, Row, Space, Skeleton, Typography } from 'antd';
 import { EyeFilled } from '@ant-design/icons';
 
 import AtomImage from '../../../components/atoms/image';
+import AtomPrimaryButton from '../../../components/atoms/button/primary-button';
+import AtomSectionTitle from '../../../components/atoms/section-title';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 import MoleculeDatatableFilter from '../../../components/molecules/datatable/filter-plugin';
+import MoleculeOrderInfoGroup from '../../../components/molecules/info-group-order';
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
-import AtomPrimaryButton from '../../../components/atoms/button/primary-button';
-import AtomCard from '../../../components/atoms/card';
-import AtomSectionTitle from '../../../components/atoms/section-title';
-import MoleculeOrderInfoGroup from '../../../components/molecules/info-group-order';
+
+import MemberGetMemberService from '../../../services/member-get-member';
 
 const MemberGetMemberListPage = () => {
+	const mgmService = new MemberGetMemberService();
+	const [mgm, setMgm] = useState(null);
+	const [loading, setLoading] = useState(null);
+
+	const getMgmDetail = async () => {
+		try {
+			setLoading(true);
+
+			const { data: mgm } = await mgmService.getMemberGetMember();
+			setMgm(mgm.data);
+		} catch (error) {
+			message.error(error.message);
+			console.error(error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	const column = [
 		{
 			align: 'center',
@@ -125,6 +144,7 @@ const MemberGetMemberListPage = () => {
 			skipExport: true,
 		},
 	];
+
 	const memberGetMemberRef = useRef();
 
 	const renderAdditionalAction = () => {
@@ -133,7 +153,7 @@ const MemberGetMemberListPage = () => {
 				column={column}
 				getLimit={() => memberGetMemberRef.current.totalData}
 				label="Member Get Member"
-				route="/customer/member-get-meber"
+				route="/customer/member-get-member"
 				url="mgms"
 				withoutAddButton
 			/>
@@ -165,6 +185,12 @@ const MemberGetMemberListPage = () => {
 		];
 	};
 
+	useEffect(() => {
+		(async () => {
+			await getMgmDetail();
+		})();
+	}, []);
+
 	return (
 		<OrganismLayout
 			breadcumbs={[
@@ -183,7 +209,14 @@ const MemberGetMemberListPage = () => {
 							<span className="f4">Member Get Member</span>
 						</Typography.Text>
 
-						<Link to={`member-get-member/${`xx`}/edit`}>
+						<Link
+							to={{
+								pathname: 'member-get-member/edit',
+								state: {
+									mgm: mgm,
+								},
+							}}
+						>
 							<AtomPrimaryButton size="large">
 								Edit Detail
 							</AtomPrimaryButton>
@@ -191,87 +224,93 @@ const MemberGetMemberListPage = () => {
 					</Row>
 				</Col>
 
-				<Col className="mt3" span={24}>
-					<Row gutter={[12, 12]} className="bg-white pa4">
+				{loading ? (
+					<Skeleton active />
+				) : mgm && !loading ? (
+					<>
+						<Col className="mt4" span={24}>
+							<Row gutter={[12, 12]} className="bg-white pa4">
+								<Col span={24}>
+									<AtomSectionTitle title="Info Member Get Member" />
+								</Col>
+
+								<Col span={10}>
+									<MoleculeOrderInfoGroup
+										title="Nominal Point Pelanggan (pts)"
+										content={mgm[0].value}
+									/>
+								</Col>
+
+								<Col span={10}>
+									<MoleculeOrderInfoGroup
+										title="Nominal Point Member (pts)"
+										content={mgm[1].value}
+									/>
+								</Col>
+
+								<Col span={10}>
+									<MoleculeOrderInfoGroup
+										title="Nominal Minimal Belanja"
+										content={mgm[2].value}
+									/>
+								</Col>
+							</Row>
+						</Col>
+
 						<Col span={24}>
-							<AtomSectionTitle title="Info Member Get Member" />
-						</Col>
+							<Row gutter={[12, 12]} className="bg-white pa4">
+								<Col span={24}>
+									<AtomSectionTitle title="Info Update Produk" />
+								</Col>
 
-						<Col span={10}>
-							<MoleculeOrderInfoGroup
-								title="Nominal Point Pelanggan (pts)"
-								content={null}
-							/>
+								<Col span={10}>
+									<MoleculeOrderInfoGroup
+										title="Tanggal Pendaftaran"
+										content={
+											<ReactMoment
+												format="DD MMMM YY HH:ss"
+												locale="id"
+											>
+												{mgm[0].created_at}
+											</ReactMoment>
+										}
+									/>
+								</Col>
+								<Col span={10}>
+									<MoleculeOrderInfoGroup
+										title="Tanggal Diperbaharui"
+										content={
+											<ReactMoment
+												format="DD MMMM YY HH:ss"
+												locale="id"
+											>
+												{mgm[0].updated_at}
+											</ReactMoment>
+										}
+									/>
+								</Col>
+								<Col span={10}>
+									<MoleculeOrderInfoGroup
+										title="Didaftarkah Oleh"
+										content={mgm[0].created_by}
+									/>
+								</Col>
+								<Col span={10}>
+									<MoleculeOrderInfoGroup
+										title="Diperbaharui Oleh"
+										content={mgm[0].updated_by}
+									/>
+								</Col>
+							</Row>
 						</Col>
-
-						<Col span={10}>
-							<MoleculeOrderInfoGroup
-								title="Nominal Point Member (pts)"
-								content={null}
-							/>
-						</Col>
-
-						<Col span={10}>
-							<MoleculeOrderInfoGroup
-								title="Nominal Minimal Belanja"
-								content={null}
-							/>
-						</Col>
-					</Row>
-				</Col>
-
-				<Col span={24}>
-					<Row gutter={[12, 12]} className="bg-white pa4">
-						<Col span={24}>
-							<AtomSectionTitle title="Info Update Produk" />
-						</Col>
-
-						<Col span={10}>
-							<MoleculeOrderInfoGroup
-								title="Tanggal Pendaftaran"
-								content={
-									<ReactMoment
-										format="DD MMMM YY HH:ss"
-										locale="id"
-									>
-										{null}
-									</ReactMoment>
-								}
-							/>
-						</Col>
-						<Col span={10}>
-							<MoleculeOrderInfoGroup
-								title="Tanggal Diperbaharui"
-								content={
-									<ReactMoment
-										format="DD MMMM YY HH:ss"
-										locale="id"
-									>
-										{null}
-									</ReactMoment>
-								}
-							/>
-						</Col>
-						<Col span={10}>
-							<MoleculeOrderInfoGroup
-								title="Didaftarkah Oleh"
-								content={null}
-							/>
-						</Col>
-						<Col span={10}>
-							<MoleculeOrderInfoGroup
-								title="Diperbaharui Oleh"
-								content={null}
-							/>
-						</Col>
-					</Row>
-				</Col>
+					</>
+				) : null}
 			</Row>
 
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={`mgms`}
+				dataSourceURL={``}
 				filters={renderDatatableFilters()}
 				ref={memberGetMemberRef}
 				scroll={2280}

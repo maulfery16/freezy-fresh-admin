@@ -8,34 +8,76 @@ import AtomCard from '../../../components/atoms/card';
 import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../../components/organisms/layout';
 
-const EditMemberGetMemberPage = () => {
-	const history = useHistory();
-	const [memberGetMember, setMemberGetMember] = useState(null);
+import MemberGetMemberService from '../../../services/member-get-member';
 
-	const getMemberGetMemberDetail = async (code) => {
-		try {
-			console.log('try block');
-		} catch (error) {
-			message.error(error.message);
-		} finally {
-			console.log('finally block ');
-		}
+const EditMemberGetMemberPage = (props) => {
+	const mgmService = new MemberGetMemberService();
+	const history = useHistory();
+
+	const [isSubmitting, setIsSubmitting] = useState(false);
+
+	let mgm;
+	if (props.location.state === undefined)
+		history.push('/customer/member-get-member');
+	else mgm = props.location.state.mgm;
+
+	const setAdsInitialValues = () => {
+		return mgm
+			? {
+					customer_nominal_point: mgm[0].value,
+					member_nominal_point: mgm[1].value,
+					minimal_price: mgm[2].value,
+			  }
+			: {};
 	};
 
-	useEffect(() => {
-		getMemberGetMemberDetail();
-	}, []);
+	const submit = async (values) => {
+		try {
+			setIsSubmitting(true);
+			const data = {
+				mgm_settings: [
+					{
+						key: 'MEMBER_POINT',
+						value: values.member_nominal_point,
+					},
+					{
+						key: 'CUSTOMER_POINT',
+						value: values.customer_nominal_point,
+					},
+					{
+						key: 'MINIMUM_PAYMENT',
+						value: values.minimal_price,
+					},
+				],
+			};
+
+			await mgmService.editMemberGetMember(data);
+
+			message.success(`Berhasil mengubah detail member get member`);
+			message.info(
+				`Akan dikembalikan ke halaman member get member dalam 2 detik`
+			);
+			setTimeout(() => {
+				history.push('/customer/member-get-member');
+			}, 2000);
+		} catch (error) {
+			message.error(error.message);
+			console.error(error);
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
 
 	return (
 		<OrganismLayout
 			breadcumbs={[
-				{ name: 'Customer', link: '/order' },
+				{ name: 'Customer', link: '/customer' },
 				{
 					name: 'Ubah Member Get Member',
 					link: location.pathname,
 				},
 			]}
-			title={`Tambah Pesanan`}
+			title={`Ubah Member Get Member`}
 		>
 			<Typography.Title className="mb4" level={4}>
 				<span className="fw7">
