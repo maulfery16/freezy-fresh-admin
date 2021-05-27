@@ -814,7 +814,8 @@ const routes = [
 												),
 												exact: true,
 												guard: true,
-												name: 'Customer Address Page Detail',
+												name:
+													'Customer Address Page Detail',
 												path: '/detail',
 											},
 											{
@@ -825,7 +826,8 @@ const routes = [
 												),
 												exact: true,
 												guard: true,
-												name: 'Customer Address Page Edit',
+												name:
+													'Customer Address Page Edit',
 												path: '/edit',
 											},
 										],
@@ -894,7 +896,7 @@ const routes = [
 						exact: true,
 						guard: true,
 						name: 'Edit Member Get Member Page',
-						path: '/:id/edit',
+						path: '/edit',
 					},
 				],
 			},
