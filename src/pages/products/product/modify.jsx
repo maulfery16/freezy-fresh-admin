@@ -250,6 +250,7 @@ const ProductModifyPage = () => {
 					age_limit: product.age_limit,
 					base_category_id: product.base_category_id,
 					brand_id: product.brand_id,
+					branches: product.branches,
 					company: product.product_owner_id,
 					en_short_desc: product.short_description.en,
 					height_cm: product.height_cm,
@@ -276,12 +277,14 @@ const ProductModifyPage = () => {
 		setIsSubmitting(true);
 
 		try {
+			console.log(values);
 			const images = await uploadProductImages();
 
 			const newProduct = {
 				...values,
 				...images,
 				attributes,
+				branches,
 				details: productVariants,
 				variants,
 				product_owner_id: values.company,

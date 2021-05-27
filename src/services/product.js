@@ -19,7 +19,7 @@ export default class ProductService extends RequestAdapterService {
 
 	async editProduct(id, product) {
 		try {
-			const { data } = await super.sendPutRequest(
+			const { data } = await super.sendPatchRequest(
 				`${this.baseUrl}/v1/products/${id}?_method=PATCH`,
 				product
 			);
