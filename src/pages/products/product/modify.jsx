@@ -526,7 +526,6 @@ const ProductModifyPage = () => {
 										label="Kategori Tambahan"
 										name="additional_category_id"
 										placeholder="Kategori Tambahan"
-										required
 										data={{
 											url: 'additional-categories',
 											generateCustomOption: (item) => ({
@@ -619,7 +618,6 @@ const ProductModifyPage = () => {
 										name="supplier"
 										label="Supplier"
 										placeholder="Supplier"
-										required
 										type="text"
 									/>
 								</Col>
@@ -630,7 +628,6 @@ const ProductModifyPage = () => {
 										name="similar_products"
 										mode="multiple"
 										placeholder="Produk Serupa"
-										required
 										data={{
 											url: 'product/variants/lists',
 											generateCustomOption: (item) => ({
@@ -647,7 +644,6 @@ const ProductModifyPage = () => {
 										name="related_products"
 										mode="multiple"
 										placeholder="Produk Terkait"
-										required
 										data={{
 											url: 'product/variants/lists',
 											generateCustomOption: (item) => ({
@@ -711,7 +707,6 @@ const ProductModifyPage = () => {
 										name="txt1"
 										label="Txt1"
 										placeholder="Txt1"
-										required
 										type="text"
 									/>
 								</Col>
@@ -721,7 +716,6 @@ const ProductModifyPage = () => {
 										name="txt2"
 										label="Txt2"
 										placeholder="Txt2"
-										required
 										type="text"
 									/>
 								</Col>
@@ -731,7 +725,6 @@ const ProductModifyPage = () => {
 										name="txt3"
 										label="Txt3"
 										placeholder="Txt3"
-										required
 										type="text"
 									/>
 								</Col>
@@ -741,7 +734,6 @@ const ProductModifyPage = () => {
 										name="txt4"
 										label="Txt4"
 										placeholder="Txt4"
-										required
 										type="text"
 									/>
 								</Col>

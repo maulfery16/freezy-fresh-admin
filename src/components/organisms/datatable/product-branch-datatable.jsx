@@ -64,13 +64,13 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 			dataIndex: 'branches',
 			render: (_, record) => record.branch.tows,
 			sorter: true,
-			hidden: !props.isEditing || !props.isReadOnly ? true : false,
+			hidden: !props.isEditing && !props.isReadOnly ? true : false,
 		},
 		{
 			title: 'Rating',
 			dataIndex: 'rating',
 			sorter: true,
-			hidden: !props.isEditing || !props.isReadOnly ? true : false,
+			hidden: !props.isEditing && !props.isReadOnly ? true : false,
 		},
 		{
 			title: 'Jumlah Favorite',
@@ -131,7 +131,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
 			),
 			sorter: true,
-			hidden: !props.isEditing || !props.isReadOnly ? true : false,
+			hidden: !props.isEditing && !props.isReadOnly ? true : false,
 		},
 		{
 			title: 'Date Exp Terlama',
@@ -141,7 +141,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
 			),
 			sorter: true,
-			hidden: !props.isEditing || !props.isReadOnly ? true : false,
+			hidden: !props.isEditing && !props.isReadOnly ? true : false,
 		},
 		{
 			title: 'Harga Normal',
@@ -470,7 +470,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 					columns={mergeColumn.filter((column) => !column.hidden)}
 					rowKey="branch_sku_id"
 					scroll={{
-						x: !props.isEditing || !props.isReadOnly ? 2160 : 2880,
+						x: 2880,
 					}}
 					components={{
 						body: {
