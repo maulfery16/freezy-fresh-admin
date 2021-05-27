@@ -22,7 +22,7 @@ const AdsPage = () => {
 			setLoading(true);
 
 			const { data: ads } = await adsService.getAdvertisement();
-			if (typeof ads.data === 'object') if (ads.data) setAds(ads.data);
+			if (ads.data !== []) setAds(ads.data);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
