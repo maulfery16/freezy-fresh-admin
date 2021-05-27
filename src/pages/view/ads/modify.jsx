@@ -128,7 +128,6 @@ const AdsModifyPage = (props) => {
 								<Col span={24}>
 									<MoleculeFileInputGroup
 										label="Gambar Poster"
-										description=""
 										fileInputs={[
 											{
 												defaultValue: ads

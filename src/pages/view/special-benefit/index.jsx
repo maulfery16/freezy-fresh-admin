@@ -25,9 +25,8 @@ const SpecialBenefitPage = () => {
 				data: specialBenefit,
 			} = await specialBenefitService.getSpecialBenefit();
 
-			if (typeof specialBenefit.data === Object)
-				if (specialBenefit.data.length > 0)
-					setSpecialBenefit(specialBenefit.data);
+			if (typeof specialBenefit.data === 'object')
+				if (specialBenefit.data) setSpecialBenefit(specialBenefit.data);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);

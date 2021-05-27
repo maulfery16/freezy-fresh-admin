@@ -7,6 +7,7 @@ import AtomCard from '../../../components/atoms/card';
 import MoleculeFileInputGroup from '../../../components/molecules/input-group/file-input';
 import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
 import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
+import MoleculeSelectInputGroup from '../../../components/molecules/input-group/select-input';
 import OrganismLayout from '../../../components/organisms/layout';
 
 import SpecialBenefitService from '../../../services/special-benefit';
@@ -32,6 +33,7 @@ const AdsModifyPage = (props) => {
 			? {
 					title_en: specialBenefit.title.en,
 					title_id: specialBenefit.title.id,
+					is_active: specialBenefit.is_active,
 			  }
 			: {};
 	};
@@ -47,12 +49,13 @@ const AdsModifyPage = (props) => {
 			data.append('banner_desktop', dekstopImage);
 			data.append('title[en]', values.title_en);
 			data.append('title[id]', values.title_id);
+			data.append('is_active', values.is_active);
 
 			await specialBenefitService.editSpecialBenefit(data);
 
-			message.success(`Berhasil mengubah iklan`);
+			message.success(`Berhasil mengubah special benefit`);
 			message.info(
-				`Akan dikembalikan ke halaman detail iklan dalam 2 detik`
+				`Akan dikembalikan ke halaman detail special benefit dalam 2 detik`
 			);
 			setTimeout(() => {
 				history.push('/view/special-benefit');
@@ -102,6 +105,27 @@ const AdsModifyPage = (props) => {
 								gutter={12}
 							>
 								<Col span={12}>
+									<MoleculeSelectInputGroup
+										name="is_active"
+										label="Status"
+										placeholder="Status"
+										required={true}
+										data={{
+											options: [
+												{
+													label: 'Aktif',
+													value: true,
+												},
+												{
+													label: 'Tidak Aktif',
+													value: false,
+												},
+											],
+										}}
+									/>
+								</Col>
+								<Col span={12}></Col>
+								<Col span={12}>
 									<MoleculeTextInputGroup
 										name="title_id"
 										label="Title Konten (ID)"
@@ -124,7 +148,6 @@ const AdsModifyPage = (props) => {
 								<Col span={24}>
 									<MoleculeFileInputGroup
 										label="Gambar Poster"
-										description=""
 										fileInputs={[
 											{
 												defaultValue: specialBenefit
