@@ -434,7 +434,7 @@ const OrderReviewDetailPage = () => {
 
 										<Col span={24}>
 											<MoleculeInfoGroup
-												title="Konten Artikel (ID)"
+												title="Ulasan Pelanggan"
 												content={
 													<MoleculeMarkdownRenderer
 														text={
