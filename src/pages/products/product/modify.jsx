@@ -54,16 +54,23 @@ const ProductModifyPage = () => {
 	const [productVariants, setProductVariants] = useState([]);
 	const [variants, setVariants] = useState([]);
 
-	const combineProductVariantWithExisting = (newProductVariants) => {
+	const combineProductVariantWithExisting = (
+		newProductVariants,
+		withoutVariant
+	) => {
 		let combinedProductVariants = [];
 
 		newProductVariants.forEach((variant) => {
 			const existingProductVariantId = productVariants.findIndex(
 				(productVariant) => {
-					return (
-						productVariant.branch.id === variant.branch.id &&
-						productVariant.sku_id === variant.sku_id
-					);
+					if (withoutVariant) {
+						return productVariant.branch.id === variant.branch.id;
+					} else {
+						return (
+							productVariant.branch.id === variant.branch.id &&
+							productVariant.sku_id === variant.sku_id
+						);
+					}
 				}
 			);
 
@@ -116,30 +123,56 @@ const ProductModifyPage = () => {
 			let newProductVariants = [];
 			let generatedProductsVariants = [];
 
-			branches.map((branch) => {
-				variants.map((variant) => {
-					generatedProductsVariants.push({
-						branch_id: branch.branch_id,
-						branch_sku_id: branch.branch_id + variant.sku_id,
-						discount_percentage: '',
-						fixed_price: 0,
-						is_freezy_pick: true,
-						is_manage_stock: true,
-						price: '',
-						published_stock: 0,
-						sku_id: variant.sku_id,
-						variant: variant.name.id,
-						branch: {
-							id: branch.branch,
-							tows: branch.tows,
-						},
+			if (variants.length === 0) {
+				branches.map((branch) => {
+					variants.map((variant) => {
+						generatedProductsVariants.push({
+							branch_id: branch.branch_id,
+							branch_sku_id: branch.branch_id,
+							discount_percentage: '',
+							fixed_price: 0,
+							is_freezy_pick: true,
+							is_manage_stock: true,
+							price: '',
+							published_stock: 0,
+							sku_id: variant.branch_id,
+							variant: branch.branch,
+							branch: {
+								id: branch.branch,
+							},
+						});
 					});
 				});
-			});
 
-			newProductVariants = combineProductVariantWithExisting(
-				generatedProductsVariants
-			);
+				newProductVariants = combineProductVariantWithExisting(
+					generatedProductsVariants,
+					true
+				);
+			} else {
+				branches.map((branch) => {
+					variants.map((variant) => {
+						generatedProductsVariants.push({
+							branch_id: branch.branch_id,
+							branch_sku_id: branch.branch_id + variant.sku_id,
+							discount_percentage: '',
+							fixed_price: 0,
+							is_freezy_pick: true,
+							is_manage_stock: true,
+							price: '',
+							published_stock: 0,
+							sku_id: variant.sku_id,
+							variant: variant.name.id,
+							branch: {
+								id: branch.branch,
+							},
+						});
+					});
+				});
+
+				newProductVariants = combineProductVariantWithExisting(
+					generatedProductsVariants
+				);
+			}
 
 			setProductVariants(newProductVariants);
 		} catch (error) {
