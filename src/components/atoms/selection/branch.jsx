@@ -22,7 +22,7 @@ const AtomBranchSelect = (props) => {
 			name="branches"
 			placeholder="Pilih Cabang Freezy"
 			data={{
-				url: 'branches',
+				url: props.url ?? 'branches',
 				generateCustomOption: (item) => ({
 					value: optionValue ? item[optionValue] : item.id,
 					label: item.name.id,
@@ -37,6 +37,7 @@ AtomBranchSelect.propTypes = {
 	onChange: PropTypes.func,
 	optionValue: PropTypes.string,
 	required: PropTypes.bool,
+	url: PropTypes.string,
 };
 
 export default AtomBranchSelect;

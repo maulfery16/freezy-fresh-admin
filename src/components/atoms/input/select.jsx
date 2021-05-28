@@ -26,7 +26,7 @@ const AtomCustomSelect = forwardRef((props, ref) => {
 
 	const getOptions = async () => {
 		setOptions(null);
-
+		
 		if (props.data.options) {
 			setOptions(props.data.options);
 		} else {
