@@ -71,6 +71,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 			title: 'Cabang',
 			dataIndex: 'branch',
 			sorter: true,
+			render: (_, record) => record.branch.id,
 		},
 		{
 			title: 'SKUID',
@@ -164,6 +165,8 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 	const [keyword, setKeyword] = useState('');
 	const [productForm] = Form.useForm();
 	const [productID, setProductID] = useState(null);
+	const [productDetailID, setProductDetailID] = useState(null);
+	const [branchesURL, setBranchesURL] = useState('branches');
 	const [filters, setFilters] = useState({
 		branch: '',
 		productCategory: '',
@@ -183,11 +186,13 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 	// };
 
 	const applyFilter = (values) => {
-		const filter = {};
+		const filterTmp = {};
 
-		if (values.branch) filter.branch = values.branch;
-		if (values.productCategory) filter.branch = values.product_category;
-		setFilters(filter);
+		if (values.branches) filterTmp.branch = values.branch;
+		else filterTmp.branch = '';
+		if (values.product_category) filterTmp.productCategory = values.product_category;
+		else filterTmp.productCategory = '';
+		setFilters(filterTmp);
 	};
 
 	const cancel = () => setEditingKey('');
@@ -213,11 +218,12 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 				productID,
 				{
 					branch_id,
-					priduct_detail_id: productID,
+					product_detail_id: productDetailID,
 				}
 			);
+			if (response.data && response.data.length > 0) return response.data[0];
+			else return null;
 
-			return response.data[0];
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
@@ -236,14 +242,12 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 
 		if (filters.branch || filters.branch !== '')
 			filteredData = filteredData.filter((column) =>
-				column.branches
-					.map((branch) => branch.id)
-					.includes(filters.branch)
+			column.branch.id.includes(filters.branch)
 			);
 
 		if (filters.productCategory || filters.productCategory !== '')
 			filteredData = filteredData.filter((column) =>
-				column.brand.id.includes(filters.productCategory)
+				column.additional_category.id.includes(filters.productCategory)
 			);
 
 		return filteredData;
@@ -276,8 +280,10 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 		try {
 			const response = await getDetailProduct(values.branches.join(', '));
 			productForm.resetFields();
-			setData([...data, response]);
-			setIsPickProductVisible(false);
+			if (response) {
+				setData([...data, response]);
+				setIsPickProductVisible(false);
+			}
 		} catch (error) {
 			message.error(error.message);
 		}
@@ -298,8 +304,8 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 	});
 
 	useEffect(() => {
-		if (productID) branchOptionsRef.current.refetchData();
-	}, [productID]);
+		if (productID && productDetailID) branchOptionsRef.current.refetchData();
+	}, [productID, productDetailID, branchesURL]);
 
 	useImperativeHandle(ref, () => ({
 		data,
@@ -333,7 +339,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 								>
 									<Row align="middle" gutter={12}>
 										<Col span={9}>
-											<AtomBranchSelection required />
+											<AtomBranchSelection />
 										</Col>
 
 										<Col span={9}>
@@ -341,7 +347,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 												label="Kategori Produk"
 												name="product_category"
 												placeholder="Kategori Produk"
-												required
+												allowClear
 												data={{
 													url: 'additional-categories',
 													generateCustomOption: (
@@ -415,14 +421,19 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 														name="product"
 														placeholder="Nama Produk"
 														data={{
-															onChange: (value) =>
+															onChange: (value) => {
+																const productID = value.split('|')[0];
 																setProductID(
-																	value
-																),
+																	productID
+																)
+																const product_detail_id = value.split('|')[1];
+																setProductDetailID(product_detail_id)
+																setBranchesURL(`products/${productID}/branches?product_detail_id=${product_detail_id}`)
+															},
 															url: 'products/not/discounted',
 															generateCustomOption:
 																(item) => ({
-																	value: item.product_id,
+																	value: `${item.product_id}|${item.product_detail_id}`,
 																	label: `${
 																		item.sku_id
 																	} ${
@@ -449,11 +460,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 														optionsRef={
 															branchOptionsRef
 														}
-														data={{
-															url: productID
-																? `products/${productID}/branches`
-																: 'branches',
-														}}
+														url={branchesURL}
 													/>
 												</Col>
 												<Col>
