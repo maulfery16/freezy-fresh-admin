@@ -34,9 +34,8 @@ const CustomerAddressModifyPage = () => {
 
 	const getAddressDetail = async (id) => {
 		try {
-			const {
-				data: address,
-			} = await customerService.getCustomerAddressById(id, address_id);
+			const { data: address } =
+				await customerService.getCustomerAddressById(id, address_id);
 
 			setProvinceId(address && address.province_id);
 			setCityId(address && address.city_id);
@@ -223,9 +222,13 @@ const CustomerAddressModifyPage = () => {
 	return (
 		<OrganismLayout
 			breadcumbs={[
-				{ name: 'Alamat Pelanggan', link: '/address' },
+				{ name: 'Pelanggan', link: '/customer' },
 				{
-					name: location.pathname.includes('add') ? 'Tambah' : 'Ubah',
+					name: 'Detail Pelanggan',
+					link: `/customer/${id}/detail`,
+				},
+				{
+					name: `${isCreating ? 'Tambah' : 'Ubah'} Alamat`,
 					link: location.pathname,
 				},
 			]}
