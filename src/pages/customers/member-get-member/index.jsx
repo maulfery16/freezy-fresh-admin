@@ -113,21 +113,31 @@ const MemberGetMemberListPage = () => {
 		{
 			title: 'Total Member Join',
 			dataIndex: 'total_member_ids',
+			render: (total_member_ids) => total_member_ids || 0,
 			sorter: true,
 		},
 		{
 			title: 'Total Member Berhasil',
 			dataIndex: 'succeed_member_ids',
+			render: (succeed_member_ids) => succeed_member_ids || 0,
 			sorter: true,
 		},
 		{
 			title: 'Total Member Gagal',
 			dataIndex: 'failed_member_ids',
+			render: (failed_member_ids) => failed_member_ids || 0,
 			sorter: true,
 		},
 		{
-			title: 'Total Cashback',
-			dataIndex: 'total_cashback',
+			title: 'Member Cashback',
+			dataIndex: 'member_cashback',
+			render: (member_cashback) => member_cashback || 0,
+			sorter: true,
+		},
+		{
+			title: 'Customer Cashback',
+			dataIndex: 'customer_cashback',
+			render: (customer_cashback) => customer_cashback || 0,
 			sorter: true,
 		},
 		{
@@ -310,7 +320,7 @@ const MemberGetMemberListPage = () => {
 			<OrganismDatatable
 				additionalAction={renderAdditionalAction()}
 				columns={column}
-				dataSourceURL={``}
+				dataSourceURL={`mgms`}
 				filters={renderDatatableFilters()}
 				ref={memberGetMemberRef}
 				scroll={2280}

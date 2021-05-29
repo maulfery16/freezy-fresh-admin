@@ -22,7 +22,8 @@ const AdsPage = () => {
 			setLoading(true);
 
 			const { data: ads } = await adsService.getAdvertisement();
-			if (typeof ads.data === 'object') if (ads.data) setAds(ads.data);
+			if (Array.isArray(ads.data))
+				if (ads.data.length > 0) setAds(ads.data);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
@@ -70,7 +71,9 @@ const AdsPage = () => {
 				<Skeleton active />
 			) : !ads && !loading ? (
 				<Typography.Text strong>
-					<span className="denim f5">Belum ada Iklan</span>
+					<span className="denim f5">
+						Belum ada Iklan, edit detail untuk menambahkan
+					</span>
 				</Typography.Text>
 			) : (
 				<Row align="top" className="mt4" gutter={24}>

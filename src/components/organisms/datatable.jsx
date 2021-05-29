@@ -35,7 +35,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 	const [filterParams, setFilterParams] = useState({
 		filter: '',
 		search: '',
-		limit: props.limit || 5,
+		limit: props.limit || 15,
 		orderBy: '',
 		page: 1,
 		sortedBy: '',
