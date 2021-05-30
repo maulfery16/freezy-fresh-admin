@@ -12,7 +12,7 @@ import {
 	Tabs,
 	Typography,
 } from 'antd';
-import { useLocation, useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 
 import AtomBranchSelection from '../../../components/atoms/selection/branch';
 import AtomCard from '../../../components/atoms/card';
@@ -40,7 +40,7 @@ const ProductModifyPage = () => {
 	const masterService = new MasterService();
 	const productService = new ProductService();
 
-	const location = useLocation();
+	const history = useHistory();
 	const isCreating = location.pathname.includes('add') ? true : false;
 
 	const { id } = useParams();
@@ -108,13 +108,6 @@ const ProductModifyPage = () => {
 		if (branches.length === 0) {
 			message.warning(
 				'Gagal untuk menghasilkan produk variant: belum ada cabang terpilih'
-			);
-			return;
-		}
-
-		if (variants.length === 0) {
-			message.warning(
-				'Gagal untuk menghasilkan produk variant: belum ada variants yang diatur'
 			);
 			return;
 		}
@@ -277,7 +270,6 @@ const ProductModifyPage = () => {
 		setIsSubmitting(true);
 
 		try {
-			console.log(values);
 			const images = await uploadProductImages();
 
 			const newProduct = {
@@ -388,13 +380,20 @@ const ProductModifyPage = () => {
 						name="modify_product"
 						initialValues={setProductInitialValues()}
 						onFinish={submitProduct}
-						onFinishFailed={() =>
+						onFinishFailed={({
+							values,
+							errorFields,
+							outOfDate,
+						}) => {
+							console.error(values);
+							console.error(errorFields);
+							console.error(outOfDate);
+
 							message.error(
 								'Kesalahan saat mengambil nilai pada form. Silahkan periksa kembali'
-							)
-						}
+							);
+						}}
 					>
-						{' '}
 						<AtomCard title="Info Produk">
 							<Row gutter={[24, 24]}>
 								<Col span={24}>
@@ -672,7 +671,6 @@ const ProductModifyPage = () => {
 												name="width_cm"
 												label="L"
 												placeholder="Lebar"
-												required
 												suffix="cm"
 												type="text"
 											/>
@@ -698,6 +696,15 @@ const ProductModifyPage = () => {
 										placeholder="Berat"
 										required
 										suffix="gr"
+										type="text"
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeTextInputGroup
+										name="uom"
+										label="UOM"
+										placeholder="UOM"
 										type="text"
 									/>
 								</Col>
