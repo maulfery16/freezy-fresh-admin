@@ -169,7 +169,6 @@ const ProductModifyPage = () => {
 
 			setProductVariants(newProductVariants);
 		} catch (error) {
-			console.error(error);
 			message.error('Terjadi kesalah saat membuat data product variants');
 		}
 	};
@@ -380,15 +379,7 @@ const ProductModifyPage = () => {
 						name="modify_product"
 						initialValues={setProductInitialValues()}
 						onFinish={submitProduct}
-						onFinishFailed={({
-							values,
-							errorFields,
-							outOfDate,
-						}) => {
-							console.error(values);
-							console.error(errorFields);
-							console.error(outOfDate);
-
+						onFinishFailed={() => {
 							message.error(
 								'Kesalahan saat mengambil nilai pada form. Silahkan periksa kembali'
 							);
