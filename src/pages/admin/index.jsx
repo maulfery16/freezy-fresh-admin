@@ -17,12 +17,15 @@ import MoleculeDatatableFilter from '../../components/molecules/datatable/filter
 import MoleculeDeleteConfirm from '../../components/molecules/delete-confirm';
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
+import { useSelector } from 'react-redux';
 
 import AdminService from '../../services/admin';
 import { translateGenderEnum } from '../../utils/helpers';
 
 const AdminPage = () => {
 	const [totalAdmin, setTotalAdmin] = useState(null);
+	const { roles } = useSelector((state) => state.auth);
+
 	const adminService = new AdminService();
 	const adminTableRef = useRef();
 	const column = [
@@ -122,9 +125,11 @@ const AdminPage = () => {
 						<EyeFilled className="f4 blue" />
 					</Link>
 
-					<Link to={`/admin/${id}/edit`}>
-						<EditFilled className="f4 orange" />
-					</Link>
+					{!roles.includes('super-admin') && (
+						<Link to={`/admin/${id}/edit`}>
+							<EditFilled className="f4 orange" />
+						</Link>
+					)}
 
 					{!record.is_active && (
 						<MoleculeDeleteConfirm
@@ -164,6 +169,8 @@ const AdminPage = () => {
 				getLimit={() => adminTableRef.current.totalData}
 				route="/admin"
 				url="admins"
+				withoutAddButton={roles.includes('admin')}
+				withoutExportButton={roles.includes('admin')}
 			/>
 		);
 	};
