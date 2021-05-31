@@ -183,10 +183,6 @@ const menus = [
 				name: 'Iklan',
 				link: '/view/ads',
 			},
-			{
-				name: 'Special Benefit',
-				link: '/view/special-benefit',
-			},
 		],
 	},
 	{

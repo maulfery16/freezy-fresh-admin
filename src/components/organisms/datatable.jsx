@@ -46,8 +46,8 @@ const OrganismDatatable = forwardRef((props, ref) => {
 
 		try {
 			if (props.dataSource) {
-				setData(props.dataSource.data);
-				setTotalData(props.dataSource.meta.pagination.total);
+				setData(props?.dataSource?.data);
+				setTotalData(props?.dataSource?.meta?.pagination?.total);
 			} else {
 				const { data, meta } = await datatableService.getData(
 					props.dataSourceURL,
