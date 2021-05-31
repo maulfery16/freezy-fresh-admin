@@ -19,7 +19,7 @@ import {
 	Space,
 	Table,
 } from 'antd';
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, DeleteFilled, EditFilled } from '@ant-design/icons';
 
 import AtomBranchSelection from '../../atoms/selection/branch';
 import AtomCard from '../../atoms/card';
@@ -156,6 +156,17 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 							<CloseOutlined className="red f4 fw8" />
 						</Popconfirm>
 					</Space>
+				) : props.canModify ? (
+					<Space>
+						<EditFilled
+							className="yellow f4 fw8"
+							onClick={() => edit(record)}
+						/>
+
+						<Popconfirm title="Are you sure you want to delete this product?" onConfirm={() => deleteProduct(record.product_id)}>
+							<DeleteFilled className="red f4 fw8" />
+						</Popconfirm>
+					</Space>
 				) : (
 					<AtomPrimaryButton
 						disabled={editingKey !== ''}
@@ -209,6 +220,12 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 	const cancel = () => setEditingKey('');
 
 	const deleteAllProduct = () => setData([]);
+
+	const deleteProduct = (id) => {
+		let filteredData = data;
+		filteredData = filteredData.filter((column) => column.product_id !== id);
+		setData(filteredData);
+	}
 
 	const edit = (record) => {
 		form.setFieldsValue({

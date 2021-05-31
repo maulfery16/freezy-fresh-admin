@@ -346,6 +346,7 @@ const DailyDealsModifyPage = () => {
 							ref={viewTableRef}
 							defaultData={productList}
 							maxStockPerUser
+							canModify
 						/>
 					</Col>
 					
