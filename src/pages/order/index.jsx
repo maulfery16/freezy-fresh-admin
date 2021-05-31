@@ -5,6 +5,7 @@ import ReactMoment from 'react-moment';
 import { Col, Form, message, Modal, Row, Space } from 'antd';
 import { EyeFilled } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import AtomBranchDatatableFilter from '../../components/atoms/selection/branch-datatable';
 import AtomNumberFormat from '../../components/atoms/number-format';
@@ -22,6 +23,8 @@ import OrderService from '../../services/order';
 const OrderPage = () => {
 	const [pickedProductOwner, setPickedProductOwner] = useState(null);
 	const [productOwners, setProductOwners] = useState([]);
+	const { roles } = useSelector((state) => state.auth);
+
 	const orderService = new OrderService();
 	const orderTableRef = useRef();
 	const baseColumn = [
@@ -128,6 +131,7 @@ const OrderPage = () => {
 				orderService.translateOrderEnum(item.admin_status),
 		},
 	];
+
 	const [isChangeStatusModalVisible, setIsChangeStatusModalVisible] =
 		useState(false);
 
@@ -362,11 +366,13 @@ const OrderPage = () => {
 						<EyeFilled className="f4 blue" />
 					</Link>
 
-					<AtomPrimaryButton
-						onClick={() => openChangeStatusModal(index)}
-					>
-						Ubah Status
-					</AtomPrimaryButton>
+					{roles.includes('super-admin') && (
+						<AtomPrimaryButton
+							onClick={() => openChangeStatusModal(index)}
+						>
+							Ubah Status
+						</AtomPrimaryButton>
+					)}
 				</Space>
 			),
 			skipExport: true,

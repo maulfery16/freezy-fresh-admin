@@ -89,6 +89,7 @@ const OrganismLayout = (props) => {
 				{
 					name: 'Ulasan',
 					link: '/order/review',
+					hidden: roles.includes('manager-freezy'),
 				},
 			],
 		},
@@ -224,6 +225,7 @@ const OrganismLayout = (props) => {
 			name: 'Pelanggan',
 			icon: <CustomerServiceOutlined />,
 			subMenuKey: 'customer',
+			hidden: roles.includes('manager-tows'),
 			subMenus: [
 				{
 					name: 'Pelanggan',
