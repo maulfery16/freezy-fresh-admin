@@ -117,23 +117,23 @@ const ProductModifyPage = () => {
 			let generatedProductsVariants = [];
 
 			if (variants.length === 0) {
+				const values = form.getFieldsValue(true);
+
 				branches.map((branch) => {
-					variants.map((variant) => {
-						generatedProductsVariants.push({
-							branch_id: branch.branch_id,
-							branch_sku_id: branch.branch_id,
-							discount_percentage: '',
-							fixed_price: 0,
-							is_freezy_pick: true,
-							is_manage_stock: true,
-							price: '',
-							published_stock: 0,
-							sku_id: variant.branch_id,
-							variant: branch.branch,
-							branch: {
-								id: branch.branch,
-							},
-						});
+					generatedProductsVariants.push({
+						branch_id: branch.branch_id,
+						branch_sku_id: branch.branch_id + values.sku_id,
+						discount_percentage: '',
+						fixed_price: 0,
+						is_freezy_pick: true,
+						is_manage_stock: true,
+						price: '',
+						published_stock: 0,
+						sku_id: values.sku_id,
+						variant: branch.branch,
+						branch: {
+							id: branch.branch,
+						},
 					});
 				});
 
@@ -257,6 +257,7 @@ const ProductModifyPage = () => {
 					txt1: product.txt1,
 					txt2: product.txt2,
 					txt3: product.txt3,
+					uom: product.uom,
 					txt4: product.txt4,
 					upc_code: product.upc_code,
 					weight_gr: product.weight_gr,
@@ -430,7 +431,6 @@ const ProductModifyPage = () => {
 										label="SKU ID"
 										name="sku_id"
 										placeholder="SKU ID"
-										required
 										type="code"
 									/>
 								</Col>
@@ -440,7 +440,6 @@ const ProductModifyPage = () => {
 										label="Kode UPC"
 										name="upc_code"
 										placeholder="Kode UPC"
-										required
 										type="code"
 									/>
 								</Col>
