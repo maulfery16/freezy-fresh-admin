@@ -3,6 +3,7 @@ import React, { useRef } from 'react';
 import { EditFilled, EyeFilled } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { Space } from 'antd';
+import { useSelector } from 'react-redux';
 
 import AtomBaseCategoriesDatatableFilter from '../../../components/atoms/selection/base-categories-datatable';
 import AtomBranchDatatableFilter from '../../../components/atoms/selection/branch-datatable';
@@ -15,6 +16,9 @@ import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
 
 const ProductPage = () => {
+	const productTableRef = useRef();
+	const { roles } = useSelector((state) => state.auth);
+
 	const column = [
 		{
 			title: 'No',
@@ -105,9 +109,12 @@ const ProductPage = () => {
 						<EyeFilled className="f4 blue" />
 					</Link>
 
-					<Link to={`/products/${id}/edit`}>
-						<EditFilled className="f4 orange" />
-					</Link>
+					{!roles.includes('super-admin') ||
+						(!roles.includes('admin') && (
+							<Link to={`/products/${id}/edit`}>
+								<EditFilled className="f4 orange" />
+							</Link>
+						))}
 
 					{!record.is_active && (
 						<MoleculeDeleteConfirm
@@ -122,8 +129,6 @@ const ProductPage = () => {
 			skipExport: true,
 		},
 	];
-
-	const productTableRef = useRef();
 
 	const renderAdditionalAction = () => {
 		return (

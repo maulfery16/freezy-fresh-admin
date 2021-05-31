@@ -5,6 +5,8 @@ import { Col, Form, message, Row, Typography } from 'antd';
 import { useHistory } from 'react-router';
 
 import AtomCard from '../../../components/atoms/card';
+import MoleculeModifyActionButtons from '../../../components/molecules/modify-action-buttons';
+import MoleculeNumberInputGroup from '../../../components/molecules/input-group/number-input';
 import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../../components/organisms/layout';
 
@@ -21,12 +23,12 @@ const EditMemberGetMemberPage = (props) => {
 		history.push('/customer/member-get-member');
 	else mgm = props.location.state.mgm;
 
-	const setAdsInitialValues = () => {
+	const setMgmInitialValues = () => {
 		return mgm
 			? {
-					customer_nominal_point: mgm[0].value,
-					member_nominal_point: mgm[1].value,
-					minimal_price: mgm[2].value,
+					customer_nominal_point: Number(mgm[1].value),
+					member_nominal_point: Number(mgm[0].value),
+					minimal_price: Number(mgm[2].value),
 			  }
 			: {};
 	};
@@ -85,37 +87,64 @@ const EditMemberGetMemberPage = (props) => {
 				</span>
 			</Typography.Title>
 
-			<AtomCard title="Info Member Get Member">
-				<Form>
-					<Row gutter={[24, 0]}>
-						<Col span={12}>
-							<MoleculeTextInputGroup
-								name="customer_nominal_point"
-								label="Nominal Point Pelanggan (Rp)"
-								placeholder="Masukkan Nominal Point Pelanggan"
-								type="text"
-							/>
-						</Col>
+			<Form
+				className="w-100 mt4"
+				name="modify_mgm"
+				initialValues={setMgmInitialValues()}
+				onFinish={submit}
+				onFinishFailed={(error) => {
+					message.error(`Failed: ${error}`);
+					console.error(error);
+				}}
+			>
+				<Row>
+					<Col span={18}>
+						<AtomCard title="Info Member Get Member">
+							<Row
+								align="top"
+								style={{ paddingTop: '1rem' }}
+								gutter={12}
+							>
+								<Col span={12}>
+									<MoleculeTextInputGroup
+										label="Nominal Point Pelanggan (Pts)"
+										name="customer_nominal_point"
+										placeholder="Masukkan Nominal Point Pelanggan"
+										type="number"
+									/>
+								</Col>
 
-						<Col span={12}>
-							<MoleculeTextInputGroup
-								name="member_nominal_point"
-								label="Nominal Point Member (Rp)"
-								placeholder="Masukkan Nominal Point Member"
-								type="text"
-							/>
-						</Col>
-						<Col span={12}>
-							<MoleculeTextInputGroup
-								name="minimal_price"
-								label="Nominal Minimal Belanja (Rp)"
-								placeholder="Masukkan Minimal Belanja"
-								type="text"
-							/>
-						</Col>
-					</Row>
-				</Form>
-			</AtomCard>
+								<Col span={12}>
+									<MoleculeTextInputGroup
+										label="Nominal Point Member (Pts)"
+										name="member_nominal_point"
+										placeholder="Masukkan Nominal Point Member"
+										type="number"
+									/>
+								</Col>
+
+								<Col span={12}>
+									<MoleculeNumberInputGroup
+										label="Nominal Minimal Belanja (Rp)"
+										name="minimal_price"
+										placeholder="Masukkan Minimal Belanja"
+										required={true}
+									/>
+								</Col>
+							</Row>
+						</AtomCard>
+					</Col>
+
+					<Col className="mt4" span={24}>
+						<MoleculeModifyActionButtons
+							backUrl="/customer/member-get-member"
+							isCreating={false}
+							isSubmitting={isSubmitting}
+							label="Member Get Member"
+						/>
+					</Col>
+				</Row>
+			</Form>
 		</OrganismLayout>
 	);
 };

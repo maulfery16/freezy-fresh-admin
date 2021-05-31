@@ -20,9 +20,8 @@ const CustomerAddressDetailPage = () => {
 
 	const getCustomerAddressDetail = async () => {
 		try {
-			const {
-				data: address,
-			} = await customerService.getCustomerAddressById(id, address_id);
+			const { data: address } =
+				await customerService.getCustomerAddressById(id, address_id);
 			setAddress(address);
 		} catch (error) {
 			message.error(error.message);
@@ -39,14 +38,14 @@ const CustomerAddressDetailPage = () => {
 	return (
 		<OrganismLayout
 			breadcumbs={[
-				{ name: 'Pelanggan', link: '/address' },
+				{ name: 'Pelanggan', link: '/customer' },
 				{
 					name: 'Detail Pelanggan',
-					link: `/address/${id}/detail`,
+					link: `/customer/${id}/detail`,
 				},
 				{
 					name: 'Detail Alamat',
-					link: `/address/${id}/detail/address/${address_id}`,
+					link: `/customer/address/${id}/detail/address/${address_id}`,
 				},
 			]}
 			title="Detail Alamat Pelanggan"
@@ -162,8 +161,7 @@ const CustomerAddressDetailPage = () => {
 											<MoleculeImageGroup
 												images={[
 													{
-														source:
-															address.image_location,
+														source: address.image_location,
 														label: 'Foto Lokasi',
 													},
 												]}

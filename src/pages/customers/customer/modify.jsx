@@ -43,7 +43,7 @@ const PelangganModifyPage = () => {
 		return isCreating
 			? {}
 			: {
-					birth: moment(new Date(customer.birth)),
+					birth: moment(new Date(customer.birth) || new Date()),
 					email: customer.email,
 					first_name: customer.first_name,
 					gender: customer.gender,
@@ -51,7 +51,6 @@ const PelangganModifyPage = () => {
 					last_name: customer.last_name,
 					marital_status: customer.marital_status,
 					phone_number: customer.phone_number,
-					profile_image: customer.profile_image,
 					frequency_groceries_one_month:
 						customer.frequency_groceries_one_month,
 			  };
@@ -76,7 +75,7 @@ const PelangganModifyPage = () => {
 			data.append('marital_status', values.marital_status);
 			data.append('phone_number', values.phone_number);
 			if (idCardImage) data.append('id_card_image', idCardImage);
-			if (profileImage) data.append('profile_image', profileImage);
+			if (profileImage) data.append('social_avatar', profileImage);
 
 			if (isCreating) {
 				await customerService.createCustomer(data);
@@ -159,7 +158,7 @@ const PelangganModifyPage = () => {
 											fileInputs={[
 												{
 													defaultValue: customer
-														? customer.profile_image
+														? customer.social_avatar
 														: null,
 													label: 'Foto Profil',
 													ref: profileImageRef,

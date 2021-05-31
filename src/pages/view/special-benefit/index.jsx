@@ -21,12 +21,11 @@ const SpecialBenefitPage = () => {
 		try {
 			setLoading(true);
 
-			const {
-				data: specialBenefit,
-			} = await specialBenefitService.getSpecialBenefit();
+			const { data: specialBenefit } =
+				await specialBenefitService.getSpecialBenefit();
 
-			if (typeof specialBenefit.data === 'object')
-				if (specialBenefit.data) setSpecialBenefit(specialBenefit.data);
+			if (!Array.isArray(specialBenefit.data))
+				setSpecialBenefit(specialBenefit.data);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);

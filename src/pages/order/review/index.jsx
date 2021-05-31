@@ -108,7 +108,7 @@ const ReviewPage = () => {
 				placeholder="Filter tanggal pesanan"
 			/>,
 			<MoleculeDatatableFilter
-				name="order.user_id"
+				name="user_id"
 				operator=":"
 				identifier="customer-filter"
 				label="Nama Pelanggan"
