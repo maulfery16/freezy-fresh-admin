@@ -9,9 +9,11 @@ import AtomSecondaryButton from '../../atoms/button/secondary-button';
 
 import DatatableService from '../../../services/datatable';
 import { getURLParams } from '../../../utils/helpers';
+import { useSelector } from 'react-redux';
 
 const MoleculeDatatableAdditionalAction = (props) => {
 	const [isExporting, setIsExporting] = useState(false);
+	const { roles } = useSelector((state) => state.auth);
 	const datatableService = new DatatableService();
 	const history = useHistory();
 
@@ -58,6 +60,40 @@ const MoleculeDatatableAdditionalAction = (props) => {
 		}
 	};
 
+	const renderAddButton = () => {
+		if (props.withoutExportButton) return null;
+
+		if (roles.includes('super-admin') || roles.includes('admin')) {
+			return (
+				<Link to={`${props.route}/${props.isEdit ? 'edit' : 'add'}`}>
+					<AtomPrimaryButton size="large">
+						{`${props.isEdit ? 'Edit' : 'Tambah'} ${props.label}`}
+					</AtomPrimaryButton>
+				</Link>
+			);
+		}
+
+		return null;
+	};
+
+	const renderExportButton = () => {
+		if (props.withoutExportButton) return null;
+
+		if (roles.includes('super-admin') || roles.includes('admin')) {
+			return (
+				<AtomSecondaryButton
+					loading={isExporting}
+					onClick={() => exportAsCSV()}
+					size="large"
+				>
+					Export Excel
+				</AtomSecondaryButton>
+			);
+		}
+
+		return null;
+	};
+
 	return (
 		<Space>
 			{props.importRoute && (
@@ -69,25 +105,13 @@ const MoleculeDatatableAdditionalAction = (props) => {
 				</AtomSecondaryButton>
 			)}
 
-			{!props.withoutExportButton && (
-				<AtomSecondaryButton
-					loading={isExporting}
-					onClick={() => exportAsCSV()}
-					size="large"
-				>
-					Export Excel
-				</AtomSecondaryButton>
-			)}
+			{renderExportButton}
+
+			{renderExportButton()}
 
 			{props.child && props.child}
 
-			{!props.withoutAddButton && (
-				<Link to={`${props.route}/${props.isEdit ? 'edit' : 'add'}`}>
-					<AtomPrimaryButton size="large">
-						{`${props.isEdit ? 'Edit' : 'Tambah'} ${props.label}`}
-					</AtomPrimaryButton>
-				</Link>
-			)}
+			{renderAddButton()}
 		</Space>
 	);
 };

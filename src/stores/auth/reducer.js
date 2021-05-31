@@ -9,11 +9,7 @@ const INITIAL_STATE = {
 		id: null,
 		first_name: 'John',
 		last_name: 'Doe',
-		roles: [
-			{
-				display_name: 'Administrator Role',
-			},
-		],
+		roles: [],
 		created_at: new Date(),
 		branches: ['Jakarta Pusat', 'Jakarta Barat', 'Bandung'],
 	},
@@ -25,6 +21,11 @@ const authReducer = (state = INITIAL_STATE, action) => {
 			return {
 				...state,
 				token: action.payload,
+			};
+		case AuthTypes.SET_CURRENT_ROLE:
+			return {
+				...state,
+				roles: action.payload,
 			};
 		case AuthTypes.SET_CURRENT_USER:
 			return {

@@ -16,6 +16,7 @@ import AtomPrimaryButton from '../../components/atoms/button/primary-button';
 import AuthenticationLayout from '../../components/layouts/authentication';
 import {
 	setAuthToken,
+	setCurrentRole,
 	setCurrentUser,
 	setLoginStatus,
 	setRefreshToken,
@@ -64,6 +65,9 @@ const LoginPages = () => {
 
 			const { data } = await authService.getAuthenticatedUser();
 			dispatch(setCurrentUser(data));
+			dispatch(
+				setCurrentRole(data.roles.data.map((role) => role.name)[0])
+			);
 
 			window.location = '/';
 		} catch (error) {

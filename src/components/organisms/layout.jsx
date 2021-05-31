@@ -52,219 +52,253 @@ import {
 	setRememberMeStatus,
 } from '../../stores/auth/actions';
 
-const menus = [
-	{
-		name: 'Beranda',
-		icon: <HomeFilled />,
-		link: '/',
-	},
-	{
-		name: 'Admin',
-		icon: <BsPersonFill />,
-		link: '/admin',
-	},
-
-	{
-		name: 'Pesanan',
-		icon: <ShoppingCartOutlined />,
-		subMenuKey: 'order',
-		subMenus: [
-			{
-				name: 'Pesanan',
-				link: '/order/',
-			},
-			{
-				name: 'Pesanan Dikomplain',
-				link: '/order/complain',
-			},
-			{
-				name: 'Ulasan',
-				link: '/order/review',
-			},
-		],
-	},
-	{
-		name: 'Produk-Produk',
-		icon: <DropboxOutlined />,
-		subMenuKey: 'products',
-		subMenus: [
-			{
-				name: 'Produk',
-				link: '/products/',
-			},
-			{
-				name: 'Brand',
-				link: '/products/brand',
-			},
-			{
-				name: 'Kategori Dasar',
-				link: '/products/category',
-			},
-			{
-				name: 'Kategori Tambahan',
-				link: '/products/additional-category',
-			},
-			{
-				name: 'Rekomendasi',
-				link: '/products/recomandation',
-			},
-			{
-				name: 'Warna',
-				link: '/products/colour',
-			},
-			{
-				name: 'Wishlist',
-				link: '/products/wishlist',
-			},
-			{
-				name: 'Zona',
-				link: '/products/zone',
-			},
-		],
-	},
-	{
-		name: 'Tampilan',
-		icon: <LayoutFilled />,
-		subMenuKey: 'view',
-		subMenus: [
-			{
-				name: 'Tampilan',
-				link: '/view/',
-			},
-			{
-				name: 'Banner',
-				link: '/view/banner',
-			},
-			{
-				name: 'Holiday',
-				link: '/view/holiday',
-			},
-			{
-				name: 'Daily Deals',
-				link: '/view/daily-deals',
-			},
-			{
-				name: 'Flash Sale',
-				link: '/view/flash-sale',
-			},
-			{
-				name: 'Special Benefit',
-				link: '/view/special-benefit',
-			},
-			{
-				name: 'Bundling Deals',
-				link: '/view/bundling-deals',
-			},
-			{
-				name: 'Produk Baru',
-				link: '/view/new-product',
-			},
-			{
-				name: `Circle's Favorite`,
-				link: '/view/circle-favorite',
-			},
-			{
-				name: 'Based on Search',
-				link: '/view/based-on-search',
-			},
-			{
-				name: 'Artikel',
-				link: '/view/article',
-			},
-			{
-				name: 'Kategori Artikel',
-				link: '/view/article-category',
-			},
-			{
-				name: 'Promo',
-				link: '/view/promotion',
-			},
-			{
-				name: 'Iklan',
-				link: '/view/ads',
-			},
-		],
-	},
-	{
-		name: 'Pelanggan',
-		icon: <CustomerServiceOutlined />,
-		subMenuKey: 'customer',
-		subMenus: [
-			{
-				name: 'Pelanggan',
-				link: '/customer/',
-			},
-			{
-				name: 'Daftar Teman',
-				link: '/customer/friend-list',
-			},
-			{
-				name: 'Daftar Keluarga',
-				link: '/customer/family-list',
-			},
-			{
-				name: 'Favorite',
-				link: '/customer/favorite',
-			},
-			{
-				name: 'My Catalog',
-				link: '/customer/catalog',
-			},
-			{
-				name: 'MGM',
-				link: '/customer/member-get-member',
-			},
-		],
-	},
-	{
-		name: 'Feed',
-		icon: <MdRssFeed />,
-		link: '/feed',
-	},
-	{
-		name: 'Transaksi',
-		icon: <AiOutlineTransaction />,
-		link: '/transaction',
-	},
-	{
-		name: 'Cabang Freezy',
-		icon: <FaStoreAlt />,
-		link: '/branch',
-	},
-	{
-		name: 'Perusahaan',
-		icon: <FaBuilding />,
-		link: '/perusahaan',
-	},
-	{
-		name: 'Bank',
-		icon: <AiTwotoneBank />,
-		link: '/bank',
-	},
-	{
-		name: 'Pendapatan',
-		icon: <FaMoneyBill />,
-		link: '/income',
-	},
-	{
-		name: 'Voucher',
-		icon: <AiFillGift />,
-		link: '/voucher',
-	},
-	{
-		name: 'Kurir',
-		icon: <FaMotorcycle />,
-		link: '/courier',
-	},
-];
-
 const OrganismLayout = (props) => {
 	const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 	const [notifications] = useState([]);
-	const { user } = useSelector((state) => state.auth);
+	const { roles, user } = useSelector((state) => state.auth);
+
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const location = useLocation();
+
+	const menus = [
+		{
+			name: 'Beranda',
+			icon: <HomeFilled />,
+			link: '/',
+		},
+		{
+			name: 'Admin',
+			icon: <BsPersonFill />,
+			link: '/admin',
+			hidden: !roles.includes('super-admin') || !roles.includes('admin'),
+		},
+		{
+			name: 'Pesanan',
+			icon: <ShoppingCartOutlined />,
+			subMenuKey: 'order',
+			subMenus: [
+				{
+					name: 'Pesanan',
+					link: '/order/',
+				},
+				{
+					name: 'Pesanan Dikomplain',
+					link: '/order/complain',
+				},
+				{
+					name: 'Ulasan',
+					link: '/order/review',
+					hidden: roles.includes('manager-freezy'),
+				},
+			],
+		},
+		{
+			name: 'Produk-Produk',
+			icon: <DropboxOutlined />,
+			subMenuKey: 'products',
+			subMenus: [
+				{
+					name: 'Produk',
+					link: '/products/',
+				},
+				{
+					name: 'Brand',
+					link: '/products/brand',
+					hidden:
+						!roles.includes('super-admin') ||
+						!roles.includes('admin'),
+				},
+				{
+					name: 'Kategori Dasar',
+					link: '/products/category',
+					hidden:
+						!roles.includes('super-admin') ||
+						!roles.includes('admin'),
+				},
+				{
+					name: 'Kategori Tambahan',
+					link: '/products/additional-category',
+					hidden:
+						!roles.includes('super-admin') ||
+						!roles.includes('admin'),
+				},
+				{
+					name: 'Rekomendasi',
+					link: '/products/recomandation',
+					hidden:
+						!roles.includes('super-admin') ||
+						!roles.includes('admin'),
+				},
+				{
+					name: 'Warna',
+					link: '/products/colour',
+					hidden:
+						!roles.includes('super-admin') ||
+						!roles.includes('admin'),
+				},
+				{
+					name: 'Wishlist',
+					link: '/products/wishlist',
+					hidden:
+						!roles.includes('super-admin') ||
+						!roles.includes('admin'),
+				},
+				{
+					name: 'Zona',
+					link: '/products/zone',
+					hidden:
+						!roles.includes('super-admin') ||
+						!roles.includes('admin'),
+				},
+			],
+		},
+		{
+			name: 'Tampilan',
+			icon: <LayoutFilled />,
+			subMenuKey: 'view',
+			hidden: !roles.includes('super-admin') || !roles.includes('admin'),
+			subMenus: [
+				{
+					name: 'Tampilan',
+					link: '/view/',
+				},
+				{
+					name: 'Banner',
+					link: '/view/banner',
+				},
+				{
+					name: 'Holiday',
+					link: '/view/holiday',
+				},
+				{
+					name: 'Daily Deals',
+					link: '/view/daily-deals',
+				},
+				{
+					name: 'Flash Sale',
+					link: '/view/flash-sale',
+				},
+				{
+					name: 'Special Benefit',
+					link: '/view/special-benefit',
+				},
+				{
+					name: 'Bundling Deals',
+					link: '/view/bundling-deals',
+				},
+				{
+					name: 'Produk Baru',
+					link: '/view/new-product',
+				},
+				{
+					name: `Circle's Favorite`,
+					link: '/view/circle-favorite',
+				},
+				{
+					name: 'Based on Search',
+					link: '/view/based-on-search',
+				},
+				{
+					name: 'Artikel',
+					link: '/view/article',
+				},
+				{
+					name: 'Kategori Artikel',
+					link: '/view/article-category',
+				},
+				{
+					name: 'Promo',
+					link: '/view/promotion',
+				},
+				{
+					name: 'Iklan',
+					link: '/view/ads',
+				},
+				{
+					name: 'Special Benefit',
+					link: '/view/special-benefit',
+				},
+			],
+		},
+		{
+			name: 'Pelanggan',
+			icon: <CustomerServiceOutlined />,
+			subMenuKey: 'customer',
+			hidden: roles.includes('manager-tows'),
+			subMenus: [
+				{
+					name: 'Pelanggan',
+					link: '/customer/',
+				},
+				{
+					name: 'Daftar Teman',
+					link: '/customer/friend-list',
+				},
+				{
+					name: 'Daftar Keluarga',
+					link: '/customer/family-list',
+				},
+				{
+					name: 'Favorite',
+					link: '/customer/favorite',
+				},
+				{
+					name: 'My Catalog',
+					link: '/customer/catalog',
+				},
+				{
+					name: 'MGM',
+					link: '/customer/member-get-member',
+				},
+			],
+		},
+		{
+			name: 'Feed',
+			icon: <MdRssFeed />,
+			link: '/feed',
+		},
+		{
+			name: 'Transaksi',
+			icon: <AiOutlineTransaction />,
+			link: '/transaction',
+			hidden: !roles.includes('super-admin') || !roles.includes('admin'),
+		},
+		{
+			name: 'Cabang Freezy',
+			icon: <FaStoreAlt />,
+			link: '/branch',
+			hidden: !roles.includes('super-admin') || !roles.includes('admin'),
+		},
+		{
+			name: 'Perusahaan',
+			icon: <FaBuilding />,
+			link: '/perusahaan',
+			hidden: !roles.includes('super-admin') || !roles.includes('admin'),
+		},
+		{
+			name: 'Bank',
+			icon: <AiTwotoneBank />,
+			link: '/bank',
+			hidden: !roles.includes('super-admin') || !roles.includes('admin'),
+		},
+		{
+			name: 'Pendapatan',
+			icon: <FaMoneyBill />,
+			link: '/income',
+		},
+		{
+			name: 'Voucher',
+			icon: <AiFillGift />,
+			link: '/voucher',
+			hidden: !roles.includes('super-admin') || !roles.includes('admin'),
+		},
+		{
+			name: 'Kurir',
+			icon: <FaMotorcycle />,
+			link: '/courier',
+		},
+	];
 
 	const notificationMenus = () => (
 		<Space className="pa3" direction="vertical" style={{ width: 300 }}>
@@ -464,39 +498,46 @@ const OrganismLayout = (props) => {
 						theme="dark"
 					>
 						{menus.map((menu) => {
-							return !menu.subMenus ? (
-								<Menu.Item
-									key={menu.link}
-									icon={menu.icon}
-									onClick={() => history.push(menu.link)}
-								>
-									{menu.name}
-								</Menu.Item>
-							) : (
-								<Menu.SubMenu
-									className={
-										location.pathname.includes(
-											menu.subMenyKey
-										)
-											? 'ant-menu-submenu-open'
-											: ''
-									}
-									key={menu.subMenuKey}
-									icon={menu.icon}
-									title={menu.name}
-								>
-									{menu.subMenus.map((sub) => (
-										<Menu.Item
-											key={sub.link}
-											onClick={() =>
-												history.push(sub.link)
-											}
-										>
-											{sub.name}
-										</Menu.Item>
-									))}
-								</Menu.SubMenu>
-							);
+							return !menus.hidden ? (
+								!menu.subMenus ? (
+									<Menu.Item
+										key={menu.link}
+										icon={menu.icon}
+										onClick={() => history.push(menu.link)}
+									>
+										{menu.name}
+									</Menu.Item>
+								) : (
+									<Menu.SubMenu
+										className={
+											location.pathname.includes(
+												menu.subMenyKey
+											)
+												? 'ant-menu-submenu-open'
+												: ''
+										}
+										key={menu.subMenuKey}
+										icon={menu.icon}
+										title={menu.name}
+									>
+										{menu.subMenus.map(
+											(sub) =>
+												!sub.hidden && (
+													<Menu.Item
+														key={sub.link}
+														onClick={() =>
+															history.push(
+																sub.link
+															)
+														}
+													>
+														{sub.name}
+													</Menu.Item>
+												)
+										)}
+									</Menu.SubMenu>
+								)
+							) : null;
 						})}
 					</Menu>
 				</Layout.Sider>

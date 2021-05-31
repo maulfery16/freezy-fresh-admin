@@ -35,7 +35,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 	const [filterParams, setFilterParams] = useState({
 		filter: '',
 		search: '',
-		limit: props.limit || 5,
+		limit: props.limit || 15,
 		orderBy: '',
 		page: 1,
 		sortedBy: '',
@@ -300,7 +300,10 @@ const OrganismDatatable = forwardRef((props, ref) => {
 				</Row>
 			</Col>
 
-			<Col className="mt4" span={24}>
+			<Col
+				className={`${props.searchInput || props.filter ? 'mt4' : ''}`}
+				span={24}
+			>
 				<Table
 					bordered={true}
 					columns={props.columns}
