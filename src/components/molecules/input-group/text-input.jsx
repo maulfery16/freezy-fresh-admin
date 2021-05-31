@@ -59,7 +59,7 @@ const MoleculeTextInputGroup = (props) => {
 	};
 
 	return (
-		<Form.Item>
+		<Form.Item help={props.help || ''}>
 			<Typography.Text>
 				<span className="gray fw5 mb2">{props.label}</span>
 			</Typography.Text>
