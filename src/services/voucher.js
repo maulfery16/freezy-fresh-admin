@@ -67,3 +67,22 @@ export default class VoucherService extends RequestAdapterService {
 		}
 	}
 }
+
+export const translateVoucherStatusEnum = (status) => {
+	const STATUS_ENUM = {
+		ACTIVE: 'Aktif',
+		UPCOMING: 'Mendatang',
+		NOT_ACTIVE: 'Tidak Aktif',
+	};
+
+	return status ? STATUS_ENUM[status] : '-';
+};
+
+export const translateVoucherTargetEnum = (target) => {
+	const TARGET_ENUM = {
+		LIMITED: 'Terbatas',
+		PUBLIC: 'Publik',
+	};
+
+	return target ? TARGET_ENUM[target] : '-';
+};

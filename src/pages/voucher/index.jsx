@@ -12,6 +12,11 @@ import MoleculeDeleteConfirm from '../../components/molecules/delete-confirm';
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
 
+import {
+	translateVoucherStatusEnum,
+	translateVoucherTargetEnum,
+} from '../../services/voucher';
+
 const VoucherPage = () => {
 	const voucherTableRef = useRef();
 	const column = [
@@ -24,11 +29,13 @@ const VoucherPage = () => {
 		{
 			title: 'Nama Voucher',
 			dataIndex: 'name',
+			render: (name) => name.id,
 			sorter: true,
 		},
 		{
 			title: 'Target Voucher',
 			dataIndex: 'target',
+			render: (target) => translateVoucherTargetEnum(target),
 			sorter: true,
 		},
 		{
@@ -40,7 +47,7 @@ const VoucherPage = () => {
 			title: 'Tipe Cashback',
 			dataIndex: 'cashback_type',
 			render: (cashback_type) =>
-				cashback_type === 'PERSENTAGE' ? 'Persentase' : 'Rupiah',
+				cashback_type === 'PERCENTAGE' ? 'Persentase' : 'Rupiah',
 			sorter: true,
 		},
 		{
@@ -95,9 +102,9 @@ const VoucherPage = () => {
 				},
 				{
 					title: 'Status Voucher',
-					dataIndex: 'is_active',
+					dataIndex: 'status',
 					render: (is_active) =>
-						is_active ? 'Aktif' : 'Tidak Aktif',
+						translateVoucherStatusEnum(is_active),
 				},
 			],
 		},
@@ -115,7 +122,7 @@ const VoucherPage = () => {
 						<EditFilled className="f4 orange" />
 					</Link>
 
-					{!record.is_active && (
+					{record.status !== 'ACTIVE' && (
 						<MoleculeDeleteConfirm
 							id={id}
 							label="Voucher"
@@ -168,7 +175,7 @@ const VoucherPage = () => {
 				data={{
 					options: [
 						{ value: 'RUPIAH', label: 'Rupiah' },
-						{ value: 'PERSENTAGE', label: 'Persentase' },
+						{ value: 'PERCENTAGE', label: 'Persentase' },
 					],
 				}}
 			/>,
