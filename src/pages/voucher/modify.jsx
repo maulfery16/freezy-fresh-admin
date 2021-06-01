@@ -16,15 +16,6 @@ import OrganismLayout from '../../components/organisms/layout';
 import VoucherService from '../../services/voucher';
 import { generateFormFailedError } from '../../utils/helpers';
 
-export const getFormattedDate = (date) => {
-	return (
-		date &&
-		`${date.getFullYear()} ${
-			date.getMonth() + 1
-		} ${date.getDate()} ${date.getHours()} ${date.getMinutes()} 00`
-	);
-};
-
 const VoucherModifyPage = () => {
 	const voucherService = new VoucherService();
 
@@ -39,19 +30,13 @@ const VoucherModifyPage = () => {
 
 	let defaultStartDate = new Date();
 	defaultStartDate.setDate(defaultStartDate.getDate() + 1);
-	let defaultFinishDate = new Date();
-	defaultFinishDate.setDate(defaultFinishDate.getDate() + 7);
+	let defaultEndDate = new Date();
+	defaultEndDate.setDate(defaultEndDate.getDate() + 7);
 
 	const [cashbackNominal, setCashbackNominal] = useState(0);
 	const [cashbackPeriode, setCashbackPeriode] = useState({
-		start_periode: moment(
-			`${getFormattedDate(defaultStartDate)}`,
-			'YYYY-MM-DD HH:mm:ss'
-		),
-		end_periode: moment(
-			`${getFormattedDate(defaultFinishDate)}`,
-			'YYYY-MM-DD HH:mm:ss'
-		),
+		start_periode: moment(defaultStartDate, 'YYYY-MM-DD HH:mm:ss'),
+		end_periode: moment(defaultEndDate, 'YYYY-MM-DD HH:mm:ss'),
 	});
 
 	const [howToUseEn, setHowToUseEn] = useState('');
@@ -66,9 +51,8 @@ const VoucherModifyPage = () => {
 	const [termEn, setTermEn] = useState('');
 	const [termId, setTermId] = useState('');
 
-	const [isCashbackNominalEnabled, setIsCashbackNominalEnabled] = useState(
-		false
-	);
+	const [isCashbackNominalEnabled, setIsCashbackNominalEnabled] =
+		useState(false);
 	const [isCodeEnabled, setIsCodeEnabled] = useState(false);
 
 	const getVoucherDetail = async (id) => {
@@ -99,8 +83,6 @@ const VoucherModifyPage = () => {
 	};
 
 	const submit = async (values) => {
-		// console.log()
-		console.log(getFormattedDate(cashbackPeriode.start_periode));
 		if (!termEn || !termId) {
 			message.error('Syarat dan Ketentuan wajib diisi');
 			return false;
@@ -113,6 +95,7 @@ const VoucherModifyPage = () => {
 			message.error('Periode Cashback wajib diisi');
 			return false;
 		}
+
 		try {
 			setIsSubmitting(true);
 
@@ -128,8 +111,14 @@ const VoucherModifyPage = () => {
 			data.append('min_order_rp', values.min_order_rp);
 			data.append('quota', values.quota);
 			data.append('estimation_costs_rp', values.estimation_costs_rp);
-			data.append('start_periode', cashbackPeriode.start_periode);
-			data.append('end_periode', cashbackPeriode.end_periode);
+			data.append(
+				'start_periode',
+				moment(cashbackPeriode.start_periode, 'YYYY-MM-DD HH:mm:ss')
+			);
+			data.append(
+				'end_periode',
+				moment(cashbackPeriode.end_periode, 'YYYY-MM-DD HH:mm:ss')
+			);
 			data.append('how_to_use[id]', howToUseId);
 			data.append('how_to_use[en]', howToUseEn);
 			data.append('terms_and_condition[id]', termId);
@@ -302,7 +291,7 @@ const VoucherModifyPage = () => {
 													label="Target Voucher"
 													name="target"
 													placeholder="Pilih Target Voucher"
-													// required={true}
+													required={true}
 													value="PUBLIC"
 													onChange={(value) =>
 														setIsCodeEnabled(
@@ -316,10 +305,8 @@ const VoucherModifyPage = () => {
 																label: 'Publik',
 															},
 															{
-																value:
-																	'LIMITED',
-																label:
-																	'Terbatas',
+																value: 'LIMITED',
+																label: 'Terbatas',
 															},
 														],
 													}}
@@ -345,7 +332,7 @@ const VoucherModifyPage = () => {
 													name="id_name"
 													placeholder="Masukkan Nama Voucher (ID)"
 													type="text"
-													// required={true}
+													required={true}
 												/>
 											</Col>
 
@@ -355,7 +342,7 @@ const VoucherModifyPage = () => {
 													name="en_name"
 													placeholder="Masukkan Nama Voucher (EN)"
 													type="text"
-													// required={true}
+													required={true}
 												/>
 											</Col>
 
@@ -364,7 +351,7 @@ const VoucherModifyPage = () => {
 													label="Tipe Cashback"
 													name="cashback_type"
 													placeholder="Pilih Tipe Cashback"
-													// required={true}
+													required={true}
 													value="RUPIAH"
 													onChange={(value) =>
 														setIsCashbackNominalEnabled(
@@ -378,10 +365,8 @@ const VoucherModifyPage = () => {
 																label: 'Rupiah',
 															},
 															{
-																value:
-																	'PERCENTAGE',
-																label:
-																	'Persentase',
+																value: 'PERCENTAGE',
+																label: 'Persentase',
 															},
 														],
 													}}
@@ -458,7 +443,7 @@ const VoucherModifyPage = () => {
 													onChange={(value) =>
 														setQuota(value)
 													}
-													// required={true}
+													required={true}
 												/>
 											</Col>
 
@@ -479,7 +464,9 @@ const VoucherModifyPage = () => {
 													label="Periode Cashback"
 													name="cashback_periode"
 													onChange={(date) => {
+														console.log(date[0]);
 														setCashbackPeriode({
+															...cashbackPeriode,
 															start_periode:
 																date[0],
 															end_periode:
@@ -519,7 +506,7 @@ const VoucherModifyPage = () => {
 													label="Syarat dan Ketentuan (ID)"
 													onChange={setTermId}
 													value={termId}
-													// required={true}
+													required={true}
 												/>
 											</Col>
 
@@ -528,7 +515,7 @@ const VoucherModifyPage = () => {
 													label="Syarat dan Ketentuan (EN)"
 													onChange={setTermEn}
 													value={termEn}
-													// required={true}
+													required={true}
 												/>
 											</Col>
 										</Row>
@@ -547,7 +534,7 @@ const VoucherModifyPage = () => {
 													label="Cara Pakai (ID)"
 													onChange={setHowToUseId}
 													value={howToUseId}
-													// required={true}
+													required={true}
 												/>
 											</Col>
 
@@ -556,7 +543,7 @@ const VoucherModifyPage = () => {
 													label="Cara Pakai (EN)"
 													onChange={setHowToUseEn}
 													value={howToUseEn}
-													// required={true}
+													required={true}
 												/>
 											</Col>
 										</Row>
