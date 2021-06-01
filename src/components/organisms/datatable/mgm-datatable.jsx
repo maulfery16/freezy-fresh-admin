@@ -27,76 +27,74 @@ const OrganismMgmDatatable = (props) => {
 		},
 		{
 			title: 'Kode Pelanggan ',
-			dataIndex: 'customer',
+			dataIndex: 'user',
 			sorter: true,
-			render: (customer) => customer?.code,
-			csvRender: (item) => item?.customer?.code,
+			render: (user) => user?.code,
+			csvRender: (item) => item?.user?.code,
 		},
 		{
 			title: 'Nama Depan',
-			dataIndex: 'customer',
+			dataIndex: 'user',
 			sorter: true,
-			render: (customer) => customer?.first_name,
-			csvRender: (item) => item?.customer?.first_name,
+			render: (user) => user?.first_name,
+			csvRender: (item) => item?.user?.first_name,
 		},
 		{
 			title: 'Nama Belakang',
-			dataIndex: 'customer',
+			dataIndex: 'user',
 			sorter: true,
-			render: (customer) => customer?.last_name,
-			csvRender: (item) => item?.customer?.last_name,
+			render: (user) => user?.last_name,
+			csvRender: (item) => item?.user?.last_name,
 		},
 		{
 			align: 'center',
 			title: 'Foto Profile',
-			dataIndex: 'customer',
-			render: (customer) => <AtomImage src={customer?.social_avatar} />,
-			csvRender: (item) => item?.customer?.social_avatar,
+			dataIndex: 'user',
+			render: (user) => <AtomImage src={user?.profile_image} />,
+			csvRender: (item) => item?.user?.profile_image,
 		},
 		{
 			title: 'Tanggal Lahir',
-			dataIndex: 'customer',
+			dataIndex: 'user',
 			sorter: true,
 			csvRender: (item) =>
-				item?.customer?.birth
-					? moment(item?.customer?.birth).format('DD/MM/YYYY')
+				item?.user?.birth
+					? moment(item?.user?.birth).format('DD/MM/YYYY')
 					: '-',
-			render: (customer) =>
-				customer?.birth ? (
-					<ReactMoment format="DD/MM/YYYY">
-						{customer?.birth}
-					</ReactMoment>
+			render: (user) =>
+				user?.birth ? (
+					<ReactMoment format="DD/MM/YYYY">{user?.birth}</ReactMoment>
 				) : (
 					'-'
 				),
 		},
 		{
 			title: 'Jenis Kelamin',
-			dataIndex: 'customer',
+			dataIndex: 'user',
 			sorter: true,
-			render: (customer) => translateGenderEnum(customer?.gender),
-			csvRender: (item) => item?.customer?.gender,
+			render: (user) => translateGenderEnum(user?.gender),
+			csvRender: (item) => item?.user?.gender,
 		},
 		{
 			title: 'Email',
-			dataIndex: 'customer',
+			dataIndex: 'user',
 			sorter: true,
-			render: (customer) => customer?.email,
-			csvRender: (item) => item?.customer?.email,
+			render: (user) => user?.email,
+			csvRender: (item) => item?.user?.email,
 		},
 		{
 			title: 'No Handphone',
-			dataIndex: 'customer',
+			dataIndex: 'user',
 			sorter: true,
-			render: (customer) => customer?.phone_number,
-			csvRender: (item) => item?.customer?.phone_number,
+			render: (user) => user?.phone_number,
+			csvRender: (item) => item?.user?.phone_number,
 		},
 		{
 			align: 'center',
 			title: 'Foto KTP',
-			dataIndex: 'customer',
-			render: (customer) => <AtomImage src={customer?.ktp_photo} />,
-			csvRender: (item) => item?.customer?.ktp_photo,
+			dataIndex: 'user',
+			render: (user) => <AtomImage src={user?.idcard_image} />,
+			csvRender: (item) => item?.user?.idcard_image,
 		},
 		{
 			title: 'Total Member Join',
@@ -139,7 +137,7 @@ const OrganismMgmDatatable = (props) => {
 			render: (id, record) => (
 				<Space size="middle">
 					<Link
-						to={`/customer/member-get-member/customer/${record?.customer_id}/detail`}
+						to={`/customer/member-get-member/customer/${record?.user_id}/detail`}
 					>
 						<EyeFilled className="f4 blue" />
 					</Link>
@@ -181,8 +179,8 @@ const OrganismMgmDatatable = (props) => {
 			align: 'center',
 			title: 'Foto Profile',
 			dataIndex: 'member',
-			render: (member) => <AtomImage src={member?.social_avatar} />,
-			csvRender: (item) => item?.member?.social_avatar,
+			render: (member) => <AtomImage src={member?.profile_image} />,
+			csvRender: (item) => item?.member?.profile_image,
 		},
 		{
 			title: 'Status Member',
