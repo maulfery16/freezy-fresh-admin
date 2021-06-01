@@ -61,10 +61,6 @@ const BrandPage = () => {
 			csvRender: (item) => moment(item.created_at).format('DD/MM/YYYY'),
 		},
 		{
-			title: 'Dibuat Oleh',
-			dataIndex: 'created_by',
-		},
-		{
 			title: 'Tanggal Diperbaharui',
 			dataIndex: 'updated_at',
 			render: (date) => (
@@ -72,6 +68,10 @@ const BrandPage = () => {
 			),
 
 			csvRender: (item) => moment(item.updated_at).format('DD/MM/YYYY'),
+		},
+		{
+			title: 'Dibuat Oleh',
+			dataIndex: 'created_by',
 		},
 		{
 			title: 'Diperbaharui Oleh',
