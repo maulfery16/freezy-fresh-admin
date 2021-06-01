@@ -19,7 +19,7 @@ import {
 	Space,
 	Table,
 } from 'antd';
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, DeleteFilled, EditFilled } from '@ant-design/icons';
 
 import AtomBranchSelection from '../../atoms/selection/branch';
 import AtomCard from '../../atoms/card';
@@ -35,6 +35,8 @@ const EditableCell = ({
 	dataIndex,
 	title,
 	children,
+	isEditDiscount,
+	record,
 	...restProps
 }) => {
 	return (
@@ -53,7 +55,7 @@ const EditableCell = ({
 					]}
 				>
 					<Space size={5}>
-						<InputNumber /> <span>%</span>
+						<InputNumber defaultValue={record ? record[dataIndex] ? record[dataIndex] : '' : ''} /> {isEditDiscount && (<span>%</span>)}
 					</Space>
 				</Form.Item>
 			) : (
@@ -127,6 +129,15 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 		},
 	];
 
+	if (props.maxStockPerUser) {
+		columns.push({
+			editable: true,
+			title: 'Batas Stok per User',
+			dataIndex: 'max_stock_per_user',
+			sorter: true,	
+		})
+	}
+
 	if (!props.isReadOnly) {
 		columns.push({
 			align: 'center',
@@ -143,6 +154,17 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 
 						<Popconfirm title="Sure to cancel?" onConfirm={cancel}>
 							<CloseOutlined className="red f4 fw8" />
+						</Popconfirm>
+					</Space>
+				) : props.canModify ? (
+					<Space>
+						<EditFilled
+							className="yellow f4 fw8"
+							onClick={() => edit(record)}
+						/>
+
+						<Popconfirm title="Are you sure you want to delete this product?" onConfirm={() => deleteProduct(record.product_id)}>
+							<DeleteFilled className="red f4 fw8" />
 						</Popconfirm>
 					</Space>
 				) : (
@@ -188,7 +210,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 	const applyFilter = (values) => {
 		const filterTmp = {};
 
-		if (values.branches) filterTmp.branch = values.branch;
+		if (values.branches) filterTmp.branch = values.branches;
 		else filterTmp.branch = '';
 		if (values.product_category) filterTmp.productCategory = values.product_category;
 		else filterTmp.productCategory = '';
@@ -199,12 +221,17 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 
 	const deleteAllProduct = () => setData([]);
 
+	const deleteProduct = (id) => {
+		let filteredData = data;
+		filteredData = filteredData.filter((column) => column.product_id !== id);
+		setData(filteredData);
+	}
+
 	const edit = (record) => {
 		form.setFieldsValue({
-			name: '',
-			age: '',
-			address: '',
-			...record,
+			discount_percentage: '',
+			max_stock_per_user: '',
+			...record
 		});
 
 		setEditingKey(record.product_id);
@@ -247,7 +274,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 
 		if (filters.productCategory || filters.productCategory !== '')
 			filteredData = filteredData.filter((column) =>
-				column.additional_category.id.includes(filters.productCategory)
+				column.base_category.id.includes(filters.productCategory)
 			);
 
 		return filteredData;
@@ -279,6 +306,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 	const setProductToTable = async (values) => {
 		try {
 			const response = await getDetailProduct(values.branches.join(', '));
+			if (props.maxStockPerUser) response.max_stock_per_user = 0;
 			productForm.resetFields();
 			if (response) {
 				setData([...data, response]);
@@ -299,17 +327,26 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 				dataIndex: col.dataIndex,
 				title: col.title,
 				editing: isEditing(record),
+				isEditDiscount: col.dataIndex === 'discount_percentage',
 			}),
 		};
 	});
 
 	useEffect(() => {
-		if (productID && productDetailID) branchOptionsRef.current.refetchData();
+		if (productID && productDetailID) {
+			branchOptionsRef.current.refetchData();
+		}
 	}, [productID, productDetailID, branchesURL]);
 
 	useImperativeHandle(ref, () => ({
 		data,
 	}));
+
+	useEffect(() => {
+		if (props.defaultData.length > 0) {
+			setData(props.defaultData)
+		}
+	}, [props.defaultData])
 
 	return (
 		<AtomCard title="Daftar Produk">
@@ -339,7 +376,12 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 								>
 									<Row align="middle" gutter={12}>
 										<Col span={9}>
-											<AtomBranchSelection />
+											<AtomBranchSelection
+												generateCustomOption={(item) => ({
+													value: item.name.id,
+													label: item.name.id
+												})}
+											/>
 										</Col>
 
 										<Col span={9}>
@@ -349,11 +391,11 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 												placeholder="Kategori Produk"
 												allowClear
 												data={{
-													url: 'additional-categories',
+													url: 'base-categories',
 													generateCustomOption: (
 														item
 													) => ({
-														value: item.id,
+														value: item.name.id,
 														label: item.name.id,
 													}),
 												}}

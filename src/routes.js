@@ -583,6 +583,29 @@ const routes = [
 				],
 			},
 			{
+				path: '/daily-deals',
+				children: [
+					{
+						component: React.lazy(() =>
+							import('./pages/view/daily-deals')
+						),
+						exact: true,
+						guard: true,
+						name: 'Daily Deals Page',
+						path: '/',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/view/daily-deals/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Edit Daily Deals Page',
+						path: '/edit',
+					},
+				],
+			},
+			{
 				path: '/new-product',
 				children: [
 					{

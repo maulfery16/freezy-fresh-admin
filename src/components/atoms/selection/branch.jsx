@@ -14,6 +14,17 @@ const AtomBranchSelect = (props) => {
 		}
 	};
 
+	const setGenerateCustomOption = () => {
+		if (props.generateCustomOption) {
+			return (item) => props.generateCustomOption(item)
+		} else {
+			return (item) => ({
+				value: optionValue ? item[optionValue] : item.id,
+				label: item.name.id,
+			})
+		}
+	}
+
 	return (
 		<MoleculeSelectInputGroup
 			{...restProps}
@@ -23,10 +34,7 @@ const AtomBranchSelect = (props) => {
 			placeholder="Pilih Cabang Freezy"
 			data={{
 				url: props.url ?? 'branches',
-				generateCustomOption: (item) => ({
-					value: optionValue ? item[optionValue] : item.id,
-					label: item.name.id,
-				}),
+				generateCustomOption: setGenerateCustomOption(),
 				onChange: setOnChangeFunction(),
 			}}
 		/>
@@ -36,6 +44,7 @@ const AtomBranchSelect = (props) => {
 AtomBranchSelect.propTypes = {
 	onChange: PropTypes.func,
 	optionValue: PropTypes.string,
+	optionValue2: PropTypes.string,
 	required: PropTypes.bool,
 	url: PropTypes.string,
 };
