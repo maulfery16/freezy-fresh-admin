@@ -201,6 +201,14 @@ const DailyDealsPage = () => {
 								<AtomCard>
 									<Row gutter={[24, 24]}>
 										<Col span={24}>
+											<Typography.Text strong>
+												<span className="denim f5">
+													{'Info Daily Deals'.toUpperCase()}
+												</span>
+											</Typography.Text>
+										</Col>
+
+										<Col span={24}>
 											<MoleculeInfoGroup
 												title="Foto Banner"
 												content={
@@ -267,35 +275,35 @@ const DailyDealsPage = () => {
 										<Col span={12}>
 											<MoleculeInfoGroup
 												title="Deskripsi Lengkap (ID)"
-												content={
-													<MoleculeMarkdownRenderer
+												content={dailyDeals?.long_description?.id ? (
+                          <MoleculeMarkdownRenderer
 														withBorder
 														text={
 															dailyDeals?.long_description?.id
 														}
 													/>
-												}
+                        ) : null}
 											/>
 										</Col>
 
 										<Col span={12}>
 											<MoleculeInfoGroup
 												title="Deskripsi Lengkap (EN)"
-												content={
-													<MoleculeMarkdownRenderer
+                        content={dailyDeals?.long_description?.en ? (
+                          <MoleculeMarkdownRenderer
 														withBorder
 														text={
 															dailyDeals?.long_description?.en
 														}
 													/>
-												}
+                        ) : null}
 											/>
 										</Col>
 
 										<Col span={24}>
 											<Typography.Text strong>
 												<span className="denim f5">
-													{'Info Update Produk'.toUpperCase()}
+													{'Info Update'.toUpperCase()}
 												</span>
 											</Typography.Text>
 										</Col>
@@ -313,10 +321,10 @@ const DailyDealsPage = () => {
 
 										<Col span={12}>
 											<MoleculeInfoGroup
-												title="Tanggal di Daftarkan"
+												title="Tanggal Diperbarui"
 												content={
 													<ReactMoment format="DD-MM-YYYY">
-														{dailyDeals?.registered_at}
+														{dailyDeals?.updated_at}
 													</ReactMoment>
 												}
 											/>
@@ -331,8 +339,8 @@ const DailyDealsPage = () => {
 
 										<Col span={12}>
 											<MoleculeInfoGroup
-												title="Didaftarkan Oleh"
-												content={dailyDeals?.registered_by}
+												title="Diperbarui Oleh"
+												content={dailyDeals?.updated_by}
 											/>
 										</Col>
 									</Row>

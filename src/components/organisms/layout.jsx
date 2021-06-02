@@ -161,7 +161,7 @@ const OrganismLayout = (props) => {
 			subMenus: [
 				{
 					name: 'Tampilan',
-					link: '/view/',
+					link: '/view/additional-sections',
 				},
 				{
 					name: 'Banner',
@@ -178,10 +178,6 @@ const OrganismLayout = (props) => {
 				{
 					name: 'Flash Sale',
 					link: '/view/flash-sale',
-				},
-				{
-					name: 'Special Benefit',
-					link: '/view/special-benefit',
 				},
 				{
 					name: 'Bundling Deals',

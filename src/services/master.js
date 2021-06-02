@@ -7,7 +7,6 @@ export default class MasterService extends RequestAdapterService {
 				`${this.baseUrl}/v1/${url}`,
 				{
 					...params,
-					limit: 300,
 				}
 			);
 

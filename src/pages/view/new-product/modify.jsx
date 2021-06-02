@@ -89,7 +89,7 @@ const NewProductModifyPage = (props) => {
 					<Row>
 						<Col span={15}>
 							<AtomCard title="Info Produk Baru">
-								<Row gutter={12}>
+								<Row gutter={12} className="mt4">
 									<Col span={24}>
 										<MoleculeTextInputGroup
 											name="title_id"

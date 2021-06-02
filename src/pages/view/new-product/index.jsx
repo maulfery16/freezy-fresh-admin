@@ -74,7 +74,7 @@ const NewProductPage = () => {
 				<Row align="top" className="mt4" gutter={24}>
 					<Col span={15}>
 						<AtomCard title="Info Produk Baru">
-							<Row gutter={[12, 24]}>
+							<Row gutter={[12, 24]} className="mt4">
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Title Konten (ID)"
@@ -128,7 +128,7 @@ const NewProductPage = () => {
 
 								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Tanggal di Update"
+										title="Tanggal Diperbarui"
 										content={
 											<ReactMoment format="DD-MM-YYYY">
 												{newProduct.updated_at}
@@ -146,7 +146,7 @@ const NewProductPage = () => {
 
 								<Col span={12}>
 									<MoleculeInfoGroup
-										title="Diupdate Oleh"
+										title="Diperbarui Oleh"
 										content={newProduct.updated_by}
 									/>
 								</Col>

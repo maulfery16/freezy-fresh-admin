@@ -12,7 +12,8 @@ import MasterService from '../../../services/master';
 const masterService = new MasterService();
 
 const AtomCustomSelect = forwardRef((props, ref) => {
-	const [options, setOptions] = useState(null);
+	const [options, setOptions] = useState([]);
+	const [nextPage, setNextPage] = useState(1);
 
 	const generateOption = (item) => {
 		if (props.data.generateCustomOption)
@@ -24,30 +25,41 @@ const AtomCustomSelect = forwardRef((props, ref) => {
 		};
 	};
 
-	const getOptions = async () => {
-		setOptions(null);
-		
+	const getOptions = async (page) => {
 		if (props.data.options) {
 			setOptions(props.data.options);
 		} else {
-			const { data } = await masterService.getOptions(props.data.url);
+			const response = await masterService.getOptions(props.data.url, {page, limit: 10});
+			const nextURL = response?.meta?.pagination?.links?.next;
+			if (response.data && response.data.length > 0) {
+				let tmpOptions = page === 1 ? [] : options;
 
-			const options = data.map((item) => generateOption(item));
-			options.unshift({ label: 'Semua', value: '', disabled: true });
-
-			setOptions(options);
+				response.data.map((item) => tmpOptions.push(generateOption(item)));
+				options.unshift({ label: 'Semua', value: '', disabled: true });
+	
+				setOptions(tmpOptions);
+			}
+			if (nextURL) {
+				const url = new URL(nextURL);
+				const page = url.searchParams.get('page');
+				setNextPage(page);
+			} else {
+				setNextPage(null);
+			}
 		}
 	};
 
 	useEffect(() => {
 		(async () => {
-			await getOptions();
+			setOptions(null);
+			await getOptions(1);
 		})();
 	}, []);
 
 	useImperativeHandle(ref, () => ({
 		async refetchData() {
-			await getOptions();
+			setOptions(null);
+			await getOptions(1);
 		},
 	}));
 
@@ -70,6 +82,15 @@ const AtomCustomSelect = forwardRef((props, ref) => {
 					.toLowerCase()
 					.localeCompare(optionB.children.toLowerCase())
 			}
+			onPopupScroll={(e) => {
+				e.persist();
+				let target = e.target;
+				if (target.scrollTop + target.offsetHeight === target.scrollHeight) {
+					if (nextPage) {
+						getOptions(nextPage);
+					}
+				}
+			}}
 		>
 			{options.map((option, index) => (
 				<Select.Option
