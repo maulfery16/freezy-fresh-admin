@@ -1,15 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import {
-	Col,
-	Form,
-	message,
-	Row,
-	Skeleton,
-	// Tabs,
-	Typography,
-} from 'antd';
+import { Col, Form, message, Row, Skeleton, Tabs, Typography } from 'antd';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import AtomCard from '../../components/atoms/card';
@@ -36,34 +28,54 @@ const VoucherModifyPage = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [voucher, setVoucher] = useState(null);
 
+	let defaultStartDate = new Date();
+	defaultStartDate.setDate(defaultStartDate.getDate() + 1);
+	let defaultEndDate = new Date();
+	defaultEndDate.setDate(defaultEndDate.getDate() + 7);
+
 	const [cashbackNominal, setCashbackNominal] = useState(0);
+	const [cashbackPeriode, setCashbackPeriode] = useState({
+		start_periode: moment(defaultStartDate, 'YYYY-MM-DD HH:mm:ss'),
+		end_periode: moment(defaultEndDate, 'YYYY-MM-DD HH:mm:ss'),
+	});
+
 	const [howToUseEn, setHowToUseEn] = useState('');
 	const [howToUseId, setHowToUseId] = useState('');
 	const [maxDiscount, setMaxDiscount] = useState(0);
 	const [minOrder, setMinOrder] = useState(null);
-	const [quota, setQuota] = useState(null);
-	const [termEn, setTermEn] = useState('');
-	const [termId, setTermId] = useState('');
 	const [minOrderValidation, setMinOrderValidation] = useState({
 		validateStatus: 'success',
 		errorMsg: null,
 	});
+	const [quota, setQuota] = useState(null);
+	const [termEn, setTermEn] = useState('');
+	const [termId, setTermId] = useState('');
 
-	const [isCashbackNominalEnabled, setIsCashbackNominalEnabled] = useState(
-		false
-	);
+	const [isCashbackNominalEnabled, setIsCashbackNominalEnabled] =
+		useState(false);
 	const [isCodeEnabled, setIsCodeEnabled] = useState(false);
 
 	const getVoucherDetail = async (id) => {
 		try {
-			let voucher = await voucherService.getVoucherById(id);
-			voucher = voucher.data;
-
+			const { data: voucher } = await voucherService.getVoucherById(id);
 			setVoucher(voucher);
-			setTermId(voucher.terms_and_condition?.id);
-			setTermEn(voucher.terms_and_condition?.en);
-			setHowToUseId(voucher.how_to_use?.id);
+
+			setIsCodeEnabled(voucher.target === 'LIMITED');
+			setCashbackNominal(voucher.cashback_rp);
+			setCashbackPeriode({
+				start_periode: moment(
+					voucher.start_periode,
+					'YYYY-MM-DD HH:mm:ss'
+				),
+				end_periode: moment(voucher.end_periode, 'YYYY-MM-DD HH:mm:ss'),
+			});
 			setHowToUseEn(voucher.how_to_use?.en);
+			setHowToUseId(voucher.how_to_use?.id);
+			setIsCashbackNominalEnabled(voucher.type === 'RUPIAH');
+			setMaxDiscount(voucher.max_discount_rp);
+			setMinOrder(voucher.cashback_rp);
+			setTermEn(voucher.terms_and_condition?.en);
+			setTermId(voucher.terms_and_condition?.id);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
@@ -71,25 +83,46 @@ const VoucherModifyPage = () => {
 	};
 
 	const submit = async (values) => {
+		if (!termEn || !termId) {
+			message.error('Syarat dan Ketentuan wajib diisi');
+			return false;
+		}
+		if (!howToUseEn || !howToUseId) {
+			message.error('Cara Pakai wajib diisi');
+			return false;
+		}
+		if (!cashbackPeriode) {
+			message.error('Periode Cashback wajib diisi');
+			return false;
+		}
+
 		try {
 			setIsSubmitting(true);
 
 			const data = new FormData();
 			data.append('target', values.target);
-			data.append('code', values.code);
+			data.append('code', values.code || '0000000000');
 			data.append('name[id]', values.id_name);
 			data.append('name[en]', values.en_name);
 			data.append('cashback_type', values.cashback_type);
-			data.append('cashback_percentage', values.cashback_percentage);
-			data.append('cashback_rp', values.cashback_rp);
-			data.append('max_discount_rp', values.max_discount_rp);
+			data.append('cashback_percentage', values.cashback_percentage || 0);
+			data.append('cashback_rp', values.cashback_rp || 0);
+			data.append('max_discount_rp', values.max_discount_rp || 0);
 			data.append('min_order_rp', values.min_order_rp);
 			data.append('quota', values.quota);
 			data.append('estimation_costs_rp', values.estimation_costs_rp);
-			data.append('start_date_periode', values.start_date_periode);
-			data.append('end_date_periode', values.end_date_periode);
-			data.append('start_time_periode', values.start_time_periode);
-			data.append('end_time_periode', values.end_time_periode);
+			data.append(
+				'start_periode',
+				moment(cashbackPeriode.start_periode, 'YYYY-MM-DD HH:mm:ss')
+			);
+			data.append(
+				'end_periode',
+				moment(cashbackPeriode.end_periode, 'YYYY-MM-DD HH:mm:ss')
+			);
+			data.append('how_to_use[id]', howToUseId);
+			data.append('how_to_use[en]', howToUseEn);
+			data.append('terms_and_condition[id]', termId);
+			data.append('terms_and_condition[en]', termEn);
 
 			if (isCreating) {
 				await voucherService.createVoucher(data);
@@ -129,14 +162,14 @@ const VoucherModifyPage = () => {
 					min_order_rp: voucher.min_order_rp,
 					quota: voucher.quota,
 					estimation_costs_rp: voucher.estimation_costs_rp,
-					start_date_periode: moment(
-						new Date(voucher.start_date_periode)
+					cashback_periode: moment(
+						new Date(voucher.start_periode),
+						'YYYY-MM-DD HH:mm:ss'
 					),
-					end_date_periode: moment(
-						new Date(voucher.end_date_periode)
+					end_periode: moment(
+						new Date(voucher.end_periode),
+						'YYYY-MM-DD HH:mm:ss'
 					),
-					start_time_periode: voucher.start_time_periode,
-					end_time_periode: voucher.end_time_periode,
 			  };
 	};
 
@@ -184,12 +217,9 @@ const VoucherModifyPage = () => {
 				estimation_costs_rp: cashbackNominal,
 			});
 		} else {
-			if (quota) {
-				const _quota = quota.target.value || 0;
-				form.setFieldsValue({
-					estimation_costs_rp: _quota * (maxDiscount || 0),
-				});
-			}
+			form.setFieldsValue({
+				estimation_costs_rp: (quota || 0) * (maxDiscount || 0),
+			});
 		}
 
 		validateMinOrder();
@@ -247,280 +277,282 @@ const VoucherModifyPage = () => {
 						);
 					}}
 				>
+					<Tabs defaultActiveKey="1">
+						<Tabs.TabPane
+							tab={`Info Voucher`.toUpperCase()}
+							key="1"
+						>
+							<Row align="top" gutter={24}>
+								<Col span={24}>
+									<AtomCard title="">
+										<Row gutter={24}>
+											<Col span={12}>
+												<MoleculeSelectInputGroup
+													label="Target Voucher"
+													name="target"
+													placeholder="Pilih Target Voucher"
+													required={true}
+													value="PUBLIC"
+													onChange={(value) =>
+														setIsCodeEnabled(
+															value === 'LIMITED'
+														)
+													}
+													data={{
+														options: [
+															{
+																value: 'PUBLIC',
+																label: 'Publik',
+															},
+															{
+																value: 'LIMITED',
+																label: 'Terbatas',
+															},
+														],
+													}}
+												/>
+											</Col>
+
+											<Col span={12}>
+												<MoleculeTextInputGroup
+													disabled={!isCodeEnabled}
+													maxLength={10}
+													minLength={10}
+													help="Kode harus 10 karakter huruf atau angka"
+													name="code"
+													label="Kode Voucher"
+													placeholder="Masukkan Kode Voucher"
+													type="alphanumeric"
+												/>
+											</Col>
+
+											<Col span={12}>
+												<MoleculeTextInputGroup
+													label="Nama Voucher (ID)"
+													name="id_name"
+													placeholder="Masukkan Nama Voucher (ID)"
+													type="text"
+													required={true}
+												/>
+											</Col>
+
+											<Col span={12}>
+												<MoleculeTextInputGroup
+													label="Nama Voucher (EN)"
+													name="en_name"
+													placeholder="Masukkan Nama Voucher (EN)"
+													type="text"
+													required={true}
+												/>
+											</Col>
+
+											<Col span={12}>
+												<MoleculeSelectInputGroup
+													label="Tipe Cashback"
+													name="cashback_type"
+													placeholder="Pilih Tipe Cashback"
+													required={true}
+													value="RUPIAH"
+													onChange={(value) =>
+														setIsCashbackNominalEnabled(
+															value === 'RUPIAH'
+														)
+													}
+													data={{
+														options: [
+															{
+																value: 'RUPIAH',
+																label: 'Rupiah',
+															},
+															{
+																value: 'PERCENTAGE',
+																label: 'Persentase',
+															},
+														],
+													}}
+												/>
+											</Col>
+
+											<Col span={12}></Col>
+
+											<Col span={12}>
+												<MoleculeNumberInputGroup
+													disabled={
+														isCashbackNominalEnabled
+													}
+													max={100}
+													name="cashback_percentage"
+													label="Persentase Cashback (%)"
+													placeholder="Masukkan Persentase Cashback"
+												/>
+											</Col>
+
+											<Col span={12}>
+												<MoleculeNumberInputGroup
+													disabled={
+														!isCashbackNominalEnabled
+													}
+													name="cashback_rp"
+													label="Nominal Cashback (Rp)"
+													placeholder="Masukkan Nominal Cashback (Rp)"
+													onChange={(value) =>
+														setCashbackNominal(
+															value
+														)
+													}
+												/>
+											</Col>
+
+											<Col span={12}>
+												<MoleculeNumberInputGroup
+													disabled={
+														isCashbackNominalEnabled
+													}
+													name="max_discount_rp"
+													label="Maksimum Pembelian (Rp)"
+													placeholder="Masukkan Maksimum Pembelian (Rp)"
+													onChange={(value) =>
+														setMaxDiscount(value)
+													}
+												/>
+											</Col>
+
+											<Col span={12}>
+												<MoleculeNumberInputGroup
+													name="min_order_rp"
+													label="Minimal Pembelian (Rp)"
+													placeholder="Masukkan Minimal Pembelian (Rp)"
+													help={
+														minOrderValidation.errorMsg ||
+														''
+													}
+													validateStatus={
+														minOrderValidation.validateStatus
+													}
+													onChange={(value) =>
+														setMinOrder(value)
+													}
+												/>
+											</Col>
+
+											<Col span={12}>
+												<MoleculeNumberInputGroup
+													name="quota"
+													label="Kuota"
+													placeholder="Masukkan Kuota"
+													onChange={(value) =>
+														setQuota(value)
+													}
+													required={true}
+												/>
+											</Col>
+
+											<Col span={12}>
+												<MoleculeNumberInputGroup
+													name="estimation_costs_rp"
+													label="Maksimum Pengeluaran Toko (Rp)"
+													placeholder="0"
+													readOnly
+												/>
+											</Col>
+
+											<Col span={24}>
+												<MoleculeDatePickerGroup
+													format="YYYY-MM-DD HH:mm:ss"
+													isDisabledDate={true}
+													isDisabledTime={true}
+													label="Periode Cashback"
+													name="cashback_periode"
+													onChange={(date) => {
+														console.log(date[0]);
+														setCashbackPeriode({
+															...cashbackPeriode,
+															start_periode:
+																date[0],
+															end_periode:
+																date[1],
+														});
+													}}
+													placeholder={[
+														'Tanggal dan Jam Mulai',
+														'Tanggal dan Jam Selesai',
+													]}
+													defaultValue={[
+														cashbackPeriode.start_periode,
+														cashbackPeriode.end_periode,
+													]}
+													showTime={{
+														hideDisabledOptions: true,
+													}}
+													type="range"
+												/>
+											</Col>
+										</Row>
+									</AtomCard>
+								</Col>
+							</Row>
+						</Tabs.TabPane>
+
+						<Tabs.TabPane
+							tab={`Syarat & ketentuan`.toUpperCase()}
+							key="2"
+						>
+							<Row align="top" gutter={24}>
+								<Col span={24}>
+									<AtomCard>
+										<Row gutter={24}>
+											<Col span={24}>
+												<MoleculeTextEditorGroup
+													label="Syarat dan Ketentuan (ID)"
+													onChange={setTermId}
+													value={termId}
+													required={true}
+												/>
+											</Col>
+
+											<Col span={24}>
+												<MoleculeTextEditorGroup
+													label="Syarat dan Ketentuan (EN)"
+													onChange={setTermEn}
+													value={termEn}
+													required={true}
+												/>
+											</Col>
+										</Row>
+									</AtomCard>
+								</Col>
+							</Row>
+						</Tabs.TabPane>
+
+						<Tabs.TabPane tab={`Cara Pakai`.toUpperCase()} key="3">
+							<Row align="top" gutter={24}>
+								<Col span={24}>
+									<AtomCard>
+										<Row gutter={24}>
+											<Col span={24}>
+												<MoleculeTextEditorGroup
+													label="Cara Pakai (ID)"
+													onChange={setHowToUseId}
+													value={howToUseId}
+													required={true}
+												/>
+											</Col>
+
+											<Col span={24}>
+												<MoleculeTextEditorGroup
+													label="Cara Pakai (EN)"
+													onChange={setHowToUseEn}
+													value={howToUseEn}
+													required={true}
+												/>
+											</Col>
+										</Row>
+									</AtomCard>
+								</Col>
+							</Row>
+						</Tabs.TabPane>
+					</Tabs>
 					<Row>
-						<Col span={18}>
-							<AtomCard title="Info Voucher">
-								<Row gutter={12}>
-									<Col span={12}>
-										<MoleculeSelectInputGroup
-											label="Target Voucher"
-											name="target"
-											placeholder="Pilih Target Voucher"
-											required={true}
-											value="PUBLIC"
-											onChange={(value) =>
-												setIsCodeEnabled(
-													value === 'LIMITED'
-												)
-											}
-											data={{
-												options: [
-													{
-														value: 'PUBLIC',
-														label: 'Publik',
-													},
-													{
-														value: 'LIMITED',
-														label: 'Terbatas',
-													},
-												],
-											}}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeTextInputGroup
-											disabled={!isCodeEnabled}
-											maxLength={10}
-											minLength={10}
-											name="code"
-											label="Kode Voucher"
-											placeholder="Masukkan Kode Voucher"
-											type="alphanumeric"
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeTextInputGroup
-											label="Nama Voucher (ID)"
-											name="id_name"
-											placeholder="Masukkan Nama Voucher (ID)"
-											type="text"
-											required={true}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeTextInputGroup
-											label="Nama Voucher (EN)"
-											name="en_name"
-											placeholder="Masukkan Nama Voucher (EN)"
-											type="text"
-											required={true}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeSelectInputGroup
-											label="Tipe Cashback"
-											name="cashback_type"
-											placeholder="Pilih Tipe Cashback"
-											required={true}
-											value="RUPIAH"
-											onChange={(value) =>
-												setIsCashbackNominalEnabled(
-													value === 'RUPIAH'
-												)
-											}
-											data={{
-												options: [
-													{
-														value: 'RUPIAH',
-														label: 'Rupiah',
-													},
-													{
-														value: 'PERSENTAGE',
-														label: 'Persentase',
-													},
-												],
-											}}
-										/>
-									</Col>
-
-									<Col span={12}></Col>
-
-									<Col span={12}>
-										<MoleculeTextInputGroup
-											disabled={isCashbackNominalEnabled}
-											name="cashback_percentage"
-											label="Persentase Cashback (%)"
-											placeholder="Masukkan Persentase Cashback"
-											type="number"
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeNumberInputGroup
-											disabled={!isCashbackNominalEnabled}
-											name="cashback_rp"
-											label="Nominal Cashback (Rp)"
-											placeholder="Masukkan Nominal Cashback (Rp)"
-											onChange={(value) =>
-												setCashbackNominal(value)
-											}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeNumberInputGroup
-											disabled={isCashbackNominalEnabled}
-											name="max_discount_rp"
-											label="Maksimum Pembelian (Rp)"
-											placeholder="Masukkan Maksimum Pembelian (Rp)"
-											onChange={(value) =>
-												setMaxDiscount(value)
-											}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeNumberInputGroup
-											name="min_discount_rp"
-											label="Minimal Pembelian (Rp)"
-											placeholder="Masukkan Minimal Pembelian (Rp)"
-											help={
-												minOrderValidation.errorMsg ||
-												''
-											}
-											validateStatus={
-												minOrderValidation.validateStatus
-											}
-											// rules={[
-											// 	{
-											// 		min: maxDiscount,
-											// 		message:
-											// 			'Minimum pembelian tidka boleh kurang dari diskon atau maksimum diskon',
-											// 	},
-											// 	{
-											// 		min: cashbackNominal,
-											// 		message:
-											// 			'Minimum pembelian tidka boleh kurang dari diskon atau maksimum diskon',
-											// 		},
-											// 	]}
-											// rules={({ getFieldValue }) => ({
-											// 	validator(_, value) {
-											// 		if (
-											// 			value <
-											// 				getFieldValue(
-											// 					'cashback_rp'
-											// 				) ||
-											// 			value <
-											// 				getFieldValue(
-											// 					'max_discount_rp'
-											// 				)
-											// 		) {
-											// 			return Promise.resolve();
-											// 		}
-											// 		return Promise.reject(
-											// 			'Minimum Pembelian Tidak Boleh Kurang Dari Nominal Diskon atau Maksimum Diskon'
-											// 		);
-											// 	},
-											// })}
-											onChange={(value) =>
-												setMinOrder(value)
-											}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeNumberInputGroup
-											name="quota"
-											label="Kuota"
-											placeholder="Masukkan Kuota"
-											onChange={(value) =>
-												setQuota(value)
-											}
-											required={true}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeNumberInputGroup
-											name="estimation_costs_rp"
-											label="Maksimum Pengeluaran Toko (Rp)"
-											placeholder="0"
-											value={0}
-											readOnly
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeDatePickerGroup
-											format={'YYYY-MM-DD'}
-											label="Tanggal Mulai"
-											name="start_date_periode"
-											placeholder="Tanggal Lahir"
-											required={true}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeDatePickerGroup
-											// format={'YYYY-MM-DD'}
-											label="Jam Mulai"
-											type="time"
-											name="start_time_periode"
-											placeholder="Jam Mulai"
-											required={true}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeDatePickerGroup
-											format={'YYYY-MM-DD'}
-											label="Tanggal Selesai"
-											name="end_date_periode"
-											placeholder="Tanggal Selesai"
-											required={true}
-										/>
-									</Col>
-
-									<Col span={12}>
-										<MoleculeDatePickerGroup
-											// format={'YYYY-MM-DD'}
-											label="Jam Selesai"
-											type="time"
-											name="end_time_periode"
-											placeholder="Jam Selesai"
-											required={true}
-										/>
-									</Col>
-
-									<Col span={24}>
-										<MoleculeTextEditorGroup
-											label="Syarat dan Ketentuan (ID)"
-											onChange={setTermId}
-											value={termId}
-										/>
-									</Col>
-
-									<Col span={24}>
-										<MoleculeTextEditorGroup
-											label="Syarat dan Ketentuan (EN)"
-											onChange={setTermEn}
-											value={termEn}
-										/>
-									</Col>
-
-									<Col span={24}>
-										<MoleculeTextEditorGroup
-											label="Cara Pakai (ID)"
-											onChange={setHowToUseId}
-											value={howToUseId}
-										/>
-									</Col>
-
-									<Col span={24}>
-										<MoleculeTextEditorGroup
-											label="Cara Pakai (EN)"
-											onChange={setHowToUseEn}
-											value={howToUseEn}
-										/>
-									</Col>
-								</Row>
-							</AtomCard>
-						</Col>
-
 						<Col className="mt4" span={24}>
 							<MoleculeModifyActionButtons
 								backUrl="/voucher"

@@ -61,10 +61,12 @@ const TransactionPage = () => {
 			title: 'Tanggal Transaksi',
 			dataIndex: 'created_at',
 			render: (date) => (
-				<ReactMoment format="DD/MM/YY H:mm">{date}</ReactMoment>
+				<ReactMoment format="DD MMMM YYYY - H:mm:ss">
+					{date}
+				</ReactMoment>
 			),
 			csvRender: (item) =>
-				moment(item.created_at).format('DD/MM/YYYY H:mm'),
+				moment(item.created_at).format('DD MMMM YYYY - H:mm:ss'),
 			sorter: true,
 		},
 		{
@@ -72,13 +74,15 @@ const TransactionPage = () => {
 			dataIndex: 'finish_at',
 			render: (date) =>
 				date ? (
-					<ReactMoment format="DD/MM/YY H:mm:ss">{date}</ReactMoment>
+					<ReactMoment format="DD MMMM YYYY - H:mm:ss">
+						{date}
+					</ReactMoment>
 				) : (
 					'-'
 				),
 			csvRender: (item) =>
 				item.finish_at
-					? moment(item.finish_at).format('DD/MM/YYYY H:mm:ss')
+					? moment(item.finish_at).format('DD MMMM YYYY - H:mm:ss')
 					: '-',
 			sorter: true,
 		},
@@ -273,7 +277,9 @@ const TransactionPage = () => {
 					url: `admin/customers?filter=code;first_name;last_name`,
 					generateCustomOption: (item) => ({
 						value: item.code,
-						label: `${item.first_name} ${item.last_name}`,
+						label: `${item.first_name || '-'} ${
+							item.last_name || '-'
+						}`,
 					}),
 				}}
 			/>,
@@ -291,7 +297,7 @@ const TransactionPage = () => {
 				dataSourceURL={`transactions`}
 				filters={renderDatatableFilters()}
 				ref={transactionTableRef}
-				scroll={1920}
+				scroll={2820}
 				searchInput={true}
 				title={`Transaksi`}
 			/>
