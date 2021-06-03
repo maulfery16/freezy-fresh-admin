@@ -109,12 +109,12 @@ const ProductPage = () => {
 						<EyeFilled className="f4 blue" />
 					</Link>
 
-					{!roles.includes('super-admin') ||
-						(!roles.includes('admin') && (
+					{roles && (roles.includes('super-admin') ||
+						roles.includes('admin')) && (
 							<Link to={`/products/${id}/edit`}>
 								<EditFilled className="f4 orange" />
 							</Link>
-						))}
+						)}
 
 					{!record.is_active && (
 						<MoleculeDeleteConfirm
