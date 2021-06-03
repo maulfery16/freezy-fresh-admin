@@ -2,12 +2,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ReactMoment from 'react-moment';
 
-import { Col, Row, Skeleton, Tabs, Typography, message } from 'antd';
-import { useParams } from 'react-router-dom';
+import { Col, Row, Tabs, Typography, message, Input, Form } from 'antd';
 
-import AtomBaseCategoriesDatatableFilter from '../../../components/atoms/selection/base-categories-datatable';
-import AtomBranchDatatableFilter from '../../../components/atoms/selection/branch-datatable';
 import AtomCard from '../../../components/atoms/card';
+import AtomSpinner from '../../../components/atoms/spinner';
 import AtomNumberFormat from '../../../components/atoms/number-format';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 import MoleculeImageGroup from '../../../components/molecules/molecule-image-group';
@@ -15,141 +13,154 @@ import MoleculeInfoGroup from '../../../components/molecules/info-group';
 import MoleculeMarkdownRenderer from '../../../components/molecules/markdown-renderer';
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
+import AtomBranchSelect from '../../../components/atoms/selection/branch';
+import MoleculeSelectInputGroup from '../../../components/molecules/input-group/select-input';
+import AtomPrimaryButton from '../../../components/atoms/button/primary-button';
 
 const { TabPane } = Tabs;
 
-// import HolidayService from '../../../services/holiday';
-// const holidayService = new HolidayService();
+import HolidayService from '../../../services/holiday';
+const holidayService = new HolidayService();
 
-const dataSource = {
-	data: [
-		{
-			id: 'FF-8387423',
-			discount: 0.5,
-			name: 'Apel Fuji',
-			price: 20000,
-			stock: 99,
-		},
-		{
-			id: 'FF-8387422',
-			discount: 0.5,
-			name: 'Apel Fuji',
-			price: 20000,
-			stock: 99,
-		},
-	],
-	meta: {
-		pagination: { totalData: 1 },
-	},
-};
-
-const HolidayPage = () => {
+const HolidaysPage = () => {
 	const column = [
 		{
+			title: 'Cabang (ID)',
+			dataIndex: 'branch',
+			sorter: true,
+			render: (_, record) => record?.product_detail?.branch?.id
+		},
+		{
 			title: 'SKUID',
-			dataIndex: 'id',
+			dataIndex: 'sku_id',
+			sorter: true,
+			render: (_, record) => record?.product_detail?.sku_id
 		},
 		{
 			title: 'Nama Produk',
 			dataIndex: 'name',
+			sorter: true,
+			render: (_, record) => record?.product_detail?.name?.id
 		},
 		{
 			title: 'Stok Tersedia',
 			dataIndex: 'stock',
+			sorter: true,
+			render: (_, record) => record?.product_detail?.available_stock
 		},
 		{
 			title: 'Harga Normal',
 			dataIndex: 'price',
-			render: (price) => <AtomNumberFormat prefix="Rp. " value={price} />,
+			sorter: true,
+			render: (_, record) => (
+				<AtomNumberFormat
+					prefix="Rp. "
+					value={record?.product_detail?.price}
+				/>
+			),
+		},
+		{
+			title: 'Stok Terjual',
+			dataIndex: 'total_sold',
+			sorter: true,
+			render: (_, record) => record?.product_detail?.total_sold
+		},
+		{
+			title: 'Batas Stok per User',
+			sorter: true,
+			dataIndex: 'max_stock_per_user',
 		},
 		{
 			title: 'Harga Setelah Discount',
-			dataIndex: 'price',
-			render: (price, record) => (
+			dataIndex: 'price_after_discount',
+			sorter: true,
+			render: (price_after_discount) => (
 				<AtomNumberFormat
 					prefix="Rp. "
-					value={price - price * record.discount}
+					value={price_after_discount}
 				/>
 			),
 		},
 		{
 			title: 'Discount (%)',
-			dataIndex: 'discount',
-			render: (disc) => `${disc * 100}%`,
+			dataIndex: 'discount_percentage',
+			sorter: true,
+			render: (discount_percentage) =>
+			discount_percentage ? `${discount_percentage} %` : null,
 		},
 	];
 	const viewTableRef = useRef();
-
-	const { id } = useParams();
 	const [holiday, setHoliday] = useState(null);
+	const [products, setProducts] = useState({});
+	const [isLoading, setIsLoading] = useState(false);
+	const [keyword, setKeyword] = useState('');
+	const [filters, setFilters] = useState({
+		branch: '',
+		productCategory: '',
+	});
 
-	const getHoliday = () => {
+	const getHolidays = async () => {
+		setIsLoading(true);
 		try {
-			// const holiday = holidayService.getHolidayDetail(holidayID);
-			// setHoliday(holiday);
-
-			setTimeout(() => {
-				setHoliday({
-					created_at: new Date(),
-					created_by: 'Jeong Dajeong',
-					registered_at: new Date(),
-					registered_by: 'Kim Ji Yeon',
-					updated_at: new Date(),
-					updated_by: 'Dita Karang',
-					short_desc: {
-						id:
-							'Deskripsi Singkat Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam et turpis tincidunt lacus ornare malesuada. Integer purus nulla, vestibulum',
-						en:
-							'Short Description Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam et turpis tincidunt lacus ornare malesuada. Integer purus nulla, vestibulum',
-					},
-					long_desc: {
-						id: 'Deskripsi Panjang',
-						en: 'Long Description',
-					},
-					desktop_image:
-						'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
-					mobile_image:
-						'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
-					small_image_1:
-						'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
-					small_image_2:
-						'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
-					small_image_3:
-						'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=jpg&quality=90&v=1530129081',
-					title: {
-						id: 'Artikel Super',
-						en: 'Super View',
-					},
-					term_and_condition: {
-						id: ` Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam et turpis tincidunt lacus ornare malesuada. Integer purus nulla, vestibulum non lectus at, mollis semper dui. Etiam mattis velit id vehicula faucibus. Donec bibendum tempus mi, sit amet venenatis erat finibus ut. Suspendisse vitae cursus urna, ac pulvinar magna. Nullam viverra sapien arcu, at congue orci lacinia quis. Quisque sapien eros, facilisis in maximus eu, finibus eu mauris. Morbi bibendum ligula in rhoncus dictum. Aenean fermentum blandit elit vitae vehicula.
-
-Phasellus ac enim ac diam malesuada semper. Fusce sem nisi, luctus ut tellus ut, dictum blandit massa. In id molestie eros, eu varius libero. Curabitur non neque non elit pellentesque ornare. Duis libero arcu, placerat eu lorem nec, consectetur hendrerit mi. Pellentesque nec diam ut eros rhoncus luctus. Ut a ultrices felis.
-
-Ut luctus ex non eleifend ullamcorper. Nullam elementum nisi sem, id egestas nisi pretium nec. Sed pretium interdum tristique. Mauris at porttitor enim. In a mi et massa porttitor molestie. Fusce varius, lorem ut cursus consectetur, sapien diam tincidunt magna, nec ultrices quam quam malesuada ante. Sed auctor mi eu finibus finibus. Quisque iaculis malesuada metus, eget ornare magna laoreet nec. Morbi interdum gravida bibendum. `,
-						en: ` Suspendisse at nisl nisi. Praesent at diam mattis, porta arcu blandit, efficitur nisi. Sed suscipit massa diam, et vehicula mauris ornare a. Nunc blandit metus vitae lacus ultrices ornare. Aenean eget justo fringilla, pharetra odio at, cursus augue. Donec lacinia dolor malesuada ipsum vestibulum ornare. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse molestie, ipsum et porttitor ultricies, sem arcu pharetra risus, non finibus diam tortor ac odio. Morbi est mauris, lobortis eu mauris a, fringilla pellentesque orci. Morbi mollis rhoncus orci nec convallis. Proin efficitur, eros sit amet pellentesque tincidunt, libero turpis hendrerit sem, quis convallis arcu ante quis ligula. Phasellus porta aliquet dolor, vel mattis libero interdum a. In in dui ex.
-
-Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris volutpat luctus nec id nulla. Nulla pretium libero a ante cursus, vitae pellentesque mauris efficitur. Mauris ut dolor porta, fermentum leo nec, rutrum mauris. Nam felis nunc, rhoncus quis lorem id, mollis rutrum velit. Nulla facilisi. Vestibulum quis cursus ante. In molestie sapien ullamcorper orci elementum ullamcorper. Proin eget convallis ex, eu iaculis nisl. Vestibulum congue nulla eu tristique faucibus. Etiam mollis in turpis sed posuere. Nunc interdum ac enim a varius. Morbi euismod porta nisi, quis egestas massa sollicitudin eu. Aliquam dapibus condimentum metus porta rutrum. Sed vehicula ac lacus in aliquam. Quisque tempor dolor ac venenatis blandit. `,
-					},
-				});
-			}, 1000);
+			const {data} = await holidayService.getHoliday();
+			setHoliday(data);
+			if (data.products && Array.isArray(data.products) && data.products.length > 0) {
+				const tmp = {};
+				tmp.data = data.products;
+				tmp.meta = { pagination: { total: data.products.length } }
+				setProducts(tmp)
+			}
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
-	const renderDatatableFilters = () => {
-		return [
-			<AtomBranchDatatableFilter key="branch-filter" />,
-			<AtomBaseCategoriesDatatableFilter key="base-categories-filter" />,
-		];
+	const applyFilter = (values) => {
+		const filterTmp = {};
+
+		if (values.branches) filterTmp.branch = values.branches;
+		else filterTmp.branch = '';
+		if (values.product_category) filterTmp.productCategory = values.product_category;
+		else filterTmp.productCategory = '';
+
+		setFilters(filterTmp);
+	};
+
+	const getDatatableData = () => {
+		if (keyword !== '' || filters.branch || filters.branch !== '' || filters.productCategory || filters.productCategory !== '') {
+			let tmp = {...products};
+			if (keyword !== '')
+				tmp.data = tmp.data.filter((column) =>
+					column.product_detail.name.id.toLowerCase().includes(keyword.toLowerCase())
+				);
+	
+			if (filters.branch || filters.branch !== '')
+				tmp.data = tmp.data.filter((column) =>
+				column.product_detail.branch.id.includes(filters.branch)
+				);
+	
+			if (filters.productCategory || filters.productCategory !== '')
+				tmp.data = tmp.data.filter((column) =>
+					column.product_detail.base_category.id.includes(filters.productCategory)
+				);
+			return tmp;
+		} else {
+			return products;
+		}
 	};
 
 	useEffect(() => {
 		(async () => {
-			getHoliday(id);
+			getHolidays();
 		})();
 	}, []);
+
+	useEffect(() => {
+		viewTableRef.current.refetchData();
+	}, [keyword, filters])
 
 	return (
 		<OrganismLayout
@@ -180,8 +191,8 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 				</Col>
 			</Row>
 
-			{!holiday ? (
-				<Skeleton active />
+			{isLoading ? (
+				<AtomSpinner/>
 			) : (
 				<Tabs defaultActiveKey="1">
 					<TabPane tab={`Info Holiday`.toUpperCase()} key="1">
@@ -190,6 +201,14 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 								<AtomCard>
 									<Row gutter={[24, 24]}>
 										<Col span={24}>
+											<Typography.Text strong>
+												<span className="denim f5">
+													{'Info Holiday'.toUpperCase()}
+												</span>
+											</Typography.Text>
+										</Col>
+
+										<Col span={24}>
 											<MoleculeInfoGroup
 												title="Foto Banner"
 												content={
@@ -197,33 +216,27 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 														images={[
 															{
 																source:
-																	holiday.image_mobile,
+																	holiday?.banner_mobile_home,
 																label:
-																	' Foto Banner Mobile',
+																	' Foto Banner Mobile (Beranda)',
 															},
 															{
 																source:
-																	holiday.image_dekstop,
+																	holiday?.banner_mobile_detail,
 																label:
-																	' Foto Banner Dekstop',
+																	' Foto Banner Mobile (Detail)',
+															},
+                              {
+																source:
+																	holiday?.banner_desktop_home,
+																label:
+																	' Foto Banner Desktop (Beranda)',
 															},
 															{
 																source:
-																	holiday.image_small_1,
+																	holiday?.banner_desktop_detail,
 																label:
-																	' Foto Banner Kecil 1',
-															},
-															{
-																source:
-																	holiday.image_small_2,
-																label:
-																	' Foto Banner Kecil 2',
-															},
-															{
-																source:
-																	holiday.image_small_3,
-																label:
-																	' Foto Banner Kecil 3',
+																	' Foto Banner Desktop (Detail)',
 															},
 														]}
 													/>
@@ -234,63 +247,63 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 										<Col span={12}>
 											<MoleculeInfoGroup
 												title="Title (ID)"
-												content={holiday.title.id}
+												content={holiday?.title?.id}
 											/>
 										</Col>
 
 										<Col span={12}>
 											<MoleculeInfoGroup
 												title="Title (EN)"
-												content={holiday.title.en}
+												content={holiday?.title?.en}
 											/>
 										</Col>
 
 										<Col span={12}>
 											<MoleculeInfoGroup
 												title="Deskripsi Singkat (ID)"
-												content={holiday.short_desc.id}
+												content={holiday?.short_description?.id}
 											/>
 										</Col>
 
 										<Col span={12}>
 											<MoleculeInfoGroup
 												title="Deskripsi Singkat (EN)"
-												content={holiday.short_desc.en}
+												content={holiday?.short_description?.en}
 											/>
 										</Col>
 
 										<Col span={12}>
 											<MoleculeInfoGroup
 												title="Deskripsi Lengkap (ID)"
-												content={
-													<MoleculeMarkdownRenderer
+												content={holiday?.long_description?.id ? (
+                          <MoleculeMarkdownRenderer
 														withBorder
 														text={
-															holiday.long_desc.id
+															holiday?.long_description?.id
 														}
 													/>
-												}
+                        ) : null}
 											/>
 										</Col>
 
 										<Col span={12}>
 											<MoleculeInfoGroup
 												title="Deskripsi Lengkap (EN)"
-												content={
-													<MoleculeMarkdownRenderer
+                        content={holiday?.long_description?.en ? (
+                          <MoleculeMarkdownRenderer
 														withBorder
 														text={
-															holiday.long_desc.en
+															holiday?.long_description?.en
 														}
 													/>
-												}
+                        ) : null}
 											/>
 										</Col>
 
 										<Col span={24}>
 											<Typography.Text strong>
 												<span className="denim f5">
-													{'Info Update Produk'.toUpperCase()}
+													{'Info Update'.toUpperCase()}
 												</span>
 											</Typography.Text>
 										</Col>
@@ -300,7 +313,7 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 												title="Tanggal Dibuat"
 												content={
 													<ReactMoment format="DD-MM-YYYY">
-														{holiday.created_at}
+														{holiday?.created_at}
 													</ReactMoment>
 												}
 											/>
@@ -308,10 +321,10 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 
 										<Col span={12}>
 											<MoleculeInfoGroup
-												title="Tanggal di Daftarkan"
+												title="Tanggal Diperbarui"
 												content={
 													<ReactMoment format="DD-MM-YYYY">
-														{holiday.registered_at}
+														{holiday?.updated_at}
 													</ReactMoment>
 												}
 											/>
@@ -320,14 +333,14 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 										<Col span={8}>
 											<MoleculeInfoGroup
 												title="Dibuat Oleh"
-												content={holiday.created_by}
+												content={holiday?.created_by}
 											/>
 										</Col>
 
 										<Col span={12}>
 											<MoleculeInfoGroup
-												title="Didaftarkan Oleh"
-												content={holiday.registered_by}
+												title="Diperbarui Oleh"
+												content={holiday?.updated_by}
 											/>
 										</Col>
 									</Row>
@@ -336,13 +349,77 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 
 							<Col className="mt4" span={24}>
 								<AtomCard title="Daftar Produk">
+									<Row gutter={[0, 12]} className="mt4">
+										<Col span={24}>
+											<Col span={8}>
+												<Input.Search
+													placeholder="Cari Nama Produk"
+													onSearch={(value) => setKeyword(value)}
+													size="large"
+												/>
+											</Col>
+										</Col>
+										<Col span={24}>
+											<Row align="middle" gutter={48} justify="space-between">
+												<Col span={14}>
+													<Form
+														className="w-100 mt2"
+														name="product"
+														onFinish={applyFilter}
+														onFinishFailed={(error) => {
+															message.error(`Failed: ${error}`);
+															console.error(error);
+														}}
+													>
+														<Row align="middle" gutter={12}>
+															<Col span={9}>
+																<AtomBranchSelect
+																	generateCustomOption={(item) => ({
+																			value: item.name.id,
+																			label: item.name.id
+																		})
+																	}
+																/>
+															</Col>
+
+															<Col span={9}>
+																<MoleculeSelectInputGroup
+																	label="Kategori Produk"
+																	name="product_category"
+																	placeholder="Kategori Produk"
+																	allowClear
+																	data={{
+																		url: 'base-categories',
+																		generateCustomOption: (
+																			item
+																		) => ({
+																			value: item.name.id,
+																			label: item.name.id,
+																		}),
+																	}}
+																/>
+															</Col>
+
+															<Col span={6}>
+																<AtomPrimaryButton
+																	htmlType="submit"
+																	size="large"
+																>
+																	Terapkan
+																</AtomPrimaryButton>
+															</Col>
+														</Row>
+													</Form>
+												</Col>
+											</Row>
+										</Col>
+									</Row>
 									<OrganismDatatable
 										columns={column}
+										setFilterLocally
 										dataSourceURL={`products`}
-										filters={renderDatatableFilters()}
-										dataSource={dataSource}
+										dataSource={getDatatableData()}
 										ref={viewTableRef}
-										searchInput={true}
 									/>
 								</AtomCard>
 							</Col>
@@ -360,9 +437,7 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 													<MoleculeMarkdownRenderer
 														withBorder
 														text={
-															holiday
-																.term_and_condition
-																.id
+															holiday?.term_and_condition?.id
 														}
 													/>
 												}
@@ -376,9 +451,7 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 													<MoleculeMarkdownRenderer
 														withBorder
 														text={
-															holiday
-																.term_and_condition
-																.en
+															holiday?.term_and_condition?.en
 														}
 													/>
 												}
@@ -395,4 +468,4 @@ Integer rhoncus leo ac diam vestibulum aliquam. Duis in eros sit amet mauris vol
 	);
 };
 
-export default HolidayPage;
+export default HolidaysPage;

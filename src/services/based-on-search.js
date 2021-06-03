@@ -1,53 +1,53 @@
 import RequestAdapterService from './request-adapter';
 
-export default class HolidayService extends RequestAdapterService {
-	async createHoliday(holiday) {
+export default class BasedOnSearchService extends RequestAdapterService {
+	async createBasedOnSearch(basedOnSearch) {
 		try {
 			const { data } = await super.sendPostMultipartRequest(
-				`${this.baseUrl}/v1/holidays`,
-				holiday
+				`${this.baseUrl}/v1/based-on-your-searches`,
+				basedOnSearch
 			);
 
 			return data;
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail creating holiday: ${super.generateErrorMessage(
+				`Fail creating based on search: ${super.generateErrorMessage(
 					error
 				)}`
 			);
 		}
 	}
 
-	async editHoliday(id, holiday) {
+	async editBasedOnSearch(id, basedOnSearch) {
 		try {
 			const { data } = await super.sendPostMultipartRequest(
-				`${this.baseUrl}/v1/holidays/${id}?_method=PATCH`,
-				holiday
+				`${this.baseUrl}/v1/based-on-your-searches/${id}?_method=PATCH`,
+				basedOnSearch
 			);
 
 			return data;
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail updating holiday: ${super.generateErrorMessage(
+				`Fail updating based on search: ${super.generateErrorMessage(
 					error
 				)}`
 			);
 		}
 	}
 
-	async getHoliday() {
+	async getBasedOnSearch() {
 		try {
 			const { data } = await super.sendGetRequest(
-				`${this.baseUrl}/v1/holidays`
+				`${this.baseUrl}/v1/based-on-your-searches`
 			);
 
 			return data;
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail getting holiday: ${super.generateErrorMessage(
+				`Fail getting based on search: ${super.generateErrorMessage(
 					error
 				)}`
 			);
@@ -57,14 +57,14 @@ export default class HolidayService extends RequestAdapterService {
 	async assignProduct(id, products) {
 		try {
 			const { data } = await super.sendPostRequest(
-				`${this.baseUrl}/v1/holidays/${id}/products`, products
+				`${this.baseUrl}/v1/based-on-your-searches/${id}/products`, products
 			);
 
 			return data;
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail assign products to holiday: ${super.generateErrorMessage(
+				`Fail assign products to based on search: ${super.generateErrorMessage(
 					error
 				)}`
 			);

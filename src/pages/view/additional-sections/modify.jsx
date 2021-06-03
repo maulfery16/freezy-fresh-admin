@@ -2,7 +2,7 @@
 /* eslint-disable react/display-name */
 import React, { useEffect, useRef, useState } from 'react';
 import { Col, Row, Skeleton, Typography, message, Form, Tabs } from 'antd';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
 import MoleculeFileInputGroup from '../../../components/molecules/input-group/file-input';
@@ -14,34 +14,37 @@ import OrganismLayout from '../../../components/organisms/layout';
 
 const { TabPane } = Tabs;
 
-import DailyDealsService from '../../../services/daily-deals';
-const dailyDealsService = new DailyDealsService();
+import AdditionalSectionService from '../../../services/additional-sections';
+const additionalSectionService = new AdditionalSectionService();
 
-const DailyDealsModifyPage = () => {
+const AdditionalSectionModifyPage = () => {
 	const viewTableRef = useRef();
-	const dailyDealsMobileHomeRef = useRef();
-	const dailyDealsMobileDetailRef = useRef();
-	const dailyDealsDesktopHomeRef = useRef();
-	const dailyDealsDesktopDetailRef = useRef();
+	const sectionMobileHomeRef = useRef();
+	const sectionMobileDetailRef = useRef();
+	const sectionDesktopHomeRef = useRef();
+	const sectionDesktopDetailRef = useRef();
 
 	const history = useHistory();
+  const {id} = useParams();
 	const [form] = Form.useForm();
 
-	const [dailyDeals, setDailyDeals] = useState(null);
+	const [sectionDetail, setSectionDetail] = useState(null);
 
 	// eslint-disable-next-line no-unused-vars
 	const [productList, setProductList] = useState([]);
 	const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
 	const [isCreating, setIsCreating] = useState(false);
 	const [termId, setTermId] = useState('');
 	const [termEn, setTermEn] = useState('');
 	const [longDescId, setLongDescId] = useState('');
 	const [longDescEn, setLongDescEn] = useState('');
 
-	const getDailyDeals = async () => {
+	const getSectionByID = async () => {
+    setIsCreating(true);
 		try {
-			const {data} = await dailyDealsService.getDailyDeals();
-			setDailyDeals(data);
+			const {data} = await additionalSectionService.findSectionById(id);
+			setSectionDetail(data);
 			if (data?.term_and_condition?.id) setTermId(data?.term_and_condition?.id);
 			if (data?.term_and_condition?.en) setTermEn(data?.term_and_condition?.en);
 			if (data?.long_description?.id) setLongDescId(data?.long_description?.id);
@@ -60,17 +63,19 @@ const DailyDealsModifyPage = () => {
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
-		}
+		} finally {
+      setIsCreating(false);
+    }
 	};
 
 	const setHolidayInitialValues = () => {
 		return isCreating
 			? {}
 			: {
-					en_title: dailyDeals?.title?.en,
-					id_title: dailyDeals?.title?.id,
-					id_short_desc: dailyDeals?.short_description?.id,
-					en_short_desc: dailyDeals?.short_description?.en,
+					en_title: sectionDetail?.title?.en,
+					id_title: sectionDetail?.title?.id,
+					id_short_desc: sectionDetail?.short_description?.id,
+					en_short_desc: sectionDetail?.short_description?.en,
 					// eslint-disable-next-line no-mixed-spaces-and-tabs
 			  };
 	};
@@ -80,10 +85,10 @@ const DailyDealsModifyPage = () => {
 			setIsSubmitting(true);
 
 			const formData = new FormData();
-			const mobileHomeImage = await dailyDealsMobileHomeRef.current.getImage();
-			const mobileDetailImage = await dailyDealsMobileDetailRef.current.getImage();
-			const desktopHomeImage = await dailyDealsDesktopHomeRef.current.getImage();
-			const desktopDetailImage = await dailyDealsDesktopDetailRef.current.getImage();
+			const mobileHomeImage = await sectionMobileHomeRef.current.getImage();
+			const mobileDetailImage = await sectionMobileDetailRef.current.getImage();
+			const desktopHomeImage = await sectionDesktopHomeRef.current.getImage();
+			const desktopDetailImage = await sectionDesktopDetailRef.current.getImage();
 			if (mobileHomeImage)
 				formData.append('banner_mobile_home', mobileHomeImage);
 			if (mobileDetailImage)
@@ -120,28 +125,28 @@ const DailyDealsModifyPage = () => {
 			
 			
 			if (isCreating) {
-				const {data} = await dailyDealsService.createDailyDeals(formData);
+				const {data} = await additionalSectionService.createAdditionalSection(formData);
 				if (data) {
-					const response = await dailyDealsService.assignProduct(data.id, {products: productsToAssign});
+					const response = await additionalSectionService.assignProduct(data.id, {products: productsToAssign});
 					if (response && response.data) {
-						message.success('Berhasil menambah daily deals');
+						message.success('Berhasil menambah section');
 					}
 				}
 			} else {
-				const {data} = await dailyDealsService.editDailyDeals(dailyDeals.id, formData);
+				const {data} = await additionalSectionService.editAdditionalSection(sectionDetail.id, formData);
 				if (data) {
-					const response = await dailyDealsService.assignProduct(data.id, {products: productsToAssign});
+					const response = await additionalSectionService.assignProduct(data.id, {products: productsToAssign});
 					if (response && response.data) {
-						message.success('Berhasil mengubah daily deals');
+						message.success('Berhasil mengubah section');
 					}
 				}
 			}
 
 			message.info(
-				'Akan dikembalikan ke halaman daftar daily deals dalam 2 detik'
+				'Akan dikembalikan ke halaman daftar additional section dalam 2 detik'
 			);
 			setTimeout(() => {
-				history.push('/view/daily-deals');
+				history.push('/view/additioanl-sections');
 			}, 2000);
 		} catch (error) {
 			message.error(error.message);
@@ -153,7 +158,7 @@ const DailyDealsModifyPage = () => {
 
 	useEffect(() => {
 		(async () => {
-			await getDailyDeals();
+      if (id) await getSectionByID();
 		})();
 	}, []);
 
@@ -161,25 +166,25 @@ const DailyDealsModifyPage = () => {
 		<OrganismLayout
 			breadcumbs={[
 				{ name: 'Tampilan', link: '/view' },
-				{ name: 'Daily Deals', link: location.pathname },
+				{ name: 'Additional Section', link: '/view/additional-sections' },
 				{
-					name: location.pathname.includes('add') ? 'Tambah' : 'Ubah Daily Deals',
+					name: isCreating ? 'Tambah Section' : 'Ubah Section',
 					link: location.pathname,
 				},
 			]}
-			title="Daily Deals"
+			title="Section"
 		>
 			<Typography.Title level={4}>
-				<span className="fw7">{`Ubah Daily Deals`.toUpperCase()}</span>
+				<span className="fw7">{`${location.pathname.includes('add') ? 'Tambah' : 'Ubah'} Section`.toUpperCase()}</span>
 			</Typography.Title>
 
-			{!dailyDeals ? (
+			{isFetching ? (
 				<Skeleton active />
 			) : (
 				<>
 					<Form
 						className="w-100 mt4"
-						name="modify_daily_deals"
+						name={`modify_section_${id}`}
 						form={form}
 						onFinish={submit}
 						initialValues={setHolidayInitialValues()}
@@ -189,7 +194,7 @@ const DailyDealsModifyPage = () => {
 						}}
 					>
 						<Tabs defaultActiveKey="1">
-							<TabPane tab={`Info Daily Deals`.toUpperCase()} key="1">
+							<TabPane tab={`Info Section`.toUpperCase()} key="1">
 								<Row align="top" className="mt4" gutter={24}>
 									<Col span={24}>
 										<AtomCard>
@@ -197,7 +202,7 @@ const DailyDealsModifyPage = () => {
 												<Col span={24}>
 													<Typography.Text strong>
 														<span className="denim f5">
-															{'Info Daily Deals'.toUpperCase()}
+															{'Info Section'.toUpperCase()}
 														</span>
 													</Typography.Text>
 												</Col>
@@ -212,37 +217,37 @@ const DailyDealsModifyPage = () => {
 												"
 														fileInputs={[
 															{
-																defaultValue: dailyDeals
-																	? dailyDeals.banner_mobile_home
+																defaultValue: sectionDetail
+																	? sectionDetail.banner_mobile_home
 																	: null,
 																isMobileImage: true,
 																label:
 																	'Foto Banner Mobile (Beranda)',
-																ref: dailyDealsMobileHomeRef,
+																ref: sectionMobileHomeRef,
 															},
 															{
-																defaultValue: dailyDeals
-																	? dailyDeals.banner_mobile_detail
+																defaultValue: sectionDetail
+																	? sectionDetail.banner_mobile_detail
 																	: null,
 																label:
 																	'Foto Banner Mobile (Detail)',
-																ref: dailyDealsMobileDetailRef,
+																ref: sectionMobileDetailRef,
 															},
 															{
-																defaultValue: dailyDeals
-																	? dailyDeals.banner_desktop_home
+																defaultValue: sectionDetail
+																	? sectionDetail.banner_desktop_home
 																	: null,
 																label:
 																	'Foto Banner Desktop (Beranda)',
-																ref: dailyDealsDesktopHomeRef,
+																ref: sectionDesktopHomeRef,
 															},
 															{
-																defaultValue: dailyDeals
-																	? dailyDeals.banner_desktop_detail
+																defaultValue: sectionDetail
+																	? sectionDetail.banner_desktop_detail
 																	: null,
 																label:
 																	'Foto Banner Desktop (Detail)',
-																ref: dailyDealsDesktopDetailRef,
+																ref: sectionDesktopDetailRef,
 															},
 														]}
 													/>
@@ -254,7 +259,7 @@ const DailyDealsModifyPage = () => {
 														label="Title (ID)"
 														placeholder="Judul Title (ID)"
 														type="text"
-														value={dailyDeals?.title?.id}
+														value={sectionDetail?.title?.id}
 													/>
 												</Col>
 
@@ -264,7 +269,7 @@ const DailyDealsModifyPage = () => {
 														label="Judul (EN)"
 														placeholder="Judul (EN)"
 														type="text"
-														value={dailyDeals?.title?.en}
+														value={sectionDetail?.title?.en}
 													/>
 												</Col>
 
@@ -278,7 +283,7 @@ const DailyDealsModifyPage = () => {
 														name="id_short_desc"
 														placeholder="Deskripsi Singkat (ID)"
 														type="textarea"
-														value={dailyDeals?.short_description?.id}
+														value={sectionDetail?.short_description?.id}
 													/>
 												</Col>
 
@@ -292,7 +297,7 @@ const DailyDealsModifyPage = () => {
 														label="Deskripsi Singkat (EN)"
 														placeholder="Deskripsi Singkat (EN)"
 														type="textarea"
-														value={dailyDeals?.short_description?.en}
+														value={sectionDetail?.short_description?.en}
 													/>
 												</Col>
 
@@ -361,10 +366,10 @@ const DailyDealsModifyPage = () => {
 					
 					<Col className="mt4" span={24}>
 						<MoleculeModifyActionButtons
-							backUrl="/view/daily-deals"
+							backUrl="/view/additonal-sections"
 							isCreating={isCreating}
 							isSubmitting={isSubmitting}
-							label="Daily Deals"
+							label="Section"
 							onClick={() => form.submit()}
 						/>
 					</Col>
@@ -374,4 +379,4 @@ const DailyDealsModifyPage = () => {
 	);
 };
 
-export default DailyDealsModifyPage;
+export default AdditionalSectionModifyPage;

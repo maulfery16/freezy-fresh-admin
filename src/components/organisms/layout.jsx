@@ -160,8 +160,8 @@ const OrganismLayout = (props) => {
 			hidden: !roles.includes('super-admin') || !roles.includes('admin'),
 			subMenus: [
 				{
-					name: 'Tampilan',
-					link: '/view/',
+					name: 'Tampilan Lainnya',
+					link: '/view/additional-sections',
 				},
 				{
 					name: 'Banner',
@@ -178,10 +178,6 @@ const OrganismLayout = (props) => {
 				{
 					name: 'Flash Sale',
 					link: '/view/flash-sale',
-				},
-				{
-					name: 'Special Benefit',
-					link: '/view/special-benefit',
 				},
 				{
 					name: 'Bundling Deals',
@@ -511,7 +507,7 @@ const OrganismLayout = (props) => {
 									<Menu.SubMenu
 										className={
 											location.pathname.includes(
-												menu.subMenyKey
+												menu.subMenuKey
 											)
 												? 'ant-menu-submenu-open'
 												: ''
@@ -524,6 +520,13 @@ const OrganismLayout = (props) => {
 											(sub) =>
 												!sub.hidden && (
 													<Menu.Item
+														className={
+															location.pathname.includes(
+																sub.link
+															)
+																? 'ant-menu-item-selected'
+																: ''
+														}
 														key={sub.link}
 														onClick={() =>
 															history.push(

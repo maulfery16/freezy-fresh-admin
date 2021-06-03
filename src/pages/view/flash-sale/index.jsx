@@ -19,10 +19,10 @@ import AtomPrimaryButton from '../../../components/atoms/button/primary-button';
 
 const { TabPane } = Tabs;
 
-import DailyDealsService from '../../../services/daily-deals';
-const dailyDealsService = new DailyDealsService();
+import FlashSalesService from '../../../services/flash-sales';
+const flashSalesService = new FlashSalesService();
 
-const DailyDealsPage = () => {
+const FlashSalesPage = () => {
 	const column = [
 		{
 			title: 'Cabang (ID)',
@@ -90,7 +90,7 @@ const DailyDealsPage = () => {
 		},
 	];
 	const viewTableRef = useRef();
-	const [dailyDeals, setDailyDeals] = useState(null);
+	const [flashSale, setFlashSale] = useState(null);
 	const [products, setProducts] = useState({});
 	const [isLoading, setIsLoading] = useState(false);
 	const [keyword, setKeyword] = useState('');
@@ -99,11 +99,11 @@ const DailyDealsPage = () => {
 		productCategory: '',
 	});
 
-	const getDailyDeals = async () => {
+	const getFlashSale = async () => {
 		setIsLoading(true);
 		try {
-			const {data} = await dailyDealsService.getDailyDeals();
-			setDailyDeals(data);
+			const {data} = await flashSalesService.getFlashSales();
+			setFlashSale(data);
 			if (data.products && Array.isArray(data.products) && data.products.length > 0) {
 				const tmp = {};
 				tmp.data = data.products;
@@ -154,7 +154,7 @@ const DailyDealsPage = () => {
 
 	useEffect(() => {
 		(async () => {
-			getDailyDeals();
+			getFlashSale();
 		})();
 	}, []);
 
@@ -166,16 +166,16 @@ const DailyDealsPage = () => {
 		<OrganismLayout
 			breadcumbs={[
 				{ name: 'Tampilan', link: '/view' },
-				{ name: 'Daily Deals', link: location.pathname },
+				{ name: 'Flash Sale', link: location.pathname },
 			]}
-			title="Daily Deals"
+			title="Flash Sale"
 		>
 			<Row>
 				<Col span={24}>
 					<Row align="middle" justify="space-between">
 						<Typography.Title level={4}>
 							<span className="fw7">
-								{`Daily Deals`.toUpperCase()}
+								{`Flash Sale`.toUpperCase()}
 							</span>
 						</Typography.Title>
 
@@ -183,9 +183,9 @@ const DailyDealsPage = () => {
 							column={column}
 							getLimit={0}
 							isEdit={true}
-							label="Daily Deals"
-							route="/view/daily-deals"
-							url="daily-deals"
+							label="Flash Sale"
+							route="/view/flash-sale"
+							url="flash-sale"
 						/>
 					</Row>
 				</Col>
@@ -195,7 +195,7 @@ const DailyDealsPage = () => {
 				<AtomSpinner/>
 			) : (
 				<Tabs defaultActiveKey="1">
-					<TabPane tab={`Info Daily Deals`.toUpperCase()} key="1">
+					<TabPane tab={`Info Flash Sale`.toUpperCase()} key="1">
 						<Row align="top" className="mt4" gutter={24}>
 							<Col span={24}>
 								<AtomCard>
@@ -203,7 +203,7 @@ const DailyDealsPage = () => {
 										<Col span={24}>
 											<Typography.Text strong>
 												<span className="denim f5">
-													{'Info Daily Deals'.toUpperCase()}
+													{'Info Flash Sale'.toUpperCase()}
 												</span>
 											</Typography.Text>
 										</Col>
@@ -216,25 +216,25 @@ const DailyDealsPage = () => {
 														images={[
 															{
 																source:
-																	dailyDeals?.banner_mobile_home,
+																	flashSale?.banner_mobile_home,
 																label:
 																	' Foto Banner Mobile (Beranda)',
 															},
 															{
 																source:
-																	dailyDeals?.banner_mobile_detail,
+																	flashSale?.banner_mobile_detail,
 																label:
 																	' Foto Banner Mobile (Detail)',
 															},
                               {
 																source:
-																	dailyDeals?.banner_desktop_home,
+																	flashSale?.banner_desktop_home,
 																label:
 																	' Foto Banner Desktop (Beranda)',
 															},
 															{
 																source:
-																	dailyDeals?.banner_desktop_detail,
+																	flashSale?.banner_desktop_detail,
 																label:
 																	' Foto Banner Desktop (Detail)',
 															},
@@ -247,39 +247,57 @@ const DailyDealsPage = () => {
 										<Col span={12}>
 											<MoleculeInfoGroup
 												title="Title (ID)"
-												content={dailyDeals?.title?.id}
+												content={flashSale?.title?.id}
 											/>
 										</Col>
 
 										<Col span={12}>
 											<MoleculeInfoGroup
 												title="Title (EN)"
-												content={dailyDeals?.title?.en}
+												content={flashSale?.title?.en}
+											/>
+										</Col>
+
+										<Col span={12}>
+											<MoleculeInfoGroup
+												title="Tanggal dan Waktu Mulai Masa Berlaku Promo"
+												content={<ReactMoment format="DD MMM YYYY | HH:mm">
+													{flashSale?.start_at}
+												</ReactMoment>}
+											/>
+										</Col>
+
+										<Col span={12}>
+											<MoleculeInfoGroup
+												title="Tanggal dan Waktu Selesai Masa Berlaku Promo"
+												content={<ReactMoment format="DD MMM YYYY | HH:mm">
+													{flashSale?.finish_at}
+												</ReactMoment>}
 											/>
 										</Col>
 
 										<Col span={12}>
 											<MoleculeInfoGroup
 												title="Deskripsi Singkat (ID)"
-												content={dailyDeals?.short_description?.id}
+												content={flashSale?.short_description?.id}
 											/>
 										</Col>
 
 										<Col span={12}>
 											<MoleculeInfoGroup
 												title="Deskripsi Singkat (EN)"
-												content={dailyDeals?.short_description?.en}
+												content={flashSale?.short_description?.en}
 											/>
 										</Col>
 
 										<Col span={12}>
 											<MoleculeInfoGroup
 												title="Deskripsi Lengkap (ID)"
-												content={dailyDeals?.long_description?.id ? (
+												content={flashSale?.long_description?.id ? (
                           <MoleculeMarkdownRenderer
 														withBorder
 														text={
-															dailyDeals?.long_description?.id
+															flashSale?.long_description?.id
 														}
 													/>
                         ) : null}
@@ -289,11 +307,11 @@ const DailyDealsPage = () => {
 										<Col span={12}>
 											<MoleculeInfoGroup
 												title="Deskripsi Lengkap (EN)"
-                        content={dailyDeals?.long_description?.en ? (
+                        content={flashSale?.long_description?.en ? (
                           <MoleculeMarkdownRenderer
 														withBorder
 														text={
-															dailyDeals?.long_description?.en
+															flashSale?.long_description?.en
 														}
 													/>
                         ) : null}
@@ -313,7 +331,7 @@ const DailyDealsPage = () => {
 												title="Tanggal Dibuat"
 												content={
 													<ReactMoment format="DD-MM-YYYY">
-														{dailyDeals?.created_at}
+														{flashSale?.created_at}
 													</ReactMoment>
 												}
 											/>
@@ -324,7 +342,7 @@ const DailyDealsPage = () => {
 												title="Tanggal Diperbarui"
 												content={
 													<ReactMoment format="DD-MM-YYYY">
-														{dailyDeals?.updated_at}
+														{flashSale?.updated_at}
 													</ReactMoment>
 												}
 											/>
@@ -333,14 +351,14 @@ const DailyDealsPage = () => {
 										<Col span={8}>
 											<MoleculeInfoGroup
 												title="Dibuat Oleh"
-												content={dailyDeals?.created_by}
+												content={flashSale?.created_by}
 											/>
 										</Col>
 
 										<Col span={12}>
 											<MoleculeInfoGroup
 												title="Diperbarui Oleh"
-												content={dailyDeals?.updated_by}
+												content={flashSale?.updated_by}
 											/>
 										</Col>
 									</Row>
@@ -437,7 +455,7 @@ const DailyDealsPage = () => {
 													<MoleculeMarkdownRenderer
 														withBorder
 														text={
-															dailyDeals?.term_and_condition?.id
+															flashSale?.term_and_condition?.id
 														}
 													/>
 												}
@@ -451,7 +469,7 @@ const DailyDealsPage = () => {
 													<MoleculeMarkdownRenderer
 														withBorder
 														text={
-															dailyDeals?.term_and_condition?.en
+															flashSale?.term_and_condition?.en
 														}
 													/>
 												}
@@ -468,4 +486,4 @@ const DailyDealsPage = () => {
 	);
 };
 
-export default DailyDealsPage;
+export default FlashSalesPage;

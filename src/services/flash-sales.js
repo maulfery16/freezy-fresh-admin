@@ -1,53 +1,54 @@
+
 import RequestAdapterService from './request-adapter';
 
-export default class HolidayService extends RequestAdapterService {
-	async createHoliday(holiday) {
+export default class FlashSalesService extends RequestAdapterService {
+	async createFlashSales(flashSales) {
 		try {
 			const { data } = await super.sendPostMultipartRequest(
-				`${this.baseUrl}/v1/holidays`,
-				holiday
+				`${this.baseUrl}/v1/flash-sales`,
+				flashSales
 			);
 
 			return data;
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail creating holiday: ${super.generateErrorMessage(
+				`Fail creating flash sales: ${super.generateErrorMessage(
 					error
 				)}`
 			);
 		}
 	}
 
-	async editHoliday(id, holiday) {
+	async editFlashSales(id, flashSales) {
 		try {
 			const { data } = await super.sendPostMultipartRequest(
-				`${this.baseUrl}/v1/holidays/${id}?_method=PATCH`,
-				holiday
+				`${this.baseUrl}/v1/flash-sales/${id}?_method=PATCH`,
+				flashSales
 			);
 
 			return data;
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail updating holiday: ${super.generateErrorMessage(
+				`Fail updating flash sales: ${super.generateErrorMessage(
 					error
 				)}`
 			);
 		}
 	}
 
-	async getHoliday() {
+	async getFlashSales() {
 		try {
 			const { data } = await super.sendGetRequest(
-				`${this.baseUrl}/v1/holidays`
+				`${this.baseUrl}/v1/flash-sales`
 			);
 
 			return data;
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail getting holiday: ${super.generateErrorMessage(
+				`Fail getting flash sales: ${super.generateErrorMessage(
 					error
 				)}`
 			);
@@ -57,14 +58,14 @@ export default class HolidayService extends RequestAdapterService {
 	async assignProduct(id, products) {
 		try {
 			const { data } = await super.sendPostRequest(
-				`${this.baseUrl}/v1/holidays/${id}/products`, products
+				`${this.baseUrl}/v1/flash-sales/${id}/products`, products
 			);
 
 			return data;
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail assign products to holiday: ${super.generateErrorMessage(
+				`Fail assign products to flash sales: ${super.generateErrorMessage(
 					error
 				)}`
 			);

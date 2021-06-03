@@ -64,7 +64,7 @@ export default class DailyDealsService extends RequestAdapterService {
 		} catch (error) {
 			console.error(error);
 			throw new Error(
-				`Fail getting daily deals: ${super.generateErrorMessage(
+				`Fail assign products to daily deals: ${super.generateErrorMessage(
 					error
 				)}`
 			);

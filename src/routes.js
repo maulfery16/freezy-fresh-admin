@@ -606,6 +606,93 @@ const routes = [
 				],
 			},
 			{
+				path: '/flash-sale',
+				children: [
+					{
+						component: React.lazy(() =>
+							import('./pages/view/flash-sale')
+						),
+						exact: true,
+						guard: true,
+						name: 'Flash Sale Page',
+						path: '/',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/view/flash-sale/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Edit Flash Sale Page',
+						path: '/edit',
+					},
+				],
+			},
+			{
+				path: '/based-on-search',
+				children: [
+					{
+						component: React.lazy(() =>
+							import('./pages/view/based-on-search')
+						),
+						exact: true,
+						guard: true,
+						name: 'Based On Search Page',
+						path: '/',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/view/based-on-search/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Edit Based On Search Page',
+						path: '/edit',
+					},
+				],
+			},
+			{
+				path: '/additional-sections',
+				children: [
+					{
+						component: React.lazy(() =>
+							import('./pages/view/additional-sections')
+						),
+						exact: true,
+						guard: true,
+						name: 'Additional Sections Page',
+						path: '/',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/view/additional-sections/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Add Additional Sections Page',
+						path: '/add',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/view/additional-sections/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Edit Additional Sections Page',
+						path: '/:id/edit',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/view/additional-sections/detail')
+						),
+						exact: true,
+						guard: true,
+						name: 'Additional Section Detail Page',
+						path: '/:id/detail',
+					},
+				],
+			},
+			{
 				path: '/new-product',
 				children: [
 					{
