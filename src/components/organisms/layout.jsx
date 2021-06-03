@@ -160,7 +160,7 @@ const OrganismLayout = (props) => {
 			hidden: !roles.includes('super-admin') || !roles.includes('admin'),
 			subMenus: [
 				{
-					name: 'Tampilan',
+					name: 'Tampilan Lainnya',
 					link: '/view/additional-sections',
 				},
 				{
@@ -507,7 +507,7 @@ const OrganismLayout = (props) => {
 									<Menu.SubMenu
 										className={
 											location.pathname.includes(
-												menu.subMenyKey
+												menu.subMenuKey
 											)
 												? 'ant-menu-submenu-open'
 												: ''
@@ -520,6 +520,13 @@ const OrganismLayout = (props) => {
 											(sub) =>
 												!sub.hidden && (
 													<Menu.Item
+														className={
+															location.pathname.includes(
+																sub.link
+															)
+																? 'ant-menu-item-selected'
+																: ''
+														}
 														key={sub.link}
 														onClick={() =>
 															history.push(

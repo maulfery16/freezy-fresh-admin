@@ -606,6 +606,29 @@ const routes = [
 				],
 			},
 			{
+				path: '/flash-sale',
+				children: [
+					{
+						component: React.lazy(() =>
+							import('./pages/view/flash-sale')
+						),
+						exact: true,
+						guard: true,
+						name: 'Flash Sale Page',
+						path: '/',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/view/flash-sale/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Edit Flash Sale Page',
+						path: '/edit',
+					},
+				],
+			},
+			{
 				path: '/based-on-search',
 				children: [
 					{

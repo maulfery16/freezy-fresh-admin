@@ -166,7 +166,7 @@ const AdditionalSectionDetailPage = () => {
 		<OrganismLayout
 			breadcumbs={[
 				{ name: 'Tampilan', link: '/view' },
-        { name: 'Tampilan', link: '/view/additional-sections' },
+        { name: 'Tampilan Lainnya', link: '/view/additional-sections' },
 				{ name: 'Detail Section', link: location.pathname },
 			]}
 			title="Detail Section"

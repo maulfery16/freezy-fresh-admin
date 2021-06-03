@@ -138,7 +138,7 @@ const BasedOnSearchModifyPage = () => {
 		<OrganismLayout
 			breadcumbs={[
 				{ name: 'Tampilan', link: '/view' },
-				{ name: 'Based On Search', link: location.pathname },
+				{ name: 'Based On Search', link: '/view/based-on-search' },
 				{
 					name: location.pathname.includes('add') ? 'Tambah' : 'Ubah Based On Search',
 					link: location.pathname,
