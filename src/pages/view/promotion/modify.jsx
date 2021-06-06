@@ -82,32 +82,55 @@ const PromotionModifyPage = () => {
 				await promotionImageSmall2Ref.current.getImage();
 			const promotionImageSmall3 =
 				await promotionImageSmall3Ref.current.getImage();
-			const dataProduct = await viewTableRef.current.data;
 
-			console.log(dataProduct);
+			const productsToAssign = [];
+			viewTableRef.current.data.map((x) => {
+				const { published_stock, id, product_id, product_detail_id, fixed_price, price, discount_percentage, is_manage_stock } = x;
+				const tmpObj = {
+					published_stock,
+					product_id,
+					fixed_price,
+					price,
+					discount_percentage: parseInt(discount_percentage),
+					is_manage_stock,
+					product_detail_id: id ? id : product_detail_id,
+					price_after_discount: price - price * (discount_percentage / 100)
+				};
+				productsToAssign.push(tmpObj);
+			});
 
-			const data = new FormData();
-			data.append('image_mobile', promotionImageMobile);
-			data.append('image_desktop', promotionImageDekstop);
-			data.append('addition_image_1', promotionImageSmall1);
-			data.append('addition_image_2', promotionImageSmall2);
-			data.append('addition_image_3', promotionImageSmall3);
-			data.append('is_information', values.promotion_type);
-			data.append('title[id]', values.id_title);
-			data.append('title[en]', values.en_title);
-			data.append('short_description[id]', values.id_short_desc);
-			data.append('short_description[en]', values.en_short_desc);
-			data.append('full_description[id]', fullDescId);
-			data.append('full_description[en]', fullDescEn);
-			data.append('terms_and_condition[id]', termId);
-			data.append('terms_and_condition[en]', termEn);
+			const formData = new FormData();
+			if (promotionImageMobile) formData.append('image_mobile', promotionImageMobile);
+			if (promotionImageDekstop) formData.append('image_desktop', promotionImageDekstop);
+			if (promotionImageSmall1) formData.append('addition_image_1', promotionImageSmall1);
+			if (promotionImageSmall2) formData.append('addition_image_2', promotionImageSmall2);
+			if (promotionImageSmall3) formData.append('addition_image_3', promotionImageSmall3);
+			formData.append('is_information', values.promotion_type);
+			formData.append('title[id]', values.id_title);
+			formData.append('title[en]', values.en_title);
+			formData.append('short_description[id]', values.id_short_desc);
+			formData.append('short_description[en]', values.en_short_desc);
+			formData.append('full_description[id]', fullDescId);
+			formData.append('full_description[en]', fullDescEn);
+			formData.append('terms_and_condition[id]', termId);
+			formData.append('terms_and_condition[en]', termEn);
 
 			if (isCreating) {
-				await promotionService.createPromotion(data);
-				message.success('Berhasil menambah promotion');
+				const {data} = await promotionService.createPromotion(formData);
+				if (data) {
+					const response = await promotionService.addProductsToPromotion(id, {data: productsToAssign});
+					if (response && response.data) {
+						message.success('Berhasil menambah promotion');
+					}
+				}
 			} else {
-				await promotionService.editPromotion(id, data);
-				message.success('Berhasil mengubah promotion');
+				const {data} = await promotionService.editPromotion(id, formData);
+				if (data) {
+					const response = await promotionService.addProductsToPromotion(id, {data: productsToAssign});
+					if (response && response.data) {
+						message.success('Berhasil mengubah promotion');
+					}
+				}
 			}
 
 			message.info(
