@@ -41,7 +41,7 @@ const AdditionalSectionModifyPage = () => {
 	const [longDescEn, setLongDescEn] = useState('');
 
 	const getSectionByID = async () => {
-    setIsCreating(true);
+    setIsFetching(true);
 		try {
 			const {data} = await additionalSectionService.findSectionById(id);
 			setSectionDetail(data);
@@ -59,13 +59,12 @@ const AdditionalSectionModifyPage = () => {
 				})
 				setProductList(tmp);
 			}
-			setIsCreating(!data);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
 		} finally {
-      setIsCreating(false);
-    }
+			setIsFetching(false);
+		}
 	};
 
 	const setHolidayInitialValues = () => {
@@ -146,7 +145,7 @@ const AdditionalSectionModifyPage = () => {
 				'Akan dikembalikan ke halaman daftar additional section dalam 2 detik'
 			);
 			setTimeout(() => {
-				history.push('/view/additioanl-sections');
+				history.push('/view/additional-sections');
 			}, 2000);
 		} catch (error) {
 			message.error(error.message);
@@ -159,6 +158,7 @@ const AdditionalSectionModifyPage = () => {
 	useEffect(() => {
 		(async () => {
       if (id) await getSectionByID();
+			setIsCreating(!history.location.pathname.includes('/edit'));
 		})();
 	}, []);
 
@@ -175,12 +175,12 @@ const AdditionalSectionModifyPage = () => {
 			title="Section"
 		>
 			<Typography.Title level={4}>
-				<span className="fw7">{`${location.pathname.includes('add') ? 'Tambah' : 'Ubah'} Section`.toUpperCase()}</span>
+				<span className="fw7">{`${isCreating ? 'Tambah' : 'Ubah'} Section`.toUpperCase()}</span>
 			</Typography.Title>
 
 			{isFetching ? (
 				<Skeleton active />
-			) : (
+			) : !isFetching && ((sectionDetail && !isCreating) || (isCreating && !sectionDetail)) ? (
 				<>
 					<Form
 						className="w-100 mt4"
@@ -193,167 +193,133 @@ const AdditionalSectionModifyPage = () => {
 							console.error(error);
 						}}
 					>
-						<Tabs defaultActiveKey="1">
-							<TabPane tab={`Info Section`.toUpperCase()} key="1">
-								<Row align="top" className="mt4" gutter={24}>
-									<Col span={24}>
-										<AtomCard>
-											<Row gutter={[24, 24]}>
-												<Col span={24}>
-													<Typography.Text strong>
-														<span className="denim f5">
-															{'Info Section'.toUpperCase()}
-														</span>
-													</Typography.Text>
-												</Col>
+						<Row align="top" className="mt4" gutter={24}>
+							<Col span={24}>
+								<AtomCard>
+									<Row gutter={[24, 24]}>
+										<Col span={24}>
+											<Typography.Text strong>
+												<span className="denim f5">
+													{'Info Section'.toUpperCase()}
+												</span>
+											</Typography.Text>
+										</Col>
 
-												<Col span={24}>
-													<MoleculeFileInputGroup
-														label="Foto Banner"
-														description="
-													Format gambar .jpg .jpeg .png, Untuk foto banner mobile ukuran minimum 0 x 0px (Untuk
-													gambar optimal gunakan ukuran minimum 0 x 0 px) Untuk foto banner desktop ukuran
-													minimum 0 x 0px (Untuk gambar optimal gunakan ukuran minimum 0 x 0 px)
-												"
-														fileInputs={[
-															{
-																defaultValue: sectionDetail
-																	? sectionDetail.banner_mobile_home
-																	: null,
-																isMobileImage: true,
-																label:
-																	'Foto Banner Mobile (Beranda)',
-																ref: sectionMobileHomeRef,
-															},
-															{
-																defaultValue: sectionDetail
-																	? sectionDetail.banner_mobile_detail
-																	: null,
-																label:
-																	'Foto Banner Mobile (Detail)',
-																ref: sectionMobileDetailRef,
-															},
-															{
-																defaultValue: sectionDetail
-																	? sectionDetail.banner_desktop_home
-																	: null,
-																label:
-																	'Foto Banner Desktop (Beranda)',
-																ref: sectionDesktopHomeRef,
-															},
-															{
-																defaultValue: sectionDetail
-																	? sectionDetail.banner_desktop_detail
-																	: null,
-																label:
-																	'Foto Banner Desktop (Detail)',
-																ref: sectionDesktopDetailRef,
-															},
-														]}
-													/>
-												</Col>
+										<Col span={24}>
+											<MoleculeFileInputGroup
+												label="Foto Banner"
+												description="
+											Format gambar .jpg .jpeg .png, Untuk foto banner mobile ukuran minimum 0 x 0px (Untuk
+											gambar optimal gunakan ukuran minimum 0 x 0 px) Untuk foto banner desktop ukuran
+											minimum 0 x 0px (Untuk gambar optimal gunakan ukuran minimum 0 x 0 px)
+										"
+												fileInputs={[
+													{
+														defaultValue: sectionDetail
+															? sectionDetail.banner_mobile_home
+															: null,
+														isMobileImage: true,
+														label:
+															'Foto Banner Mobile (Beranda)',
+														ref: sectionMobileHomeRef,
+													},
+													{
+														defaultValue: sectionDetail
+															? sectionDetail.banner_mobile_detail
+															: null,
+														label:
+															'Foto Banner Mobile (Detail)',
+														ref: sectionMobileDetailRef,
+													},
+													{
+														defaultValue: sectionDetail
+															? sectionDetail.banner_desktop_home
+															: null,
+														label:
+															'Foto Banner Desktop (Beranda)',
+														ref: sectionDesktopHomeRef,
+													},
+													{
+														defaultValue: sectionDetail
+															? sectionDetail.banner_desktop_detail
+															: null,
+														label:
+															'Foto Banner Desktop (Detail)',
+														ref: sectionDesktopDetailRef,
+													},
+												]}
+											/>
+										</Col>
 
-												<Col span={12}>
-													<MoleculeTextInputGroup
-														name="id_title"
-														label="Title (ID)"
-														placeholder="Judul Title (ID)"
-														type="text"
-														value={sectionDetail?.title?.id}
-													/>
-												</Col>
+										<Col span={12}>
+											<MoleculeTextInputGroup
+												name="id_title"
+												label="Title (ID)"
+												placeholder="Judul Title (ID)"
+												type="text"
+												value={sectionDetail?.title?.id}
+											/>
+										</Col>
 
-												<Col span={12}>
-													<MoleculeTextInputGroup
-														name="en_title"
-														label="Judul (EN)"
-														placeholder="Judul (EN)"
-														type="text"
-														value={sectionDetail?.title?.en}
-													/>
-												</Col>
+										<Col span={12}>
+											<MoleculeTextInputGroup
+												name="en_title"
+												label="Judul (EN)"
+												placeholder="Judul (EN)"
+												type="text"
+												value={sectionDetail?.title?.en}
+											/>
+										</Col>
 
-												<Col span={12}>
-													<MoleculeTextInputGroup
-														autoSize={{
-															minRows: 2,
-															maxRows: 6,
-														}}
-														label="Deskripsi Singkat (ID)"
-														name="id_short_desc"
-														placeholder="Deskripsi Singkat (ID)"
-														type="textarea"
-														value={sectionDetail?.short_description?.id}
-													/>
-												</Col>
+										<Col span={12}>
+											<MoleculeTextInputGroup
+												autoSize={{
+													minRows: 2,
+													maxRows: 6,
+												}}
+												label="Deskripsi Singkat (ID)"
+												name="id_short_desc"
+												placeholder="Deskripsi Singkat (ID)"
+												type="textarea"
+												value={sectionDetail?.short_description?.id}
+											/>
+										</Col>
 
-												<Col span={12}>
-													<MoleculeTextInputGroup
-														autoSize={{
-															minRows: 2,
-															maxRows: 6,
-														}}
-														name="en_short_desc"
-														label="Deskripsi Singkat (EN)"
-														placeholder="Deskripsi Singkat (EN)"
-														type="textarea"
-														value={sectionDetail?.short_description?.en}
-													/>
-												</Col>
+										<Col span={12}>
+											<MoleculeTextInputGroup
+												autoSize={{
+													minRows: 2,
+													maxRows: 6,
+												}}
+												name="en_short_desc"
+												label="Deskripsi Singkat (EN)"
+												placeholder="Deskripsi Singkat (EN)"
+												type="textarea"
+												value={sectionDetail?.short_description?.en}
+											/>
+										</Col>
 
-												<Col span={12}>
-													<MoleculeTextEditorGroup
-														name="id_long_desc"
-														label="Deskripsi Lengkap (ID)"
-														value={longDescId}
-														onChange={setLongDescId}
-													/>
-												</Col>
+										<Col span={12}>
+											<MoleculeTextEditorGroup
+												name="id_long_desc"
+												label="Deskripsi Lengkap (ID)"
+												value={longDescId}
+												onChange={setLongDescId}
+											/>
+										</Col>
 
-												<Col span={12}>
-													<MoleculeTextEditorGroup
-														name="en_long_desc"
-														label="Deskripsi Lengkap (EN)"
-														value={longDescEn}
-														onChange={setLongDescEn}
-													/>
-												</Col>
-											</Row>
-										</AtomCard>
-									</Col>
-								</Row>
-							</TabPane>
-							<TabPane
-								tab={`Syarat & ketentuan`.toUpperCase()}
-								key="2"
-							>
-								<Row align="top" gutter={24}>
-									<Col span={24}>
-										<AtomCard>
-											<Row gutter={[12, 24]}>
-												<Col span={24}>
-													<MoleculeTextEditorGroup
-														name="term_id"
-														label={`Syarat & Ketentuan (ID)`}
-														value={termId}
-														onChange={setTermId}
-													/>
-												</Col>
-
-												<Col span={24}>
-													<MoleculeTextEditorGroup
-														name="term_en"
-														label={`Syarat & Ketentuan (EN)`}
-														value={termEn}
-														onChange={setTermEn}
-													/>
-												</Col>
-											</Row>
-										</AtomCard>
-									</Col>
-								</Row>
-							</TabPane>
-						</Tabs>
+										<Col span={12}>
+											<MoleculeTextEditorGroup
+												name="en_long_desc"
+												label="Deskripsi Lengkap (EN)"
+												value={longDescEn}
+												onChange={setLongDescEn}
+											/>
+										</Col>
+									</Row>
+								</AtomCard>
+							</Col>
+						</Row>
 					</Form>
 					<Col className="mt4" span={24}>
 						<OrganismProductDatatable
@@ -374,7 +340,7 @@ const AdditionalSectionModifyPage = () => {
 						/>
 					</Col>
 				</>
-			)}
+			) : null}
 		</OrganismLayout>
 	);
 };

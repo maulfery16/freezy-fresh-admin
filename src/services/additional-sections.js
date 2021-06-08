@@ -37,6 +37,24 @@ export default class AdditionalSectionService extends RequestAdapterService {
 		}
 	}
 
+	async updateStatusSectionByID(id, dataToEdit) {
+		try {
+			const { data } = await super.sendPostMultipartRequest(
+				`${this.baseUrl}/v1/additional-home-sections/update_status/${id}?_method=PATCH`,
+				dataToEdit
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail updating status additional home sections: ${super.generateErrorMessage(
+					error
+				)}`
+			);
+		}
+	}
+
 	async getAllSections() {
 		try {
 			const { data } = await super.sendGetRequest(
@@ -65,6 +83,23 @@ export default class AdditionalSectionService extends RequestAdapterService {
 			console.error(error);
 			throw new Error(
 				`Fail getting additional home sections: ${super.generateErrorMessage(
+					error
+				)}`
+			);
+		}
+	}
+
+	async deleteSectionById(id) {
+		try {
+			const { data } = await super.sendDeleteRequest(
+				`${this.baseUrl}/v1/additional-home-sections/${id}`
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail deleting additional home sections: ${super.generateErrorMessage(
 					error
 				)}`
 			);

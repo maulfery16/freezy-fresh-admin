@@ -18,14 +18,23 @@ const AtomStatusSwitch = (props) => {
 
 	const changeActiveStatus = async () => {
 		try {
-			await datatableService.updateActiveStatus(props.id, props.url);
-			message.success('Berhasil memperbaharui status aktif kategori');
+			
+			if (props.statusChangeAction) {
+				await props.statusChangeAction();
+			} else {
+				await datatableService.updateActiveStatus(props.id, props.url);
+			}
+			message.success(`Berhasil memperbaharui status aktif ${props.label ?? 'kategori'}`);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
 		} finally {
 			setIsVisible(false);
-			props.tableRef.current.refetchData();
+			if (props.afterSuccessUpdate) {
+				props.afterSuccessUpdate();
+			} else {
+				props.tableRef.current.refetchData();
+			}
 		}
 	};
 

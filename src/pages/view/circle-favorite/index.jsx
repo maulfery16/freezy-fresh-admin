@@ -74,7 +74,7 @@ const CircleFavoritePage = () => {
 				<Row align="top" className="mt4" gutter={24}>
 					<Col span={15}>
 						<AtomCard title={`Info Circle's Favorite`}>
-							<Row gutter={[12, 24]}>
+							<Row gutter={[12, 24]} className="mt4">
 								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Title Konten (ID)"

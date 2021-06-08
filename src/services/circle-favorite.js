@@ -22,7 +22,7 @@ export default class CircleFavoriteService extends RequestAdapterService {
 	async editCircleFavorite(id, circleFavorite) {
 		try {
 			const { data } = await super.sendPostMultipartRequest(
-				`${this.baseUrl}/v1/circle-favorites/${id}?_method=PATCH`,
+				`${this.baseUrl}/v1/favorite-on-your-circles/${id}?_method=PATCH`,
 				circleFavorite
 			);
 
@@ -40,7 +40,7 @@ export default class CircleFavoriteService extends RequestAdapterService {
 	async getCircleFavorites() {
 		try {
 			const data = await super.sendGetRequest(
-				`${this.baseUrl}/v1/circle-favorites`
+				`${this.baseUrl}/v1/favorite-on-your-circles`
 			);
 
 			return data;

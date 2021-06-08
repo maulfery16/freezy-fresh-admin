@@ -44,13 +44,13 @@ const AdditionalHomeSectionsPage = () => {
 			title: 'Nama Section (ID)',
 			dataIndex: 'title',
 			sorter: true,
-      render: (_, record) => record.title,
+      render: (_, record) => typeof record.title === 'string' ? record.title : record.title.id,
 		},
 		{
 			title: 'Nama Section (EN)',
 			dataIndex: 'title',
 			sorter: true,
-      render: (_, record) => record.title,
+      render: (_, record) => typeof record.title === 'string' ? record.title : record.title.en,
 		},
 		{
 			title: 'Deskripsi Singkat (ID)',
@@ -81,6 +81,17 @@ const AdditionalHomeSectionsPage = () => {
 					id={record.id}
 					tableRef={viewTableRef}
 					url="additional-home-sections"
+					label="Section"
+					statusChangeAction={async () => {
+						try {
+							const formData = new FormData();
+							formData.append("is_active", active ? 0 : 1);
+							await additionalSectionService.updateStatusSectionByID(record.id, formData);	
+						} catch (error) {
+							message.error(error.message)
+						}
+					}}
+					afterSuccessUpdate={() => getAllSections()}
 				/>
 			),
 			csvRender: (item) => (item.is_active ? 'Aktif' : 'Tidak Aktif'),
@@ -104,6 +115,7 @@ const AdditionalHomeSectionsPage = () => {
 							label="Section"
 							tableRef={viewTableRef}
 							url="additional-home-sections"
+							afterSuccessDelete={() => getAllSections()}
 						/>
 					)}
 				</Space>
