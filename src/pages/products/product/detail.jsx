@@ -61,7 +61,7 @@ const OrganismProductDetail = () => {
 					style={{ maxWidth: '100%' }}
 				>
 					<AtomCard title="Info Produk">
-						<Row gutter={[24, 24]}>
+						<Row gutter={[24, 24]} className="mt4">
 							<Col span={24}>
 								<MoleculeInfoGroup
 									title="Foto Produk"
@@ -70,26 +70,22 @@ const OrganismProductDetail = () => {
 											images={[
 												{
 													source:
-														product.image &&
-														product.image[0],
+														product.beauty_image,
 													label: `Foto "Cantik"`,
 												},
 												{
 													source:
-														product.image &&
-														product.image[1],
+														product.white_image,
 													label: `Foto "Putih Terbang"`,
 												},
 												{
 													source:
-														product.image &&
-														product.image[2],
+														product.inspiration_image,
 													label: `Foto "Inspirasi"`,
 												},
 												{
 													source:
-														product.imag &&
-														product.image[3],
+														product.packaging_image,
 													label: `Foto "Packaging"`,
 												},
 											]}
@@ -98,10 +94,17 @@ const OrganismProductDetail = () => {
 								/>
 							</Col>
 
-							<Col span={24}>
+							<Col span={12}>
 								<MoleculeInfoGroup
 									title="SKU ID"
 									content={product.sku_id}
+								/>
+							</Col>
+
+							<Col span={12}>
+								<MoleculeInfoGroup
+									title="Kode UPC"
+									content={product.upc_code}
 								/>
 							</Col>
 
@@ -136,30 +139,30 @@ const OrganismProductDetail = () => {
 							<Col span={12}>
 								<MoleculeInfoGroup
 									title="Deskripsi Lengkap (ID)"
-									content={
+									content={product?.full_description?.id ? (
 										<MoleculeMarkdownRenderer
 											withBorder
-											text={product.full_description.id}
+											text={product?.full_description?.id}
 										/>
-									}
+									) : null}
 								/>
 							</Col>
 
 							<Col span={12}>
 								<MoleculeInfoGroup
 									title="Deskripsi Lengkap (EN)"
-									content={
+									content={product?.full_description?.en ? (
 										<MoleculeMarkdownRenderer
 											withBorder
-											text={product.full_description.en}
+											text={product?.full_description?.en}
 										/>
-									}
+									) : null}
 								/>
 							</Col>
 
 							<Col span={12}>
 								<MoleculeInfoGroup
-									title="Kategori Tambahan"
+									title="Kategori Tambahan (ID)"
 									content={
 										product.additional_category &&
 										product.additional_category.id
@@ -169,14 +172,14 @@ const OrganismProductDetail = () => {
 
 							<Col span={12}>
 								<MoleculeInfoGroup
-									title="Cabang"
-									content={product.branch || '-'}
+									title="Cabang Freezy (ID)"
+									content={product.branches.length > 0 ? product.branches.map(x => x.name.id).join(', ') : '-'}
 								/>
 							</Col>
 
 							<Col span={12}>
 								<MoleculeInfoGroup
-									title="Kategori Dasar"
+									title="Kategori Dasar (ID)"
 									content={product.base_category.id}
 								/>
 							</Col>
@@ -246,6 +249,27 @@ const OrganismProductDetail = () => {
 
 							<Col span={12}>
 								<MoleculeInfoGroup
+									title="Ukuran Produk (cm)"
+									content={`P: ${product?.long_cm ?? '-'} X L: ${product?.wide_cm ?? '-'} X T: ${product?.height_cm ?? '-'}`}
+								/>
+							</Col>
+
+							<Col span={12}>
+								<MoleculeInfoGroup
+									title="Berat Produk (gr)"
+									content={product?.weight_gr ? `${product?.weight_gr} gr` : '-'}
+								/>
+							</Col>
+
+							<Col span={12}>
+								<MoleculeInfoGroup
+									title="UOM"
+									content={product?.uom}
+								/>
+							</Col>
+
+							<Col span={12}>
+								<MoleculeInfoGroup
 									title="Txt 1"
 									content={product.txt1 || '-'}
 								/>
@@ -274,8 +298,8 @@ const OrganismProductDetail = () => {
 						</Row>
 					</AtomCard>
 
-					<AtomCard title="Info Produk">
-						<Row gutter={[24, 24]}>
+					<AtomCard title="Info Update">
+						<Row gutter={[24, 24]} className="mt4">
 							<Col span={12}>
 								<MoleculeInfoGroup
 									title="Tanggal Pendaftaran"

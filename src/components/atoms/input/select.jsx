@@ -29,7 +29,7 @@ const AtomCustomSelect = forwardRef((props, ref) => {
 		if (props.data.options) {
 			setOptions(props.data.options);
 		} else {
-			const response = await masterService.getOptions(props.data.url, {page, limit: 10});
+			const response = await masterService.getOptions(props.data.url, {page, limit: props.data.limit ?? 10});
 			const nextURL = response?.meta?.pagination?.links?.next;
 			if (response.data && response.data.length > 0) {
 				let tmpOptions = page === 1 ? [] : options;
