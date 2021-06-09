@@ -34,6 +34,7 @@ const AtomBranchSelect = (props) => {
 			placeholder="Pilih Cabang Freezy"
 			data={{
 				url: props.url ?? 'branches',
+				limit: 300,
 				generateCustomOption: setGenerateCustomOption(),
 				onChange: setOnChangeFunction(),
 			}}

@@ -242,12 +242,12 @@ const ProductModifyPage = () => {
 					age_limit: product.age_limit,
 					base_category_id: product.base_category_id,
 					brand_id: product.brand_id,
-					branches: product.branches,
+					branches: product.branches.map((x) => x.id),
 					company: product.product_owner_id,
 					en_short_desc: product.short_description.en,
 					height_cm: product.height_cm,
 					id_short_desc: product.short_description.id,
-					long_cm: product.height_cm,
+					long_cm: product.long_cm,
 					name_en: product.name.en,
 					name_id: product.name.id,
 					related_products: product.related_products,
@@ -261,7 +261,7 @@ const ProductModifyPage = () => {
 					txt4: product.txt4,
 					upc_code: product.upc_code,
 					weight_gr: product.weight_gr,
-					width_cm: product.width_cm,
+					width_cm: product.wide_cm,
 					zone_id: product.zone_id,
 			  };
 	};
@@ -271,43 +271,45 @@ const ProductModifyPage = () => {
 
 		try {
 			const images = await uploadProductImages();
-
-			const newProduct = {
-				...values,
-				...images,
-				attributes,
-				branches,
-				details: productVariants,
-				variants,
-				product_owner_id: values.company,
-				name: {
-					id: values.name_id,
-					en: values.name_en,
-				},
-				short_description: {
-					id: values.id_short_desc,
-					en: values.en_short_desc,
-				},
-				full_description: {
-					id: fullDescId,
-					en: fullDescEn,
-				},
-			};
-
-			if (isCreating) {
-				await productService.createProduct(newProduct);
-				message.success('Berhasil membuat produk baru');
-			} else {
-				await productService.editProduct(id, newProduct);
-				message.success('Berhasil mengubah data produk');
+			if (images) {
+				const newProduct = {
+					...values,
+					...images,
+					attributes,
+					branches,
+					details: productVariants,
+					variants,
+					product_owner_id: values.company,
+					name: {
+						id: values.name_id,
+						en: values.name_en,
+					},
+					short_description: {
+						id: values.id_short_desc,
+						en: values.en_short_desc,
+					},
+					full_description: {
+						id: fullDescId,
+						en: fullDescEn,
+					},
+				};
+	
+				if (isCreating) {
+					await productService.createProduct(newProduct);
+					message.success('Berhasil membuat produk baru');
+				} else {
+					await productService.editProduct(id, newProduct);
+					message.success('Berhasil mengubah data produk');
+				}
+	
+				message.info(
+					'Akan dikembalikan ke halaman daftar produk dalam 2 detik'
+				);
+				setTimeout(() => {
+					history.push('/products');
+				}, 2000);
 			}
 
-			message.info(
-				'Akan dikembalikan ke halaman daftar produk dalam 2 detik'
-			);
-			setTimeout(() => {
-				history.push('/products');
-			}, 2000);
 		} catch (error) {
 			message.error(error.message);
 		} finally {
@@ -387,7 +389,7 @@ const ProductModifyPage = () => {
 						}}
 					>
 						<AtomCard title="Info Produk">
-							<Row gutter={[24, 24]}>
+							<Row gutter={[24, 24]} className="mt4">
 								<Col span={24}>
 									<MoleculeFileInputGroup
 										description="Format gambar .jpg .jpeg .png, Untuk foto ukuran minimum 450 x 450px"
@@ -521,6 +523,7 @@ const ProductModifyPage = () => {
 												value: item.id,
 												label: item.name.id,
 											}),
+											limit: 300
 										}}
 									/>
 								</Col>
@@ -530,12 +533,13 @@ const ProductModifyPage = () => {
 										mode="multiple"
 										onChange={(_, options) => {
 											if (branches.length !== options) {
-												setBranches(
-													options.map((option) => ({
-														branch_id: option.value,
-														branch: option.children,
-													}))
-												);
+												const values = options.map((option) => ({
+													branch_id: option.value,
+													branch: option.children,
+												}))
+												const val = options.map((option) => option.value);
+												form.setFieldsValue({ branches: val })
+												setBranches(values);
 											}
 										}}
 									/>
@@ -553,6 +557,7 @@ const ProductModifyPage = () => {
 												value: item.id,
 												label: item.name.id,
 											}),
+											limit: 300
 										}}
 									/>
 								</Col>
@@ -573,6 +578,7 @@ const ProductModifyPage = () => {
 												value: item.id,
 												label: item.name.id,
 											}),
+											limit: 300
 										}}
 									/>
 								</Col>
@@ -589,6 +595,7 @@ const ProductModifyPage = () => {
 												value: item.id,
 												label: item.name.id,
 											}),
+											limit: 300
 										}}
 									/>
 								</Col>
@@ -696,6 +703,7 @@ const ProductModifyPage = () => {
 										label="UOM"
 										placeholder="UOM"
 										type="text"
+										required
 									/>
 								</Col>
 
