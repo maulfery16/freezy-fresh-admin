@@ -152,7 +152,7 @@ const ProductPage = () => {
 				name="additional-categories"
 				operator=":"
 				identifier="additional-categories-filter"
-				label="Kategori Dasar"
+				label="Kategori Tambahan"
 				key="additional-categories-filter"
 				placeholder="Semua Kategori Tambahan"
 				data={{
