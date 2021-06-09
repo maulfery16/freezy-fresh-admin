@@ -196,6 +196,7 @@ const TransactionModifyPage = () => {
 														'FREEZY_CASH' ? (
 															<AtomNumberFormat
 																value={`${transaction.amount}`}
+																prefix="Rp. "
 															/>
 														) : (
 															'-'
@@ -206,7 +207,7 @@ const TransactionModifyPage = () => {
 
 											<Col span={12}>
 												<MoleculeInfoGroup
-													title="Nominal Transaksi (Rp)"
+													title="Freezy Point"
 													content={
 														transaction.source_or_destination ===
 														'FREEZY_POINT' ? (
