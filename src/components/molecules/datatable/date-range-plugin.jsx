@@ -7,7 +7,7 @@ const MoleculeDatatableDateRange = (props) => {
 		if (!selectedValue) return;
 
 		if (selectedValue.length > 0) {
-			props.addMultipleFilter([
+			let params = [
 				{
 					name: props.name || 'created_at',
 					value: selectedValue[0].format(),
@@ -18,7 +18,15 @@ const MoleculeDatatableDateRange = (props) => {
 					value: selectedValue[1].format(),
 					operator: props.operator,
 				},
-			]);
+			]
+			if (props.customAddFilter) {
+				params = [{
+					name: props.name || 'created_at',
+					value: `[${selectedValue[0].format('YYYY-MM-DD')},${selectedValue[1].format('YYYY-MM-DD')}]`,
+					operator: props.operator,
+				}]
+			}
+			props.addMultipleFilter(params);
 		} else {
 			props.removeFilter(props.filterName);
 		}

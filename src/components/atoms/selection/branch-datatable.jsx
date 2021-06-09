@@ -8,7 +8,7 @@ const AtomBranchDatatableFilter = (props) => {
 			{...props}
 			identifier="branch-filter"
 			label={props.label || 'Cabang'}
-			name="branch"
+			name={props.name || 'branch'}
 			operator=":"
 			placeholder="Semua cabang"
 			data={{

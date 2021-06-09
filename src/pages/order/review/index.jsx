@@ -106,6 +106,7 @@ const ReviewPage = () => {
 				key="daterange"
 				label="Tanggal Pesanan"
 				placeholder="Filter tanggal pesanan"
+				customAddFilter={true}
 			/>,
 			<MoleculeDatatableFilter
 				name="user_id"
@@ -115,7 +116,7 @@ const ReviewPage = () => {
 				key="customer"
 				placeholder="Semua nama pelanggan"
 				data={{
-					url: 'admin/customers?filter=id;first_name;last_name',
+					url: 'admin/customers',
 					generateCustomOption: (item) => ({
 						value: item.id,
 						label: `${item.first_name || ''} ${

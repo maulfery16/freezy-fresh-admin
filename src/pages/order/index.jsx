@@ -86,7 +86,7 @@ const OrderPage = () => {
 		},
 		{
 			title: 'Tipe Pengiriman',
-			dataIndex: 'delivery_info',
+			dataIndex: 'shipping_type',
 			sorter: true,
 		},
 		{
