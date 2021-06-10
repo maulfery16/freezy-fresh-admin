@@ -434,6 +434,7 @@ const ProductModifyPage = () => {
 										name="sku_id"
 										placeholder="SKU ID"
 										type="code"
+										required
 									/>
 								</Col>
 
@@ -443,6 +444,7 @@ const ProductModifyPage = () => {
 										name="upc_code"
 										placeholder="Kode UPC"
 										type="code"
+										required
 									/>
 								</Col>
 

@@ -464,7 +464,6 @@ const VoucherModifyPage = () => {
 													label="Periode Cashback"
 													name="cashback_periode"
 													onChange={(date) => {
-														console.log(date[0]);
 														setCashbackPeriode({
 															...cashbackPeriode,
 															start_periode:

@@ -3,14 +3,15 @@ import React, { useRef } from 'react';
 import ReactMoment from 'react-moment';
 import { Link } from 'react-router-dom';
 import { Space } from 'antd';
+import { useSelector } from 'react-redux';
 import { EditFilled, EyeFilled } from '@ant-design/icons';
 
 import AtomNumberFormat from '../../components/atoms/number-format';
-import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
 import MoleculeDatatableFilter from '../../components/molecules/datatable/filter-plugin';
 import MoleculeDeleteConfirm from '../../components/molecules/delete-confirm';
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
+import AtomPrimaryButton from '../../components/atoms/button/primary-button';
 
 import {
 	translateVoucherStatusEnum,
@@ -19,6 +20,7 @@ import {
 
 const VoucherPage = () => {
 	const voucherTableRef = useRef();
+	const { roles } = useSelector((state) => state.auth);
 	const column = [
 		{
 			align: 'center',
@@ -137,16 +139,13 @@ const VoucherPage = () => {
 	];
 
 	const renderAdditionalAction = () => {
-		return (
-			<MoleculeDatatableAdditionalAction
-				column={column}
-				getLimit={() => voucherTableRef.current.totalData}
-				label="Voucher"
-				route="/voucher"
-				url="vouchers"
-				withoutExportButton={true}
-			/>
-		);
+		return (roles.includes('super-admin') || roles.includes('admin')) ? (
+			<Link to={`voucher/add`}>
+				<AtomPrimaryButton size="large">
+					{`Tambah Voucher`}
+				</AtomPrimaryButton>
+			</Link>
+		) : null
 	};
 
 	const renderDatatableFilters = () => {

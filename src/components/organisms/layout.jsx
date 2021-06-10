@@ -27,7 +27,7 @@ import {
 } from 'react-icons/ai';
 import {
 	FaBuilding,
-	FaMoneyBill,
+	// FaMoneyBill,
 	FaMotorcycle,
 	FaStoreAlt,
 } from 'react-icons/fa';
@@ -125,7 +125,7 @@ const OrganismLayout = (props) => {
 				},
 				{
 					name: 'Rekomendasi',
-					link: '/products/recomandation',
+					link: '/products/recommendation',
 					hidden:
 						!roles.includes('super-admin') ||
 						!roles.includes('admin'),
@@ -231,18 +231,18 @@ const OrganismLayout = (props) => {
 					name: 'Daftar Teman',
 					link: '/customer/friend-list',
 				},
-				{
-					name: 'Daftar Keluarga',
-					link: '/customer/family-list',
-				},
-				{
-					name: 'Favorite',
-					link: '/customer/favorite',
-				},
-				{
-					name: 'My Catalog',
-					link: '/customer/catalog',
-				},
+				// {
+				// 	name: 'Daftar Keluarga',
+				// 	link: '/customer/family-list',
+				// },
+				// {
+				// 	name: 'Favorite',
+				// 	link: '/customer/favorite',
+				// },
+				// {
+				// 	name: 'My Catalog',
+				// 	link: '/customer/catalog',
+				// },
 				{
 					name: 'MGM',
 					link: '/customer/member-get-member',
@@ -278,11 +278,11 @@ const OrganismLayout = (props) => {
 			link: '/bank',
 			hidden: !roles.includes('super-admin') || !roles.includes('admin'),
 		},
-		{
-			name: 'Pendapatan',
-			icon: <FaMoneyBill />,
-			link: '/income',
-		},
+		// {
+		// 	name: 'Pendapatan',
+		// 	icon: <FaMoneyBill />,
+		// 	link: '/income',
+		// },
 		{
 			name: 'Voucher',
 			icon: <AiFillGift />,
@@ -520,13 +520,6 @@ const OrganismLayout = (props) => {
 											(sub) =>
 												!sub.hidden && (
 													<Menu.Item
-														className={
-															location.pathname.includes(
-																sub.link
-															)
-																? 'ant-menu-item-selected'
-																: ''
-														}
 														key={sub.link}
 														onClick={() =>
 															history.push(

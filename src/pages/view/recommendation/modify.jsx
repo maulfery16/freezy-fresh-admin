@@ -13,16 +13,16 @@ import OrganismLayout from '../../../components/organisms/layout';
 
 const { TabPane } = Tabs;
 
-import BasedOnSearchService from '../../../services/based-on-search';
-const basedOnSearchService = new BasedOnSearchService();
+import RecommendationService from '../../../services/recommendation';
+const recommendationService = new RecommendationService();
 
-const BasedOnSearchModifyPage = () => {
+const RecommendationModifyPage = () => {
 	const viewTableRef = useRef();
 
 	const history = useHistory();
 	const [form] = Form.useForm();
 
-	const [basedOnSearch, setBasedOnSearch] = useState(null);
+	const [recommendation, setRecommendation] = useState(null);
 
 	// eslint-disable-next-line no-unused-vars
 	const [productList, setProductList] = useState([]);
@@ -31,12 +31,12 @@ const BasedOnSearchModifyPage = () => {
 	const [longDescId, setLongDescId] = useState('');
 	const [longDescEn, setLongDescEn] = useState('');
 
-	const getBasedOnSearch = async () => {
+	const getRecommendation = async () => {
 		try {
-			const {data} = await basedOnSearchService.getBasedOnSearch();
-			setBasedOnSearch(data);
-			if (data?.long_description?.id) setLongDescId(data?.long_description?.id);
-			if (data?.long_description?.en) setLongDescEn(data?.long_description?.en);
+			const {data} = await recommendationService.getRecommendation();
+			setRecommendation(data);
+			if (data?.long_description && data?.long_description?.id) setLongDescId(data?.long_description?.id);
+			if (data?.long_description && data?.long_description?.en) setLongDescEn(data?.long_description?.en);
 			if (data.products && Array.isArray(data.products) && data.products.length > 0) {
 				const tmp = [];
 				data.products.map((x) => {
@@ -49,8 +49,8 @@ const BasedOnSearchModifyPage = () => {
 			}
 			setIsCreating(!data);
 		} catch (error) {
+			console.error(error.message);
 			message.error(error.message);
-			console.error(error);
 		}
 	};
 
@@ -58,10 +58,10 @@ const BasedOnSearchModifyPage = () => {
 		return isCreating
 			? {}
 			: {
-					en_title: basedOnSearch?.title?.en,
-					id_title: basedOnSearch?.title?.id,
-					id_short_desc: basedOnSearch?.short_description?.id,
-					en_short_desc: basedOnSearch?.short_description?.en,
+					en_title: recommendation?.title?.en,
+					id_title: recommendation?.title?.id,
+					id_short_desc: recommendation?.short_description?.id,
+					en_short_desc: recommendation?.short_description?.en,
 					// eslint-disable-next-line no-mixed-spaces-and-tabs
 			  };
 	};
@@ -97,28 +97,28 @@ const BasedOnSearchModifyPage = () => {
 			
 			
 			if (isCreating) {
-				const {data} = await basedOnSearchService.createBasedOnSearch(formData);
+				const {data} = await recommendationService.createRecommendation(formData);
 				if (data) {
-					const response = await basedOnSearchService.assignProduct(data.id, {products: productsToAssign});
+					const response = await recommendationService.assignProduct(data.id, {products: productsToAssign});
 					if (response && response.data) {
-						message.success('Berhasil menambah based on search');
+						message.success('Berhasil menambah produk rekomendasi');
 					}
 				}
 			} else {
-				const {data} = await basedOnSearchService.editBasedOnSearch(basedOnSearch.id, formData);
+				const {data} = await recommendationService.editRecommendation(recommendation.id, formData);
 				if (data) {
-					const response = await basedOnSearchService.assignProduct(data.id, {products: productsToAssign});
+					const response = await recommendationService.assignProduct(data.id, {products: productsToAssign});
 					if (response && response.data) {
-						message.success('Berhasil mengubah based on search');
+						message.success('Berhasil mengubah produk rekomendasi');
 					}
 				}
 			}
 
 			message.info(
-				'Akan dikembalikan ke halaman daftar based on search dalam 2 detik'
+				'Akan dikembalikan ke halaman daftar produk rekomendasi dalam 2 detik'
 			);
 			setTimeout(() => {
-				history.push('/view/based-on-search');
+				history.push('/products/recommendation');
 			}, 2000);
 		} catch (error) {
 			message.error(error.message);
@@ -130,34 +130,34 @@ const BasedOnSearchModifyPage = () => {
 
 	useEffect(() => {
 		(async () => {
-			await getBasedOnSearch();
+			await getRecommendation();
 		})();
 	}, []);
 
 	return (
 		<OrganismLayout
 			breadcumbs={[
-				{ name: 'Tampilan', link: '/view' },
-				{ name: 'Based On Search', link: '/view/based-on-search' },
+				{ name: 'Produk-produk', link: '/products' },
+				{ name: 'Produk Rekomendasi', link: '/products/recommendation' },
 				{
-					name: location.pathname.includes('add') ? 'Tambah' : 'Ubah Based On Search',
+					name: location.pathname.includes('add') ? 'Tambah' : 'Ubah Produk Rekomendasi',
 					link: location.pathname,
 				},
 			]}
-			title="Based On Search"
+			title="Produk Rekomendasi"
 		>
 			<Typography.Title level={4}>
-				<span className="fw7">{`Ubah Based On Search`.toUpperCase()}</span>
+				<span className="fw7">{`Ubah Produk Rekomendasi`.toUpperCase()}</span>
 			</Typography.Title>
 
-			{!basedOnSearch ? (
+			{!recommendation ? (
 				<Skeleton active />
 			) : (
         <Row align="top" className="mt4" gutter={24}>
           <Col span={24}>
             <Form
               className="w-100 mt4"
-              name="modify_based_on_search"
+              name="modify_product_recommendation"
               form={form}
               onFinish={submit}
               initialValues={setHolidayInitialValues()}
@@ -171,7 +171,7 @@ const BasedOnSearchModifyPage = () => {
                   <Col span={24}>
                     <Typography.Text strong>
                       <span className="denim f5">
-                        {'Info Based On Search'.toUpperCase()}
+                        {'Info Produk Rekomendasi'.toUpperCase()}
                       </span>
                     </Typography.Text>
                   </Col>
@@ -182,7 +182,7 @@ const BasedOnSearchModifyPage = () => {
                       label="Title (ID)"
                       placeholder="Judul Title (ID)"
                       type="text"
-                      value={basedOnSearch?.title?.id}
+                      value={recommendation?.title?.id}
                     />
                   </Col>
 
@@ -192,7 +192,7 @@ const BasedOnSearchModifyPage = () => {
                       label="Judul (EN)"
                       placeholder="Judul (EN)"
                       type="text"
-                      value={basedOnSearch?.title?.en}
+                      value={recommendation?.title?.en}
                     />
                   </Col>
 
@@ -206,7 +206,7 @@ const BasedOnSearchModifyPage = () => {
                       name="id_short_desc"
                       placeholder="Deskripsi Singkat (ID)"
                       type="textarea"
-                      value={basedOnSearch?.short_description?.id}
+                      value={recommendation?.short_description?.id}
                     />
                   </Col>
 
@@ -220,7 +220,7 @@ const BasedOnSearchModifyPage = () => {
                       label="Deskripsi Singkat (EN)"
                       placeholder="Deskripsi Singkat (EN)"
                       type="textarea"
-                      value={basedOnSearch?.short_description?.en}
+                      value={recommendation?.short_description?.en}
                     />
                   </Col>
 
@@ -257,10 +257,10 @@ const BasedOnSearchModifyPage = () => {
           
           <Col className="mt4" span={24}>
             <MoleculeModifyActionButtons
-              backUrl="/view/based-on-search"
+              backUrl="/products/recommendation"
               isCreating={isCreating}
               isSubmitting={isSubmitting}
-              label="Based On Search"
+              label="Produk Rekomendasi"
               onClick={() => form.submit()}
             />
           </Col>
@@ -270,4 +270,4 @@ const BasedOnSearchModifyPage = () => {
 	);
 };
 
-export default BasedOnSearchModifyPage;
+export default RecommendationModifyPage;

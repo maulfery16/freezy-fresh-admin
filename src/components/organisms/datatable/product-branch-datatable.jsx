@@ -237,6 +237,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 	const [data, setData] = useState(props.defaultData);
 	const [editingKey, setEditingKey] = useState('');
 	const [form] = Form.useForm();
+	const [bindingForm] = Form.useForm();
 	const [inventroyProduct, setInventroyProduct] = useState([]);
 	const [keyword, setKeyword] = useState('');
 	const [selectedTenant, setSelectedTenant] = useState(null);
@@ -429,6 +430,12 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		data,
 	}));
 
+	useEffect(() => {
+		if (tenantSelectRef.current && tenantSelectRef.current.refetchData) {
+			tenantSelectRef.current.refetchData();
+		}
+	}, [selectedTenant]);
+
 	return (
 		<AtomCard title="Pengaturan Cabang">
 			<Form name="table-form" form={form} component={false}>
@@ -485,11 +492,12 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 
 			{beingSyncedProductIndex !== null && (
 				<Modal
+					onCancel={() => setBeingSyncedProductIndex(null)}
 					visible={true}
 					footer={
 						<AtomPrimaryButton
 							size="large"
-							onClick={connectProduct}
+							onClick={() => bindingForm.submit()}
 						>
 							Simpan
 						</AtomPrimaryButton>
@@ -500,44 +508,49 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 						</span>
 					}
 				>
-					<Row>
-						<Col span={24}>
-							<MoleculeSelectInputGroup
-								label="Jenis Produk"
-								name="product_type"
-								placeholder="Jenis Produk"
-								data={{
-									onChange: (_, options) => {
-										setSelectedTenant(options.value);
-										tenantSelectRef.current.refetchData();
-									},
-									options: [
-										{ label: 'TOWS', value: 'TOWS' },
-										{
-											label: 'Inventory',
-											value: 'INVENTORY',
+					<Form name="binding-form" form={bindingForm} component={false} onFinish={connectProduct}>
+						<Row>
+							<Col span={24}>
+								<MoleculeSelectInputGroup
+									label="Jenis Produk"
+									name="product_type"
+									placeholder="Jenis Produk"
+									required
+									data={{
+										onChange: (_, options) => {
+											setSelectedTenant(options.value);
+											bindingForm.setFieldsValue({ product_type: options.value });
 										},
-										{ label: 'T2T', value: 'T2T' },
-									],
-								}}
-							/>
-						</Col>
+										options: [
+											{ label: 'TOWS', value: 'TOWS' },
+											{
+												label: 'Inventory',
+												value: 'INVENTORY',
+											},
+											{ label: 'T2T', value: 'T2T' },
+										],
+									}}
+								/>
+							</Col>
 
-						<Col span={24}>
-							<MoleculeSelectInputGroup
-								label="Nama Produk"
-								name="product_type"
-								optionsRef={tenantSelectRef}
-								placeholder="Nama Produk"
-								data={{
-									options: setTenantProduct(),
-									onChange: (_, options) => {
-										setSelectedFFProduct(options.value);
-									},
-								}}
-							/>
-						</Col>
-					</Row>
+							<Col span={24}>
+								<MoleculeSelectInputGroup
+									label="Nama Produk"
+									name="product_name"
+									optionsRef={tenantSelectRef}
+									placeholder="Nama Produk"
+									required
+									data={{
+										options: setTenantProduct(),
+										onChange: (_, options) => {
+											setSelectedFFProduct(options.value);
+											bindingForm.setFieldsValue({ product_name: options.value });
+										},
+									}}
+								/>
+							</Col>
+						</Row>
+					</Form>
 				</Modal>
 			)}
 

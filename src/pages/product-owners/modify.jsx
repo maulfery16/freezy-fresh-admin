@@ -20,6 +20,7 @@ const ProductOwnerModifyPage = () => {
 	const history = useHistory();
 	const location = useLocation();
 	const isCreating = location.pathname.includes('add') ? true : false;
+	const [ownerForm] = Form.useForm();
 
 	const [productOwner, setProductOwner] = useState(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
@@ -107,19 +108,19 @@ const ProductOwnerModifyPage = () => {
 				<Skeleton active />
 			) : (
 				<Form
+					form={ownerForm}
 					className="w-100 mt4"
 					name="modify_productOwner"
 					initialValues={setProductOwnerInitialValues()}
 					onFinish={submit}
-					onFinishFailed={(error) => {
-						message.error(`Failed: ${error}`);
-						console.error(error);
+					onFinishFailed={() => {
+						message.error('Kesalahan saat mengambil nilai pada form. Silahkan periksa kembali');
 					}}
 				>
 					<Row>
 						<Col span={15}>
 							<AtomCard title="Info Perusahaan">
-								<Row gutter={12}>
+								<Row gutter={12} className="mt4">
 									<Col span={18}>
 										<MoleculeTextInputGroup
 											name="name"
@@ -127,6 +128,7 @@ const ProductOwnerModifyPage = () => {
 											placeholder="Nama Perusahaan"
 											required
 											type="alphanumeric"
+											validationMessage="Spasi dan simbol tidak diperbolehkan"
 										/>
 									</Col>
 
