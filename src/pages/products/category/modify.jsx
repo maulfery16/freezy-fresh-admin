@@ -113,7 +113,9 @@ const CategoryModifyPage = () => {
 					initialValues={setCategoryInitialValues()}
 					onFinish={submit}
 					onFinishFailed={(error) => {
-						message.error(`Failed: ${error}`);
+						message.error(
+							'Kesalahan saat mengambil nilai pada form. Silahkan periksa kembali'
+						);
 						console.error(error);
 					}}
 				>

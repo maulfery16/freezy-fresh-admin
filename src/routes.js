@@ -455,6 +455,29 @@ const routes = [
 					},
 				],
 			},
+			{
+				path: '/recommendation',
+				children: [
+					{
+						component: React.lazy(() =>
+							import('./pages/view/recommendation')
+						),
+						exact: true,
+						guard: true,
+						name: 'Recommendation Page',
+						path: '/',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/view/recommendation/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Edit Recommendation Page',
+						path: '/modify',
+					},
+				],
+			},
 		],
 	},
 	{

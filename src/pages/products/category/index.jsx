@@ -21,7 +21,7 @@ const CategoryPage = () => {
 		},
 		{
 			title: 'Kategori ID',
-			dataIndex: 'id',
+			dataIndex: 'code',
 		},
 		{
 			title: 'Nama Kategori (ID)',
