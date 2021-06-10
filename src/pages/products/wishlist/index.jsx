@@ -26,7 +26,8 @@ const WishlistPage = () => {
 		{
 			title: 'ID Pelanggan',
 			dataIndex: `user_id`,
-			render: (_, record) => record.user_id,
+			render: (_, record) => record.user?.code,
+			csvRender: (item) => item.user?.code,
 		},
 		{
 			align: 'center',
