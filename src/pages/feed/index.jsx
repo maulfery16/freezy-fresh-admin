@@ -3,9 +3,10 @@ import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Space } from 'antd';
 import { EditFilled, EyeFilled } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
 
 import AtomImage from '../../components/atoms/image';
-import MoleculeDatatableAdditionalAction from '../../components/molecules/datatable/additional-actions';
+import AtomPrimaryButton from '../../components/atoms/button/primary-button';
 import MoleculeDatatableFilter from '../../components/molecules/datatable/filter-plugin';
 import MoleculeDeleteConfirm from '../../components/molecules/delete-confirm';
 import OrganismDatatable from '../../components/organisms/datatable';
@@ -89,18 +90,16 @@ const FeedPage = () => {
 		},
 	];
 	const feedTableRef = useRef();
+	const { roles } = useSelector((state) => state.auth);
 
 	const renderAdditionalAction = () => {
-		return (
-			<MoleculeDatatableAdditionalAction
-				column={column}
-				label="Feed"
-				getLimit={() => feedTableRef.current.totalData}
-				route="/feed"
-				url="feeds"
-				withoutExportButton
-			/>
-		);
+		return (roles.includes('super-admin') || roles.includes('admin')) ? (
+			<Link to={`/feed/add`}>
+				<AtomPrimaryButton size="large">
+					Tambah Feed
+				</AtomPrimaryButton>
+			</Link>
+		) : null;
 	};
 
 	const renderDatatableFilters = () => {

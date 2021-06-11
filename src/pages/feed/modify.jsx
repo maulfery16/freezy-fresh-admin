@@ -126,9 +126,8 @@ const FeedModifyPage = () => {
 					name="modify_feed"
 					initialValues={setFeedInitialValues()}
 					onFinish={submit}
-					onFinishFailed={(error) => {
-						message.error(`Failed: ${error.errorFields}`);
-						console.error(error);
+					onFinishFailed={() => {
+						message.error('Kesalahan saat mengambil nilai pada form. Silahkan periksa kembali');
 					}}
 				>
 					<Row>
