@@ -1,6 +1,23 @@
 import RequestAdapterService from './request-adapter';
 
 export default class PromotionService extends RequestAdapterService {
+	async updateStatusByID(id) {
+		try {
+			const { data } = await super.sendPatchRequest(
+				`${this.baseUrl}/v1/promotions/status-change/${id}`
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail updating status promotion: ${super.generateErrorMessage(
+					error
+				)}`
+			);
+		}
+	}
+
 	async createPromotion(promotion) {
 		try {
 			const { data } = await super.sendPostMultipartRequest(
