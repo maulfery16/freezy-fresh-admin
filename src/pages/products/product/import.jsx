@@ -38,7 +38,7 @@ const ProductImportPage = () => {
 
 			message.success('Berhasil mengupload data produk');
 		} catch (error) {
-			error.message(message.error);
+			message.error(error.message, 5);
 		} finally {
 			setIsUploadingProduct(false);
 		}
