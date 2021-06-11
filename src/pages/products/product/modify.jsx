@@ -36,6 +36,7 @@ const ProductModifyPage = () => {
 	const inspirationImageRef = useRef();
 	const packagingImageRef = useRef();
 	const whiteImageRef = useRef();
+	const branchSelectRef = useRef();
 
 	const masterService = new MasterService();
 	const productService = new ProductService();
@@ -534,16 +535,29 @@ const ProductModifyPage = () => {
 									<AtomBranchSelection
 										mode="multiple"
 										onChange={(_, options) => {
-											if (branches.length !== options) {
-												const values = options.map((option) => ({
+											let values = [];
+											let val = [];
+											if (_.includes('all')) {
+												const allOptions = branchSelectRef.current.getAllOptions();
+												values = allOptions.filter(x => x.value !== 'all').map((option) => ({
 													branch_id: option.value,
 													branch: option.children,
 												}))
-												const val = options.map((option) => option.value);
-												form.setFieldsValue({ branches: val })
-												setBranches(values);
+												val = allOptions.filter(x => x.value !== 'all').map((option) => option.value);
+											} else {
+												if (branches.length !== options) {
+													values = options.map((option) => ({
+														branch_id: option.value,
+														branch: option.children,
+													}))
+													val = options.map((option) => option.value);
+												}
 											}
+											form.setFieldsValue({ branches: val })
+											setBranches(values);
 										}}
+										optionsRef={branchSelectRef}
+										canSelectAll={true}
 									/>
 								</Col>
 
@@ -661,7 +675,7 @@ const ProductModifyPage = () => {
 												placeholder="Panjang"
 												required
 												suffix="cm"
-												type="text"
+												type="number"
 											/>
 										</Col>
 
@@ -671,7 +685,8 @@ const ProductModifyPage = () => {
 												label="L"
 												placeholder="Lebar"
 												suffix="cm"
-												type="text"
+												type="number"
+												required
 											/>
 										</Col>
 
@@ -682,7 +697,7 @@ const ProductModifyPage = () => {
 												placeholder="Tinggi"
 												required
 												suffix="cm"
-												type="text"
+												type="number"
 											/>
 										</Col>
 									</Row>
@@ -695,7 +710,7 @@ const ProductModifyPage = () => {
 										placeholder="Berat"
 										required
 										suffix="gr"
-										type="text"
+										type="number"
 									/>
 								</Col>
 

@@ -27,6 +27,7 @@ const AtomCustomSelect = forwardRef((props, ref) => {
 
 	const getOptions = async (page) => {
 		if (props.data.options) {
+			if (props.canSelectAll) props.data.options.unshift({ label: 'Semua', value: 'all', disabled: false });
 			setOptions(props.data.options);
 		} else {
 			const response = await masterService.getOptions(props.data.url, {page, limit: props.data.limit ?? 10});
@@ -35,7 +36,7 @@ const AtomCustomSelect = forwardRef((props, ref) => {
 				let tmpOptions = page === 1 ? [] : options;
 
 				response.data.map((item) => tmpOptions.push(generateOption(item)));
-				options.unshift({ label: 'Semua', value: '', disabled: true });
+				if (props.canSelectAll) tmpOptions.unshift({ label: 'Semua', value: 'all', disabled: false });
 	
 				setOptions(tmpOptions);
 			}
@@ -61,6 +62,9 @@ const AtomCustomSelect = forwardRef((props, ref) => {
 			setOptions(null);
 			await getOptions(1);
 		},
+		getAllOptions() {
+			return options;
+		}
 	}));
 
 	const optionalProps = { ...props };

@@ -67,7 +67,7 @@ const BannerModifyPage = () => {
 													},
 													{
 														source:
-															banner.image_dekstop,
+															banner.image_desktop,
 														label:
 															' Foto Banner Dekstop',
 													},

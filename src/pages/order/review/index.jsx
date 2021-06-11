@@ -24,8 +24,9 @@ const ReviewPage = () => {
 		},
 		{
 			title: 'ID Pesanan',
-			dataIndex: 'id',
+			dataIndex: 'code',
 			sorter: true,
+			customSorter: 'id'
 		},
 		{
 			title: 'Nama Pelanggan',
