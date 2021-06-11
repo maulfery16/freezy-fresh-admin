@@ -292,6 +292,7 @@ const BranchModifyPage = () => {
 													value: item.id,
 													label: `${item.name.id} / ${item.name.en} `,
 												}),
+												limit: 50
 											}}
 										/>
 									</Col>
@@ -329,6 +330,7 @@ const BranchModifyPage = () => {
 													value: item.id,
 													label: `${item.name.id} / ${item.name.en} `,
 												}),
+												limit: 300
 											}}
 										/>
 									</Col>
@@ -366,6 +368,7 @@ const BranchModifyPage = () => {
 													value: item.id,
 													label: `${item.name.id} / ${item.name.en} `,
 												}),
+												limit: 300
 											}}
 										/>
 									</Col>
@@ -404,6 +407,7 @@ const BranchModifyPage = () => {
 													value: item.id,
 													label: `${item.name.id} / ${item.name.en} `,
 												}),
+												limit: 300
 											}}
 										/>
 									</Col>

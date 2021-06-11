@@ -62,7 +62,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		{
 			title: 'Tipe TOWS',
 			dataIndex: 'branches',
-			render: (_, record) => record.branch.tows,
+			render: (_, record) => record.branch.tows ?? '-',
 			sorter: true,
 			hidden: !props.isEditing && !props.isReadOnly ? true : false,
 		},
@@ -107,29 +107,31 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		{
 			title: 'Stok Dikelola',
 			dataIndex: `managed_stock`,
-			render: (count) => <AtomNumberFormat value={count} />,
+			render: (count) => <AtomNumberFormat value={count ?? 0} />,
 			editable: true,
 			sorter: true,
 		},
 		{
 			title: 'Stok Gudang',
 			dataIndex: `warehouse_stock`,
-			render: (count) => <AtomNumberFormat value={count} />,
+			render: (count) => <AtomNumberFormat value={count ?? 0} />,
 			sorter: true,
 		},
 		{
 			title: 'Stok Tersedia',
 			dataIndex: `available_stock`,
-			render: (count) => <AtomNumberFormat value={count} />,
+			render: (count) => <AtomNumberFormat value={count ?? 0} />,
 			sorter: true,
 		},
 		{
 			title: 'Date Exp Tercepat',
 			dataIndex: 'shortest_expiration',
 			editable: true,
-			render: (date) => (
-				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
-			),
+			render: (date) => {
+				return date ? (
+					<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
+				) : '-'
+			},
 			sorter: true,
 			hidden: !props.isEditing && !props.isReadOnly ? true : false,
 		},
@@ -137,28 +139,27 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 			title: 'Date Exp Terlama',
 			dataIndex: 'longest_expiration',
 			editable: true,
-			render: (date) => (
-				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
-			),
+			render: (date) => {
+				return date ? (
+					<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
+				) : '-'
+			},
 			sorter: true,
 			hidden: !props.isEditing && !props.isReadOnly ? true : false,
 		},
 		{
 			title: 'Harga Normal',
 			dataIndex: 'price',
-			render: (price) => `Rp. ${price}`,
+			render: (price) => <AtomNumberFormat prefix="Rp. " value={price} />,
 			editable: true,
 			sorter: true,
 		},
 		{
 			title: 'Harga Setelah Diskon',
 			dataIndex: 'fixed_price',
-			render: (price) =>
-				typeof price === 'string' ? (
-					`Rp. ${price}`
-				) : (
-					<AtomNumberFormat prefix="Rp. " value={price} />
-				),
+			render: (price) => parseInt(price) === 0 ? 'Tidak ada diskon' : (
+				<AtomNumberFormat prefix="Rp. " value={parseInt(price)} />
+			),
 			editable: true,
 			sorter: true,
 		},
