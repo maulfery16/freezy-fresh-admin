@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Space } from 'antd';
+import { Space, message } from 'antd';
 import { EditFilled, EyeFilled } from '@ant-design/icons';
 
 import AtomImage from '../../../components/atoms/image';
@@ -12,6 +12,9 @@ import MoleculeDatatableFilter from '../../../components/molecules/datatable/fil
 import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
+
+import PromoService from '../../../services/promotion';
+const promoService = new PromoService();
 
 const PromotionsPage = () => {
 	const column = [
@@ -78,6 +81,13 @@ const PromotionsPage = () => {
 					id={record.id}
 					tableRef={promotionsTableRef}
 					url="promotion"
+					statusChangeAction={async () => {
+						try {
+							await promoService.updateStatusByID(record.id);	
+						} catch (error) {
+							message.error(error.message)
+						}
+					}}
 				/>
 			),
 			csvRender: (item) => (item.is_active ? 'Aktif' : 'Tidak Aktif'),
