@@ -132,7 +132,7 @@ const CustomerPage = () => {
 							id={id}
 							label="Pelanggan"
 							tableRef={customerTableRef}
-							url="cutomers"
+							url="admin/customers"
 						/>
 					)}
 				</Space>

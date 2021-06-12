@@ -46,7 +46,7 @@ const AtomStatusSwitch = (props) => {
 
 			<Modal
 				footer={null}
-				onCancel={() => setIsVisible(false)}
+				onCancel={() => cancelChangeStatus()}
 				visible={isVisible}
 				width={360}
 			>
