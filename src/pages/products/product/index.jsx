@@ -65,7 +65,7 @@ const ProductPage = () => {
 		{
 			title: 'Batas Umur Pelanggan',
 			dataIndex: 'age_limit',
-			sorter: true,
+			sorter: false,
 		},
 		{
 			title: 'Nama brand',
@@ -84,7 +84,7 @@ const ProductPage = () => {
 			dataIndex: 'branch',
 			render: (_, record) =>
 				record.branch.map((branch) => branch.id).join(', '),
-			sorter: true,
+			sorter: false,
 		},
 
 		{
@@ -147,9 +147,9 @@ const ProductPage = () => {
 
 	const renderDatatableFilters = () => {
 		return [
-			<AtomBaseCategoriesDatatableFilter key="base-categories-filter" />,
+			<AtomBaseCategoriesDatatableFilter name="baseCategory.id" key="base-categories-filter" />,
 			<MoleculeDatatableFilter
-				name="additional-categories"
+				name="additionalCategory.id"
 				operator=":"
 				identifier="additional-categories-filter"
 				label="Kategori Tambahan"
@@ -164,7 +164,7 @@ const ProductPage = () => {
 				}}
 			/>,
 			<MoleculeDatatableFilter
-				name="product-owner"
+				name="productOwner.id"
 				operator=":"
 				identifier="product-owner-filter"
 				label="Perusahaan"
@@ -174,9 +174,9 @@ const ProductPage = () => {
 					url: 'product-owners',
 				}}
 			/>,
-			<AtomBranchDatatableFilter key="branch-filter" />,
+			<AtomBranchDatatableFilter name="productDetails.branch_id" key="branch-filter" />,
 			<MoleculeDatatableFilter
-				name="brand"
+				name="brand.id"
 				operator=":"
 				identifier="brand-filter"
 				label="Brand"
@@ -191,7 +191,7 @@ const ProductPage = () => {
 				}}
 			/>,
 			<MoleculeDatatableFilter
-				name="freezy-pick"
+				name="productDetails.is_freezy_pick"
 				operator=":"
 				identifier="freezy-pick-filter"
 				label="Freezy Pick"
@@ -199,8 +199,8 @@ const ProductPage = () => {
 				placeholder="Semua freezy pick"
 				data={{
 					options: [
-						{ id: true, label: 'Ya' },
-						{ id: false, label: 'Tidak' },
+						{ value: 'true', label: 'Ya' },
+						{ value: 'false', label: 'Tidak' },
 					],
 				}}
 			/>,
@@ -227,6 +227,7 @@ const ProductPage = () => {
 				ref={productTableRef}
 				scroll={1920}
 				searchInput={true}
+				searchJoin="and"
 				title={`Produk-Produk`}
 			/>
 		</OrganismLayout>

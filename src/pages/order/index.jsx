@@ -36,7 +36,7 @@ const OrderPage = () => {
 		},
 		{
 			title: 'ID Pesanan',
-			dataIndex: 'id',
+			dataIndex: 'code',
 			sorter: true,
 		},
 		{

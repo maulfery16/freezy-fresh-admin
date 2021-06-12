@@ -6,7 +6,7 @@ const AtomBaseCategoriesDatatableFilter = (props) => {
 	return (
 		<MoleculeDatatableFilter
 			{...props}
-			name="base-categories"
+			name={props.name ?? "base-categories"}
 			operator=":"
 			identifier="base-categories-filter"
 			label="Kategori Dasar"
