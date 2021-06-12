@@ -49,9 +49,11 @@ const OrganismDatatable = forwardRef((props, ref) => {
 				setData(props?.dataSource?.data);
 				setTotalData(props?.dataSource?.meta?.pagination?.total);
 			} else {
+				let filters = filterParams;
+				if (props.searchJoin) filters = { ...filters, searchJoin: props.searchJoin };
 				const { data, meta } = await datatableService.getData(
 					props.dataSourceURL,
-					filterParams
+					filters
 				);
 
 				setData(data);
