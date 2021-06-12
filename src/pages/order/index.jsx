@@ -81,7 +81,7 @@ const OrderPage = () => {
 		},
 		{
 			title: 'No Resi Pengiriman',
-			dataIndex: 'code',
+			dataIndex: 'shipping_code',
 			sorter: true,
 		},
 		{
@@ -108,13 +108,14 @@ const OrderPage = () => {
 			title: 'Tipe Pembayaran',
 			dataIndex: 'payment_method',
 			sorter: true,
-			render: (status) => orderService.transaltePaymentEnum(status),
+			render: (payment_method) => payment_method.id,
 			csvRender: (item) =>
 				orderService.transaltePaymentEnum(item.admin_status),
 		},
 		{
 			title: 'Nama Bank',
 			dataIndex: 'bank',
+			render: (bank) => bank.id,
 			sorter: true,
 		},
 		{
