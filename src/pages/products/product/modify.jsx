@@ -126,8 +126,8 @@ const ProductModifyPage = () => {
 						branch_sku_id: branch.branch_id + values.sku_id,
 						discount_percentage: 0,
 						fixed_price: 0,
-						is_freezy_pick: true,
-						is_manage_stock: true,
+						is_freezy_pick: false,
+						is_manage_stock: false,
 						price: 0,
 						published_stock: 0,
 						sku_id: values.sku_id,
@@ -150,8 +150,8 @@ const ProductModifyPage = () => {
 							branch_sku_id: branch.branch_id + variant.sku_id,
 							discount_percentage: 0,
 							fixed_price: 0,
-							is_freezy_pick: true,
-							is_manage_stock: true,
+							is_freezy_pick: false,
+							is_manage_stock: false,
 							price: 0,
 							published_stock: 0,
 							sku_id: variant.sku_id,
@@ -436,6 +436,7 @@ const ProductModifyPage = () => {
 										placeholder="SKU ID"
 										type="code"
 										required
+										validationMessage="Spasi dan simbol tidak diperbolehkan kecuali (/) dan (-)"
 									/>
 								</Col>
 
@@ -446,6 +447,7 @@ const ProductModifyPage = () => {
 										placeholder="Kode UPC"
 										type="code"
 										required
+										validationMessage="Spasi dan simbol tidak diperbolehkan kecuali (/) dan (-)"
 									/>
 								</Col>
 
