@@ -9,6 +9,7 @@ import React, {
 import { Select, Skeleton } from 'antd';
 
 import MasterService from '../../../services/master';
+import { debounce } from 'underscore';
 const masterService = new MasterService();
 
 const AtomCustomSelect = forwardRef((props, ref) => {
@@ -25,12 +26,12 @@ const AtomCustomSelect = forwardRef((props, ref) => {
 		};
 	};
 
-	const getOptions = async (page) => {
+	const getOptions = async (page, search) => {
 		if (props.data.options) {
 			if (props.canSelectAll) props.data.options.unshift({ label: 'Semua', value: 'all', disabled: false });
 			setOptions(props.data.options);
 		} else {
-			const response = await masterService.getOptions(props.data.url, {page, limit: props.data.limit ?? 10});
+			const response = await masterService.getOptions(props.data.url, {page, limit: props.data.limit ?? 10, search: search ?? ''});
 			const nextURL = response?.meta?.pagination?.links?.next;
 			if (response.data && response.data.length > 0) {
 				let tmpOptions = page === 1 ? [] : options;
@@ -73,6 +74,10 @@ const AtomCustomSelect = forwardRef((props, ref) => {
 			props.data.onChange(value, options);
 	if (optionalProps.optionsRef) delete optionalProps.optionsRef;
 
+	const debounceFetcher = debounce(value => {
+    getOptions(1, value);
+	}, 800)
+
 	return options ? (
 		<Select
 			{...optionalProps}
@@ -94,6 +99,9 @@ const AtomCustomSelect = forwardRef((props, ref) => {
 						getOptions(nextPage);
 					}
 				}
+			}}
+			onSearch={(value) => {
+				debounceFetcher(value)
 			}}
 		>
 			{options.map((option, index) => (

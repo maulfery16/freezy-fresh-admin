@@ -3,7 +3,7 @@ import RequestAdapterService from './request-adapter';
 export default class PromotionService extends RequestAdapterService {
 	async updateStatusByID(id) {
 		try {
-			const { data } = await super.sendPatchRequest(
+			const { data } = await super.sendPutRequest(
 				`${this.baseUrl}/v1/promotions/status-change/${id}`
 			);
 

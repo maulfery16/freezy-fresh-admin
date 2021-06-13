@@ -39,8 +39,8 @@ export default class AdditionalSectionService extends RequestAdapterService {
 
 	async updateStatusSectionByID(id, dataToEdit) {
 		try {
-			const { data } = await super.sendPostMultipartRequest(
-				`${this.baseUrl}/v1/additional-home-sections/update_status/${id}?_method=PATCH`,
+			const { data } = await super.sendPutMultipartRequest(
+				`${this.baseUrl}/v1/additional-home-sections/update_status/${id}`,
 				dataToEdit
 			);
 
