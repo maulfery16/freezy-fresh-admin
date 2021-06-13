@@ -31,6 +31,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 	const [filters, setFilters] = useState([]);
 	const [isFilterVisible, setIsFilterVisible] = useState(false);
 	const [isGettingData, setIsGettingData] = useState(false);
+	const [isSearchProduct, setIsSearchProduct] = useState(false);
 	const [totalData, setTotalData] = useState(0);
 	const [filterParams, setFilterParams] = useState({
 		filter: '',
@@ -50,7 +51,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 				setTotalData(props?.dataSource?.meta?.pagination?.total);
 			} else {
 				let filters = filterParams;
-				if (props.searchJoin) filters = { ...filters, searchJoin: props.searchJoin };
+				if (props.searchJoin && !isSearchProduct) filters = { ...filters, searchJoin: props.searchJoin };
 				const { data, meta } = await datatableService.getData(
 					props.dataSourceURL,
 					filters
@@ -125,6 +126,7 @@ const OrganismDatatable = forwardRef((props, ref) => {
 	};
 
 	const setFilter = () => {
+		setIsSearchProduct(false);
 		const keyword =
 			filterParams.search.split(';')[0].includes(':') ||
 			filterParams.search.split(';')[0].length === 0
@@ -146,14 +148,14 @@ const OrganismDatatable = forwardRef((props, ref) => {
 
 	const setKeyword = (search) => {
 		const keyword = filterParams.search.split(';');
-
+		delete filterParams.searchJoin;
 		if (keyword[0].length === 0 || !keyword[0].includes[':']) {
 			setFilterParams({ ...filterParams, search });
 		} else {
 			keyword.unshift(search);
 			setFilterParams({ ...filterParams, search: keyword.join(';') });
 		}
-
+		setIsSearchProduct(true);
 		setUrlParams(search);
 	};
 

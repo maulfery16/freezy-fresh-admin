@@ -36,7 +36,8 @@ const BankModifyPage = () => {
 			const data = new FormData();
 			data.append('name', values.name);
 
-			await bankService.createBank(data);
+			if (isCreating) await bankService.createBank(data);
+			else await bankService.editBank(id, data);
 
 			message.success('Berhasil menambah data bank');
 			message.info(
@@ -102,7 +103,7 @@ const BankModifyPage = () => {
 					<Row>
 						<Col span={15}>
 							<AtomCard title="Info Bank">
-								<Row gutter={12}>
+								<Row gutter={12} className="mt4">
 									<Col span={24}>
 										<MoleculeTextInputGroup
 											name="name"
