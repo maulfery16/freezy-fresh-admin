@@ -166,7 +166,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		{
 			title: 'Diskon (%)',
 			dataIndex: 'discount_percentage',
-			editable: true,
+			editable: false,
 			render: (discount) => (discount ? `${discount} %` : null),
 			sorter: true,
 		},
@@ -286,12 +286,12 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		}
 
 		if (fixedPriceChanged) {
-			row.discount_percentage = (100 * row.fixed_price) / row.price;
+			row.discount_percentage = parseFloat(((parseInt(row.price) - parseInt(row.fixed_price)) / parseInt(row.price)) * 100).toFixed(2);
 			return row;
 		}
 
 		if (discountChanged) {
-			row.fixed_price = (row.discount_percentage / 100) * row.price;
+			// row.fixed_price = (row.discount_percentage / 100) * row.price;
 			return row;
 		}
 
@@ -365,6 +365,10 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 	const save = async (id) => {
 		try {
 			let row = await form.validateFields();
+			row.discount_percentage = row.discount_percentage ? parseFloat(row.discount_percentage) : 0
+			row.fixed_price = row.fixed_price ? parseInt(row.fixed_price) : 0
+			row.price = row.price ? parseInt(row.price) : 0
+			row.managed_stock = row.managed_stock ? parseInt(row.managed_stock) : 0
 			const newData = [...data];
 			const index = newData.findIndex(
 				(item) => id === item.branch_sku_id

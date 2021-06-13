@@ -110,7 +110,7 @@ const MoleculeProductVariantsInput = (props) => {
 
 						<Col span={12}>
 							<Row gutter={12}>
-								<Col span={5}>
+								<Col span={8}>
 									<MoleculeTextInputGroup
 										label="P"
 										placeholder="P"
@@ -126,7 +126,7 @@ const MoleculeProductVariantsInput = (props) => {
 									/>
 								</Col>
 
-								<Col span={5}>
+								<Col span={8}>
 									<MoleculeTextInputGroup
 										label="L"
 										placeholder="L"
@@ -142,7 +142,7 @@ const MoleculeProductVariantsInput = (props) => {
 									/>
 								</Col>
 
-								<Col span={5}>
+								<Col span={8}>
 									<MoleculeTextInputGroup
 										label="T"
 										placeholder="T"

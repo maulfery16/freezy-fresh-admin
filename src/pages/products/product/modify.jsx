@@ -124,14 +124,14 @@ const ProductModifyPage = () => {
 					generatedProductsVariants.push({
 						branch_id: branch.branch_id,
 						branch_sku_id: branch.branch_id + values.sku_id,
-						discount_percentage: '',
+						discount_percentage: 0,
 						fixed_price: 0,
 						is_freezy_pick: true,
 						is_manage_stock: true,
-						price: '',
+						price: 0,
 						published_stock: 0,
 						sku_id: values.sku_id,
-						variant: branch.branch,
+						variant: null,
 						branch: {
 							id: branch.branch,
 						},
@@ -148,11 +148,11 @@ const ProductModifyPage = () => {
 						generatedProductsVariants.push({
 							branch_id: branch.branch_id,
 							branch_sku_id: branch.branch_id + variant.sku_id,
-							discount_percentage: '',
+							discount_percentage: 0,
 							fixed_price: 0,
 							is_freezy_pick: true,
 							is_manage_stock: true,
-							price: '',
+							price: 0,
 							published_stock: 0,
 							sku_id: variant.sku_id,
 							variant: variant.name.id,
@@ -262,7 +262,7 @@ const ProductModifyPage = () => {
 					txt4: product.txt4,
 					upc_code: product.upc_code,
 					weight_gr: product.weight_gr,
-					width_cm: product.wide_cm,
+					wide_cm: product.wide_cm,
 					zone_id: product.zone_id,
 			  };
 	};
@@ -294,7 +294,7 @@ const ProductModifyPage = () => {
 						en: fullDescEn,
 					},
 				};
-	
+
 				if (isCreating) {
 					await productService.createProduct(newProduct);
 					message.success('Berhasil membuat produk baru');
@@ -541,7 +541,7 @@ const ProductModifyPage = () => {
 												const allOptions = branchSelectRef.current.getAllOptions();
 												values = allOptions.filter(x => x.value !== 'all').map((option) => ({
 													branch_id: option.value,
-													branch: option.children,
+													branch: option.label,
 												}))
 												val = allOptions.filter(x => x.value !== 'all').map((option) => option.value);
 											} else {
@@ -668,7 +668,7 @@ const ProductModifyPage = () => {
 
 								<Col span={12}>
 									<Row gutter={12}>
-										<Col span={6}>
+										<Col span={8}>
 											<MoleculeTextInputGroup
 												name="long_cm"
 												label="P"
@@ -679,9 +679,9 @@ const ProductModifyPage = () => {
 											/>
 										</Col>
 
-										<Col span={6}>
+										<Col span={8}>
 											<MoleculeTextInputGroup
-												name="width_cm"
+												name="wide_cm"
 												label="L"
 												placeholder="Lebar"
 												suffix="cm"
@@ -690,7 +690,7 @@ const ProductModifyPage = () => {
 											/>
 										</Col>
 
-										<Col span={6}>
+										<Col span={8}>
 											<MoleculeTextInputGroup
 												name="height_cm"
 												label="T"
