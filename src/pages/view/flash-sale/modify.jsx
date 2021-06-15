@@ -171,7 +171,7 @@ const FlashSaleModifyPage = () => {
 		<OrganismLayout
 			breadcumbs={[
 				{ name: 'Tampilan', link: '/view' },
-				{ name: 'Flash Sale', link: location.pathname },
+				{ name: 'Flash Sale', link: '/view/flash-sale' },
 				{
 					name: location.pathname.includes('add') ? 'Tambah' : 'Ubah Flash Sale',
 					link: location.pathname,

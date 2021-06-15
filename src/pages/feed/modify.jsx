@@ -23,12 +23,14 @@ const FeedModifyPage = () => {
 	const [longDescription, setLongDescription] = useState('');
 	const [selectedContentType, setSelectedContentType] = useState('VIDEO');
 	const { id } = useParams();
+	const [form] = Form.useForm();
 
 	const getFeedDetail = async (id) => {
 		try {
 			const response = await feedService.getFeedById(id);
 			setLongDescription(response.data.long_description?.id);
 			setFeed(response.data);
+			setSelectedContentType(response.data.content_type);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
@@ -44,28 +46,34 @@ const FeedModifyPage = () => {
 
 			const data = new FormData();
 			data.append('content_type', selectedContentType);
+			data.append('update_type', 'MANUAL');
+
 			if (selectedContentType === 'VIDEO') {
 				data.append('video_link', values.video_link);
 				data.append('video_title[id]', values.video_title);
+				data.append('video_title[en]', values.video_title);
 			} else {
 				const storyImage = await storyImageRef.current.getImage();
-				if (storyImage) data.append('image', storyImage);
-				data.append('products', values.products);
+				if (storyImage) data.append('story_image', storyImage);
+				values.products.map((x) => data.append('products[]', x));
 				data.append('long_description[id]', longDescription);
+				data.append('long_description[en]', longDescription);
 				data.append('short_description[id]', values.short_description);
-				data.append('title[id]', values.title);
+				data.append('short_description[en]', values.short_description);
+				data.append('title[id]', values.story_title);
+				data.append('title[en]', values.story_title);
 			}
 
 			if (isCreating) {
 				await feedService.createFeed(data);
-				message.success('Berhasil menambah cabang');
+				message.success('Berhasil menambah feed');
 			} else {
 				await feedService.editFeed(id, data);
-				message.success('Berhasil mengubah cabang');
+				message.success('Berhasil mengubah feed');
 			}
 
 			message.info(
-				'Akan dikembalikan ke halaman daftar cabang dalam 2 detik'
+				'Akan dikembalikan ke halaman daftar feed dalam 2 detik'
 			);
 			setTimeout(() => {
 				history.push('/feed');
@@ -85,11 +93,11 @@ const FeedModifyPage = () => {
 			  }
 			: {
 					content_type: feed.content_type,
-					products: feed.products,
-					short_description: feed.short_description,
-					title: feed.title?.id,
-					video_link: feed.video_link,
-					video_title: feed.video_title?.id,
+					products: feed?.products?.map((x) => x.sku_id),
+					short_description: feed?.short_description?.id,
+					story_title: feed.title?.id,
+					video_link: feed?.video_link,
+					video_title: feed?.video_title?.id,
 			  };
 	};
 
@@ -126,6 +134,7 @@ const FeedModifyPage = () => {
 					name="modify_feed"
 					initialValues={setFeedInitialValues()}
 					onFinish={submit}
+					form={form}
 					onFinishFailed={() => {
 						message.error('Kesalahan saat mengambil nilai pada form. Silahkan periksa kembali');
 					}}
@@ -140,8 +149,10 @@ const FeedModifyPage = () => {
 											label="Tipe Konten"
 											placeholder="Pilih Tipe Konten"
 											data={{
-												onChange: (val) =>
-													setSelectedContentType(val),
+												onChange: (val) => {
+													setSelectedContentType(val);
+													form.setFieldsValue({ content_type: val });
+												},
 												options: [
 													{
 														value: 'STORY',
@@ -226,7 +237,7 @@ const FeedModifyPage = () => {
 														generateCustomOption: (
 															item
 														) => ({
-															value: item.id,
+															value: item.sku_id,
 															label: `${item.sku_id} - ${item.name.id}`,
 														}),
 													}}

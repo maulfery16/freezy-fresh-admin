@@ -161,7 +161,7 @@ const DailyDealsModifyPage = () => {
 		<OrganismLayout
 			breadcumbs={[
 				{ name: 'Tampilan', link: '/view' },
-				{ name: 'Daily Deals', link: location.pathname },
+				{ name: 'Daily Deals', link: '/view/daily-deals' },
 				{
 					name: location.pathname.includes('add') ? 'Tambah' : 'Ubah Daily Deals',
 					link: location.pathname,

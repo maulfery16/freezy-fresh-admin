@@ -45,7 +45,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		{
 			title: 'No',
 			dataIndex: 'id',
-			render: (_, _record, index) => index + 1,
+			render: (_, _record, index) => ((pageNumber - 1) * 10 + (index + 1))
 		},
 		{
 			title: 'Cabang',
@@ -234,6 +234,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 	const productService = new ProductService();
 	const tenantSelectRef = useRef();
 
+	const [pageNumber, setPageNumber] = useState(1);
 	const [branch, setBranch] = useState(null);
 	const [data, setData] = useState(props.defaultData);
 	const [editingKey, setEditingKey] = useState('');
@@ -480,7 +481,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 					bordered
 					dataSource={getDatatableData()}
 					columns={mergeColumn.filter((column) => !column.hidden)}
-					rowKey="branch_sku_id"
+					rowKey={(record) => `branch_sku_id_${record.product_detail_id}`}
 					scroll={{
 						x: 2880,
 					}}
@@ -490,7 +491,10 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 						},
 					}}
 					pagination={{
-						onChange: cancel,
+						onChange: function(current) {
+							setPageNumber(current);
+							cancel();
+						}
 					}}
 				/>
 			</Form>

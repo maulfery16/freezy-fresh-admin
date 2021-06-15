@@ -20,7 +20,7 @@ export default class FeedService extends RequestAdapterService {
 	async editFeed(id, feed) {
 		try {
 			const { data } = await super.sendPostMultipartRequest(
-				`${this.baseUrl}/v1/feeds/${id}?_method=PATCH`,
+				`${this.baseUrl}/v1/feeds/${id}?_method=PUT`,
 				feed
 			);
 

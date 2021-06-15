@@ -5,6 +5,7 @@ import { Space } from 'antd';
 import { EditFilled, EyeFilled } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 
+import UploadDesktopIcon from '../../assets/icons/desktop-upload.svg';
 import AtomImage from '../../components/atoms/image';
 import AtomPrimaryButton from '../../components/atoms/button/primary-button';
 import MoleculeDatatableFilter from '../../components/molecules/datatable/filter-plugin';
@@ -35,12 +36,13 @@ const FeedPage = () => {
 			dataIndex: 'title',
 			render: (title) => title?.id,
 			csvRender: (item) => item.title?.id,
+			customSorter: `title->>'id'`,
 			sorter: true,
 		},
 		{
 			title: 'Gambar',
 			dataIndex: 'story_image',
-			render: (image) => <AtomImage src={image} />,
+			render: (image) => <AtomImage preview={image ? true : false} src={image ?? UploadDesktopIcon} />,
 			csvRender: (item) => item.story_image,
 		},
 		{
@@ -48,6 +50,7 @@ const FeedPage = () => {
 			dataIndex: 'video_title',
 			render: (title) => title?.id,
 			csvRender: (item) => item.video_title?.id,
+			customSorter: `video_title->>'id'`,
 			sorter: true,
 		},
 		{

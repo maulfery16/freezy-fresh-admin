@@ -134,10 +134,10 @@ const FeedDetailPage = () => {
 										<Col span={12}>
 											<MoleculeInfoGroup
 												title="Produk Terkait"
-												content={feed.products
+												content={feed?.products
 													?.map(
 														(product) =>
-															`${product.sku_id} ${product.name?.id}`
+															product ? `${product?.sku_id} ${product?.name?.id}` : null
 													)
 													.join(', ')}
 											/>

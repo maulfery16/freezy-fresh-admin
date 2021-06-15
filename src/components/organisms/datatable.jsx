@@ -114,12 +114,12 @@ const OrganismDatatable = forwardRef((props, ref) => {
 
 	const setDatatableMetadata = (pagination, _, sorter) => {
 		const { current, pageSize } = pagination;
-		const { field, order, customSorter } = sorter;
+		const { field, order, column } = sorter;
 
 		setFilterParams({
 			...filterParams,
 			limit: pageSize,
-			orderBy: customSorter ? customSorter : field,
+			orderBy: column !== undefined ? column.customSorter !== undefined ? column.customSorter : field : '',
 			page: current,
 			sortedBy: order ? order.replace('end', '') : '',
 		});

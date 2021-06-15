@@ -26,11 +26,12 @@ const ReviewPage = () => {
 			title: 'ID Pesanan',
 			dataIndex: 'code',
 			sorter: true,
-			customSorter: 'id'
+			customSorter: 'orders|code'
 		},
 		{
 			title: 'Nama Pelanggan',
 			dataIndex: `customer_info`,
+			customSorter: 'users|first_name',
 			render: (customer_info) => customer_info.full_name,
 			sorter: true,
 		},
@@ -56,6 +57,7 @@ const ReviewPage = () => {
 			dataIndex: 'branch_info',
 			render: (branch_info) => branch_info.name.id,
 			sorter: true,
+			customSorter: `orders|branch_info->name->id`,
 		},
 		{
 			title: 'Status Pesanan Pelanggan',
@@ -67,9 +69,12 @@ const ReviewPage = () => {
 			title: 'Tanggal Pesanan Selesai',
 			dataIndex: 'finish_order',
 			sorter: true,
-			render: (date) => (
-				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
-			),
+			customSorter: `orders|finish_date`,
+			render: (date) => {
+				return date ? (
+					<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
+				) : '-'
+			}
 		},
 		{
 			align: 'center',
@@ -147,6 +152,7 @@ const ReviewPage = () => {
 				scroll={1360}
 				searchInput={true}
 				title={`Ulasan`}
+				searchJoin="and"
 			/>
 		</OrganismLayout>
 	);
