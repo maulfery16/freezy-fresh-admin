@@ -120,7 +120,7 @@ const ProductModifyPage = () => {
 			if (variants.length === 0) {
 				const values = form.getFieldsValue(true);
 
-				branches.map((branch) => {
+				branches.map((branch, idx) => {
 					generatedProductsVariants.push({
 						branch_id: branch.branch_id,
 						branch_sku_id: branch.branch_id + values.sku_id,
@@ -135,6 +135,7 @@ const ProductModifyPage = () => {
 						branch: {
 							id: branch.branch,
 						},
+						data_idx: branch.branch_id+'_'+idx
 					});
 				});
 
@@ -144,7 +145,7 @@ const ProductModifyPage = () => {
 				);
 			} else {
 				branches.map((branch) => {
-					variants.map((variant) => {
+					variants.map((variant, idx) => {
 						generatedProductsVariants.push({
 							branch_id: branch.branch_id,
 							branch_sku_id: branch.branch_id + variant.sku_id,
@@ -159,6 +160,7 @@ const ProductModifyPage = () => {
 							branch: {
 								id: branch.branch,
 							},
+							data_idx: branch.branch_id+'_'+idx
 						});
 					});
 				});
@@ -238,7 +240,8 @@ const ProductModifyPage = () => {
 			newProductVariants = combineProductVariantWithExisting(
 				generatedProductsVariants
 			);
-			setProductVariants(newProductVariants);
+			let tmp = newProductVariants.map((x, idx) => ({ ...x, data_idx: `${x.branch_id}_${idx}` }))
+			setProductVariants(tmp);
 
 			setBranches(
 				response.data.branches.map((option) => ({

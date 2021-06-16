@@ -61,8 +61,8 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		},
 		{
 			title: 'Tipe TOWS',
-			dataIndex: 'branches',
-			render: (_, record) => record.branch.tows ?? '-',
+			dataIndex: 'tows',
+			render: (_, record) => record.tows ?? '-',
 			sorter: true,
 			hidden: !props.isEditing && !props.isReadOnly ? true : false,
 		},
@@ -194,7 +194,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 					<Space>
 						<CheckOutlined
 							className="green f4 fw8"
-							onClick={() => save(record.branch_id)}
+							onClick={() => save(record.data_idx)}
 						/>
 
 						<Popconfirm title="Sure to cancel?" onConfirm={cancel}>
@@ -306,7 +306,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 			...record,
 		});
 
-		setEditingKey(record.branch_id);
+		setEditingKey(record.data_idx);
 	};
 
 	const getDatatableData = () => {
@@ -354,7 +354,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		}
 	};
 
-	const isEditing = (record) => record.branch_id === editingKey;
+	const isEditing = (record) => record.data_idx === editingKey;
 
 	const removeSyncedProduct = () => {
 		const newData = [...data];
@@ -374,7 +374,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 			row.managed_stock = row.managed_stock ? parseInt(row.managed_stock) : 0
 			const newData = [...data];
 			const index = newData.findIndex(
-				(item) => id === item.branch_id
+				(item) => id === item.data_idx
 			);
 
 			if (index > -1) {
@@ -414,11 +414,11 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		return {
 			...col,
 			onCell: (record) => ({
-				record,
-				dataIndex: col.dataIndex,
-				title: col.title,
-				editing: isEditing(record),
-			}),
+					record,
+					dataIndex: col.dataIndex,
+					title: col.title,
+					editing: isEditing(record),
+				}),
 		};
 	});
 
