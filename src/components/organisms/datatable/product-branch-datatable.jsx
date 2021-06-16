@@ -62,7 +62,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		{
 			title: 'Tipe TOWS',
 			dataIndex: 'tows',
-			render: (_, record) => record.tows ?? '-',
+			render: (_, record) => record.tows === "NEAR" ? 'Dekat' : record.tows === "FAR" ? 'Jauh' : '-',
 			sorter: true,
 			hidden: !props.isEditing && !props.isReadOnly ? true : false,
 		},
@@ -167,7 +167,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 			title: 'Diskon (%)',
 			dataIndex: 'discount_percentage',
 			editable: false,
-			render: (discount) => (discount ? `${discount} %` : null),
+			render: (discount) => discount ? `${discount} %` : '0.00 %',
 			sorter: true,
 		},
 		{
@@ -289,7 +289,11 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		}
 
 		if (fixedPriceChanged) {
-			row.discount_percentage = parseFloat(((parseInt(row.price) - parseInt(row.fixed_price)) / parseInt(row.price)) * 100).toFixed(2);
+			if (parseInt(row.fixed_price) > 0) {
+				row.discount_percentage = parseFloat(((parseInt(row.price) - parseInt(row.fixed_price)) / parseInt(row.price)) * 100).toFixed(2);
+			} else {
+				row.discount_percentage = 0;
+			}
 			return row;
 		}
 
