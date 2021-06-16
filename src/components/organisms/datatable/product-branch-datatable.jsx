@@ -262,6 +262,8 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 			selectedTenant;
 		setSelectedTenant(null);
 		setSelectedFFProduct(null);
+		bindingForm.setFieldsValue({ product_name: null });
+		bindingForm.setFieldsValue({ product_type: null });
 		setBeingSyncedProductIndex(null);
 		setData(newData);
 	};
@@ -343,7 +345,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 
 			setter(
 				response.data.map((data) => ({
-					label: data.name,
+					label: `${data.skuNumber} - ${data.name}`,
 					value: data.skuNumber,
 				}))
 			);
