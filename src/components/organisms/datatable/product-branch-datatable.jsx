@@ -176,7 +176,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 			align: 'center',
 			render: (synced, _, index) => (
 				<SyncOutlined
-					onClick={() => setBeingSyncedProductIndex(index)}
+					onClick={() => setBeingSyncedProductIndex((pageNumber - 1) * 10 + (index))}
 					className={`f4 fw8 pointer ${
 						synced ? 'dark-green' : 'dark-red'
 					}`}
@@ -213,8 +213,8 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 						<AtomSecondaryButton
 							onClick={() =>
 								record.fresh_factory_product_sku_number
-									? setBeingRemoveFFProductIndex(index)
-									: setBeingSyncedProductIndex(index)
+									? setBeingRemoveFFProductIndex((pageNumber - 1) * 10 + (index))
+									: setBeingSyncedProductIndex((pageNumber - 1) * 10 + (index))
 							}
 						>
 							<SyncOutlined

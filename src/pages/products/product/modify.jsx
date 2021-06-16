@@ -223,10 +223,27 @@ const ProductModifyPage = () => {
 			setFullDescEn(response.data.full_description.en);
 			setFullDescId(response.data.full_description.id);
 			setProduct(response.data);
-			setProductVariants(
-				response.data.details.map((variant) => ({
-					...variant,
-					branch_sku_id: variant.branch.id + variant.sku_id,
+
+			let newProductVariants = [];
+			let generatedProductsVariants = [];
+			response.data.details.map((detail) => {
+				response.data.variants.map((variant) => {
+					generatedProductsVariants.push({
+						...detail,
+						variant: variant.name.id,
+						branch_sku_id: detail.branch.id + detail.sku_id,
+					});
+				});
+			});
+			newProductVariants = combineProductVariantWithExisting(
+				generatedProductsVariants
+			);
+			setProductVariants(newProductVariants);
+
+			setBranches(
+				response.data.branches.map((option) => ({
+					branch_id: option.id,
+					branch: option.name.id
 				}))
 			);
 			setVariants(response.data.variants);
