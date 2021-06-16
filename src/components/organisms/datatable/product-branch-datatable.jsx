@@ -194,7 +194,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 					<Space>
 						<CheckOutlined
 							className="green f4 fw8"
-							onClick={() => save(record.branch_sku_id)}
+							onClick={() => save(record.branch_id)}
 						/>
 
 						<Popconfirm title="Sure to cancel?" onConfirm={cancel}>
@@ -306,7 +306,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 			...record,
 		});
 
-		setEditingKey(record.branch_sku_id);
+		setEditingKey(record.branch_id);
 	};
 
 	const getDatatableData = () => {
@@ -354,7 +354,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		}
 	};
 
-	const isEditing = (record) => record.branch_sku_id === editingKey;
+	const isEditing = (record) => record.branch_id === editingKey;
 
 	const removeSyncedProduct = () => {
 		const newData = [...data];
@@ -374,7 +374,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 			row.managed_stock = row.managed_stock ? parseInt(row.managed_stock) : 0
 			const newData = [...data];
 			const index = newData.findIndex(
-				(item) => id === item.branch_sku_id
+				(item) => id === item.branch_id
 			);
 
 			if (index > -1) {
@@ -483,7 +483,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 					bordered
 					dataSource={getDatatableData()}
 					columns={mergeColumn.filter((column) => !column.hidden)}
-					rowKey={(record) => `branch_sku_id_${record.product_detail_id}`}
+					rowKey={(record) => `branch_id_${record.product_detail_id}`}
 					scroll={{
 						x: 2880,
 					}}
