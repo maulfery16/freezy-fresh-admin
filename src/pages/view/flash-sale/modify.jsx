@@ -114,9 +114,10 @@ const FlashSaleModifyPage = () => {
 
 			const productsToAssign = [];
 			viewTableRef.current.data.map((x) => {
-				const { max_stock_per_user, published_stock, id, product_id, product_detail_id, fixed_price, price, discount_percentage, is_manage_stock, price_after_discount } = x;
+				const { max_stock_per_user, max_stock_per_branch, published_stock, id, product_id, product_detail_id, fixed_price, price, discount_percentage, is_manage_stock, price_after_discount } = x;
 				const tmpObj = {
 					max_stock_per_user: parseInt(max_stock_per_user),
+					max_stock_per_branch: parseInt(max_stock_per_branch),
 					published_stock,
 					product_id,
 					fixed_price,
@@ -384,6 +385,7 @@ const FlashSaleModifyPage = () => {
 							ref={viewTableRef}
 							defaultData={productList}
 							maxStockPerUser
+							maxStockPerBranch
 							canModify
 						/>
 					</Col>

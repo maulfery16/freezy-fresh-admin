@@ -132,6 +132,17 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 		},
 	];
 
+	if (props.maxStockPerBranch) {
+		columns.push({
+			editable: true,
+			title: 'Batas Stok per Cabang',
+			dataIndex: 'max_stock_per_branch',
+			render: (max_stock_per_branch) =>
+				max_stock_per_branch ? `${max_stock_per_branch}` : '0',
+			sorter: true,	
+		})
+	}
+
 	if (props.maxStockPerUser) {
 		columns.push({
 			editable: true,
@@ -234,6 +245,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 		form.setFieldsValue({
 			discount_percentage: '',
 			max_stock_per_user: '',
+			max_stock_per_branch: '',
 			...record
 		});
 
@@ -347,7 +359,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 	const setProductToTable = async (values) => {
 		try {
 			let response = await getDetailProduct(values.branches.join(','));
-			if (props.maxStockPerUser) response = response.map((x, idx) =>({ ...x, max_stock_per_user: 0, data_idx: `${Math.floor(Math.random() * 1000)}_${idx}`, price_after_discount: x.fixed_price }));
+			if (props.maxStockPerUser) response = response.map((x, idx) =>({ ...x, max_stock_per_user: 0, max_stock_per_branch: 0, data_idx: `${Math.floor(Math.random() * 1000)}_${idx}`, price_after_discount: x.fixed_price }));
 			productForm.resetFields();
 			if (response) {
 				setData([...data, ...response]);

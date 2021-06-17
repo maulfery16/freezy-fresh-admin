@@ -86,7 +86,7 @@ const HolidaysPage = () => {
 			dataIndex: 'discount_percentage',
 			sorter: true,
 			render: (discount_percentage) =>
-			discount_percentage ? `${discount_percentage} %` : null,
+			discount_percentage ? `${discount_percentage} %` : '0.00 %',
 		},
 	];
 	const viewTableRef = useRef();

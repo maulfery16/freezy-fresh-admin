@@ -66,6 +66,13 @@ const FlashSalesPage = () => {
 			render: (_, record) => record?.product_detail?.total_sold
 		},
 		{
+			title: 'Batas Stok per Cabang',
+			sorter: true,
+			dataIndex: 'max_stock_per_branch',
+			render: (max_stock_per_branch) =>
+				max_stock_per_branch ? `${max_stock_per_branch}` : '0',
+		},
+		{
 			title: 'Batas Stok per User',
 			sorter: true,
 			dataIndex: 'max_stock_per_user',
@@ -86,7 +93,7 @@ const FlashSalesPage = () => {
 			dataIndex: 'discount_percentage',
 			sorter: true,
 			render: (discount_percentage) =>
-			discount_percentage ? `${discount_percentage} %` : null,
+			discount_percentage ? `${discount_percentage} %` : '0.00 %',
 		},
 	];
 	const viewTableRef = useRef();
