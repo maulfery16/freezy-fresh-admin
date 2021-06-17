@@ -106,7 +106,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 		},
 		{
 			title: 'Stok Dikelola',
-			dataIndex: `managed_stock`,
+			dataIndex: `published_stock`,
 			render: (count) => <AtomNumberFormat value={count ?? 0} />,
 			editable: true,
 			sorter: true,
@@ -375,7 +375,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 			row.discount_percentage = row.discount_percentage ? parseFloat(row.discount_percentage) : 0
 			row.fixed_price = row.fixed_price ? parseInt(row.fixed_price) : 0
 			row.price = row.price ? parseInt(row.price) : 0
-			row.managed_stock = row.managed_stock ? parseInt(row.managed_stock) : 0
+			row.published_stock = row.published_stock ? parseInt(row.published_stock) : 0
 			const newData = [...data];
 			const index = newData.findIndex(
 				(item) => id === item.data_idx
