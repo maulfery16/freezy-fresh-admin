@@ -1,0 +1,100 @@
+/* eslint-disable no-unused-vars */
+import React, { useState } from 'react';
+import { Col, message, Row, Typography, Upload } from 'antd';
+
+import AtomCard from '../../../components/atoms/card';
+import MoleculeImportExportWrapper from '../../../components/molecules/import-export-wrapper';
+import OrganismLayout from '../../../components/organisms/layout';
+
+import DownloadImage from '../../../assets/images/download.svg';
+import UploadImage from '../../../assets/images/upload.svg';
+
+import config from '../../../config';
+import BundlingDealsService from '../../../services/bundling-deals';
+
+const BundlingDealsImportPage = () => {
+	const bundlingDealsService = new BundlingDealsService();
+
+	const [isUploadingProduct, setIsUploadingProduct] = useState(false);
+
+	const downloadTemplate = () => {
+		try {
+			window.open(
+				`${config.API_URL}/storage/templates/products/import_produk.xlsx`,
+				'_blank'
+			);
+		} catch (error) {
+			error.message(message.error);
+		}
+	};
+
+	const uploadProduct = async ({ file }) => {
+		// setIsUploadingProduct(true);
+
+		// try {
+		// 	const fileProduct = new FormData();
+
+		// 	fileProduct.append('file', file);
+		// 	await bundlingDealsService.uploadProduct(fileProduct);
+
+		// 	message.success('Berhasil mengupload data produk');
+		// } catch (error) {
+		// 	message.error(error.message, 5);
+		// } finally {
+		// 	setIsUploadingProduct(false);
+		// }
+	};
+
+	return (
+		<OrganismLayout
+			breadcumbs={[
+				{ name: 'Tampilan', link: '/view' },
+				{
+					name: 'Bundling Deals',
+					link: '/view/bundling-deals',
+				},
+				{
+					name: 'Import',
+					link: location.pathname,
+				},
+			]}
+			title="Bundling Deals Import Page"
+		>
+			<Typography.Title level={4}>
+				<span className="fw7">{`Import Produk`.toUpperCase()}</span>
+			</Typography.Title>
+
+			<Row align="top" className="mt4" gutter={24}>
+				<Col span={12}>
+					<AtomCard title="Download dan Isi File Excel">
+						<MoleculeImportExportWrapper
+							buttonLabel="DOWNLOAD TEMPLATE"
+							info="Gunakan template ini untuk tambah produk di beragam kategori"
+							image={DownloadImage}
+							onClick={downloadTemplate}
+						/>
+					</AtomCard>
+				</Col>
+
+				<Col span={12}>
+					<AtomCard title="Upload File Excel">
+						<Upload
+							beforeUpload={() => false}
+							onChange={uploadProduct}
+							showUploadList={false}
+						>
+							<MoleculeImportExportWrapper
+								buttonLabel="UPLOAD FILE"
+								info="Pilih atau letakkan file Excel(.xlsx atau .csv) kamu disini, Maks. 300 produk dalam satu file."
+								image={UploadImage}
+								loading={isUploadingProduct}
+							/>
+						</Upload>
+					</AtomCard>
+				</Col>
+			</Row>
+		</OrganismLayout>
+	);
+};
+
+export default BundlingDealsImportPage;
