@@ -629,6 +629,47 @@ const routes = [
 				],
 			},
 			{
+				path: '/bundling-deals',
+				children: [
+					{
+						component: React.lazy(() =>
+							import('./pages/view/bundling-deals')
+						),
+						exact: true,
+						guard: true,
+						name: 'Bundling Deals Page',
+						path: '/',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/view/bundling-deals/modify')
+						),
+						exact: true,
+						guard: true,
+						name: 'Edit Bundling Deals Page',
+						path: '/edit',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/view/bundling-deals/add-packages')
+						),
+						exact: true,
+						guard: true,
+						name: 'Add Bundling Deals Page',
+						path: '/add',
+					},
+					{
+						component: React.lazy(() =>
+							import('./pages/view/bundling-deals/import')
+						),
+						exact: true,
+						guard: true,
+						name: 'Bundling Deals Import Page',
+						path: '/import',
+					},
+				],
+			},
+			{
 				path: '/flash-sale',
 				children: [
 					{

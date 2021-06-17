@@ -107,25 +107,28 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 		},
 		{
 			title: 'Harga Setelah Diskon',
-			dataIndex: 'discounted_price',
+			dataIndex: 'price_after_discount',
 			sorter: true,
-			render: (_, record) => (
-				<AtomNumberFormat
-					prefix="Rp. "
-					value={
-						record.price -
-						record.price * (record.discount_percentage / 100)
-					}
-				/>
+			editable: true,
+			render: (price) => parseInt(price) === 0 ? 'Tidak ada diskon' : (
+				<AtomNumberFormat prefix="Rp. " value={parseInt(price)} />
 			),
+			// render: (_, record) => (
+			// 	<AtomNumberFormat
+			// 		prefix="Rp. "
+			// 		value={
+			// 			record.price -
+			// 			record.price * (record.discount_percentage / 100)
+			// 		}
+			// 	/>
+			// ),
 		},
 		{
 			title: 'Diskon',
 			dataIndex: 'discount_percentage',
-			editable: true,
 			sorter: true,
 			render: (discount_percentage) =>
-				discount_percentage ? `${discount_percentage} %` : null,
+				discount_percentage ? `${discount_percentage} %` : `0.00 %`,
 		},
 	];
 
@@ -149,7 +152,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 					<Space>
 						<CheckOutlined
 							className="green f4 fw8"
-							onClick={() => save(record.product_id)}
+							onClick={() => save(record.data_idx)}
 						/>
 
 						<Popconfirm title="Sure to cancel?" onConfirm={cancel}>
@@ -163,7 +166,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 							onClick={() => edit(record)}
 						/>
 
-						<Popconfirm title="Are you sure you want to delete this product?" onConfirm={() => deleteProduct(record.product_id)}>
+						<Popconfirm title="Are you sure you want to delete this product?" onConfirm={() => deleteProduct(record.data_idx)}>
 							<DeleteFilled className="red f4 fw8" />
 						</Popconfirm>
 					</Space>
@@ -223,7 +226,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 
 	const deleteProduct = (id) => {
 		let filteredData = data;
-		filteredData = filteredData.filter((column) => column.product_id !== id);
+		filteredData = filteredData.filter((column) => column.data_idx !== id);
 		setData(filteredData);
 	}
 
@@ -234,7 +237,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 			...record
 		});
 
-		setEditingKey(record.product_id);
+		setEditingKey(record.data_idx);
 	};
 
 	const getDetailProduct = async (branch_id) => {
@@ -248,7 +251,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 					product_detail_id: productDetailID,
 				}
 			);
-			if (response.data && response.data.length > 0) return response.data[0];
+			if (response.data && response.data.length > 0) return response.data;
 			else return null;
 
 		} catch (error) {
@@ -280,16 +283,54 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 		return filteredData;
 	};
 
-	const isEditing = (record) => record.product_id === editingKey;
+	const isEditing = (record) => record.data_idx === editingKey;
+
+	const countPriceWithDiscount = (row, index, item) => {
+		let discountChanged = false;
+		let fixedPriceChanged = false;
+
+		if (data[index].price_after_discount !== row.price_after_discount) {
+			fixedPriceChanged = true;
+		}
+
+		if (data[index].discount_percentage !== row.discount_percentage) {
+			discountChanged = true;
+		}
+
+		if (row.price === '') {
+			message.warning(
+				'Tidak dapat mengatur diskon tanpa memasukkan harga terlebih dahulu'
+			);
+			row.discount_percentage = 0;
+			return row;
+		}
+
+		if (fixedPriceChanged) {
+			if (parseInt(row.price_after_discount) > 0) {
+				row.discount_percentage = parseFloat(((parseInt(item.price) - parseInt(row.price_after_discount)) / parseInt(item.price)) * 100).toFixed(2);
+			} else {
+				row.discount_percentage = 0;
+			}
+			return row;
+		}
+
+		if (discountChanged) {
+			// row.fixed_price = (row.discount_percentage / 100) * row.price;
+			return row;
+		}
+
+		return row;
+	};
 
 	const save = async (id) => {
 		try {
-			const row = await form.validateFields();
+			let row = await form.validateFields();
 			const newData = [...data];
-			const index = newData.findIndex((item) => id === item.product_id);
+			const index = newData.findIndex((item) => id === item.data_idx);
 
 			if (index > -1) {
 				const item = newData[index];
+				row = countPriceWithDiscount(row, index, item);
 				newData.splice(index, 1, { ...item, ...row });
 				setData(newData);
 				setEditingKey('');
@@ -305,11 +346,11 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 
 	const setProductToTable = async (values) => {
 		try {
-			const response = await getDetailProduct(values.branches.join(', '));
-			if (props.maxStockPerUser) response.max_stock_per_user = 0;
+			let response = await getDetailProduct(values.branches.join(','));
+			if (props.maxStockPerUser) response = response.map((x, idx) =>({ ...x, max_stock_per_user: 0, data_idx: `${Math.floor(Math.random() * 1000)}_${idx}`, price_after_discount: x.fixed_price }));
 			productForm.resetFields();
 			if (response) {
-				setData([...data, response]);
+				setData([...data, ...response]);
 				setIsPickProductVisible(false);
 			}
 		} catch (error) {
@@ -537,7 +578,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 					pagination={{
 						onChange: cancel,
 					}}
-					rowKey="product_id"
+					rowKey={(record) => `product_id_${record.data_idx}`}
 					scroll={{ x: 1360 }}
 					style={{ width: '100%' }}
 				/>

@@ -54,9 +54,10 @@ const FlashSaleModifyPage = () => {
 			if (data?.finish_at) setFlashSaleEndAt(moment(data.finish_at).format('YYYY-MM-DD HH:mm:ss'));
 			if (data.products && Array.isArray(data.products) && data.products.length > 0) {
 				const tmp = [];
-				data.products.map((x) => {
+				data.products.map((x, idx) => {
 					const {product_detail, ...rest} = x;
 					if (product_detail.discount_percentage !== null && product_detail.discount_percentage !== undefined) delete product_detail.discount_percentage;
+					rest.data_idx = `${Math.floor(Math.random() * 1000)}_${idx}`;
 					const newObj = Object.assign({}, rest, product_detail);
 					tmp.push(newObj)
 				})
@@ -113,17 +114,17 @@ const FlashSaleModifyPage = () => {
 
 			const productsToAssign = [];
 			viewTableRef.current.data.map((x) => {
-				const { max_stock_per_user, published_stock, id, product_id, product_detail_id, fixed_price, price, discount_percentage, is_manage_stock } = x;
+				const { max_stock_per_user, published_stock, id, product_id, product_detail_id, fixed_price, price, discount_percentage, is_manage_stock, price_after_discount } = x;
 				const tmpObj = {
 					max_stock_per_user: parseInt(max_stock_per_user),
 					published_stock,
 					product_id,
 					fixed_price,
 					price,
-					discount_percentage: parseInt(discount_percentage),
+					discount_percentage: parseFloat(discount_percentage).toFixed(2),
 					is_manage_stock,
 					product_detail_id: id ? id : product_detail_id,
-					price_after_discount: price - price * (discount_percentage / 100)
+					price_after_discount: parseInt(price_after_discount)
 				};
 				productsToAssign.push(tmpObj);
 			})
