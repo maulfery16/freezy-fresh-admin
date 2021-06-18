@@ -1,14 +1,13 @@
 /* eslint-disable react/display-name */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 
-import { Col, Row, Typography, message, Input, Space } from 'antd';
+import { Col, Row, Typography, message, Space } from 'antd';
 import { Link } from 'react-router-dom';
 import { EditFilled, EyeFilled } from '@ant-design/icons';
 
 import AtomStatusSwitch from '../../../components/atoms/datatable/status-switch';
 import AtomImage from '../../../components/atoms/image';
 import AtomCard from '../../../components/atoms/card';
-import AtomSpinner from '../../../components/atoms/spinner';
 import MoleculeDatatableAdditionalAction from '../../../components/molecules/datatable/additional-actions';
 import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
 import OrganismDatatable from '../../../components/organisms/datatable';
@@ -91,7 +90,6 @@ const AdditionalHomeSectionsPage = () => {
 							message.error(error.message)
 						}
 					}}
-					afterSuccessUpdate={() => getAllSections()}
 				/>
 			),
 			csvRender: (item) => (item.is_active ? 'Aktif' : 'Tidak Aktif'),
@@ -115,58 +113,14 @@ const AdditionalHomeSectionsPage = () => {
 							label="Section"
 							tableRef={viewTableRef}
 							url="additional-home-sections"
-							afterSuccessDelete={() => getAllSections()}
 						/>
 					)}
 				</Space>
 			),
+			skipExport: true
 		},
 	];
 	const viewTableRef = useRef();
-	const [additionalSections, setAdditionalSections] = useState({});
-	const [isLoading, setIsLoading] = useState(false);
-	const [keyword, setKeyword] = useState('');
-
-	const getAllSections = async () => {
-		setIsLoading(true);
-		try {
-			const {data, meta} = await additionalSectionService.getAllSections();
-      if (data && Array.isArray(data) && data.length > 0) {
-				const tmp = {};
-				tmp.data = data;
-				tmp.meta = { pagination: { total: meta.pagination.total } };
-        setAdditionalSections(tmp);
-			}
-		} catch (error) {
-			message.error(error.message);
-			console.error(error);
-		} finally {
-			setIsLoading(false);
-		}
-	};
-
-	const getDatatableData = () => {
-		if (keyword !== '') {
-			let tmp = {...additionalSections};
-			if (keyword !== '')
-				tmp.data = tmp.data.filter((column) =>
-					column.title.toLowerCase().includes(keyword.toLowerCase())
-				);
-			return tmp;
-		} else {
-			return additionalSections;
-		}
-	};
-
-	useEffect(() => {
-		(async () => {
-			getAllSections();
-		})();
-	}, []);
-
-	useEffect(() => {
-		viewTableRef.current.refetchData();
-	}, [keyword])
 
 	return (
 		<OrganismLayout
@@ -187,44 +141,29 @@ const AdditionalHomeSectionsPage = () => {
 
 						<MoleculeDatatableAdditionalAction
 							column={column}
-							getLimit={0}
+							getLimit={() => viewTableRef.current.totalData}
 							isEdit={false}
 							label="Section"
 							route="/view/additional-sections"
-							url="additional-sections"
+							url="additional-home-sections"
 						/>
 					</Row>
 				</Col>
 			</Row>
 
-			{isLoading ? (
-				<AtomSpinner/>
-			) : (
-        <Row align="top" className="mt4" gutter={24}>
-          <Col className="mt4" span={24}>
-            <AtomCard title="Daftar Produk">
-              <Row gutter={[0, 12]} className="mt4">
-                <Col span={24}>
-                  <Col span={8}>
-                    <Input.Search
-                      placeholder="Cari Nama Produk"
-                      onSearch={(value) => setKeyword(value)}
-                      size="large"
-                    />
-                  </Col>
-                </Col>
-              </Row>
-              <OrganismDatatable
-                columns={column}
-                setFilterLocally
-                dataSourceURL={`additional-home-sections`}
-                dataSource={getDatatableData()}
-                ref={viewTableRef}
-              />
-            </AtomCard>
-          </Col>
-        </Row>
-			)}
+			
+			<Row align="top" className="mt4" gutter={24}>
+				<Col className="mt4" span={24}>
+					<AtomCard title="Daftar Produk">
+						<OrganismDatatable
+							columns={column}
+							searchInput
+							dataSourceURL={`additional-home-sections`}
+							ref={viewTableRef}
+						/>
+					</AtomCard>
+				</Col>
+			</Row>
 		</OrganismLayout>
 	);
 };

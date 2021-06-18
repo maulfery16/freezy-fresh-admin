@@ -58,6 +58,8 @@ const HolidaysPage = () => {
 					value={record?.product_detail?.price}
 				/>
 			),
+			csvRender: (item) =>
+				item?.product_detail?.price ? `Rp. ${item?.product_detail?.price}` : 0,
 		},
 		{
 			title: 'Stok Terjual',
@@ -80,6 +82,8 @@ const HolidaysPage = () => {
 					value={price_after_discount}
 				/>
 			),
+			csvRender: (item) =>
+				item?.price_after_discount ? `Rp. ${item?.price_after_discount}` : 0,
 		},
 		{
 			title: 'Discount (%)',
@@ -186,6 +190,8 @@ const HolidaysPage = () => {
 							label="Holiday"
 							route="/view/holiday"
 							url="holiday"
+							filter="products"
+							specifiedProp="products"
 						/>
 					</Row>
 				</Col>

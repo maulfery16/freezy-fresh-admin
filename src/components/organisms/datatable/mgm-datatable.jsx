@@ -120,6 +120,8 @@ const OrganismMgmDatatable = (props) => {
 			render: (member_cashback) => (
 				<AtomNumberFormat value={member_cashback || 0} />
 			),
+			csvRender: (item) =>
+				item?.member_cashback || 0,
 			sorter: true,
 		},
 		{
@@ -128,6 +130,8 @@ const OrganismMgmDatatable = (props) => {
 			render: (customer_cashback) => (
 				<AtomNumberFormat value={customer_cashback || 0} />
 			),
+			csvRender: (item) =>
+				item?.customer_cashback || 0,
 			sorter: true,
 		},
 		{

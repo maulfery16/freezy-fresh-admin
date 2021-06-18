@@ -39,6 +39,10 @@ const MoleculeDatatableAdditionalAction = (props) => {
 				}
 			}
 
+			if (props.filter) {
+				params.filter = props.filter;
+			}
+
 			if (history.location.search !== '') {
 				const { q, ...queryParams } = getURLParams(
 					history.location.search
@@ -51,7 +55,7 @@ const MoleculeDatatableAdditionalAction = (props) => {
 						.join(';')}`;
 			}
 
-			await datatableService.exportAsCSV(params, props.column, props.url);
+			await datatableService.exportAsCSV(params, props.column, props.url, props.specifiedProp);
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);

@@ -55,6 +55,8 @@ const BasedOnSearchPage = () => {
 					value={record?.product_detail?.price}
 				/>
 			),
+      csvRender: (item) =>
+				item?.product_detail?.price ? `Rp. ${item?.product_detail?.price}` : 0,
 		},
 		{
 			title: 'Stok Terjual',
@@ -77,6 +79,8 @@ const BasedOnSearchPage = () => {
 					value={price_after_discount}
 				/>
 			),
+      csvRender: (item) =>
+				item?.price_after_discount ? `Rp. ${item?.price_after_discount}` : 0,
 		},
 		{
 			title: 'Discount (%)',
@@ -183,6 +187,8 @@ const BasedOnSearchPage = () => {
 							label="Based On Search"
 							route="/view/based-on-search"
 							url="based-on-search"
+              filter="products"
+							specifiedProp="products"
 						/>
 					</Row>
 				</Col>

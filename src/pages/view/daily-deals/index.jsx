@@ -58,6 +58,8 @@ const DailyDealsPage = () => {
 					value={record?.product_detail?.price}
 				/>
 			),
+			csvRender: (item) =>
+				item?.product_detail?.price ? `Rp. ${item?.product_detail?.price}` : 0,
 		},
 		{
 			title: 'Stok Terjual',
@@ -80,6 +82,8 @@ const DailyDealsPage = () => {
 					value={price_after_discount}
 				/>
 			),
+			csvRender: (item) =>
+				item?.price_after_discount ? `Rp. ${item?.price_after_discount}` : 0,
 		},
 		{
 			title: 'Discount (%)',
@@ -181,11 +185,13 @@ const DailyDealsPage = () => {
 
 						<MoleculeDatatableAdditionalAction
 							column={column}
-							getLimit={0}
+							getLimit={() => products.length}
 							isEdit={true}
 							label="Daily Deals"
 							route="/view/daily-deals"
 							url="daily-deals"
+							filter="products"
+							specifiedProp="products"
 						/>
 					</Row>
 				</Col>

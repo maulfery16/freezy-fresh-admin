@@ -18,9 +18,11 @@ export default class DatatableService extends RequestAdapterService {
 		}
 	}
 
-	async exportAsCSV(params, properties, url) {
+	async exportAsCSV(params, properties, url, specifiedProp) {
 		try {
-			const { data } = await this.getData(url, params);
+			let { data } = await this.getData(url, params);
+
+			if (specifiedProp) data = data[specifiedProp]
 
 			super.dowloadDataAsCSV(
 				data,

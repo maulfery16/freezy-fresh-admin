@@ -58,6 +58,8 @@ const FlashSalesPage = () => {
 					value={record?.product_detail?.price}
 				/>
 			),
+			csvRender: (item) =>
+				item?.product_detail?.price ? `Rp. ${item?.product_detail?.price}` : 0,
 		},
 		{
 			title: 'Stok Terjual',
@@ -87,6 +89,8 @@ const FlashSalesPage = () => {
 					value={price_after_discount}
 				/>
 			),
+			csvRender: (item) =>
+				item?.price_after_discount ? `Rp. ${item?.price_after_discount}` : 0,
 		},
 		{
 			title: 'Discount (%)',
@@ -188,11 +192,13 @@ const FlashSalesPage = () => {
 
 						<MoleculeDatatableAdditionalAction
 							column={column}
-							getLimit={0}
+							getLimit={() => products.length}
 							isEdit={true}
 							label="Flash Sale"
 							route="/view/flash-sale"
-							url="flash-sale"
+							url="flash-sales"
+							filter="products"
+							specifiedProp="products"
 						/>
 					</Row>
 				</Col>
