@@ -358,7 +358,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 	const setProductToTable = async (values) => {
 		try {
 			let response = await getDetailProduct(values.branches.join(','));
-			if (props.maxStockPerUser) response = response.map((x, idx) =>({ ...x, max_stock_per_user: 0, max_stock_per_branch: 0, data_idx: `${Math.floor(Math.random() * 1000)}_${idx}`, price_after_discount: `${(props.tableType === "flash-sale" || props.tableType === "daily-deals" || props.tableType === "promo") ? '' : x.fixed_price}`}));
+			if (props.maxStockPerUser) response = response.map((x, idx) =>({ ...x, max_stock_per_user: 0, max_stock_per_branch: 0, data_idx: `${Math.floor(Math.random() * 1000)}_${idx}`, price_after_discount: ''}));
 			productForm.resetFields();
 			if (response) {
 				setData([...data, ...response]);
