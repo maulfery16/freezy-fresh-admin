@@ -169,8 +169,8 @@ const AdminPage = () => {
 				getLimit={() => adminTableRef.current.totalData}
 				route="/admin"
 				url="admins"
-				withoutAddButton={roles.includes('admin')}
-				withoutExportButton={roles.includes('admin')}
+				withoutAddButton={roles !== 'super-admin'}
+				withoutExportButton={roles !== 'super-admin'}
 			/>
 		);
 	};
