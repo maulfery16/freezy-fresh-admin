@@ -125,7 +125,7 @@ const AdminPage = () => {
 						<EyeFilled className="f4 blue" />
 					</Link>
 
-					{roles.includes('super-admin') && (
+					{(roles === 'super-admin' || roles === 'admin') && (
 						<Link to={`/admin/${id}/edit`}>
 							<EditFilled className="f4 orange" />
 						</Link>

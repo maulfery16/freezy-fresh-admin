@@ -91,7 +91,7 @@ const BasedOnSearchModifyPage = () => {
 					discount_percentage: parseFloat(discount_percentage).toFixed(2),
 					is_manage_stock,
 					product_detail_id: id ? id : product_detail_id,
-					price_after_discount: price_after_discount ? parseInt(price_after_discount) : parseInt(price)
+					price_after_discount: price_after_discount ? parseInt(price_after_discount) : 0
 				};
 				productsToAssign.push(tmpObj);
 			})
