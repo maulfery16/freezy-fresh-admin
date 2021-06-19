@@ -379,7 +379,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 				dataIndex: col.dataIndex,
 				title: col.title,
 				editing: isEditing(record),
-				isRequired: col.dataIndex === "price_after_discount" && (props.tableType === "flash-sale" || props.tableType === "daily-deals" || props.tableType === "promo")
+				isRequired: (col.dataIndex === "price_after_discount" && (props.tableType === "flash-sale" || props.tableType === "daily-deals" || props.tableType === "promo")) || col.dataIndex === "max_stock_per_user" || col.dataIndex === "max_stock_per_branch"
 			}),
 		};
 	});
