@@ -283,7 +283,7 @@ const AdminModifyPage = () => {
 													item
 												) => ({
 													value: item.name,
-													label: item.name,
+													label: item.description,
 												}),
 											}}
 										/>
