@@ -32,6 +32,7 @@ const PromotionModifyPage = () => {
 	const isCreating = location.pathname.includes('add') ? true : false;
 
 	const [form] = Form.useForm();
+	const [productList, setProductList] = useState([]);
 	const [fullDescEn, setFullDescEn] = useState('');
 	const [fullDescId, setFullDescId] = useState('');
 	const [promotion, setPromotion] = useState();
@@ -45,6 +46,22 @@ const PromotionModifyPage = () => {
 			const { data: promotion } = await promotionService.getPromotionById(
 				id
 			);
+			setPromotion(promotion);
+
+			const { data: products } = await promotionService.getProductsInPromotion(id);
+			if (products && Array.isArray(products) && products.length > 0) {
+				const tmp = [];
+				products.map((x, idx) => {
+					const {product_detail, ...rest} = x;
+					rest.price_after_discount = rest.fixed_price;
+					rest.branch = rest.branch_id;
+					rest.product_detail_id = rest.id;
+					rest.data_idx = `${Math.floor(Math.random() * 1000)}_${idx}`;
+					const newObj = Object.assign({}, rest, product_detail);
+					tmp.push(newObj)
+				});
+				setProductList(tmp);
+			}
 
 			setPromotion(promotion);
 			setFullDescId(promotion.full_description.id);
@@ -85,16 +102,16 @@ const PromotionModifyPage = () => {
 
 			const productsToAssign = [];
 			viewTableRef.current.data.map((x) => {
-				const { published_stock, id, product_id, product_detail_id, fixed_price, price, discount_percentage, is_manage_stock } = x;
+				const { published_stock, id, product_id, product_detail_id, price, discount_percentage, is_manage_stock, price_after_discount, total_sold } = x;
 				const tmpObj = {
 					published_stock,
 					product_id,
-					fixed_price,
 					price,
-					discount_percentage: parseInt(discount_percentage),
+					discount_percentage: parseFloat(discount_percentage).toFixed(2),
 					is_manage_stock,
 					product_detail_id: id ? id : product_detail_id,
-					price_after_discount: price - price * (discount_percentage / 100)
+					fixed_price: price_after_discount ? parseInt(price_after_discount) : parseInt(price),
+					total_sold
 				};
 				productsToAssign.push(tmpObj);
 			});
@@ -381,7 +398,8 @@ const PromotionModifyPage = () => {
 					<Col className="mt4" span={24}>
 						<OrganismProductDatatable
 							ref={viewTableRef}
-							defaultData={[]}
+							defaultData={productList}
+							tableType="promo"
 						/>
 					</Col>
 

@@ -55,8 +55,7 @@ const column = [
 			<AtomNumberFormat
 				prefix="Rp. "
 				value={
-					record.price -
-					record.price * (record.discount_percentage / 100)
+					record.fixed_price
 				}
 			/>
 		),
@@ -169,7 +168,7 @@ const PromotionModifyPage = () => {
 					</Typography.Title>
 
 					{(roles.includes('super-admin') || roles.includes('admin')) && (
-						<Link to={`/promotion/${id}/edit`}>
+						<Link to={`/view/promotion/${id}/edit`}>
 							<AtomPrimaryButton size="large">
 								{`Edit Promo`}
 							</AtomPrimaryButton>

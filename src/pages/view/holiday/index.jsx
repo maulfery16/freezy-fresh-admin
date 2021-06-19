@@ -76,14 +76,11 @@ const HolidaysPage = () => {
 			title: 'Harga Setelah Discount',
 			dataIndex: 'price_after_discount',
 			sorter: true,
-			render: (price_after_discount) => (
-				<AtomNumberFormat
-					prefix="Rp. "
-					value={price_after_discount}
-				/>
+			render: (price) => parseInt(price) === 0 || !price ? 'Tidak ada diskon' : (
+				<AtomNumberFormat prefix="Rp. " value={parseInt(price)} />
 			),
 			csvRender: (item) =>
-				item?.price_after_discount ? `Rp. ${item?.price_after_discount}` : 0,
+				item?.price_after_discount ? `Rp. ${item?.price_after_discount}` : 'Tidak ada diskon',
 		},
 		{
 			title: 'Discount (%)',

@@ -35,10 +35,16 @@ const EditableCell = ({
 	dataIndex,
 	title,
 	children,
-	isEditDiscount,
-	record,
+	isRequired,
 	...restProps
 }) => {
+	let formRules = [];
+	if (isRequired) {
+		formRules.push({
+			required: true,
+			message: `Please Input ${title}!`,
+		})
+	}
 	return (
 		<td {...restProps}>
 			{editing ? (
@@ -47,16 +53,9 @@ const EditableCell = ({
 					style={{
 						margin: 0,
 					}}
-					rules={[
-						{
-							required: true,
-							message: `Please Input ${title}!`,
-						},
-					]}
+					rules={formRules}
 				>
-					<Space size={5}>
-						<InputNumber defaultValue={record ? record[dataIndex] ? record[dataIndex] : '' : ''} /> {isEditDiscount && (<span>%</span>)}
-					</Space>
+						<InputNumber /> 
 				</Form.Item>
 			) : (
 				children
@@ -110,7 +109,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 			dataIndex: 'price_after_discount',
 			sorter: true,
 			editable: true,
-			render: (price) => parseInt(price) === 0 ? 'Tidak ada diskon' : (
+			render: (price) => parseInt(price) === 0 || !price ? 'Tidak ada diskon' : (
 				<AtomNumberFormat prefix="Rp. " value={parseInt(price)} />
 			),
 			// render: (_, record) => (
@@ -171,7 +170,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 						</Popconfirm>
 					</Space>
 				) : props.canModify ? (
-					<Space>
+					<Space className={`${editingKey !== '' ? 'dn' : 'inline-flex'}`}>
 						<EditFilled
 							className="yellow f4 fw8"
 							onClick={() => edit(record)}
@@ -359,7 +358,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 	const setProductToTable = async (values) => {
 		try {
 			let response = await getDetailProduct(values.branches.join(','));
-			if (props.maxStockPerUser) response = response.map((x, idx) =>({ ...x, max_stock_per_user: 0, max_stock_per_branch: 0, data_idx: `${Math.floor(Math.random() * 1000)}_${idx}`, price_after_discount: x.fixed_price }));
+			if (props.maxStockPerUser) response = response.map((x, idx) =>({ ...x, max_stock_per_user: 0, max_stock_per_branch: 0, data_idx: `${Math.floor(Math.random() * 1000)}_${idx}`, price_after_discount: `${(props.tableType === "flash-sale" || props.tableType === "daily-deals" || props.tableType === "promo") ? '' : x.fixed_price}`}));
 			productForm.resetFields();
 			if (response) {
 				setData([...data, ...response]);
@@ -380,7 +379,7 @@ const OrganismProductDatatable = forwardRef((props, ref) => {
 				dataIndex: col.dataIndex,
 				title: col.title,
 				editing: isEditing(record),
-				isEditDiscount: col.dataIndex === 'discount_percentage',
+				isRequired: col.dataIndex === "price_after_discount" && (props.tableType === "flash-sale" || props.tableType === "daily-deals" || props.tableType === "promo")
 			}),
 		};
 	});

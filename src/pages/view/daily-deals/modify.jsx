@@ -105,6 +105,7 @@ const DailyDealsModifyPage = () => {
 			const productsToAssign = [];
 			viewTableRef.current.data.map((x) => {
 				const { max_stock_per_user, published_stock, id, product_id, product_detail_id, fixed_price, price, discount_percentage, is_manage_stock, price_after_discount } = x;
+				console.log(price_after_discount)
 				const tmpObj = {
 					max_stock_per_user: parseInt(max_stock_per_user),
 					published_stock,
@@ -114,7 +115,7 @@ const DailyDealsModifyPage = () => {
 					discount_percentage: parseFloat(discount_percentage).toFixed(2),
 					is_manage_stock,
 					product_detail_id: id ? id : product_detail_id,
-					price_after_discount: parseInt(price_after_discount)
+					price_after_discount: price_after_discount ? parseInt(price_after_discount) : parseInt(price)
 				};
 				productsToAssign.push(tmpObj);
 			})
@@ -357,6 +358,7 @@ const DailyDealsModifyPage = () => {
 							defaultData={productList}
 							maxStockPerUser
 							canModify
+							tableType="daily-deals"
 						/>
 					</Col>
 					
