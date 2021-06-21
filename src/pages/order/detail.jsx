@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Collapse, message, Row, Skeleton, Space, Typography } from 'antd';
 import { Link, useParams, withRouter } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import AtomCard from '../../components/atoms/card';
 import AtomSecondaryButton from '../../components/atoms/button/secondary-button';
@@ -24,6 +25,8 @@ const OrderDetailPage = (props) => {
 	const { id } = useParams();
 	const [order, setOrder] = useState(null);
 	const [isLoading, setIsLoading] = useState(true);
+
+	const { roles } = useSelector((state) => state.auth);
 
 	const getOrderDetail = async () => {
 		setIsLoading(true);
@@ -89,7 +92,7 @@ const OrderDetailPage = (props) => {
 									}
 								>
 									<MoleculeOrderDetailBranchInfo
-										branch={order.branch_info}
+										branch={order?.branch_info}
 									/>
 								</Collapse.Panel>
 
@@ -105,7 +108,7 @@ const OrderDetailPage = (props) => {
 						</AtomCard>
 
 						<OrganismProductOrderDatatable
-							defaultData={order.products}
+							defaultData={order?.products}
 							isReadOnly
 						/>
 
@@ -119,20 +122,22 @@ const OrderDetailPage = (props) => {
 									}
 								>
 									<MoleculeOrderDetailCustomerInfo
-										customer={order.customer_info}
+										customer={order?.customer_info}
 									/>
 								</Collapse.Panel>
 
-								<Collapse.Panel
-									key="2"
-									header={
-										<AtomDetailCollapseHeader title="Info Pengiriman" />
-									}
-								>
-									<MoleculeOrderDeliveryInfo
-										delivery={order.delivery_info}
-									/>
-								</Collapse.Panel>
+								{(roles === 'super-admin' || roles === 'admin' || roles === 'manager-freezy') && (
+									<Collapse.Panel
+										key="2"
+										header={
+											<AtomDetailCollapseHeader title="Info Pengiriman" />
+										}
+									>
+										<MoleculeOrderDeliveryInfo
+											delivery={order?.delivery_info}
+										/>
+									</Collapse.Panel>
+								)}
 
 								<Collapse.Panel
 									key="3"
@@ -141,56 +146,61 @@ const OrderDetailPage = (props) => {
 									}
 								>
 									<MoleculeOrderDetailShippingInfo
-										shipping={order.shipping_info}
+										shipping={order?.shipping_info}
 									/>
 								</Collapse.Panel>
 
-								<Collapse.Panel
-									key="4"
-									header={
-										<AtomDetailCollapseHeader title="Voucher" />
-									}
-								>
-									<MoleculeOrderDetailVoucherInfo
-										code={order.voucher_code}
-										voucher={order.voucher.id}
-									/>
-								</Collapse.Panel>
+								{(roles === 'super-admin' || roles === 'admin' || roles === 'manager-freezy') && (
+									<>
+										<Collapse.Panel
+											key="4"
+											header={
+												<AtomDetailCollapseHeader title="Voucher" />
+											}
+										>
+											<MoleculeOrderDetailVoucherInfo
+												code={order?.voucher_code}
+												voucher={order?.voucher.id}
+											/>
+										</Collapse.Panel>
 
-								<Collapse.Panel
-									key="5"
-									header={
-										<AtomDetailCollapseHeader title="Metode Pembayaran" />
-									}
-								>
-									<MoleculeOrderDetailBillingMethodInfo
-										order={order}
-									/>
-								</Collapse.Panel>
+										<Collapse.Panel
+											key="5"
+											header={
+												<AtomDetailCollapseHeader title="Metode Pembayaran" />
+											}
+										>
+											<MoleculeOrderDetailBillingMethodInfo
+												order={order}
+											/>
+										</Collapse.Panel>
 
-								<Collapse.Panel
-									key="6"
-									header={
-										<AtomDetailCollapseHeader title="Rincian Biaya" />
-									}
-								>
-									<MoleculeOrderDetailPaymentInfo
-										order={order}
-									/>
-								</Collapse.Panel>
-								<Collapse.Panel
-									key="7"
-									header={
-										<AtomDetailCollapseHeader title="Info Update" />
-									}
-								>
-									<MoleculeOrderUpdateInfo
-										createdAt={order.created_at}
-										createdBy={order.created_by}
-										updatedAt={order.updated_at}
-										updatedBy={order.updated_by}
-									/>
-								</Collapse.Panel>
+										<Collapse.Panel
+											key="6"
+											header={
+												<AtomDetailCollapseHeader title="Rincian Biaya" />
+											}
+										>
+											<MoleculeOrderDetailPaymentInfo
+												order={order}
+											/>
+										</Collapse.Panel>
+
+										<Collapse.Panel
+											key="7"
+											header={
+												<AtomDetailCollapseHeader title="Info Update" />
+											}
+										>
+											<MoleculeOrderUpdateInfo
+												createdAt={order?.created_at}
+												createdBy={order?.created_by}
+												updatedAt={order?.updated_at}
+												updatedBy={order?.updated_by}
+											/>
+										</Collapse.Panel>
+									</>
+								)}
 							</Collapse>
 						</AtomCard>
 					</Space>

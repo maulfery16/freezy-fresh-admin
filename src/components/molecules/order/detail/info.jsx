@@ -2,12 +2,14 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import ReactMoment from 'react-moment';
 import { Col, Row } from 'antd';
+import { useSelector } from 'react-redux';
 
 import MoleculeOrderInfoGroup from '../../info-group-order';
 import OrderService from '../../../../services/order';
 
 const MoleculeOrderDetailInfo = (props) => {
 	const orderService = new OrderService();
+	const { roles } = useSelector((state) => state.auth);
 
 	return (
 		<Row gutter={[12, 12]}>
@@ -17,12 +19,14 @@ const MoleculeOrderDetailInfo = (props) => {
 					content={props.order?.id}
 				/>
 			</Col>
-			<Col span={12}>
-				<MoleculeOrderInfoGroup
-					title="Frekuensi Pesanan"
-					content={props.order?.order_frequency}
-				/>
-			</Col>
+			{(roles === 'super-admin' || roles === 'admin' || roles === 'manager-freezy') && (
+				<Col span={12}>
+					<MoleculeOrderInfoGroup
+						title="Frekuensi Pesanan"
+						content={props.order?.order_frequency}
+					/>
+				</Col>
+			)}
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Status Pesanan Pelanggan"
@@ -34,81 +38,83 @@ const MoleculeOrderDetailInfo = (props) => {
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Tanggal Pesanan"
-					content={
+					content={props?.order?.order_date ? (
 						<ReactMoment format="DD MMMM YY HH:ss" locale="id">
 							{props?.order?.order_date}
 						</ReactMoment>
-					}
+					) : null}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Tanggal Bayar"
-					content={
+					content={props?.order?.payment_date ? (
 						<ReactMoment format="DD MMMM YY HH:ss" locale="id">
 							{props?.order?.payment_date}
 						</ReactMoment>
-					}
+					) : null}
 				/>
 			</Col>
-			<Col span={12}>
-				<MoleculeOrderInfoGroup
-					title="Tanggal Diproses"
-					content={
-						<ReactMoment format="DD MMMM YY HH:ss" locale="id">
-							{props?.order?.shipping_process_date}
-						</ReactMoment>
-					}
-				/>
-			</Col>
+			{(roles === 'super-admin' || roles === 'admin' || roles === 'manager-freezy') && (
+				<Col span={12}>
+					<MoleculeOrderInfoGroup
+						title="Tanggal Diproses"
+						content={props?.order?.shipping_process_date ? (
+							<ReactMoment format="DD MMMM YY HH:ss" locale="id">
+								{props?.order?.shipping_process_date}
+							</ReactMoment>
+						) : null}
+					/>
+				</Col>
+			)}
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Tanggal Sampai"
-					content={
+					content={props?.order?.shipping_delivered_date ? (
 						<ReactMoment format="DD MMMM YY HH:ss" locale="id">
 							{props?.order?.shipping_delivered_date}
 						</ReactMoment>
-					}
+					) : null}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Tanggal Selesai"
-					content={
+					content={props?.order?.finish_date ? (
 						<ReactMoment format="DD MMMM YY HH:ss" locale="id">
 							{props?.order?.finish_date}
 						</ReactMoment>
-					}
+					) : null}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Tanggal Dibatalkan"
-					content={
+					content={props?.order?.cancel_date ? (
 						<ReactMoment format="DD MMMM YY HH:ss" locale="id">
 							{props?.order?.cancel_date}
 						</ReactMoment>
-					}
+					) : null}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Tanggal Pengembalian"
-					content={
+					content={props?.order?.refund_date ? (
 						<ReactMoment format="DD MMMM YY HH:ss" locale="id">
 							{props?.order?.refund_date}
 						</ReactMoment>
-					}
+					) : null}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Tanggal Dikembalikan"
-					content={
+					content={props?.order?.return_date ? (
 						<ReactMoment format="DD MMMM YY HH:ss" locale="id">
 							{props?.order?.return_date}
 						</ReactMoment>
-					}
+					) : null}
 				/>
 			</Col>
 		</Row>

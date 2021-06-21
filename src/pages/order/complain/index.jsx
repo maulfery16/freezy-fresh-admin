@@ -112,7 +112,7 @@ const OrderComplainPage = () => {
 			dataIndex: 'status',
 			render: (_, record) => (
 				<Space size="middle">
-					<Link to={`/admin/review/${record.id}/detail`}>
+					<Link to={`/order/complain/${record.id}/detail`}>
 						<EyeFilled className="f4 blue" />
 					</Link>
 

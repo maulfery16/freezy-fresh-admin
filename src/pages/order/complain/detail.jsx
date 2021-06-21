@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactMoment from 'react-moment';
 import { Col, Divider, message, Row, Skeleton, Space, Typography } from 'antd';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useHistory } from 'react-router-dom';
 
 import AtomCard from '../../../components/atoms/card';
 import AtomImage from '../../../components/atoms/image';
@@ -17,6 +17,7 @@ const OrderComplainDetailPage = () => {
 	const { id } = useParams();
 	const [order, setOrder] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
+	const history = useHistory();
 
 	const orderService = new OrderService();
 
@@ -62,7 +63,7 @@ const OrderComplainDetailPage = () => {
 						</Col>
 
 						<Col>
-							<AtomSecondaryButton size="large">
+							<AtomSecondaryButton size="large" onClick={() => history.push(`/order/${order.order_id}/detail`)}>
 								Detail Pesanan
 							</AtomSecondaryButton>
 						</Col>

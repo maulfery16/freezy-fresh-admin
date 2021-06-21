@@ -5,7 +5,12 @@ import React from 'react';
 import MoleculeOrderInfoGroup from '../../info-group-order';
 
 const MoleculeOrderDetailBranchInfo = (props) => {
-	const { code, address, name } = props.branch;
+	let code, address, name;
+	if (props.branch) {
+		code = props.branch.code ?? null;
+		address = props.branch.address ?? null;
+		name = props.branch.name ?? null;
+	}
 
 	return (
 		<Row gutter={[12, 12]}>
