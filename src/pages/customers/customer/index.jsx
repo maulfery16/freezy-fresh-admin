@@ -13,10 +13,12 @@ import MoleculeDatatableDateRange from '../../../components/molecules/datatable/
 import MoleculeDeleteConfirm from '../../../components/molecules/delete-confirm';
 import OrganismDatatable from '../../../components/organisms/datatable';
 import OrganismLayout from '../../../components/organisms/layout';
+import { useSelector } from 'react-redux';
 
 import { translateGenderEnum } from '../../../utils/helpers';
 
 const CustomerPage = () => {
+	const { roles } = useSelector((state) => state.auth);
 	const column = [
 		{
 			align: 'center',
@@ -103,14 +105,16 @@ const CustomerPage = () => {
 			align: 'center',
 			title: 'Aktif',
 			dataIndex: 'is_active',
-			render: (active, record) => (
-				<AtomStatusSwitch
-					active={active}
-					id={record.id}
-					tableRef={customerTableRef}
-					url="admin/customers"
-				/>
-			),
+			render: (active, record) => {
+				return roles === 'super-admin' || roles === 'admin' || roles === 'manager-freezy' ? (
+					<AtomStatusSwitch
+						active={active}
+						id={record.id}
+						tableRef={customerTableRef}
+						url="admin/customers"
+					/>
+				) : active ? 'Aktif' : 'Tidak Aktif'
+			},
 			csvRender: (item) => (item.is_active ? 'Aktif' : 'Tidak Aktif'),
 		},
 		{
@@ -122,18 +126,21 @@ const CustomerPage = () => {
 					<Link to={`/customer/${id}/detail`}>
 						<EyeFilled className="f4 blue" />
 					</Link>
+					{roles === 'super-admin' || roles === 'admin' || roles === 'manager-freezy' && (
+						<>
+							<Link to={`/customer/${id}/edit`}>
+								<EditFilled className="f4 orange" />
+							</Link>
 
-					<Link to={`/customer/${id}/edit`}>
-						<EditFilled className="f4 orange" />
-					</Link>
-
-					{!record.is_active && (
-						<MoleculeDeleteConfirm
-							id={id}
-							label="Pelanggan"
-							tableRef={customerTableRef}
-							url="admin/customers"
-						/>
+							{!record.is_active && (
+								<MoleculeDeleteConfirm
+									id={id}
+									label="Pelanggan"
+									tableRef={customerTableRef}
+									url="admin/customers"
+								/>
+							)}
+						</>
 					)}
 				</Space>
 			),
@@ -164,6 +171,8 @@ const CustomerPage = () => {
 				getLimit={() => customerTableRef.current.totalData}
 				route="/customer"
 				url="admin/customers"
+				withoutAddButton={roles !== 'super-admin' || roles !== 'admin' || roles !== 'manager-freezy'}
+				withoutExportButton={roles !== 'super-admin' || roles !== 'admin' || roles !== 'manager-freezy'}
 			/>
 		);
 	};

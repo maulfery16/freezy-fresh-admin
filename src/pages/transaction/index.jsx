@@ -13,6 +13,7 @@ import MoleculeDatatableDateRange from '../../components/molecules/datatable/dat
 import MoleculeDatatableFilter from '../../components/molecules/datatable/filter-plugin';
 import OrganismDatatable from '../../components/organisms/datatable';
 import OrganismLayout from '../../components/organisms/layout';
+import { useSelector } from 'react-redux';
 
 import {
 	translateTransactionKind,
@@ -20,6 +21,7 @@ import {
 } from '../../services/transaction';
 
 const TransactionPage = () => {
+	const { roles } = useSelector((state) => state.auth);
 	const column = [
 		{
 			align: 'center',
@@ -29,7 +31,7 @@ const TransactionPage = () => {
 		},
 		{
 			title: 'ID Transaksi',
-			dataIndex: 'id',
+			dataIndex: 'code',
 			sorter: true,
 		},
 		{
@@ -90,12 +92,14 @@ const TransactionPage = () => {
 			title: 'ID Pelanggan',
 			dataIndex: 'customer_info[code]',
 			render: (_, record) => record.customer_info.code,
+			customSorter: `users|code`,
 			sorter: true,
 		},
 		{
 			title: 'Nama Pelanggan',
 			dataIndex: 'customer_info[name]',
 			render: (_, record) => `${record.customer_info.name}`,
+			customSorter: `users|first_name`,
 			sorter: true,
 		},
 		{
@@ -134,7 +138,7 @@ const TransactionPage = () => {
 				item.product_owner_info === 'Rezeki'
 					? item.branch_info.id
 					: '-',
-			sorter: true,
+			sorter: false,
 		},
 		{
 			title: 'Status',
@@ -177,6 +181,8 @@ const TransactionPage = () => {
 				getLimit={() => transactionTableRef.current.totalData}
 				route="/transaction"
 				url="transactions"
+				withoutAddButton={roles !== 'super-admin'}
+				withoutExportButton={roles !== 'super-admin'}
 			/>
 		);
 	};

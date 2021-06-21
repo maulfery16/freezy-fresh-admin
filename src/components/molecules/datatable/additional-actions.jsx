@@ -100,7 +100,7 @@ const MoleculeDatatableAdditionalAction = (props) => {
 
 	return (
 		<Space>
-			{props.importRoute && (
+			{props.importRoute && (roles && (roles.includes('super-admin') || roles.includes('admin'))) && (
 				<AtomSecondaryButton
 					onClick={() => history.push(props.importRoute)}
 					size="large"

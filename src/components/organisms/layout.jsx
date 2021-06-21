@@ -494,7 +494,7 @@ const OrganismLayout = (props) => {
 						theme="dark"
 					>
 						{menus.map((menu) => {
-							return !menus.hidden ? (
+							return !menu.hidden ? (
 								!menu.subMenus ? (
 									<Menu.Item
 										key={menu.link}
