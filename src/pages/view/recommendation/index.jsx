@@ -183,6 +183,7 @@ const RecommendationPage = () => {
 							isEdit={true}
 							label="Produk Rekomendasi"
 							route="/products/recommendation"
+              customURL="modify"
 							url="recommendations"
               filter="products"
 							specifiedProp="products"

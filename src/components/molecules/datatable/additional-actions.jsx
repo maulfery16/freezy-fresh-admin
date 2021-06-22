@@ -69,7 +69,7 @@ const MoleculeDatatableAdditionalAction = (props) => {
 
 		if (roles.includes('super-admin') || roles.includes('admin')) {
 			return (
-				<Link to={`${props.route}/${props.isEdit ? 'edit' : 'add'}`}>
+				<Link to={`${props.route}/${props.customURL ? props.customURL : props.isEdit ? 'edit' : 'add'}`}>
 					<AtomPrimaryButton size="large">
 						{`${props.isEdit ? 'Edit' : 'Tambah'} ${props.label}`}
 					</AtomPrimaryButton>
