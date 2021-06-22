@@ -64,13 +64,13 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 			dataIndex: 'tows',
 			render: (_, record) => record.tows === "NEAR" ? 'Dekat' : record.tows === "FAR" ? 'Jauh' : '-',
 			sorter: true,
-			hidden: !props.isEditing && !props.isReadOnly ? true : false,
+			// hidden: !props.isEditing && !props.isReadOnly ? true : false,
 		},
 		{
 			title: 'Rating',
 			dataIndex: 'rating',
 			sorter: true,
-			hidden: !props.isEditing && !props.isReadOnly ? true : false,
+			// hidden: !props.isEditing && !props.isReadOnly ? true : false,
 		},
 		{
 			title: 'Jumlah Favorite',
@@ -133,7 +133,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 				) : '-'
 			},
 			sorter: true,
-			hidden: !props.isEditing && !props.isReadOnly ? true : false,
+			// hidden: !props.isEditing && !props.isReadOnly ? true : false,
 		},
 		{
 			title: 'Date Exp Terlama',
@@ -145,7 +145,7 @@ const OrganismProductBranchDatatable = forwardRef((props, ref) => {
 				) : '-'
 			},
 			sorter: true,
-			hidden: !props.isEditing && !props.isReadOnly ? true : false,
+			// hidden: !props.isEditing && !props.isReadOnly ? true : false,
 		},
 		{
 			title: 'Harga Normal',

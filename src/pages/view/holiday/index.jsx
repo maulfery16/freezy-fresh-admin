@@ -68,11 +68,6 @@ const HolidaysPage = () => {
 			render: (_, record) => record?.product_detail?.total_sold
 		},
 		{
-			title: 'Batas Stok per User',
-			sorter: true,
-			dataIndex: 'max_stock_per_user',
-		},
-		{
 			title: 'Harga Setelah Discount',
 			dataIndex: 'price_after_discount',
 			sorter: true,
