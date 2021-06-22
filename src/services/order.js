@@ -135,7 +135,7 @@ export default class OrderService extends RequestAdapterService {
 		}
 	}
 
-	async updateOrderStatus(id, status) {
+	async updateOrderStatus(id, status, batchStatus) {
 		try {
 			let newStatus = '';
 			const { data: statuses } = await this.getOrderStatuses();
@@ -144,9 +144,11 @@ export default class OrderService extends RequestAdapterService {
 				(stat) => stat.value === status.status
 			);
 
-			newStatus = statuses[currentStatusIdx + 1].value;
+			let nextIndex = currentStatusIdx + 1;
+			if (batchStatus) nextIndex = currentStatusIdx;
+			newStatus = statuses[nextIndex].value;
 
-			const { data } = await super.sendPatchRequest(
+			const { data } = await super.sendPutRequest(
 				`${this.baseUrl}/v1/orders/status/${id}`,
 				{
 					product_owner_id: status.product_owner_id,

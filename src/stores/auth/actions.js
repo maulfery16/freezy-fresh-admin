@@ -8,6 +8,10 @@ const setCurrentRole = (payload) => ({
 	type: AuthTypes.SET_CURRENT_ROLE,
 	payload,
 });
+const setCurrentCompany = (payload) => ({
+	type: AuthTypes.SET_CURRENT_COMPANY,
+	payload,
+});
 const setCurrentUser = (payload) => ({
 	type: AuthTypes.SET_CURRENT_USER,
 	payload,
@@ -32,4 +36,5 @@ export {
 	setLoginStatus,
 	setRefreshToken,
 	setRememberMeStatus,
+	setCurrentCompany
 };

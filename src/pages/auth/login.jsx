@@ -16,6 +16,7 @@ import AtomPrimaryButton from '../../components/atoms/button/primary-button';
 import AuthenticationLayout from '../../components/layouts/authentication';
 import {
 	setAuthToken,
+	setCurrentCompany,
 	setCurrentRole,
 	setCurrentUser,
 	setLoginStatus,
@@ -67,6 +68,9 @@ const LoginPages = () => {
 			dispatch(setCurrentUser(data));
 			dispatch(
 				setCurrentRole(data.roles.data.map((role) => role.name)[0])
+			);
+			dispatch(
+				setCurrentCompany(data.company)
 			);
 
 			window.location = '/';

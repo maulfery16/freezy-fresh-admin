@@ -23,7 +23,7 @@ import OrderService from '../../services/order';
 const OrderPage = () => {
 	const [pickedProductOwner, setPickedProductOwner] = useState(null);
 	const [productOwners, setProductOwners] = useState([]);
-	const { roles } = useSelector((state) => state.auth);
+	const { roles, company } = useSelector((state) => state.auth);
 
 	const orderService = new OrderService();
 	const orderTableRef = useRef();
@@ -148,7 +148,8 @@ const OrderPage = () => {
 							{
 								product_owner_id: key,
 								status: value,
-							}
+							},
+							true
 						)
 					);
 				}
@@ -316,7 +317,7 @@ const OrderPage = () => {
 
 	const updateOrderStatus = async (id, orderStatus) => {
 		try {
-			await orderService.updateOrderStatus(id, orderStatus);
+			await orderService.updateOrderStatus(id, orderStatus, false);
 			message.success('Berhasil memperbaharui status order');
 			orderTableRef.current.refetchData();
 		} catch (error) {
@@ -330,9 +331,14 @@ const OrderPage = () => {
 		})();
 	}, []);
 
+	let companies = productOwners;
+	if (company !== null && company !== undefined && company) {
+		companies = productOwners.filter((x) => x.product_owner_name === company);
+	}
+
 	const column = [
 		...baseColumn,
-		...productOwners.map((owner, index) => ({
+		...companies.map((owner, index) => ({
 			title: `Status Pesanan ${owner.product_owner_name || ''}`,
 			dataIndex: `status`,
 			sorter: true,
@@ -341,7 +347,7 @@ const OrderPage = () => {
 			csvRender: (item) =>
 				orderService.translateOrderEnum(item.status[index].status),
 		})),
-		...productOwners.map((owner, index) => ({
+		...companies.map((owner, index) => ({
 			align: 'center',
 			title: `Pesanan ${owner.product_owner_name || ''}`,
 			dataIndex: `status`,

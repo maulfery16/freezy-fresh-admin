@@ -13,6 +13,7 @@ const INITIAL_STATE = {
 		created_at: new Date(),
 		branches: ['Jakarta Pusat', 'Jakarta Barat', 'Bandung'],
 	},
+	company: null
 };
 
 const authReducer = (state = INITIAL_STATE, action) => {
@@ -26,6 +27,11 @@ const authReducer = (state = INITIAL_STATE, action) => {
 			return {
 				...state,
 				roles: action.payload,
+			};
+		case AuthTypes.SET_CURRENT_COMPANY:
+			return {
+				...state,
+				company: action.payload,
 			};
 		case AuthTypes.SET_CURRENT_USER:
 			return {
