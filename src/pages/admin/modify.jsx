@@ -191,8 +191,8 @@ const AdminModifyPage = () => {
 									<Col span={12}>
 										<MoleculeTextInputGroup
 											name="phone_number"
-											label="Nomor Handpone"
-											placeholder="Nomor Handpone"
+											label="Nomor Handphone"
+											placeholder="Nomor Handphone"
 											type="phone"
 											required
 										/>
@@ -260,6 +260,7 @@ const AdminModifyPage = () => {
 											placeholder="Email"
 											required
 											type="email"
+											autoComplete="new-password"
 										/>
 									</Col>
 
@@ -269,6 +270,7 @@ const AdminModifyPage = () => {
 												name="password"
 												label="Password"
 												placeholder="Password"
+												autoComplete="new-password"
 											/>
 										</Col>
 									)}

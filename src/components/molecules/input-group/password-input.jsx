@@ -31,7 +31,7 @@ const MoleculePasswordInputGroup = (props) => {
 					({ getFieldValue }) => ({
 						// eslint-disable-next-line no-unused-vars
 						validator(_, value) {
-							if (getFieldValue('password').length < 6) {
+							if (getFieldValue('password') && getFieldValue('password').length < 6) {
 								return Promise.reject(
 									'Password minimal harus 6 karakter'
 								);
