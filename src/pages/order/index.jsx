@@ -115,7 +115,7 @@ const OrderPage = () => {
 		{
 			title: 'Nama Bank',
 			dataIndex: 'bank',
-			render: (bank) => bank.id,
+			render: (bank) => bank ? typeof bank === 'string' ? bank : typeof bank === 'object' ? bank.id ?? '-' : '-' : '-',
 			sorter: true,
 		},
 		{

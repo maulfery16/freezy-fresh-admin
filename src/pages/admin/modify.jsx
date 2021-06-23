@@ -155,6 +155,7 @@ const AdminModifyPage = () => {
 											label="Nama Depan"
 											placeholder="Nama Depan"
 											type="text"
+											required
 										/>
 									</Col>
 
@@ -164,6 +165,7 @@ const AdminModifyPage = () => {
 											label="Nama Belakang"
 											placeholder="Nama Belakang"
 											type="text"
+											required
 										/>
 									</Col>
 
@@ -194,6 +196,7 @@ const AdminModifyPage = () => {
 											label="Nomor Handpone"
 											placeholder="Nomor Handpone"
 											type="phone"
+											required
 										/>
 									</Col>
 
@@ -226,6 +229,7 @@ const AdminModifyPage = () => {
 														? admin.profile_image
 														: null,
 													ref: profileImageRef,
+													required: true,
 												},
 											]}
 										/>
