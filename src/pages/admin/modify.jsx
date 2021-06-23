@@ -24,8 +24,11 @@ const AdminModifyPage = () => {
 	const location = useLocation();
 	const history = useHistory();
 	const isCreating = location.pathname.includes('add') ? true : false;
+	const branchSelectRef = useRef();
+	const [form] = Form.useForm();
 
 	const [admin, setAdmin] = useState(null);
+	const [branches, setBranches] = useState([]);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const getAdminDetail = async (id) => {
@@ -63,7 +66,7 @@ const AdminModifyPage = () => {
 			if (isCreating) {
 				if (values.password) data.append('password', values.password);
 			}
-			values.branches.forEach((branch) => {
+			branches.forEach((branch) => {
 				data.append('branch_id[]', branch);
 			});
 
@@ -140,6 +143,7 @@ const AdminModifyPage = () => {
 				<Form
 					className="w-100 mt4"
 					name="modify_admin"
+					form={form}
 					initialValues={setAdminInitialValues()}
 					onFinish={submit}
 				>
@@ -205,6 +209,7 @@ const AdminModifyPage = () => {
 											placeholder="Bank (Opsional)"
 											data={{
 												url: 'banks',
+												limit: 300
 											}}
 										/>
 									</Col>
@@ -297,6 +302,30 @@ const AdminModifyPage = () => {
 										<AtomBranchSelection
 											mode="multiple"
 											required
+											onChange={(_, options) => {
+												let values = [];
+												let val = [];
+												if (_.includes('all')) {
+													const allOptions = branchSelectRef.current.getAllOptions();
+													values = allOptions.filter(x => x.value !== 'all').map((option) => ({
+														branch_id: option.value,
+														branch: option.label,
+													}))
+													val = allOptions.filter(x => x.value !== 'all').map((option) => option.value);
+												} else {
+													if (branches.length !== options) {
+														values = options.map((option) => ({
+															branch_id: option.value,
+															branch: option.children,
+														}))
+														val = options.map((option) => option.value);
+													}
+												}
+												form.setFieldsValue({ branches: val })
+												setBranches(values);
+											}}
+											optionsRef={branchSelectRef}
+											canSelectAll={true}
 										/>
 									</Col>
 
