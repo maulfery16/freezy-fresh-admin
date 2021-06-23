@@ -135,7 +135,7 @@ const PromotionModifyPage = () => {
 			if (isCreating) {
 				const {data} = await promotionService.createPromotion(formData);
 				if (data) {
-					const response = await promotionService.addProductsToPromotion(id, {data: productsToAssign});
+					const response = await promotionService.addProductsToPromotion(data.id, {data: productsToAssign});
 					if (response && response.data) {
 						message.success('Berhasil menambah promotion');
 					}

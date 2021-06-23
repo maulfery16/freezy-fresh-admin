@@ -22,13 +22,25 @@ const MoleculeOrderDeliveryInfo = (props) => {
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Nama Alamat"
-					content={props.delivery?.address}
+					content={props.delivery?.title}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Nama jalan"
+					content={props.delivery?.address}
+				/>
+			</Col>
+			<Col span={12}>
+				<MoleculeOrderInfoGroup
+					title="Detail Alamat"
 					content={props.delivery?.additional_information}
+				/>
+			</Col>
+			<Col span={12}>
+				<MoleculeOrderInfoGroup
+					title="Catatan Driver"
+					content={props.delivery?.additional_information_driver}
 				/>
 			</Col>
 			<Col span={12}>

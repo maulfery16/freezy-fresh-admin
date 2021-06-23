@@ -409,8 +409,8 @@ const VoucherModifyPage = () => {
 														isCashbackNominalEnabled
 													}
 													name="max_discount_rp"
-													label="Maksimum Pembelian (Rp)"
-													placeholder="Masukkan Maksimum Pembelian (Rp)"
+													label="Maksimum Diskon (Rp)"
+													placeholder="Masukkan Maksimum Diskon (Rp)"
 													onChange={(value) =>
 														setMaxDiscount(value)
 													}

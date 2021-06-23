@@ -10,13 +10,13 @@ const MoleculeOrderDetailVoucherInfo = (props) => {
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Name Voucher"
-					content={props.voucher}
+					content={props?.voucher?.id}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Kode Voucher"
-					content={props.code}
+					content={props?.code}
 				/>
 			</Col>
 		</Row>

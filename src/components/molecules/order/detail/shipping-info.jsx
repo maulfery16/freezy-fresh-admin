@@ -45,7 +45,7 @@ const MoleculeOrderDetailShippingInfo = (props) => {
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Tipe Pengiriman"
-					content={props.shipping?.delivery_type}
+					content={props.shipping?.shipping_type}
 				/>
 			</Col>
 			<Col span={12}>

@@ -28,7 +28,7 @@ import {
 import {
 	FaBuilding,
 	// FaMoneyBill,
-	FaMotorcycle,
+	// FaMotorcycle,
 	FaStoreAlt,
 } from 'react-icons/fa';
 import {
@@ -289,11 +289,11 @@ const OrganismLayout = (props) => {
 			link: '/voucher',
 			hidden: !roles.includes('super-admin') || !roles.includes('admin'),
 		},
-		{
-			name: 'Kurir',
-			icon: <FaMotorcycle />,
-			link: '/courier',
-		},
+		// {
+		// 	name: 'Kurir',
+		// 	icon: <FaMotorcycle />,
+		// 	link: '/courier',
+		// },
 	];
 
 	const notificationMenus = () => (

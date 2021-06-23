@@ -81,9 +81,8 @@ const RecommendationModifyPage = () => {
 
 			const productsToAssign = [];
 			viewTableRef.current.data.map((x) => {
-				const { max_stock_per_user, published_stock, id, product_id, product_detail_id, fixed_price, price, discount_percentage, is_manage_stock, price_after_discount } = x;
+				const { published_stock, id, product_id, product_detail_id, fixed_price, price, discount_percentage, is_manage_stock, price_after_discount } = x;
 				const tmpObj = {
-					max_stock_per_user: parseInt(max_stock_per_user),
 					published_stock,
 					product_id,
 					fixed_price,
@@ -251,7 +250,6 @@ const RecommendationModifyPage = () => {
             <OrganismProductDatatable
               ref={viewTableRef}
               defaultData={productList}
-              maxStockPerUser
               canModify
             />
           </Col>

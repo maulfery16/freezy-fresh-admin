@@ -3,25 +3,23 @@ import React from 'react';
 import { Col, Row } from 'antd';
 
 import MoleculeOrderInfoGroup from '../../info-group-order';
-import OrderService from '../../../../services/order';
 
 const MoleculeOrderDetailBillingMethodInfo = (props) => {
-	const orderService = new OrderService();
 
 	return (
 		<Row gutter={[12, 12]}>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Tipe Pembayaran"
-					content={orderService.transaltePaymentEnum(
-						props.order?.payment_method
-					)}
+					content={
+						props.order?.payment_method?.id
+					}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Nama Bank"
-					content={orderService.translateBankEnum(props.order?.bank)}
+					content={props.order?.bank?.id}
 				/>
 			</Col>
 			<Col span={12}>

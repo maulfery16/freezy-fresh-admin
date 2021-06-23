@@ -53,11 +53,11 @@ const ArticlePage = () => {
 		{
 			align: 'center',
 			title: 'Foto Artikel Dekstop',
-			dataIndex: 'dekstop_image',
+			dataIndex: 'desktop_image',
 			render: (image) => (
 				<Image preview src={image} height={60} width={70} />
 			),
-			csvRender: (item) => item.dekstop_image,
+			csvRender: (item) => item.desktop_image,
 		},
 		{
 			title: 'Kategori Artikel',
@@ -122,7 +122,7 @@ const ArticlePage = () => {
 					active={active}
 					id={record.id}
 					tableRef={articleTableRef}
-					url="banners"
+					url="articles"
 				/>
 			),
 			csvRender: (item) => (item.is_active ? 'Aktif' : 'Tidak Aktif'),

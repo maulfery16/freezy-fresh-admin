@@ -31,16 +31,16 @@ const MoleculeOrderDetailInfo = (props) => {
 				<MoleculeOrderInfoGroup
 					title="Status Pesanan Pelanggan"
 					content={orderService.translateOrderEnum(
-						props.order?.customer_status
+						props.order?.customer_status?.id
 					)}
 				/>
 			</Col>
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="Tanggal Pesanan"
-					content={props?.order?.order_date ? (
+					content={props?.order?.created_at ? (
 						<ReactMoment format="DD MMMM YY HH:ss" locale="id">
-							{props?.order?.order_date}
+							{props?.order?.created_at}
 						</ReactMoment>
 					) : null}
 				/>

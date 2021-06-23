@@ -12,12 +12,10 @@ const MoleculeOrderDetailPaymentInfo = (props) => {
 				<MoleculeOrderInfoGroup
 					title="Total Pesanan"
 					content={
-						props.order?.total_discount && (
-							<AtomNumberFormat
-								prefix="Rp. "
-								value={props.order.total_order}
-							/>
-						)
+						<AtomNumberFormat
+							prefix="Rp. "
+							value={props?.order?.total_order ?? 0}
+						/>
 					}
 				/>
 			</Col>
@@ -25,12 +23,10 @@ const MoleculeOrderDetailPaymentInfo = (props) => {
 				<MoleculeOrderInfoGroup
 					title="Total Diskon"
 					content={
-						props.order?.total_discount && (
-							<AtomNumberFormat
-								prefix="Rp. "
-								value={props.order.total_discount}
-							/>
-						)
+						<AtomNumberFormat
+							prefix="Rp. "
+							value={props?.order?.total_discount ?? 0}
+						/>
 					}
 				/>
 			</Col>
@@ -38,12 +34,10 @@ const MoleculeOrderDetailPaymentInfo = (props) => {
 				<MoleculeOrderInfoGroup
 					title="Total Potongan Voucher"
 					content={
-						props.order?.total_voucher && (
-							<AtomNumberFormat
-								prefix="Rp. "
-								value={props.order.total_voucher}
-							/>
-						)
+						<AtomNumberFormat
+							prefix="Rp. "
+							value={props?.order?.total_voucher ?? 0}
+						/>
 					}
 				/>
 			</Col>
@@ -51,12 +45,10 @@ const MoleculeOrderDetailPaymentInfo = (props) => {
 				<MoleculeOrderInfoGroup
 					title="Biaya Pengiriman"
 					content={
-						props.order?.shipping_fee && (
-							<AtomNumberFormat
-								prefix="Rp. "
-								value={props.order.shipping_fee}
-							/>
-						)
+						<AtomNumberFormat
+							prefix="Rp. "
+							value={props?.order?.shipping_fee ?? 0}
+						/>
 					}
 				/>
 			</Col>
@@ -64,12 +56,10 @@ const MoleculeOrderDetailPaymentInfo = (props) => {
 				<MoleculeOrderInfoGroup
 					title="Biaya Pengaturan Pengiriman"
 					content={
-						props.order?.shipping_arrangement_fee && (
-							<AtomNumberFormat
-								prefix="Rp. "
-								value={props.order.shipping_arrangement_fee}
-							/>
-						)
+						<AtomNumberFormat
+							prefix="Rp. "
+							value={props?.order?.shipping_arrangement_fee ?? 0}
+						/>
 					}
 				/>
 			</Col>
@@ -77,12 +67,10 @@ const MoleculeOrderDetailPaymentInfo = (props) => {
 				<MoleculeOrderInfoGroup
 					title="Biaya Parkir"
 					content={
-						props.order?.parking_fee && (
-							<AtomNumberFormat
-								prefix="Rp. "
-								value={props.order.parking_fee}
-							/>
-						)
+						<AtomNumberFormat
+							prefix="Rp. "
+							value={props?.order?.parking_fee ?? 0}
+						/>
 					}
 				/>
 			</Col>
@@ -90,12 +78,10 @@ const MoleculeOrderDetailPaymentInfo = (props) => {
 				<MoleculeOrderInfoGroup
 					title="Total Pembayaran"
 					content={
-						props.order?.sub_total && (
-							<AtomNumberFormat
-								prefix="Rp. "
-								value={props.order.sub_total}
-							/>
-						)
+						<AtomNumberFormat
+							prefix="Rp. "
+							value={props?.order?.sub_total ?? 0}
+						/>
 					}
 				/>
 			</Col>
@@ -103,12 +89,10 @@ const MoleculeOrderDetailPaymentInfo = (props) => {
 				<MoleculeOrderInfoGroup
 					title="Cashback"
 					content={
-						props.order?.cashback_point && (
-							<AtomNumberFormat
-								prefix="Rp. "
-								value={props.order.cashback_point}
-							/>
-						)
+						<AtomNumberFormat
+							prefix="Rp. "
+							value={props?.order?.cashback_point ?? 0}
+						/>
 					}
 				/>
 			</Col>

@@ -22,7 +22,7 @@ export default class AdditionalSectionService extends RequestAdapterService {
 	async editAdditionalSection(id, dataToEdit) {
 		try {
 			const { data } = await super.sendPostMultipartRequest(
-				`${this.baseUrl}/v1/additional-home-sections/${id}?_method=PATCH`,
+				`${this.baseUrl}/v1/additional-home-sections/${id}?_method=PUT`,
 				dataToEdit
 			);
 

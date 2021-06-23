@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-mixed-spaces-and-tabs */
 import React, { useEffect, useRef, useState } from 'react';
 import { Col, Form, message, Row, Skeleton, Typography } from 'antd';
@@ -64,11 +65,11 @@ const ArticleModifyPage = () => {
 			data.append('article_category_id', values.article_category);
 			data.append('content[en]', contentEn);
 			data.append('content[id]', contentId);
-			data.append('dekstop_image', dekstopImage);
+			data.append('desktop_image', dekstopImage);
 			data.append('mobile_image', mobileImage);
-			data.append('title[en]', values.en_title);
-			data.append('title[id]', values.id_title);
-			data.append('video_link', values.video_link);
+			data.append('title[en]', values.en_title ?? null);
+			data.append('title[id]', values.id_title ?? null);
+			data.append('video_link', values.video_link ?? null);
 
 			if (isCreating) {
 				await articleService.createArticle(data);
@@ -151,6 +152,7 @@ const ArticleModifyPage = () => {
 													label:
 														'Foto Artikel Mobile',
 													ref: mobileImageRef,
+													required: true
 												},
 												{
 													defaultValue: article
@@ -159,6 +161,7 @@ const ArticleModifyPage = () => {
 													label:
 														'Foto Artikel Dekstop',
 													ref: dekstopImageRef,
+													required: true
 												},
 											]}
 										/>

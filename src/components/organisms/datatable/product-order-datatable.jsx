@@ -112,7 +112,7 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 			title: 'Kategori Dasar',
 			dataIndex: 'base_category',
 			sorter: true,
-			render: (data) => data?.id || '-',
+			render: (data) => data?.name?.id || '-',
 		},
 		{
 			title: 'Batas Umur',
@@ -129,16 +129,16 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 			title: 'Zona',
 			dataIndex: 'zone',
 			sorter: true,
-			render: (data) => data?.id || '-',
+			render: (data) => data?.name?.id || '-',
 		},
 		{
 			title: 'Brand',
 			dataIndex: 'brand',
 			sorter: true,
-			render: (data) => data?.id || '-',
+			render: (data) => data?.name?.id || '-',
 		},
 		{
-			title: 'Product Owner',
+			title: 'Perusahaan',
 			dataIndex: 'product_owner',
 			sorter: true,
 		},
@@ -151,12 +151,14 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 		{
 			title: 'Harga Setelah Diskon',
 			dataIndex: 'fixed_price',
-			render: (price) =>
-				typeof price === 'string' ? (
-					`Rp. ${price}`
+			render: (price) => {
+				
+				return parseInt(price) > 0 ? (
+					<AtomNumberFormat prefix="Rp. " value={parseInt(price)} />
 				) : (
-					<AtomNumberFormat prefix="Rp. " value={price} />
-				),
+					`Tidak ada diskon`
+				)
+			},
 			sorter: true,
 		},
 		{
@@ -169,17 +171,20 @@ const OrganismProductOrderDatatable = forwardRef((props, ref) => {
 			title: 'Promo',
 			dataIndex: 'promotion_name',
 			sorter: true,
+			render: (data) => (data ?? '-'),
 		},
 		{
 			title: 'Catatan',
 			dataIndex: 'note',
 			sorter: true,
 			editable: true,
+			render: (data) => (data ?? '-'),
 		},
 		{
 			title: 'Nama Keluarga',
 			dataIndex: 'family_name',
 			sorter: true,
+			render: (data) => (data ?? '-'),
 		},
 	];
 

@@ -74,7 +74,7 @@ const VoucherModifyPage = () => {
 												<MoleculeInfoGroup
 													title="Name Voucher"
 													content={
-														voucher.code || '-'
+														voucher?.code || '-'
 													}
 												/>
 											</Col>
@@ -82,14 +82,14 @@ const VoucherModifyPage = () => {
 											<Col span={12}>
 												<MoleculeInfoGroup
 													title="Name Voucher (ID)"
-													content={voucher.name?.id}
+													content={voucher?.name?.id}
 												/>
 											</Col>
 
 											<Col span={12}>
 												<MoleculeInfoGroup
 													title="Name Voucher (EN)"
-													content={voucher.name?.en}
+													content={voucher?.name?.en}
 												/>
 											</Col>
 
@@ -97,7 +97,7 @@ const VoucherModifyPage = () => {
 												<MoleculeInfoGroup
 													title="Tipe Voucher"
 													content={
-														voucher.cashback_type ===
+														voucher?.cashback_type ===
 														'PERCENTAGE'
 															? 'Persentase'
 															: 'Rupiah'
@@ -111,7 +111,7 @@ const VoucherModifyPage = () => {
 													content={
 														<AtomNumberFormat
 															value={
-																voucher.cashback_rp ||
+																voucher?.cashback_rp ||
 																0
 															}
 														/>
@@ -122,7 +122,7 @@ const VoucherModifyPage = () => {
 											<Col span={12}>
 												<MoleculeInfoGroup
 													title="Kuota"
-													content={voucher.quota}
+													content={voucher?.quota}
 												/>
 											</Col>
 
@@ -132,7 +132,7 @@ const VoucherModifyPage = () => {
 													content={
 														<AtomNumberFormat
 															value={
-																voucher.min_order_rp ||
+																voucher?.min_order_rp ||
 																0
 															}
 														/>
@@ -146,7 +146,7 @@ const VoucherModifyPage = () => {
 													content={
 														<AtomNumberFormat
 															value={
-																voucher.max_discount_rp ||
+																voucher?.max_discount_rp ||
 																0
 															}
 														/>
@@ -171,7 +171,7 @@ const VoucherModifyPage = () => {
 													content={
 														<ReactMoment format="DD-MM-YY">
 															{
-																voucher.start_periode
+																voucher?.start_periode
 															}
 														</ReactMoment>
 													}
@@ -182,7 +182,7 @@ const VoucherModifyPage = () => {
 												<MoleculeInfoGroup
 													title="Jam Mulai"
 													content={
-														voucher.start_time_periode ||
+														voucher?.start_time_periode ||
 														'-'
 													}
 												/>
@@ -194,7 +194,7 @@ const VoucherModifyPage = () => {
 													content={
 														<ReactMoment format="DD-MM-YY">
 															{
-																voucher.end_periode
+																voucher?.end_periode
 															}
 														</ReactMoment>
 													}
@@ -205,7 +205,7 @@ const VoucherModifyPage = () => {
 												<MoleculeInfoGroup
 													title="Jam Selesai"
 													content={
-														voucher.end_time_periode ||
+														voucher?.end_time_periode ||
 														'-'
 													}
 												/>
@@ -225,22 +225,22 @@ const VoucherModifyPage = () => {
 											<Col span={12}>
 												<MoleculeInfoGroup
 													title="Tanggal di Daftarkan"
-													content={
+													content={voucher?.created_at ? (
 														<ReactMoment format="DD-MM-YY">
 															{voucher.created_at}
 														</ReactMoment>
-													}
+													) : null}
 												/>
 											</Col>
 
 											<Col span={12}>
 												<MoleculeInfoGroup
 													title="Tanggal di Update"
-													content={
+													content={voucher?.updated_at ? (
 														<ReactMoment format="DD-MM-YY">
 															{voucher.updated_at}
 														</ReactMoment>
-													}
+													) : null}
 												/>
 											</Col>
 
@@ -281,15 +281,14 @@ const VoucherModifyPage = () => {
 												<MoleculeInfoGroup
 													title="Syarat dan Ketentuan (ID)"
 													content={
-														<MoleculeMarkdownRenderer
-															withBorder
-															text={
-																voucher
-																	.terms_and_condition
-																	.id
-															}
-														/>
-													}
+														voucher?.terms_and_condition?.id ? (
+															<MoleculeMarkdownRenderer
+																withBorder
+																text={
+																	voucher?.terms_and_condition?.id
+																}
+															/>
+														) : null}
 												/>
 											</Col>
 
@@ -297,15 +296,14 @@ const VoucherModifyPage = () => {
 												<MoleculeInfoGroup
 													title="Syarat dan Ketentuan (EN)"
 													content={
-														<MoleculeMarkdownRenderer
-															withBorder
-															text={
-																voucher
-																	.terms_and_condition
-																	.en
-															}
-														/>
-													}
+														voucher?.terms_and_condition?.en ? (
+															<MoleculeMarkdownRenderer
+																withBorder
+																text={
+																	voucher?.terms_and_condition?.en
+																}
+															/>
+														) : null}
 												/>
 											</Col>
 										</Row>
@@ -323,15 +321,14 @@ const VoucherModifyPage = () => {
 												<MoleculeInfoGroup
 													title="Cara Pakai (ID)"
 													content={
-														<MoleculeMarkdownRenderer
-															withBorder
-															text={
-																voucher
-																	.how_to_use
-																	.id
-															}
-														/>
-													}
+														voucher?.how_to_use?.id ? (
+															<MoleculeMarkdownRenderer
+																withBorder
+																text={
+																	voucher?.how_to_use?.id
+																}
+															/>
+														) : null}
 												/>
 											</Col>
 
@@ -339,15 +336,14 @@ const VoucherModifyPage = () => {
 												<MoleculeInfoGroup
 													title="Cara Pakai (EN)"
 													content={
-														<MoleculeMarkdownRenderer
-															withBorder
-															text={
-																voucher
-																	.how_to_use
-																	.en
-															}
-														/>
-													}
+														voucher?.how_to_use?.en ? (
+															<MoleculeMarkdownRenderer
+																withBorder
+																text={
+																	voucher?.how_to_use?.en
+																}
+															/>
+														) : null}
 												/>
 											</Col>
 										</Row>
