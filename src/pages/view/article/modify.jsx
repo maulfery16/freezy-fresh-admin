@@ -67,9 +67,9 @@ const ArticleModifyPage = () => {
 			data.append('content[id]', contentId);
 			data.append('desktop_image', dekstopImage);
 			data.append('mobile_image', mobileImage);
-			data.append('title[en]', values.en_title ?? null);
-			data.append('title[id]', values.id_title ?? null);
-			data.append('video_link', values.video_link ?? null);
+			if (values.en_title) data.append('title[en]', values.en_title);
+			if (values.id_title) data.append('title[id]', values.id_title);
+			if (values.video_link) data.append('video_link', values.video_link);
 
 			if (isCreating) {
 				await articleService.createArticle(data);

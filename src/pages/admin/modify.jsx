@@ -49,8 +49,8 @@ const AdminModifyPage = () => {
 			const idCardImage = await idCardImageRef.current.getImage();
 
 			const data = new FormData();
-			data.append('bank_account_number', values.rek_number ?? null);
-			data.append('bank_id', values.bank ?? null);
+			if (values.rek_number) data.append('bank_account_number', values.rek_number);
+			if (values.bank) data.append('bank_id', values.bank);
 			data.append('email', values.email);
 			data.append('first_name', values.first_name);
 			data.append('gender', values.gender);
@@ -58,9 +58,11 @@ const AdminModifyPage = () => {
 			data.append('phone_number', values.phone_number);
 			data.append('role_name', values.role);
 			data.append('company', values.company);
-			if (idCardImage) data.append('idcard_image', idCardImage ?? null);
+			if (idCardImage) data.append('idcard_image', idCardImage);
 			if (profileImage) data.append('profile_image', profileImage);
-			if (isCreating) data.append('password', values.password ?? null);
+			if (isCreating) {
+				if (values.password) data.append('password', values.password);
+			}
 			values.branches.forEach((branch) => {
 				data.append('branch_id[]', branch);
 			});
@@ -140,10 +142,6 @@ const AdminModifyPage = () => {
 					name="modify_admin"
 					initialValues={setAdminInitialValues()}
 					onFinish={submit}
-					onFinishFailed={(error) => {
-						message.error(`Failed: ${error}`);
-						console.error(error);
-					}}
 				>
 					<Row>
 						<Col span={15}>
