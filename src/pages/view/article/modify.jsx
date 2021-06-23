@@ -67,8 +67,8 @@ const ArticleModifyPage = () => {
 			data.append('content[id]', contentId);
 			data.append('desktop_image', dekstopImage);
 			data.append('mobile_image', mobileImage);
-			if (values.en_title) data.append('title[en]', values.en_title);
-			if (values.id_title) data.append('title[id]', values.id_title);
+			data.append('title[en]', values.en_title);
+			data.append('title[id]', values.id_title);
 			if (values.video_link) data.append('video_link', values.video_link);
 
 			if (isCreating) {
@@ -173,6 +173,7 @@ const ArticleModifyPage = () => {
 											label="Judul Artikel (ID)"
 											placeholder="Judul Artikel (ID)"
 											type="text"
+											required
 										/>
 									</Col>
 
@@ -182,6 +183,7 @@ const ArticleModifyPage = () => {
 											label="Judul Artikel (EN)"
 											placeholder="Judul Artikel (EN)"
 											type="text"
+											required
 										/>
 									</Col>
 
