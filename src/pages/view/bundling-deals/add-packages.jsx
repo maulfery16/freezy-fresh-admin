@@ -28,11 +28,13 @@ import MoleculeTextEditorGroup from '../../../components/molecules/input-group/t
 import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../../components/organisms/layout';
 import OrganismProductBranchDatatable from '../../../components/organisms/datatable/product-branch-datatable';
+import OrganismProductDatatable from '../../../components/organisms/datatable/product-datatable';
 
 import MasterService from '../../../services/master';
 import ProductService from '../../../services/product';
 
 const AddPackagesPage = () => {
+	const viewTableRef = useRef();
 	const beautyImageRef = useRef();
 	const inspirationImageRef = useRef();
 	const packagingImageRef = useRef();
@@ -47,6 +49,7 @@ const AddPackagesPage = () => {
 
 	const { id } = useParams();
 	const [form] = Form.useForm();
+	const [productList, setProductList] = useState([]);
 	const [attributes, setAttributes] = useState([]);
 	const [branches, setBranches] = useState([]);
 	const [fullDescEn, setFullDescEn] = useState('');
@@ -765,32 +768,12 @@ const AddPackagesPage = () => {
 						</AtomCard>
 					</Form>
 					<AtomCard title="">
-						<Tabs
-							onTabClick={(key) => {
-								if (key === '2') generateVariants();
-							}}
-						>
-							<Tabs.TabPane key="1" tab="Attribut">
-								<MoleculeProductAttributesInput
-									attributes={attributes}
-									setAttributes={setAttributes}
-									setVariants={(newVariants) => {
-										setVariants(newVariants);
-									}}
-								/>
-							</Tabs.TabPane>
-
-							<Tabs.TabPane
-								key="2"
-								onClick={() => generateVariants()}
-								tab="Varian"
-							>
-								<MoleculeProductVariantsInput
-									setVariants={setVariants}
-									variants={variants}
-								/>
-							</Tabs.TabPane>
-						</Tabs>
+						<OrganismProductDatatable
+							ref={viewTableRef}
+							defaultData={productList}
+							canModify
+							tableType="bundling-deals"
+						/>
 					</AtomCard>
 
 					<OrganismProductBranchDatatable
