@@ -49,7 +49,7 @@ const AdditionalCategoryPage = () => {
 			render: (date) => (
 				<ReactMoment format="DD/MM/YY">{date}</ReactMoment>
 			),
-			csvRender: (item) => moment(item.created_at).format('DD/MM/YYYY'),
+			csvRender: (item) => moment(item.updated_at).format('DD/MM/YYYY'),
 		},
 		{
 			title: 'Dibuat Oleh',

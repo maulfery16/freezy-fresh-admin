@@ -22,7 +22,7 @@ const AtomStatusSwitch = (props) => {
 			if (props.statusChangeAction) {
 				await props.statusChangeAction();
 			} else {
-				await datatableService.updateActiveStatus(props.id, props.url);
+				await datatableService.updateActiveStatus(props.id, props.url, props.method);
 			}
 			message.success(`Berhasil memperbaharui status aktif ${props.label ?? 'kategori'}`);
 		} catch (error) {

@@ -20,7 +20,7 @@ export default class ZoneService extends RequestAdapterService {
 	async editZone(id, zone) {
 		try {
 			const { data } = await super.sendPostMultipartRequest(
-				`${this.baseUrl}/v1/zones/${id}?_method=PATCH`,
+				`${this.baseUrl}/v1/zones/${id}?_method=PUT`,
 				zone
 			);
 

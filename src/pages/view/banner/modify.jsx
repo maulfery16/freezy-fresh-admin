@@ -63,7 +63,7 @@ const BannerModifyPage = () => {
 			data.append('image_desktop', dekstopImage);
 			data.append('title[id]', values.title_id);
 			data.append('title[en]', values.title_en);
-			data.append('promotion_id', values.promo);
+			if (values.promo) data.append('promotion_id', values.promo);
 			values.branches.forEach((branch) => {
 				data.append('branches[]', branch);
 			});

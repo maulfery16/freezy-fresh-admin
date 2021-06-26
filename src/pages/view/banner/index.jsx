@@ -54,9 +54,9 @@ const BannerPage = () => {
 			title: 'Nama Promo',
 			dataIndex: 'promotion',
 			render: (_, record) =>
-				`${record.promotion?.title?.id} / ${record?.promotion?.title?.en}`,
+				record?.promotion?.title ? `${record.promotion?.title?.id} / ${record?.promotion?.title?.en}` : '-',
 			csvRender: (item) =>
-				`${item?.promotion?.title?.id} / ${item?.promotion?.title?.en}`,
+				item?.promotion?.title ? `${item?.promotion?.title?.id} / ${item?.promotion?.title?.en}` : '-',
 			sorter: true,
 		},
 		{

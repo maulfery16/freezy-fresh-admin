@@ -70,14 +70,27 @@ export default class DatatableService extends RequestAdapterService {
 		}
 	}
 
-	async updateActiveStatus(id, url) {
+	async updateActiveStatus(id, url, method) {
 		try {
-			const { data } = await super.sendPutRequest(
-				`${this.baseUrl}/v1/${url}/status-change/${id}`,
-				{}
-			);
-
-			return data;
+			if (method === "POST") {
+				const { data } = await super.sendPostRequest(
+					`${this.baseUrl}/v1/${url}/status-change/${id}`,
+					{}
+				);
+				return data;
+			} else if (method === "PATCH") {
+				const { data } = await super.sendPatchRequest(
+					`${this.baseUrl}/v1/${url}/status-change/${id}`,
+					{}
+				);
+				return data;
+			}else {
+				const { data } = await super.sendPutRequest(
+					`${this.baseUrl}/v1/${url}/status-change/${id}`,
+					{}
+				);
+				return data;
+			}
 		} catch (error) {
 			console.error(error);
 			throw new Error(

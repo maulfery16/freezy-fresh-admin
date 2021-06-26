@@ -50,7 +50,7 @@ const BrandPage = () => {
 			title: 'Jumlah Sosmed Follower',
 			dataIndex: 'social_media_followers',
 			render: (followers) => <AtomNumberFormat value={followers || 0} />,
-			csvRender: (item) => item.followers,
+			csvRender: (item) => item.social_media_followers,
 		},
 		{
 			title: 'Tanggal Dibuat',

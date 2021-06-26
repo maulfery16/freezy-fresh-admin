@@ -66,7 +66,8 @@ const ZonePage = () => {
 			render: (active, record) => (
 				<AtomStatusSwitch
 					active={active}
-					id={record.id}
+					id={`${record.id}?_method=PATCH`}
+					method="POST"
 					tableRef={zoneTableRef}
 					url="zones"
 				/>

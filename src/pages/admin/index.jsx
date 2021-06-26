@@ -44,7 +44,7 @@ const AdminPage = () => {
 		},
 		{
 			title: 'ID',
-			dataIndex: 'id',
+			dataIndex: 'code',
 		},
 		{
 			title: 'Tgl. Gabung',
@@ -110,6 +110,9 @@ const AdminPage = () => {
 					active={active}
 					id={record.id}
 					tableRef={adminTableRef}
+					afterSuccessUpdate={() => {
+						getTotalAdmin();
+					}}
 					url="admins"
 				/>
 			),
@@ -136,6 +139,9 @@ const AdminPage = () => {
 							id={id}
 							label="Admin"
 							tableRef={adminTableRef}
+							afterSuccessDelete={() => {
+								getTotalAdmin();
+							}}
 							url="admins"
 						/>
 					)}
