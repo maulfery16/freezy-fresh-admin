@@ -27,6 +27,13 @@ const OrganismProductDetail = () => {
 		setIsFetchingDetail(true);
 		try {
 			const response = await productService.getProductById(id);
+			response.data.details = response.data.details.length > 0 ? response.data.details.map((detail) => {
+				const variantIdx = response.data.variants.findIndex((x) => x.sku_id === detail.sku_id);
+				return {
+					...detail,
+					variant: response.data.variants[variantIdx].name.id
+				}
+			}) : []
 			setProduct(response.data);
 		} catch (error) {
 			message.error(error.message);
