@@ -353,15 +353,15 @@ const OrderPage = () => {
 			dataIndex: `status`,
 			skipExport: true,
 			render: (_, record) =>
-				record.status[index].status && (
+				record.status[index].next_status ? (
 					<AtomSecondaryButton
 						onClick={() => updateOrderStatus(record.id, owner)}
 					>
 						{orderService.translateOrderEnum(
-							record.status[index].status
+							record.status[index].next_status
 						)}
 					</AtomSecondaryButton>
-				),
+				) : '-',
 		})),
 		{
 			align: 'center',
@@ -375,6 +375,7 @@ const OrderPage = () => {
 
 					{roles.includes('super-admin') && (
 						<AtomPrimaryButton
+							className="dn"
 							onClick={() => openChangeStatusModal(index)}
 						>
 							Ubah Status

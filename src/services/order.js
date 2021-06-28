@@ -135,24 +135,14 @@ export default class OrderService extends RequestAdapterService {
 		}
 	}
 
-	async updateOrderStatus(id, status, batchStatus) {
+	async updateOrderStatus(id, status) {
 		try {
-			let newStatus = '';
-			const { data: statuses } = await this.getOrderStatuses();
-
-			const currentStatusIdx = Object.values(statuses).findIndex(
-				(stat) => stat.value === status.status
-			);
-
-			let nextIndex = currentStatusIdx + 1;
-			if (batchStatus) nextIndex = currentStatusIdx;
-			newStatus = statuses[nextIndex].value;
 
 			const { data } = await super.sendPutRequest(
 				`${this.baseUrl}/v1/orders/status/${id}`,
 				{
 					product_owner_id: status.product_owner_id,
-					status: newStatus,
+					status: status.next_status,
 				}
 			);
 
@@ -183,7 +173,7 @@ export default class OrderService extends RequestAdapterService {
 			DELIVERED: 'Sampai',
 			NEW_ORDER: 'Pesanan Baru',
 			NEW_REFUND: 'Komplain Dibuat',
-			PROCESSED: 'Di proses',
+			PROCESSED: 'Diproses',
 			READY_TO_PICKUP: 'Siap Dikirim',
 			REFUND_COMPLETED_BY_ADMIN: 'Komplain Selesai oleh Admin',
 			REFUND_COMPLETED_BY_CUSTOMER: 'Komplain Selesai Oleh Pelanggan',
