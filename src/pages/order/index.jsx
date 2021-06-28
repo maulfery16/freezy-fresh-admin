@@ -332,11 +332,9 @@ const OrderPage = () => {
 	}, []);
 
 	let companies = productOwners;
-	console.log(company)
 	if (company !== null && company !== undefined && company) {
 		companies = productOwners.filter((x) => x.product_owner_name === company);
 	}
-	console.log(companies)
 
 	const column = [
 		...baseColumn,
