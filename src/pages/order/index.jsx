@@ -332,9 +332,11 @@ const OrderPage = () => {
 	}, []);
 
 	let companies = productOwners;
+	console.log(company)
 	if (company !== null && company !== undefined && company) {
 		companies = productOwners.filter((x) => x.product_owner_name === company);
 	}
+	console.log(companies)
 
 	const column = [
 		...baseColumn,
@@ -355,7 +357,7 @@ const OrderPage = () => {
 			render: (_, record) =>
 				record.status[index].next_status ? (
 					<AtomSecondaryButton
-						onClick={() => updateOrderStatus(record.id, owner)}
+						onClick={() => updateOrderStatus(record.id, record.status[index])}
 					>
 						{orderService.translateOrderEnum(
 							record.status[index].next_status
