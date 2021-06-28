@@ -356,6 +356,7 @@ const OrderPage = () => {
 				record.status[index].next_status ? (
 					<AtomSecondaryButton
 						onClick={() => updateOrderStatus(record.id, record.status[index])}
+						disabled={record.status[index].status !== 'NEW_ORDER' && record.status[index].status !== 'PROCESSED' && !record.status[index].status !== 'REQUEST_SHUTTLE'}
 					>
 						{orderService.translateOrderEnum(
 							record.status[index].next_status
