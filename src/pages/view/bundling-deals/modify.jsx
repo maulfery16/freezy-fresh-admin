@@ -53,26 +53,30 @@ const BundlingDealsModifyPage = () => {
 		try {
 			setIsSubmitting(true);
 
-			const formData = new FormData();
-			const mobileHomeImage = await bundlingDealsMobileHomeRef.current.getImage();
-			const desktopHomeImage = await bundlingDealsDesktopHomeRef.current.getImage();
-			// if (mobileHomeImage)
-			// 	formData.append('banner_mobile_home', mobileHomeImage);
-			// if (desktopHomeImage)
-			// 	formData.append('banner_desktop_home', desktopHomeImage);
-			// formData.append('title[id]', values.id_title);
-			// formData.append('title[en]', values.en_title);
-			// formData.append('short_description[id]', values.id_short_desc);
-			// formData.append('short_description[en]', values.en_short_desc);
-			
-			// await bundlingDealsService.updateBundlingDeals(formData);
-
-			// message.info(
-			// 	'Akan dikembalikan ke halaman daftar bundling deals dalam 2 detik'
-			// );
-			// setTimeout(() => {
-			// 	history.push('/view/bundling-deals');
-			// }, 2000);
+			if (bundlingDeals.id) {
+				const formData = new FormData();
+				const mobileHomeImage = await bundlingDealsMobileHomeRef.current.getImage();
+				const desktopHomeImage = await bundlingDealsDesktopHomeRef.current.getImage();
+				formData.append('title[id]', values.id_title);
+				formData.append('title[en]', values.en_title);
+				if (mobileHomeImage)
+					formData.append('banner_mobile', mobileHomeImage);
+				if (desktopHomeImage)
+					formData.append('banner_desktop', desktopHomeImage);
+				if (values.id_short_desc)
+					formData.append('short_description[id]', values.id_short_desc);
+				if (values.en_short_desc)
+					formData.append('short_description[en]', values.en_short_desc);
+				
+				await bundlingDealsService.updateBundlingDeals(bundlingDeals.id, formData);
+	
+				message.info(
+					'Akan dikembalikan ke halaman daftar bundling deals dalam 2 detik'
+				);
+				setTimeout(() => {
+					history.push('/view/bundling-deals');
+				}, 2000);
+			}
 		} catch (error) {
 			message.error(error.message);
 			console.error(error);
@@ -214,7 +218,7 @@ const BundlingDealsModifyPage = () => {
 					</Form>
 					<Col className="mt4" span={24}>
 						<MoleculeModifyActionButtons
-							backUrl="/view/daily-deals"
+							backUrl="/view/bundling-deals"
 							isCreating={isCreating}
 							isSubmitting={isSubmitting}
 							label="Bundling Deals"

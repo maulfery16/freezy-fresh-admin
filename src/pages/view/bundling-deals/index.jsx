@@ -33,7 +33,8 @@ const BundlingDealsPage = () => {
 			align: 'center',
 			title: 'Foto Produk',
 			dataIndex: 'main_image',
-			render: (image) => <AtomImage src={image} />
+			render: (image) => <AtomImage src={image} />,
+			csvRender: (item) => item.image ?? '-',
 		},
 		{
 			title: 'SKUID',
@@ -56,7 +57,7 @@ const BundlingDealsPage = () => {
 			title: 'Stok Tersedia',
 			dataIndex: 'stock',
 			sorter: true,
-			render: (_, record) => record?.products[0]?.product_detail?.available_stock
+			render: (_, record) => record?.stock ?? '-'
 		},
 		{
 			title: 'Harga Normal',
@@ -68,49 +69,50 @@ const BundlingDealsPage = () => {
 					value={record?.price}
 				/>
 			),
+			csvRender: (item) =>
+				item?.price ? `Rp. ${item?.price}` : 0,
 		},
 		{
 			title: 'Stok Terjual',
-			dataIndex: 'total_sold',
+			dataIndex: 'sold_stock',
 			sorter: true,
-			render: (_, record) => record?.products[0]?.product_detail?.total_sold
 		},
 		{
 			title: 'Harga Setelah Discount',
 			dataIndex: 'discounted_price',
 			sorter: true,
-			render: (discounted_price) => (
-				<AtomNumberFormat
-					prefix="Rp. "
-					value={discounted_price}
-				/>
+			render: (price) => parseInt(price) === 0 || !price ? 'Tidak ada diskon' : (
+				<AtomNumberFormat prefix="Rp. " value={parseInt(price)} />
 			),
+			csvRender: (item) =>
+				item?.discounted_price ? `Rp. ${item?.discounted_price}` : 'Tidak ada diskon',
 		},
 		{
 			title: 'Discount (%)',
 			dataIndex: 'discount_percentage',
 			sorter: true,
 			render: (discount_percentage) =>
-			discount_percentage ? `${discount_percentage} %` : null,
+			discount_percentage ? `${discount_percentage} %` : '0.00%',
 		},
 		{
 			title: 'Batas Umur Pelanggan',
 			dataIndex: 'age_limit',
 			sorter: true,
-			render: (_, record) => record?.products[0]?.product_detail?.age_limit
+			render: (_, record) => record?.age_limit ?? '-'
 		},
 		{
 			title: 'Perusahaan',
-			dataIndex: 'brand',
+			dataIndex: 'product_owner',
 			sorter: true,
-			render: (_, record) => record?.brand?.id
+			render: (product_owner) => product_owner ? typeof product_owner === 'string' ? product_owner : typeof product_owner === 'object' ? product_owner.id ?? '-' : '-' : '-',
 		},
 		{
 			title: 'Cabang Freezy (ID)',
 			dataIndex: 'branch_ids',
 			sorter: true,
 			render: (_, record) =>
-				record.branch_ids.map((branch) => branch).join(', '),
+				record.branch_ids ? 
+					record.branch_ids.map((branch) => branch?.name?.id).join(', ') : '-'
 		},
 		{
 			title: 'Aktif',
@@ -149,6 +151,7 @@ const BundlingDealsPage = () => {
 					)}
 				</Space>
 			),
+			skipExport: true,
 		},
 	];
 	const viewTableRef = useRef();
@@ -244,11 +247,13 @@ const BundlingDealsPage = () => {
 							<MoleculeDatatableAdditionalAction
 								importRoute="/view/bundling-deals/import"
 								column={column}
-								getLimit={0}
+								getLimit={() => products.length}
 								isEdit={true}
 								label="Detail"
 								route="/view/bundling-deals"
 								url="bundling-deals"
+								specifiedProp="packages"
+								filter="packages"
 							/>
 
 							{(roles.includes('super-admin') || roles.includes('admin')) && (
@@ -339,7 +344,7 @@ const BundlingDealsPage = () => {
 									</Typography.Text>
 								</Col>
 
-								<Col span={8}>
+								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Tanggal Dibuat"
 										content={
@@ -361,7 +366,7 @@ const BundlingDealsPage = () => {
 									/>
 								</Col>
 
-								<Col span={8}>
+								<Col span={12}>
 									<MoleculeInfoGroup
 										title="Dibuat Oleh"
 										content={bundlingDeals?.created_by}

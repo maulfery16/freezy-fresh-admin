@@ -246,7 +246,7 @@ const FeedModifyPage = () => {
 
 											<Col span={12}>
 												<MoleculeTextEditorGroup
-													label="Deskripsi Lengkap (ID)"
+													label="Story Lengkap (ID)"
 													onChange={
 														setLongDescription
 													}

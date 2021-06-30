@@ -1,10 +1,10 @@
 import RequestAdapterService from './request-adapter';
 
 export default class DailyDealsService extends RequestAdapterService {
-	async updateBundlingDeals(bundling) {
+	async updateBundlingDeals(id, bundling) {
 		try {
-			const { data } = await super.sendPostRequest(
-				`${this.baseUrl}/v1/bundling-deals?_method=PATCH`,
+			const { data } = await super.sendPostMultipartRequest(
+				`${this.baseUrl}/v1/bundling-deals/${id}?_method=PUT`,
 				bundling
 			);
 
