@@ -13,7 +13,7 @@ const MoleculeOrderDetailCustomerInfo = (props) => {
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="ID Pelanggan"
-					content={props.customer?.id}
+					content={props.customer?.code}
 				/>
 			</Col>
 			<Col span={12}>

@@ -126,7 +126,7 @@ const CustomerPage = () => {
 					<Link to={`/customer/${id}/detail`}>
 						<EyeFilled className="f4 blue" />
 					</Link>
-					{roles === 'super-admin' || roles === 'admin' || roles === 'manager-freezy' && (
+					{(roles === 'super-admin' || roles === 'admin' || roles === 'manager-freezy') && (
 						<>
 							<Link to={`/customer/${id}/edit`}>
 								<EditFilled className="f4 orange" />

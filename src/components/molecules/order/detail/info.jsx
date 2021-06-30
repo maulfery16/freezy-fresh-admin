@@ -16,7 +16,13 @@ const MoleculeOrderDetailInfo = (props) => {
 			<Col span={12}>
 				<MoleculeOrderInfoGroup
 					title="ID Pesanan Freezy"
-					content={props.order?.id}
+					content={props.order?.code}
+				/>
+			</Col>
+			<Col span={12}>
+				<MoleculeOrderInfoGroup
+					title="ID Pesanan Fresh Factory"
+					content={props.order?.fresh_factory_order_code}
 				/>
 			</Col>
 			{(roles === 'super-admin' || roles === 'admin' || roles === 'manager-freezy') && (
