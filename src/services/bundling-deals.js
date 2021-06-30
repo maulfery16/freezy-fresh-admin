@@ -4,7 +4,7 @@ export default class DailyDealsService extends RequestAdapterService {
 	async updateBundlingDeals(id, bundling) {
 		try {
 			const { data } = await super.sendPostMultipartRequest(
-				`${this.baseUrl}/v1/bundling-deals/${id}?_method=PUT`,
+				`${this.baseUrl}/v1/bundling-deals/${id}`,
 				bundling
 			);
 
