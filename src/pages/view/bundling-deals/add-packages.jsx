@@ -28,10 +28,10 @@ import MoleculeTextEditorGroup from '../../../components/molecules/input-group/t
 import MoleculeTextInputGroup from '../../../components/molecules/input-group/text-input';
 import OrganismLayout from '../../../components/organisms/layout';
 import OrganismProductBranchDatatable from '../../../components/organisms/datatable/product-branch-datatable';
-import OrganismProductDatatable from '../../../components/organisms/datatable/product-datatable';
+import OrganismProductBundlingDatatable from '../../../components/organisms/datatable/product-bundling-datatable';
 
 import MasterService from '../../../services/master';
-import ProductService from '../../../services/product';
+import BundlingService from '../../../services/bundling-deals';
 
 const AddPackagesPage = () => {
 	const viewTableRef = useRef();
@@ -42,7 +42,7 @@ const AddPackagesPage = () => {
 	const branchSelectRef = useRef();
 
 	const masterService = new MasterService();
-	const productService = new ProductService();
+	const bundlingService = new BundlingService();
 
 	const history = useHistory();
 	const isCreating = location.pathname.includes('add') ? true : false;
@@ -58,7 +58,7 @@ const AddPackagesPage = () => {
 	const [product, setProduct] = useState(null);
 	const [productVariants, setProductVariants] = useState([]);
 	const [variants, setVariants] = useState([]);
-
+	
 	const combineProductVariantWithExisting = (
 		newProductVariants,
 		withoutVariant
@@ -221,7 +221,7 @@ const AddPackagesPage = () => {
 
 	const getProductDetail = async () => {
 		try {
-			const response = await productService.getProductById(id);
+			const response = await bundlingService.getPackageById(id);
 
 			setAttributes(response.data.attributes);
 			setFullDescEn(response.data.full_description.en);
@@ -275,77 +275,46 @@ const AddPackagesPage = () => {
 		setIsSubmitting(true);
 
 		try {
-			// const images = await uploadProductImages();
-			// if (images) {
-			// 	const newProduct = {
-			// 		...values,
-			// 		...images,
-			// 		attributes,
-			// 		branches,
-			// 		details: productVariants,
-			// 		variants,
-			// 		product_owner_id: values.company,
-			// 		name: {
-			// 			id: values.name_id,
-			// 			en: values.name_en,
-			// 		},
-			// 		short_description: {
-			// 			id: values.id_short_desc,
-			// 			en: values.en_short_desc,
-			// 		},
-			// 		full_description: {
-			// 			id: fullDescId,
-			// 			en: fullDescEn,
-			// 		},
-			// 	};
+			const beauty_image = await beautyImageRef.current.getImage();
+			const white_image = await whiteImageRef.current.getImage();
+			const inspiration_image = await inspirationImageRef.current.getImage();
+			const packaging_image = await packagingImageRef.current.getImage();
 
-			// 	if (isCreating) {
-			// 		await productService.createProduct(newProduct);
-			// 		message.success('Berhasil membuat produk baru');
-			// 	} else {
-			// 		await productService.editProduct(id, newProduct);
-			// 		message.success('Berhasil mengubah data produk');
-			// 	}
-	
-			// 	message.info(
-			// 		'Akan dikembalikan ke halaman daftar produk dalam 2 detik'
-			// 	);
-			// 	setTimeout(() => {
-			// 		history.push('/products');
-			// 	}, 2000);
+			const formData = new FormData();
+			if (beauty_image) formData.append('main_image', beauty_image)
+			if (white_image) formData.append('white_image', white_image)
+			if (inspiration_image) formData.append('inspiration_image', inspiration_image)
+			if (packaging_image) formData.append('packaging_image', packaging_image)
+			formData.append('full_description[id]', fullDescId);
+			formData.append('full_description[en]', fullDescEn);
+
+			Object.keys(values).map((prop) => {
+				if (values[prop]) formData.append(prop, values[prop])
+			});
+
+			Object.entries(formData).map(pair => {
+				console.log(pair[0]+ ', ' + pair[1]); 
+			});
+
+			// if (isCreating) {
+			// 	await bundlingService.createProduct(formData);
+			// 	message.success('Berhasil membuat package baru');
+			// } else {
+			// 	await bundlingService.editProduct(id, formData);
+			// 	message.success('Berhasil mengubah data package');
 			// }
+
+			// message.info(
+			// 	'Akan dikembalikan ke halaman bundling deals dalam 2 detik'
+			// );
+			// setTimeout(() => {
+			// 	history.push('/view/bundling-deals');
+			// }, 2000);
 
 		} catch (error) {
 			message.error(error.message);
 		} finally {
 			setIsSubmitting(false);
-		}
-	};
-
-	const uploadProductImages = async () => {
-		try {
-			const images = {
-				beauty_image: await beautyImageRef.current.getImage(),
-				white_image: await whiteImageRef.current.getImage(),
-				inspiration_image: await inspirationImageRef.current.getImage(),
-				packaging_image: await packagingImageRef.current.getImage(),
-			};
-
-			for (const key in images) {
-				if (images[key]) {
-					const data = new FormData();
-					data.append('file', images[key]);
-					data.append('type', 'image');
-
-					images[key] = await masterService.uploadImage(data);
-				} else {
-					images[key] = product[key];
-				}
-			}
-
-			return images;
-		} catch (error) {
-			message.error(error.message);
 		}
 	};
 
@@ -364,11 +333,11 @@ const AddPackagesPage = () => {
 					link: location.pathname,
 				},
 			]}
-			title={`${isCreating ? 'Tambah' : 'Ubah'} Produk`}
+			title={`${isCreating ? 'Tambah' : 'Ubah'} Package`}
 		>
 			<Typography.Title level={4}>
 				<span className="fw7">
-					{`${isCreating ? 'Tambah' : 'Ubah'} Produk`.toUpperCase()}
+					{`${isCreating ? 'Tambah' : 'Ubah'} Package`.toUpperCase()}
 				</span>
 			</Typography.Title>
 
@@ -456,7 +425,7 @@ const AddPackagesPage = () => {
 
 								<Col span={12}>
 									<MoleculeTextInputGroup
-										name="name_id"
+										name="name[id]"
 										label="Nama Produk (ID)"
 										placeholder="Nama Produk (ID)"
 										required
@@ -466,7 +435,7 @@ const AddPackagesPage = () => {
 
 								<Col span={12}>
 									<MoleculeTextInputGroup
-										name="name_en"
+										name="name[en]"
 										label="Nama Produk (EN)"
 										placeholder="Nama Produk (EN)"
 										required
@@ -477,7 +446,7 @@ const AddPackagesPage = () => {
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										label="Deskripsi Singkat (ID)"
-										name="id_short_desc"
+										name="short_description[id]"
 										placeholder="Deskripsi Singkat (ID)"
 										required
 										type="textarea"
@@ -491,7 +460,7 @@ const AddPackagesPage = () => {
 								<Col span={12}>
 									<MoleculeTextInputGroup
 										label="Deskripsi Singkat (EN)"
-										name="en_short_desc"
+										name="short_description[en]"
 										placeholder="Deskripsi Singkat (EN)"
 										required
 										type="textarea"
@@ -584,7 +553,7 @@ const AddPackagesPage = () => {
 								</Col>
 
 								<Col span={12}>
-									<AtomProductOwnerSelect required mode="multiple" />
+									<AtomProductOwnerSelect name="product_owner_id" required mode="multiple" />
 								</Col>
 
 								<Col span={12}>
@@ -675,7 +644,7 @@ const AddPackagesPage = () => {
 									<Row gutter={12}>
 										<Col span={8}>
 											<MoleculeTextInputGroup
-												name="long_cm"
+												name="length"
 												label="P"
 												placeholder="Panjang"
 												required
@@ -686,7 +655,7 @@ const AddPackagesPage = () => {
 
 										<Col span={8}>
 											<MoleculeTextInputGroup
-												name="wide_cm"
+												name="width"
 												label="L"
 												placeholder="Lebar"
 												suffix="cm"
@@ -697,7 +666,7 @@ const AddPackagesPage = () => {
 
 										<Col span={8}>
 											<MoleculeTextInputGroup
-												name="height_cm"
+												name="height"
 												label="T"
 												placeholder="Tinggi"
 												required
@@ -710,7 +679,7 @@ const AddPackagesPage = () => {
 
 								<Col span={12}>
 									<MoleculeTextInputGroup
-										name="weight_gr"
+										name="weight"
 										label="Berat"
 										placeholder="Berat"
 										required
@@ -731,7 +700,7 @@ const AddPackagesPage = () => {
 
 								<Col span={12}>
 									<MoleculeTextInputGroup
-										name="txt1"
+										name="txt_1"
 										label="Txt1"
 										placeholder="Txt1"
 										type="text"
@@ -740,7 +709,7 @@ const AddPackagesPage = () => {
 
 								<Col span={12}>
 									<MoleculeTextInputGroup
-										name="txt2"
+										name="txt_2"
 										label="Txt2"
 										placeholder="Txt2"
 										type="text"
@@ -749,7 +718,7 @@ const AddPackagesPage = () => {
 
 								<Col span={12}>
 									<MoleculeTextInputGroup
-										name="txt3"
+										name="txt_3"
 										label="Txt3"
 										placeholder="Txt3"
 										type="text"
@@ -758,7 +727,7 @@ const AddPackagesPage = () => {
 
 								<Col span={12}>
 									<MoleculeTextInputGroup
-										name="txt4"
+										name="txt_4"
 										label="Txt4"
 										placeholder="Txt4"
 										type="text"
@@ -768,7 +737,7 @@ const AddPackagesPage = () => {
 						</AtomCard>
 					</Form>
 					<AtomCard title="">
-						<OrganismProductDatatable
+						<OrganismProductBundlingDatatable
 							ref={viewTableRef}
 							defaultData={productList}
 							canModify
@@ -785,10 +754,10 @@ const AddPackagesPage = () => {
 
 					<Col className="mt4" span={24}>
 						<MoleculeModifyActionButtons
-							backUrl="/products"
+							backUrl="/view/bundling-deals"
 							isCreating={isCreating}
 							isSubmitting={isSubmitting}
-							label="Produk"
+							label="Package"
 							onClick={() => form.submit()}
 						/>
 					</Col>

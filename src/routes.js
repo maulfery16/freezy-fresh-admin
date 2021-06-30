@@ -660,6 +660,15 @@ const routes = [
 					},
 					{
 						component: React.lazy(() =>
+							import('./pages/view/bundling-deals/add-packages')
+						),
+						exact: true,
+						guard: true,
+						name: 'Edit Bundling Deals Page',
+						path: '/:id/edit',
+					},
+					{
+						component: React.lazy(() =>
 							import('./pages/view/bundling-deals/import')
 						),
 						exact: true,

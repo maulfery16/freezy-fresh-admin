@@ -35,4 +35,21 @@ export default class DailyDealsService extends RequestAdapterService {
 			);
 		}
 	}
+
+	async getPackageById(id) {
+		try {
+			const { data } = await super.sendGetRequest(
+				`${this.baseUrl}/v1/bundling-deals/${id}`
+			);
+
+			return data;
+		} catch (error) {
+			console.error(error);
+			throw new Error(
+				`Fail getting bundling deals: ${super.generateErrorMessage(
+					error
+				)}`
+			);
+		}
+	}
 }

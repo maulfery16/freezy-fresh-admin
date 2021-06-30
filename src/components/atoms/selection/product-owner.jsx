@@ -9,7 +9,7 @@ const AtomProductOwnerSelect = (props) => {
 			{...props}
 			allowClear
 			label="Perusahaan"
-			name="company"
+			name={props.name ?? 'company'}
 			placeholder="Perusahaan"
 			data={{
 				url: 'product-owners',
